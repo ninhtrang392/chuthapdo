@@ -130,11 +130,13 @@ const showToast = (message) => {
 // ==================== SECTION: DANH SÁCH ĐỊA BÀN — tab, tìm kiếm ====================
 const list = document.querySelector('#area-list');
 const tabMatch = { critical: (a) => a.status === 'critical', short: (a) => a.status === 'short', near: (a) => a.status === 'near', other: (a) => a.status === 'enough' || a.status === 'surplus' };
+const LIST_LIMIT = 5; // cột phải chỉ hiện top 5 để vừa khung (đầy đủ ở "Xem tất cả"); đang tìm kiếm thì hiện hết kết quả
 const renderList = () => {
   const query = fold(state.query.trim());
   const rows = AREAS
     .filter((area) => visible(area) && tabMatch[state.tab](area) && (!query || fold(area.name).includes(query)))
-    .sort((a, b) => b.people - a.people);
+    .sort((a, b) => b.people - a.people)
+    .slice(0, query ? undefined : LIST_LIMIT);
   list.replaceChildren();
   if (!rows.length) {
     const empty = document.createElement('li');
@@ -167,10 +169,17 @@ const areaSelect = document.querySelector('#area-filter');
 // ==================== SECTION: BẢN ĐỒ — Leaflet ====================
 const mapCard = document.querySelector('.md-map');
 const VN_BOUNDS = [[8.4, 102.1], [23.4, 114.4]];
-// Chừa chỗ cho nút nền (trên), cột nút điều khiển (phải) và chú giải (dưới).
-const VIEW_PAD = { paddingTopLeft: [24, 76], paddingBottomRight: [72, 132] };
+// Chừa chỗ cho nút nền (trên), cột nút điều khiển (phải) và chú giải (dưới — theo chiều cao thật của chú giải lúc đó).
+const viewPad = () => {
+  const legendBox = document.querySelector('.md-legend');
+  const bottom = legendBox ? Math.min(legendBox.offsetHeight + 28, mapCard.clientHeight * 0.45) : 132;
+  return { paddingTopLeft: [24, 76], paddingBottomRight: [72, Math.max(bottom, 60)] };
+};
 let map = null;
 const groups = {};
+let blobGroup = null; // vùng màu quanh địa bàn
+let pinCluster = null; // ghim điều phối, gom cụm khi gần nhau
+const STATUS_ORDER = ['critical', 'short', 'near', 'enough', 'surplus']; // nặng → nhẹ
 const markers = new Map(); // area.id → { blob, pin }
 
 const popupHtml = (area) => `
@@ -190,7 +199,11 @@ const focusArea = (id, { fly = true, pan = true } = {}) => {
   if (!area || !map) return;
   state.active = area.id;
   const entry = markers.get(area.id);
-  const open = () => { if (entry && map.hasLayer(groups.relief)) { entry.pin.getPopup().options.autoPan = pan; entry.pin.openPopup(); } };
+  // Ghim có thể đang nằm trong một cụm → mở cụm (phóng to vừa đủ) rồi mới mở popup
+  const open = () => {
+    if (!entry || !map.hasLayer(groups.relief) || !pinCluster.hasLayer(entry.pin)) return;
+    pinCluster.zoomToShowLayer(entry.pin, () => { entry.pin.getPopup().options.autoPan = pan; entry.pin.openPopup(); });
+  };
   if (fly) { map.closePopup(); map.once('moveend', open); map.flyTo([area.lat, area.lng], Math.max(map.getZoom(), 7), { duration: 0.8 }); } else open(); // mở popup sau khi bay xong để tự canh vừa khung
   document.querySelectorAll('.md-pin-wrap').forEach((el) => el.classList.toggle('is-active', el.dataset.area === String(area.id)));
   renderList();
@@ -201,13 +214,31 @@ const applyFilters = () => {
   AREAS.forEach((area) => {
     const { blob, pin } = markers.get(area.id);
     const show = visible(area);
-    [blob, pin].forEach((layer) => {
-      const wanted = show && (layer === blob || state.resources.has(area.res));
-      if (wanted && !groups.relief.hasLayer(layer)) groups.relief.addLayer(layer);
-      if (!wanted && groups.relief.hasLayer(layer)) groups.relief.removeLayer(layer);
-    });
+    const toggle = (group, layer, wanted) => {
+      if (wanted && !group.hasLayer(layer)) group.addLayer(layer);
+      if (!wanted && group.hasLayer(layer)) group.removeLayer(layer);
+    };
+    toggle(blobGroup, blob, show);
+    toggle(pinCluster, pin, show && state.resources.has(area.res));
   });
 };
+
+// ---------- Chú giải: chỉ hiện nhóm của lớp đang bật + đếm số lớp; thu gọn được ----------
+const legend = document.querySelector('.md-legend');
+const updateLegend = () => {
+  const on = [...document.querySelectorAll('[data-layer]')].filter((input) => input.checked).map((input) => input.dataset.layer);
+  legend.querySelectorAll('[data-legend]').forEach((group) => { group.hidden = !on.includes(group.dataset.legend); });
+  legend.querySelector('.md-legend-empty').hidden = on.length > 0;
+  document.getElementById('md-legend-count').textContent = on.length ? `${on.length} lớp đang bật` : 'Chưa bật lớp nào';
+};
+legend.querySelector('.md-legend-head').addEventListener('click', (event) => {
+  const open = event.currentTarget.getAttribute('aria-expanded') !== 'true';
+  event.currentTarget.setAttribute('aria-expanded', String(open));
+  legend.classList.toggle('is-collapsed', !open);
+});
+// Điện thoại: chú giải thu gọn sẵn để không che bản đồ
+if (window.matchMedia('(max-width: 700px)').matches) legend.querySelector('.md-legend-head').click();
+updateLegend();
 
 const initMap = () => {
   map = L.map('relief-map', { zoomControl: false, attributionControl: true, minZoom: 4, maxZoom: 12, zoomSnap: 0.25, worldCopyJump: false });
@@ -218,7 +249,7 @@ const initMap = () => {
     satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Ảnh vệ tinh © Esri' }),
   };
   base.map.addTo(map);
-  map.fitBounds(VN_BOUNDS, VIEW_PAD);
+  map.fitBounds(VN_BOUNDS, viewPad());
 
   // ---------- Nhãn tự đặt: quốc gia, biển, quần đảo, thành phố (không dùng nhãn của nền bản đồ) ----------
   const label = (lat, lng, html, cls) => L.marker([lat, lng], { interactive: false, keyboard: false, icon: L.divIcon({ className: '', html: `<span class="map-label ${cls}">${html}</span>`, iconSize: null }) });
@@ -233,17 +264,30 @@ const initMap = () => {
   L.layerGroup([[16.5, 111.6], [16.8, 112.3], [16.3, 112.0], [16.95, 111.95], [16.6, 111.2], [10.4, 114.3], [10.0, 113.9], [9.6, 114.6], [10.8, 114.9], [8.65, 111.9], [9.9, 115.5]].map(([a, b]) => islet(a, b))).addTo(map);
 
   // ---------- Lớp điều phối: vùng màu theo tình trạng + ghim ----------
+  // Quy ước dễ đọc: MÀU ghim = mức cân đối (khớp chú giải), HÌNH trong ghim = loại hỗ trợ cần.
+  // Ghim gần nhau gom thành vòng tròn có số (màu theo địa bàn nặng nhất trong cụm), bấm vào thì phóng to.
   const sidePopup = mapCard.clientWidth >= 640;
-  groups.relief = L.layerGroup().addTo(map);
+  blobGroup = L.layerGroup();
+  pinCluster = window.L.markerClusterGroup
+    ? L.markerClusterGroup({
+      maxClusterRadius: 44, showCoverageOnHover: false, spiderfyOnMaxZoom: true, disableClusteringAtZoom: 8,
+      iconCreateFunction: (cluster) => {
+        const worst = cluster.getAllChildMarkers().map((m) => m.options.status).sort((a, b) => STATUS_ORDER.indexOf(a) - STATUS_ORDER.indexOf(b))[0];
+        const count = cluster.getChildCount();
+        return L.divIcon({ className: '', html: `<span class="md-cluster st-${worst}" title="${count} địa bàn gần nhau, bấm để xem">${count}</span>`, iconSize: [40, 40] });
+      },
+    })
+    : L.layerGroup(); // dự phòng khi không tải được plugin gom cụm
+  if (!pinCluster.zoomToShowLayer) pinCluster.zoomToShowLayer = (layer, done) => done();
+  groups.relief = L.layerGroup([blobGroup, pinCluster]).addTo(map);
   AREAS.forEach((area) => {
     const blob = L.circle([area.lat, area.lng], {
       radius: 15000 * Math.sqrt(area.people / 1000), stroke: false, fillColor: STATUS[area.status].color, fillOpacity: 0.42, className: 'md-area-blob',
     });
-    const pinIcon = area.kind === 'need' ? 'alert-mark' : area.kind === 'program' ? 'box' : RESOURCE[area.res].icon;
-    const pinClass = area.kind === 'need' ? 'is-need' : area.kind === 'program' ? 'is-supplies' : `is-${area.res}`;
+    const pinIcon = area.kind === 'need' ? 'alert-mark' : area.kind === 'program' ? 'heart-solid' : RESOURCE[area.res].icon;
     const pin = L.marker([area.lat, area.lng], {
-      title: area.name, riseOnHover: true,
-      icon: L.divIcon({ className: 'md-pin-wrap', html: `<span class="md-pin ${pinClass}">${icon(pinIcon)}</span>`, iconSize: [32, 32], iconAnchor: [16, 38], popupAnchor: [0, -38] }),
+      title: `${area.name} · ${STATUS[area.status].label}`, riseOnHover: true, status: area.status,
+      icon: L.divIcon({ className: 'md-pin-wrap', html: `<span class="md-pin st-${area.status}">${icon(pinIcon)}</span>`, iconSize: [32, 32], iconAnchor: [16, 38], popupAnchor: [0, -38] }),
     }).bindPopup(popupHtml(area), {
       // Popup đặt bên phải ghim (như ảnh mẫu), mép trên ngang đầu ghim.
       // Màn hẹp: popup phía trên ghim như mặc định.
@@ -257,13 +301,15 @@ const initMap = () => {
   applyFilters();
 
   // ---------- Lớp thời tiết & người yếu thế (tắt sẵn) ----------
+  // Thời tiết: nhãn chữ luôn nằm trên cùng, không che bởi ghim; người yếu thế: ô vuông tím, nằm dưới ghim
   groups.weather = L.layerGroup(WEATHER.map((w) => L.marker([w.lat, w.lng], {
-    keyboard: false, icon: L.divIcon({ className: '', html: `<span class="md-weather${w.alert ? ' is-alert' : ''}">${icon(w.alert ? 'rain' : 'cloud')}${w.text}</span>`, iconSize: null }),
+    keyboard: false, interactive: false, zIndexOffset: 2000,
+    icon: L.divIcon({ className: '', html: `<span class="md-weather${w.alert ? ' is-alert' : ''}">${icon(w.alert ? 'rain' : 'cloud')}${w.text}</span>`, iconSize: null }),
   })));
   groups.vulnerable = L.layerGroup(VULNERABLE.map(([lat, lng]) => L.marker([lat, lng], {
-    keyboard: false, title: 'Hộ yếu thế cần ưu tiên',
-    icon: L.divIcon({ className: '', html: `<span class="md-vuln">${icon('people')}</span>`, iconSize: [28, 28], iconAnchor: [14, 14] }),
-  })));
+    keyboard: false, title: 'Khu có hộ yếu thế cần ưu tiên', zIndexOffset: -1000,
+    icon: L.divIcon({ className: '', html: `<span class="md-vuln">${icon('people')}</span>`, iconSize: [26, 26], iconAnchor: [13, 13] }),
+  }).bindTooltip('Khu có hộ yếu thế cần ưu tiên', { direction: 'top', offset: [0, -12] })));
 
   // ---------- Đổi nền: Bản đồ / Vệ tinh ----------
   document.querySelector('.md-basemap').addEventListener('click', (event) => {
@@ -280,7 +326,7 @@ const initMap = () => {
     const ctrl = event.target.closest('[data-ctrl]');
     if (!ctrl) return;
     const action = ctrl.dataset.ctrl;
-    if (action === 'home') map.flyToBounds(VN_BOUNDS, { ...VIEW_PAD, duration: 0.8 });
+    if (action === 'home') map.flyToBounds(VN_BOUNDS, { ...viewPad(), duration: 0.8 });
     else if (action === 'in') map.zoomIn();
     else if (action === 'out') map.zoomOut();
     else if (action === 'locate') focusArea(state.active ?? AREAS.find((a) => a.status === 'critical').id);
@@ -305,28 +351,77 @@ const initMap = () => {
   document.addEventListener('fullscreenchange', () => setTimeout(() => map.invalidateSize(), 150));
   new ResizeObserver(() => map.invalidateSize()).observe(mapCard);
 
-  if (sidePopup) focusArea(1, { fly: false, pan: false }); // mở sẵn popup Hà Giang như ảnh mẫu, không kéo lệch bản đồ
+  // Mở sẵn popup Hà Giang như ảnh mẫu, chỉ khi ghim đang hiện riêng (không nằm trong cụm) để không tự phóng to bản đồ
+  const firstPin = markers.get(1).pin;
+  if (sidePopup && (!pinCluster.getVisibleParent || pinCluster.getVisibleParent(firstPin) === firstPin)) focusArea(1, { fly: false, pan: false });
 };
 
 if (window.L) initMap();
 else document.querySelector('.md-map-fallback').hidden = false;
 
+// ==================== SECTION: BẢN ĐỒ — nút mở / đóng cột trái & cột phải ====================
+// Đóng cột: cột co về 0 (CSS), bản đồ giãn ra (ResizeObserver ở trên tự gọi invalidateSize). Cột đóng được gắn inert
+// để không nhận focus bàn phím. Trạng thái nhớ trong localStorage (chỉ là tiện ích, lỗi đọc/ghi thì bỏ qua).
+const dashboard = document.querySelector('.map-dashboard');
+const PANEL_KEY = 'md-panels-closed';
+const panelLabels = { left: 'cột lớp bản đồ và bộ lọc', right: 'cột tổng quan' };
+const setPanel = (button, open) => {
+  const side = button.dataset.panelToggle;
+  dashboard.classList.toggle(`is-${side}-closed`, !open);
+  document.getElementById(button.getAttribute('aria-controls')).inert = !open;
+  const label = `${open ? 'Thu gọn' : 'Mở'} ${panelLabels[side]}`;
+  button.setAttribute('aria-expanded', String(open));
+  button.setAttribute('aria-label', label);
+  button.title = label;
+};
+const panelToggles = [...document.querySelectorAll('[data-panel-toggle]')];
+let closedPanels = [];
+try { closedPanels = JSON.parse(localStorage.getItem(PANEL_KEY)) || []; } catch { closedPanels = []; }
+panelToggles.forEach((button) => {
+  if (closedPanels.includes(button.dataset.panelToggle)) setPanel(button, false);
+  button.addEventListener('click', () => {
+    setPanel(button, button.getAttribute('aria-expanded') !== 'true');
+    const closed = panelToggles.filter((b) => b.getAttribute('aria-expanded') === 'false').map((b) => b.dataset.panelToggle);
+    try { localStorage.setItem(PANEL_KEY, JSON.stringify(closed)); } catch { /* bỏ qua: trình duyệt chặn lưu trữ */ }
+  });
+});
+// Màn hình hẹp (≤ 1100px) xếp dọc, không có nút đóng → luôn hiện cả hai cột
+const wideMap = window.matchMedia('(min-width: 1101px)');
+const syncPanelsToWidth = () => panelToggles.forEach((button) => {
+  const panel = document.getElementById(button.getAttribute('aria-controls'));
+  panel.inert = wideMap.matches && button.getAttribute('aria-expanded') === 'false';
+});
+wideMap.addEventListener('change', syncPanelsToWidth);
+syncPanelsToWidth();
+
+// ==================== SECTION: CỘT BÊN — accordion ====================
+// Mỗi cột chỉ mở một mục: mở mục này thì mục đang mở khác trong cùng cột tự đóng (hạn chế cuộn).
+// Ngoại lệ data-acc-pinned (Lớp bản đồ): không bị mục khác tự đóng và không làm mục khác đóng — chỉ đóng/mở khi bấm chính nó.
+// Nội dung đang đóng gắn inert để không nhận focus bàn phím.
+const setAccordion = (item, open) => {
+  item.classList.toggle('is-open', open);
+  item.querySelector('.md-acc-head').setAttribute('aria-expanded', String(open));
+  item.querySelector('.md-acc-body').inert = !open;
+};
+document.querySelectorAll('.md-acc').forEach((item) => setAccordion(item, item.classList.contains('is-open')));
+document.querySelectorAll('.md-acc-head').forEach((head) => {
+  head.addEventListener('click', () => {
+    const item = head.closest('.md-acc');
+    const open = !item.classList.contains('is-open');
+    if (open && !item.hasAttribute('data-acc-pinned')) item.closest('.md-panel').querySelectorAll('.md-acc.is-open:not([data-acc-pinned])').forEach((other) => setAccordion(other, false));
+    setAccordion(item, open);
+  });
+});
+
 // ==================== SECTION: CỘT TRÁI — lớp bản đồ & bộ lọc ====================
 document.querySelectorAll('[data-layer]').forEach((input) => {
   input.addEventListener('change', () => {
     input.closest('.md-layer').classList.toggle('is-on', input.checked);
+    updateLegend();
     const group = groups[input.dataset.layer];
     if (!map || !group) return;
     if (input.checked) group.addTo(map); else map.removeLayer(group);
   });
-});
-document.querySelector('[data-collapse]').addEventListener('click', (event) => {
-  const button = event.currentTarget;
-  const target = document.getElementById(button.dataset.collapse);
-  const open = button.getAttribute('aria-expanded') !== 'true';
-  target.hidden = !open;
-  button.setAttribute('aria-expanded', String(open));
-  button.textContent = open ? 'Thu gọn' : 'Mở rộng';
 });
 document.querySelector('#resource-filter').addEventListener('click', (event) => {
   const chip = event.target.closest('[data-res]');
@@ -371,7 +466,7 @@ document.querySelector('#map-region').addEventListener('change', (event) => {
   renderList();
   if (!map) return;
   const shown = AREAS.filter(visible);
-  if (state.region === 'all' || !shown.length) map.flyToBounds(VN_BOUNDS, { ...VIEW_PAD, duration: 0.8 });
+  if (state.region === 'all' || !shown.length) map.flyToBounds(VN_BOUNDS, { ...viewPad(), duration: 0.8 });
   else map.flyToBounds(L.latLngBounds(shown.map((a) => [a.lat, a.lng])), { paddingTopLeft: [60, 90], paddingBottomRight: [90, 150], duration: 0.8 });
 });
 document.querySelector('#map-time').addEventListener('change', () => showToast('Bản xem trước: dữ liệu theo khoảng thời gian sẽ có khi kết nối hệ thống.'));

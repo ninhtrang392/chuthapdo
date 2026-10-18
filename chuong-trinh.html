@@ -67,9 +67,9 @@
       </nav>
       <div class="header-actions">
         <button class="search-button" type="button" aria-label="Tìm kiếm" data-panel="Tìm kiếm"><svg class="icon"><use href="#search"/></svg></button>
-        <!-- ---------- Thông báo & tài khoản (bản xem trước: chưa kết nối hệ thống) ---------- -->
+        <!-- ---------- Thông báo & tài khoản: menu tài khoản do account-menu.js dựng ---------- -->
         <button class="icon-button notify-button" type="button" aria-label="Thông báo, có thông báo mới" data-panel="Thông báo"><svg class="icon"><use href="#bell"/></svg><span class="notify-dot" aria-hidden="true"></span></button>
-        <button class="avatar-button" type="button" aria-label="Tài khoản của bạn" data-panel="Tài khoản"><svg class="icon"><use href="#user"/></svg></button>
+        <button class="avatar-button" type="button" aria-label="Tài khoản của bạn"><svg class="icon"><use href="#user"/></svg></button>
       </div>
     </header>
 
@@ -156,9 +156,11 @@
         </div>
         <nav class="footer-col" aria-label="Giới thiệu">
           <h2>Giới thiệu</h2>
-          <a href="#" data-panel="Về chúng tôi">Về chúng tôi</a>
-          <a href="#" data-panel="Lĩnh vực hoạt động">Lĩnh vực hoạt động</a>
-          <a href="ban-do-so.html">Mạng lưới địa phương</a>
+          <a href="index.html#chuong-trinh">Chương trình</a>
+          <a href="ban-do-so.html">Bản đồ số</a>
+          <a href="index.html#cong-khai">Công khai</a>
+          <a href="index.html#tin-tuc">Tin tức</a>
+          <a href="index.html#don-vi-dong-hanh">Đơn vị đồng hành</a>
         </nav>
         <nav class="footer-col" aria-label="Hỗ trợ">
           <h2>Hỗ trợ</h2>
@@ -200,6 +202,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
     <script src="flow.js" defer></script>
+    <script src="account-menu.js" defer></script>
     <script src="chuong-trinh.js" defer></script>
   </body>
 </html>
