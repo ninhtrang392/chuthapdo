@@ -1,15 +1,17 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Hội Chữ thập đỏ Việt Nam — Vì một cộng đồng an toàn, nhân văn và không ai bị bỏ lại phía sau." />
-    <title>Bản đồ Nhân đạo Quốc gia | Hội Chữ thập đỏ Việt Nam</title>
+    <title>Bản đồ số – Đơn vị, con người | Hội Chữ thập đỏ Việt Nam</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="vendor/leaflet/MarkerCluster.css" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="ban-do-so.css" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -24,6 +26,7 @@
 
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
     <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="bd-shield" viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m8 12 3 3 5-6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
       <symbol id="heart-solid" viewBox="0 0 24 24"><path d="M22.75 8.83574C22.6129 16.9796 15.3657 20.4397 12.8234 21.3996C12.5625 21.4987 12.2847 21.545 12.0058 21.536C11.727 21.5269 11.4527 21.4626 11.1988 21.3469C8.6987 20.2076 1.1456 16.2201 1.25109 8.92013C1.2456 7.50144 1.71064 6.12096 2.57343 4.99476C3.43621 3.86856 4.64804 3.06021 6.01925 2.69621C6.94644 2.44613 7.91588 2.3939 8.86457 2.54293C9.81326 2.69196 10.72 3.03891 11.5258 3.56123C11.6685 3.65471 11.8353 3.70451 12.0058 3.70451C12.1764 3.70451 12.3432 3.65471 12.4858 3.56123C13.3648 2.99505 14.3616 2.63707 15.4 2.51458C16.4383 2.3921 17.491 2.50834 18.4776 2.85444C19.7128 3.2998 20.7831 4.1106 21.5463 5.17903C22.3095 6.24747 22.7293 7.5229 22.75 8.83574Z" fill="currentColor"/></symbol>
       <symbol id="arrow" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.64258 11.9997C1.64258 11.3847 2.14116 10.8861 2.75619 10.8861H18.5554L12.5821 4.91277C12.1472 4.47787 12.1472 3.77278 12.5821 3.33789C13.017 2.903 13.722 2.903 14.1569 3.33789L22.0313 11.2123C22.4662 11.6472 22.4662 12.3523 22.0313 12.7872L14.1569 20.6616C13.722 21.0964 13.017 21.0964 12.5821 20.6616C12.1472 20.2267 12.1472 19.5216 12.5821 19.0867L18.5554 13.1133H2.75619C2.14116 13.1133 1.64258 12.6147 1.64258 11.9997Z" fill="currentColor"/></symbol>
       <symbol id="search" viewBox="0 0 24 24"><path d="M11.0698 2.06995C16.0404 2.06995 20.0698 6.09938 20.0698 11.0699C20.0698 13.2491 19.2951 15.2472 18.0063 16.8043L21.6704 20.4684C22.0024 20.8003 22.0024 21.3386 21.6704 21.6705C21.3385 22.0024 20.8012 22.0024 20.4692 21.6705L16.8042 18.0055C15.247 19.2945 13.2492 20.0699 11.0698 20.0699C6.09926 20.0699 2.06982 16.0405 2.06982 11.0699C2.06982 6.09938 6.09926 2.06995 11.0698 2.06995ZM11.0698 3.73792C7.02049 3.73792 3.73779 7.02061 3.73779 11.0699C3.73779 15.1193 7.02049 18.402 11.0698 18.402C15.1192 18.402 18.4019 15.1193 18.4019 11.0699C18.4019 7.02061 15.1192 3.73792 11.0698 3.73792Z" fill="currentColor"/></symbol>
@@ -87,270 +90,103 @@
       </div>
     </header>
 
-    <main id="main" class="map-page">
-      <!-- Dữ liệu trên trang là DỮ LIỆU MINH HỌA (ban-do-so.js) — khi triển khai thật phải lấy từ hệ thống điều phối chính thức.
-           Nền bản đồ: Esri World Ocean Base / World Imagery qua Leaflet; nhãn quốc gia, biển, quần đảo do trang tự đặt. -->
-
-      <!-- ==================== SECTION: THANH CÔNG CỤ — tiêu đề, tìm kiếm, phạm vi, thời gian ==================== -->
+    <!-- ==================== SECTION: BẢN ĐỒ SỐ — đơn vị, con người (bố cục 3 cột như bản cũ: lớp bản đồ · bản đồ · danh sách; tỉnh, xã + bộ lọc nâng cao trên thanh công cụ) ==================== -->
+    <main id="main" class="map-page bd-page">
+      <!-- ---------- Thanh công cụ: tiêu đề · tìm kiếm · tỉnh · xã · Bộ lọc nâng cao · Đặt lại (UI KIT pf-input, pf-btn) ---------- -->
       <div class="map-toolbar">
-        <div class="map-brand">
-          <div>
-            <h1 class="map-brand-title">Bản đồ Nhân đạo Quốc gia</h1>
-          </div>
-        </div>
-        <label class="map-search">
+        <div class="map-brand"><h1 class="map-brand-title">Bản đồ Nhân đạo Quốc gia</h1></div>
+        <label class="pf-input is-search bd-search">
           <svg class="icon" aria-hidden="true"><use href="#search"/></svg>
-          <span class="visually-hidden">Tìm kiếm địa bàn</span>
-          <input type="search" id="map-search" placeholder="Tìm kiếm tỉnh, huyện, xã..." autocomplete="off" />
+          <span class="visually-hidden">Tìm theo tên, số điện thoại, địa chỉ</span>
+          <input id="bd-search" type="search" placeholder="Tìm theo tên, số điện thoại, địa chỉ" autocomplete="off" aria-describedby="bd-search-hint" />
         </label>
-        <label class="map-select">
-          <svg class="icon" aria-hidden="true"><use href="#pin"/></svg>
-          <span class="visually-hidden">Phạm vi</span>
-          <select id="map-region">
-            <option value="all">Toàn quốc</option>
-            <option value="north">Miền Bắc</option>
-            <option value="central">Miền Trung</option>
-            <option value="south">Miền Nam</option>
-          </select>
-          <svg class="icon map-select-caret" aria-hidden="true"><use href="#chevron-down"/></svg>
-        </label>
-        <label class="map-select">
-          <svg class="icon" aria-hidden="true"><use href="#calendar"/></svg>
-          <span class="visually-hidden">Thời gian</span>
-          <select id="map-time">
-            <option value="now">Thời gian: hiện tại</option>
-            <option value="7d">7 ngày qua</option>
-            <option value="30d">30 ngày qua</option>
-          </select>
-          <svg class="icon map-select-caret" aria-hidden="true"><use href="#chevron-down"/></svg>
-        </label>
+        <span class="visually-hidden" id="bd-search-hint">Nhập từ 2 ký tự. Tìm kiếm sau khi ngừng gõ nửa giây.</span>
+        <div class="bd-filter-bar" id="bd-filter-body" role="group" aria-label="Bộ lọc">
+          <div class="pf-input bd-filter-item"><select id="bd-province" aria-label="Tỉnh, thành phố"><option value="">Tất cả tỉnh, thành phố</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <div class="pf-input bd-filter-item"><select id="bd-ward" aria-label="Xã, phường" disabled><option value="">Tất cả xã, phường</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <button class="pf-btn pf-btn-ghost pf-adv-toggle" type="button" id="bd-adv-toggle" aria-expanded="false" aria-controls="bd-adv"><svg class="icon" aria-hidden="true"><use href="#sliders"/></svg>Bộ lọc nâng cao<span class="pf-filter-count" id="bd-adv-count" hidden></span></button>
+          <button type="button" class="pf-btn pf-btn-ghost bd-reset" id="bd-reset"><svg class="icon" aria-hidden="true"><use href="#refresh"/></svg>Đặt lại</button>
+        </div>
       </div>
-      <!-- ==================== END SECTION: THANH CÔNG CỤ ==================== -->
 
-      <div class="map-dashboard">
-        <!-- ==================== SECTION: CỘT TRÁI — lớp bản đồ & bộ lọc ==================== -->
-        <aside class="md-panel md-filters" id="md-filters" aria-label="Lớp bản đồ và bộ lọc">
-          <!-- Các mục bộ lọc là accordion: mỗi cột chỉ mở một mục một lúc để hạn chế cuộn (ban-do-so.js: SECTION CỘT BÊN — accordion) -->
-          <!-- ---------- Lớp bản đồ: bật/tắt từng lớp — mở sẵn, chỉ đóng khi người dùng bấm (data-acc-pinned: không bị mục khác tự đóng) ---------- -->
-          <section class="md-block md-acc is-open" data-acc-pinned>
-            <h2 class="md-acc-title"><button class="md-acc-head" type="button" id="acc-layers-btn" aria-controls="acc-layers" aria-expanded="true"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg>Lớp bản đồ<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h2>
-            <div class="md-acc-body" id="acc-layers" role="region" aria-labelledby="acc-layers-btn"><div class="md-acc-inner">
-            <div class="md-layers" id="layer-list">
-              <label class="md-layer is-on">
-                <span class="md-layer-icon is-red" aria-hidden="true"><svg class="icon"><use href="#hand-heart"/></svg></span>
-                <span class="md-layer-text"><strong>Điều phối nguồn lực</strong><small>Nhu cầu &amp; nguồn lực cứu trợ</small></span>
-                <input class="md-switch" type="checkbox" data-layer="relief" checked />
-              </label>
-              <label class="md-layer">
-                <span class="md-layer-icon is-blue" aria-hidden="true"><svg class="icon"><use href="#cloud"/></svg></span>
-                <span class="md-layer-text"><strong>Bản đồ thời tiết</strong><small>Dự báo, cảnh báo thiên tai</small></span>
-                <input class="md-switch" type="checkbox" data-layer="weather" />
-              </label>
-              <label class="md-layer">
-                <span class="md-layer-icon is-purple" aria-hidden="true"><svg class="icon"><use href="#people"/></svg></span>
-                <span class="md-layer-text"><strong>Người yếu thế</strong><small>Hộ nghèo, người già, trẻ em…</small></span>
-                <input class="md-switch" type="checkbox" data-layer="vulnerable" />
-              </label>
+      <!-- ---------- Bộ lọc nâng cao (UI KIT pf-adv-panel, như trang hồ sơ): đơn vị hội · lĩnh vực hoạt động · kỹ năng tình nguyện viên ---------- -->
+      <div class="pf-adv-panel bd-adv-panel" id="bd-adv" role="region" aria-label="Bộ lọc nâng cao" hidden>
+        <div class="pf-adv-grid bd-adv-grid">
+          <div class="pf-adv-field" id="bd-unit-field"><span id="bd-unit-label">Đơn vị hội</span><details class="bd-multi" id="bd-unit-picker"><summary aria-labelledby="bd-unit-label bd-unit-value"><span id="bd-unit-value">Tất cả đơn vị</span><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></summary><div class="bd-options"><label class="pf-input is-search"><svg class="icon" aria-hidden="true"><use href="#search"/></svg><input id="bd-unit-search" type="search" placeholder="Tìm tên đơn vị…" aria-label="Tìm đơn vị hội" /></label><div id="bd-unit-options"></div></div></details></div>
+          <div class="pf-adv-field" id="bd-fields-field"><span id="bd-fields-label">Lĩnh vực hoạt động</span><details class="bd-multi" id="bd-fields-picker"><summary aria-labelledby="bd-fields-label bd-fields-value"><span id="bd-fields-value">Tất cả lĩnh vực</span><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></summary><div class="bd-options" id="bd-fields-options"></div></details></div>
+          <div class="pf-adv-field" id="bd-skills-field"><span id="bd-skills-label">Kỹ năng tình nguyện viên</span><details class="bd-multi" id="bd-skills-picker"><summary aria-labelledby="bd-skills-label bd-skills-value"><span id="bd-skills-value">Tất cả kỹ năng</span><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></summary><div class="bd-options" id="bd-skills-options"></div></details></div>
+        </div>
+      </div>
+
+      <div class="map-dashboard" id="bd-dashboard">
+        <!-- ==================== SECTION: CỘT TRÁI — lớp bản đồ (chia nhóm) ==================== -->
+        <aside class="md-panel md-filters" id="bd-left" aria-label="Lớp bản đồ">
+          <!-- ---------- Lớp bản đồ: nhóm Tổ chức hội · Con người · Hạ tầng hỗ trợ · Hạ tầng nhân đạo · Chương trình, mỗi nhóm thu gọn / mở bằng mũi tên ở tiêu đề nhóm, mỗi lớp 1 công tắc (ban-do-so.js dựng) ---------- -->
+          <section class="bd-card bd-layers-card">
+            <h2 class="bd-card-title"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg>Lớp bản đồ</h2>
+            <div id="bd-layers-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-overview">
+              <fieldset id="bd-layers" class="md-layers"><legend class="visually-hidden">Chọn lớp bản đồ</legend></fieldset>
             </div>
-            </div></div>
-          </section>
-
-          <!-- ---------- Bộ lọc nhanh: loại nguồn lực, tình trạng, địa bàn ---------- -->
-          <section class="md-block" aria-labelledby="filter-title">
-            <div class="md-block-head">
-              <h2 id="filter-title"><svg class="icon" aria-hidden="true"><use href="#sliders"/></svg>Bộ lọc nhanh</h2>
-              <button class="md-link" type="button" id="filter-reset"><svg class="icon" aria-hidden="true"><use href="#refresh"/></svg>Đặt lại</button>
+            <!-- ---------- Tab Nguồn lực: công tắc lớp Điều phối nguồn lực · lọc Loại nguồn lực (thẻ) · Tình trạng (mức cân đối) ---------- -->
+            <div id="bd-relief-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-relief" hidden>
+              <label class="md-layer bd-layer" style="--layer-color:#e5232f"><span class="md-layer-icon" aria-hidden="true"><svg class="icon"><use href="#hand-heart"/></svg></span><span class="md-layer-text"><strong class="bd-layer-name">Điều phối nguồn lực</strong><small><span id="bd-relief-count">0</span> địa bàn</small></span><input class="md-switch" type="checkbox" data-extra="relief" /></label>
+              <fieldset class="bd-extra-group"><legend class="bd-extra-title">Loại nguồn lực</legend><div class="md-chips" id="bd-resource-filter"></div></fieldset>
+              <fieldset class="bd-extra-group"><legend class="bd-extra-title">Tình trạng</legend><div class="md-status-list" id="bd-status-filter"></div></fieldset>
             </div>
-
-            <!-- ---------- Loại nguồn lực ---------- -->
-            <div class="md-acc">
-              <h3 class="md-acc-title"><button class="md-acc-head is-sub" type="button" id="acc-res-btn" aria-controls="acc-res" aria-expanded="false">Loại nguồn lực<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h3>
-              <div class="md-acc-body" id="acc-res" role="region" aria-labelledby="acc-res-btn"><div class="md-acc-inner">
-            <fieldset class="md-group">
-              <legend class="visually-hidden">Loại nguồn lực</legend>
-              <div class="md-chips" id="resource-filter">
-                <button type="button" class="md-chip" data-res="water" aria-pressed="true"><span class="md-chip-icon is-water"><svg class="icon" aria-hidden="true"><use href="#drop"/></svg></span>Nước uống</button>
-                <button type="button" class="md-chip" data-res="food" aria-pressed="true"><span class="md-chip-icon is-food"><svg class="icon" aria-hidden="true"><use href="#wheat"/></svg></span>Lương thực</button>
-                <button type="button" class="md-chip" data-res="medicine" aria-pressed="true"><span class="md-chip-icon is-medicine"><svg class="icon" aria-hidden="true"><use href="#medkit"/></svg></span>Thuốc men</button>
-                <button type="button" class="md-chip" data-res="volunteer" aria-pressed="true"><span class="md-chip-icon is-volunteer"><svg class="icon" aria-hidden="true"><use href="#user"/></svg></span>Tình nguyện viên</button>
-                <button type="button" class="md-chip" data-res="supplies" aria-pressed="true"><span class="md-chip-icon is-supplies"><svg class="icon" aria-hidden="true"><use href="#box"/></svg></span>Vật tư thiết yếu</button>
-                <button type="button" class="md-chip" data-res="other" aria-pressed="true"><span class="md-chip-icon is-other"><svg class="icon" aria-hidden="true"><use href="#dots"/></svg></span>Khác</button>
-              </div>
-            </fieldset>
-              </div></div>
-            </div>
-
-            <!-- ---------- Tình trạng ---------- -->
-            <div class="md-acc">
-              <h3 class="md-acc-title"><button class="md-acc-head is-sub" type="button" id="acc-status-btn" aria-controls="acc-status" aria-expanded="false">Tình trạng<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h3>
-              <div class="md-acc-body" id="acc-status" role="region" aria-labelledby="acc-status-btn"><div class="md-acc-inner">
-            <fieldset class="md-group">
-              <legend class="visually-hidden">Tình trạng</legend>
-              <div class="md-status-list" id="status-filter">
-                <label><span class="md-dot is-critical"></span>Thiếu nghiêm trọng<input type="checkbox" value="critical" checked /></label>
-                <label><span class="md-dot is-short"></span>Thiếu<input type="checkbox" value="short" checked /></label>
-                <label><span class="md-dot is-near"></span>Gần cân bằng<input type="checkbox" value="near" checked /></label>
-                <label><span class="md-dot is-enough"></span>Đủ<input type="checkbox" value="enough" checked /></label>
-                <label><span class="md-dot is-surplus"></span>Dư nguồn lực<input type="checkbox" value="surplus" checked /></label>
-              </div>
-            </fieldset>
-              </div></div>
-            </div>
-
-            <!-- ---------- Địa bàn ---------- -->
-            <div class="md-acc">
-              <h3 class="md-acc-title"><button class="md-acc-head is-sub" type="button" id="acc-area-btn" aria-controls="acc-area" aria-expanded="false">Địa bàn<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h3>
-              <div class="md-acc-body" id="acc-area" role="region" aria-labelledby="acc-area-btn"><div class="md-acc-inner">
-            <fieldset class="md-group">
-              <legend class="visually-hidden">Địa bàn</legend>
-              <label class="map-select is-block">
-                <span class="visually-hidden">Chọn tỉnh</span>
-                <select id="area-filter"><option value="">Chọn tỉnh / huyện / xã</option></select>
-                <svg class="icon map-select-caret" aria-hidden="true"><use href="#chevron-down"/></svg>
-              </label>
-            </fieldset>
-              </div></div>
+            <!-- ---------- Tab Thời tiết: công tắc Cảnh báo nguy hiểm · Cần theo dõi (nhãn cảnh báo trên bản đồ) ---------- -->
+            <div id="bd-weather-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-weather" hidden>
+              <fieldset class="bd-extra-group"><legend class="bd-extra-title">Cảnh báo thiên tai</legend><div id="bd-weather-layers"></div></fieldset>
             </div>
           </section>
-
-          <button class="md-more" type="button" data-panel="Hiển thị khác"><svg class="icon" aria-hidden="true"><use href="#grid"/></svg>Hiển thị khác<svg class="icon md-more-caret" aria-hidden="true"><use href="#chevron-right"/></svg></button>
         </aside>
         <!-- ==================== END SECTION: CỘT TRÁI ==================== -->
 
-        <!-- ==================== SECTION: BẢN ĐỒ — Leaflet, nút điều khiển, chú giải ==================== -->
-        <section class="md-map" aria-label="Bản đồ nhân đạo">
-          <div class="md-map-canvas" id="relief-map" role="application" aria-label="Bản đồ các địa bàn cần hỗ trợ"></div>
-          <p class="md-map-fallback" hidden>Không tải được bản đồ nền. Kiểm tra kết nối mạng rồi tải lại trang.</p>
-
-          <!-- ---------- Chọn nền: Bản đồ / Vệ tinh ---------- -->
-          <div class="md-basemap" role="group" aria-label="Kiểu bản đồ nền">
-            <button type="button" data-base="map" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="#map"/></svg>Bản đồ</button>
-            <button type="button" data-base="satellite" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#globe"/></svg>Vệ tinh</button>
+        <!-- ==================== SECTION: BẢN ĐỒ — Leaflet, nút thu gọn cột, điều khiển ==================== -->
+        <section class="md-map bd-workspace" id="bd-workspace" aria-label="Bản đồ đơn vị và con người">
+          <div id="digital-map" class="bd-map" role="region" aria-label="Bản đồ đơn vị và con người"></div>
+          <!-- ---------- Tab lớp bản đồ trên góc trái bản đồ (kiểu nút nhóm md-basemap của bản cũ): Tổng quan · Nguồn lực · Thời tiết — đổi nội dung cột Lớp bản đồ (ban-do-so.js: LỚP BẢN ĐỒ: tab) ---------- -->
+          <div class="md-basemap bd-tabs" role="tablist" aria-label="Nhóm lớp bản đồ">
+            <button type="button" role="tab" id="bd-tab-overview" aria-selected="true" aria-controls="bd-layers-body">Tổng quan</button>
+            <button type="button" role="tab" id="bd-tab-relief" aria-selected="false" aria-controls="bd-relief-body" tabindex="-1">Nguồn lực</button>
+            <button type="button" role="tab" id="bd-tab-weather" aria-selected="false" aria-controls="bd-weather-body" tabindex="-1">Thời tiết</button>
           </div>
-
-          <!-- ---------- Điều khiển: về toàn cảnh, phóng to/thu nhỏ, định vị, toàn màn hình ---------- -->
-          <div class="md-controls">
-            <button type="button" data-ctrl="home" aria-label="Về toàn cảnh Việt Nam"><svg class="icon" aria-hidden="true"><use href="#navigate"/></svg></button>
-            <span class="md-controls-group">
-              <button type="button" data-ctrl="in" aria-label="Phóng to"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button>
-              <button type="button" data-ctrl="out" aria-label="Thu nhỏ"><svg class="icon" aria-hidden="true"><use href="#minus"/></svg></button>
-            </span>
-            <span class="md-controls-group">
-              <button type="button" data-ctrl="locate" aria-label="Định vị địa bàn đang chọn"><svg class="icon" aria-hidden="true"><use href="#locate"/></svg></button>
-              <button type="button" data-ctrl="full" aria-label="Toàn màn hình"><svg class="icon" aria-hidden="true"><use href="#expand"/></svg></button>
-            </span>
+          <!-- ---------- Nút thu gọn / mở cột trái, cột phải (ban-do-so.js: CỘT BÊN) ---------- -->
+          <button class="md-panel-toggle is-left" type="button" data-panel-toggle="left" aria-controls="bd-left" aria-expanded="true" aria-label="Thu gọn cột lớp bản đồ" title="Thu gọn cột lớp bản đồ"><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg></button>
+          <button class="md-panel-toggle is-right" type="button" data-panel-toggle="right" aria-controls="bd-right" aria-expanded="true" aria-label="Thu gọn cột danh sách dữ liệu" title="Thu gọn cột danh sách dữ liệu"><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg></button>
+          <!-- ---------- Điều khiển bản đồ ---------- -->
+          <div class="bd-map-top">
+            <button type="button" class="bd-map-button" id="bd-fullscreen" aria-label="Toàn màn hình" title="Toàn màn hình" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#expand"/></svg></button>
+            <button type="button" class="bd-map-button" id="bd-base-toggle" aria-label="Nền bản đồ" title="Nền bản đồ" aria-expanded="false" aria-controls="bd-bases"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg></button>
           </div>
-
-          <!-- ---------- Nút mở / đóng cột trái & cột phải (desktop) ---------- -->
-          <button class="md-panel-toggle is-left" type="button" data-panel-toggle="left" aria-controls="md-filters" aria-expanded="true" aria-label="Thu gọn cột lớp bản đồ và bộ lọc" title="Thu gọn cột lớp bản đồ và bộ lọc"><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg></button>
-          <button class="md-panel-toggle is-right" type="button" data-panel-toggle="right" aria-controls="md-summary" aria-expanded="true" aria-label="Thu gọn cột tổng quan" title="Thu gọn cột tổng quan"><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg></button>
-
-          <button class="md-mylocation" type="button" data-ctrl="me" title="Vị trí của tôi"><svg class="icon" aria-hidden="true"><use href="#navigate"/></svg>Vị trí của tôi</button>
-          <p class="md-toast" role="status" aria-live="polite" hidden></p>
-
-          <!-- ---------- Chú giải: chỉ hiện nhóm của lớp đang bật, thu gọn được (ban-do-so.js: SECTION BẢN ĐỒ — chú giải) ---------- -->
-          <!-- Quy ước: mỗi lớp một kiểu hình riêng, không lớp nào dùng lại màu/hình của lớp khác.
-               Điều phối = ghim giọt nước, MÀU = mức cân đối, biểu tượng trong ghim = loại hỗ trợ · Người yếu thế = ô vuông tím · Thời tiết = nhãn chữ -->
-          <div class="md-legend">
-            <button class="md-legend-head" type="button" aria-expanded="true" aria-controls="md-legend-body">
-              <span>Chú giải</span><span class="md-legend-count" id="md-legend-count">1 lớp đang bật</span>
-              <span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span>
-            </button>
-            <div class="md-legend-body" id="md-legend-body">
-              <div class="md-legend-group" data-legend="relief">
-                <p><span class="md-legend-layer is-red"><svg class="icon" aria-hidden="true"><use href="#hand-heart"/></svg></span>Điều phối nguồn lực</p>
-                <div class="md-legend-row">
-                  <span class="md-legend-label">Màu ghim:</span>
-                  <ul>
-                    <li><span class="md-legend-drop st-critical"></span>Thiếu nghiêm trọng</li>
-                    <li><span class="md-legend-drop st-short"></span>Thiếu</li>
-                    <li><span class="md-legend-drop st-near"></span>Gần cân bằng</li>
-                    <li><span class="md-legend-drop st-enough"></span>Đủ</li>
-                    <li><span class="md-legend-drop st-surplus"></span>Dư</li>
-                  </ul>
-                </div>
-                <div class="md-legend-row">
-                  <span class="md-legend-label">Hình trong ghim:</span>
-                  <ul class="md-legend-glyphs">
-                    <li><svg class="icon" aria-hidden="true"><use href="#alert-mark"/></svg>Cần gấp</li>
-                    <li><svg class="icon" aria-hidden="true"><use href="#drop"/></svg>Nước</li>
-                    <li><svg class="icon" aria-hidden="true"><use href="#wheat"/></svg>Lương thực</li>
-                    <li><svg class="icon" aria-hidden="true"><use href="#medkit"/></svg>Thuốc</li>
-                    <li><svg class="icon" aria-hidden="true"><use href="#user"/></svg>Tình nguyện viên</li>
-                    <li><svg class="icon" aria-hidden="true"><use href="#box"/></svg>Vật tư</li>
-                    <li><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Chương trình</li>
-                  </ul>
-                </div>
-                <div class="md-legend-row">
-                  <span class="md-legend-label">Vòng có số:</span>
-                  <ul><li><span class="md-legend-cluster">5</span>nhiều địa bàn gần nhau, bấm để xem</li></ul>
-                </div>
-              </div>
-              <div class="md-legend-group" data-legend="vulnerable" hidden>
-                <p><span class="md-legend-layer is-purple"><svg class="icon" aria-hidden="true"><use href="#people"/></svg></span>Người yếu thế</p>
-                <ul><li><span class="md-vuln is-mini"><svg class="icon" aria-hidden="true"><use href="#people"/></svg></span>Khu có hộ yếu thế cần ưu tiên</li></ul>
-              </div>
-              <div class="md-legend-group" data-legend="weather" hidden>
-                <p><span class="md-legend-layer is-blue"><svg class="icon" aria-hidden="true"><use href="#cloud"/></svg></span>Thời tiết</p>
-                <ul>
-                  <li><span class="md-weather is-alert is-mini"><svg class="icon" aria-hidden="true"><use href="#rain"/></svg>Mưa lớn</span>Cảnh báo nguy hiểm</li>
-                  <li><span class="md-weather is-mini"><svg class="icon" aria-hidden="true"><use href="#cloud"/></svg>Nắng hạn</span>Cần theo dõi</li>
-                </ul>
-              </div>
-              <p class="md-legend-empty" hidden>Chưa bật lớp nào. Bật lớp ở cột “Lớp bản đồ” bên trái.</p>
-            </div>
+          <section class="bd-bases bd-card" id="bd-bases" aria-label="Nền bản đồ" hidden><h2>Nền bản đồ</h2><div class="bd-base-grid" id="bd-base-options"></div></section>
+          <div class="bd-map-bottom">
+            <button type="button" class="bd-map-button" id="bd-locate" aria-label="Vị trí của tôi" title="Vị trí của tôi"><svg class="icon" aria-hidden="true"><use href="#locate"/></svg></button>
+            <div class="bd-zoom"><button type="button" class="bd-map-button" id="bd-zoom-in" aria-label="Phóng to" title="Phóng to"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button><button type="button" class="bd-map-button" id="bd-zoom-out" aria-label="Thu nhỏ" title="Thu nhỏ"><svg class="icon" aria-hidden="true"><use href="#minus"/></svg></button></div>
           </div>
+          <div class="bd-map-notice" id="bd-map-notice" role="status" hidden></div>
+          <div class="bd-focus-note" id="bd-focus-note" hidden><span>Đang định vị bản ghi</span><button type="button" id="bd-exit-focus">Hiện tất cả kết quả</button></div>
+          <p class="bd-map-caption" id="bd-map-caption">Vị trí và thông tin trên bản đồ là dữ liệu minh họa.</p>
         </section>
         <!-- ==================== END SECTION: BẢN ĐỒ ==================== -->
 
-        <!-- ==================== SECTION: CỘT PHẢI — tổng quan, nhu cầu, danh sách địa bàn ==================== -->
-        <aside class="md-panel md-summary" id="md-summary" aria-label="Tổng quan toàn quốc">
-          <!-- ---------- Tổng quan: 4 chỉ số (mở sẵn) ---------- -->
-          <section class="md-acc is-open">
-            <h2 class="md-acc-title"><button class="md-acc-head is-lg" type="button" id="acc-stats-btn" aria-controls="acc-stats" aria-expanded="true"><span class="md-head-icon" aria-hidden="true"><svg class="icon"><use href="#people"/></svg></span>Tổng quan toàn quốc<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h2>
-            <div class="md-acc-body" id="acc-stats" role="region" aria-labelledby="acc-stats-btn"><div class="md-acc-inner">
-          <p class="md-updated">Cập nhật: <time datetime="2026-10-08T08:00">08:00, 08/10/2026</time></p>
-          <div class="md-stats">
-            <div class="md-stat is-red"><p>Địa bàn thiếu</p><strong>32</strong><small>Tỉnh / Huyện / Xã</small></div>
-            <div class="md-stat is-orange"><p>Đang cần hỗ trợ</p><strong>152.340</strong><small>Người</small></div>
-            <div class="md-stat is-green"><p>Đã đáp ứng</p><strong>108.500</strong><small>Người (71%)</small></div>
-            <div class="md-stat is-blue"><p>Còn thiếu</p><strong>43.840</strong><small>Người (29%)</small></div>
-          </div>
-            </div></div>
-          </section>
-
-          <!-- ---------- Top nhu cầu theo loại nguồn lực ---------- -->
-          <section class="md-acc">
-            <h3 class="md-acc-title"><button class="md-acc-head" type="button" id="acc-needs-btn" aria-controls="acc-needs" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#box"/></svg>Top nhu cầu theo loại nguồn lực<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h3>
-            <div class="md-acc-body" id="acc-needs" role="region" aria-labelledby="acc-needs-btn"><div class="md-acc-inner">
-          <div class="md-needs">
-            <div class="md-need"><span class="md-chip-icon is-water"><svg class="icon" aria-hidden="true"><use href="#drop"/></svg></span><p>Nước uống</p><strong>45.200</strong><small>thùng</small></div>
-            <div class="md-need"><span class="md-chip-icon is-food"><svg class="icon" aria-hidden="true"><use href="#wheat"/></svg></span><p>Lương thực</p><strong>38.600</strong><small>suất</small></div>
-            <div class="md-need"><span class="md-chip-icon is-medicine"><svg class="icon" aria-hidden="true"><use href="#medkit"/></svg></span><p>Thuốc men</p><strong>12.800</strong><small>lọ/gói</small></div>
-            <div class="md-need"><span class="md-chip-icon is-volunteer"><svg class="icon" aria-hidden="true"><use href="#user"/></svg></span><p>Tình nguyện viên</p><strong>2.150</strong><small>người</small></div>
-          </div>
-          <button class="md-link md-acc-more" type="button" data-panel="Nhu cầu theo loại nguồn lực">Xem tất cả<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></button>
-            </div></div>
-          </section>
-
-          <!-- ---------- Danh sách địa bàn nổi bật: tab theo tình trạng ---------- -->
-          <section class="md-acc">
-            <h3 class="md-acc-title"><button class="md-acc-head" type="button" id="acc-areas-btn" aria-controls="acc-areas" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Danh sách địa bàn nổi bật<span class="md-acc-chevron" aria-hidden="true"><svg class="icon"><use href="#chevron-down"/></svg></span></button></h3>
-            <div class="md-acc-body" id="acc-areas" role="region" aria-labelledby="acc-areas-btn"><div class="md-acc-inner">
-          <div class="md-tabs" role="tablist" aria-label="Lọc danh sách theo tình trạng">
-            <button type="button" role="tab" data-tab="critical" aria-selected="true">Thiếu nghiêm trọng</button>
-            <button type="button" role="tab" data-tab="short" aria-selected="false">Thiếu</button>
-            <button type="button" role="tab" data-tab="near" aria-selected="false">Gần cân bằng</button>
-            <button type="button" role="tab" data-tab="other" aria-selected="false">Khác</button>
-          </div>
-          <ol class="md-areas" id="area-list" aria-live="polite"></ol>
-          <button class="md-link md-acc-more" type="button" data-panel="Danh sách địa bàn">Xem tất cả<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></button>
-            </div></div>
+        <!-- ==================== SECTION: CỘT PHẢI — danh sách dữ liệu ==================== -->
+        <aside class="md-panel md-summary" id="bd-right" aria-label="Danh sách dữ liệu">
+          <section class="bd-card bd-results-card">
+            <h2 class="bd-card-title"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Danh sách dữ liệu<span id="bd-total" class="bd-total" aria-live="polite">Đang tải…</span></h2>
+            <div class="bd-results-body" id="bd-results-body" tabindex="0" aria-label="Danh sách kết quả, cuộn để xem thêm">
+              <table class="bd-results"><thead><tr><th scope="col">Tên</th><th scope="col">Địa chỉ</th></tr></thead><tbody id="bd-rows"></tbody></table>
+              <p id="bd-empty" class="bd-empty" role="status">Đang tải dữ liệu…</p>
+              <button type="button" class="bd-load-more" id="bd-load-more" hidden>Xem thêm 50 bản ghi</button>
+            </div>
           </section>
         </aside>
         <!-- ==================== END SECTION: CỘT PHẢI ==================== -->
       </div>
+      <div class="bd-toast" id="bd-toast" role="status" aria-live="polite" hidden></div>
+      <noscript><p>Vui lòng bật JavaScript để sử dụng tìm kiếm và bộ lọc bản đồ.</p></noscript>
     </main>
+    <!-- ==================== END SECTION: BẢN ĐỒ SỐ ==================== -->
+    <dialog class="info-dialog bd-record-dialog" id="bd-record-dialog" aria-labelledby="bd-record-title"><button class="dialog-close" type="button" aria-label="Đóng hồ sơ">×</button><span class="pf-badge is-orange">Hồ sơ minh họa</span><h2 id="bd-record-title"></h2><div id="bd-record-content"></div><button class="button button-primary dialog-done" type="button">Đóng</button></dialog>
 
     <!-- ==================== FOOTER ==================== -->
     <!-- Thông tin liên hệ theo nội dung chủ website cung cấp. -->
@@ -408,8 +244,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
         <script src="flow.js" defer></script>
     <script src="account-menu.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js" defer></script>
+    <script src="vendor/leaflet/leaflet.js" defer></script>
+    <script src="vendor/leaflet/leaflet.markercluster.js" defer></script>
+    <script src="ban-do-so-model.js" defer></script>
+    <script src="ban-do-so-locations.js" defer></script>
+    <script src="ban-do-so-data.js" defer></script>
     <script src="ban-do-so.js" defer></script>
   </body>
 </html>

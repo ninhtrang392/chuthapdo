@@ -2006,6 +2006,60 @@ html.pf-reg-lock{overflow:hidden}
 }
 /* ==================== END SECTION: XEM CHI TIẾT CHƯƠNG TRÌNH ==================== */
 
+/* ==================== SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB — dùng chung khung & khối của Xem chi tiết chương trình ==================== */
+/* ---------- 2 thẻ cạnh nhau chia đều (Thông tin chung | Chủ nhiệm · Địa chỉ | Cơ quan chủ quản) ---------- */
+.pf-view-pair.is-even{grid-template-columns:repeat(2,minmax(0,1fr))}
+#pf-team-view .pf-view-kv dd .pf-reg-badge{vertical-align:top}
+
+/* ---------- Bảng hoạt động: cột ngày giữ 1 dòng ---------- */
+.pf-reg-table.is-view.is-v-acts th:nth-child(2),.pf-reg-table.is-view.is-v-acts th:nth-child(3){width:120px}
+.pf-reg-table.is-view.is-v-acts td:nth-child(2),.pf-reg-table.is-view.is-v-acts td:nth-child(3){white-space:nowrap}
+
+/* ---------- Bảng thành viên: đủ 12 cột như phiếu, cuộn ngang; chỉ Địa chỉ, Lĩnh vực, Kỹ năng được xuống dòng ---------- */
+/* Cố định độ rộng cột (như bảng hàng hóa) để chuyển trang không bị nhảy cột; Địa chỉ lấy phần còn lại */
+.pf-view-table .pf-reg-table.is-v-members{min-width:1560px;table-layout:fixed}
+.pf-reg-table.is-view.is-v-members td,.pf-reg-table.is-view.is-v-members td .pf-tag{white-space:nowrap}
+.pf-reg-table.is-view.is-v-members td{overflow:hidden;text-overflow:ellipsis}
+.pf-reg-table.is-view.is-v-members td:nth-child(9),.pf-reg-table.is-view.is-v-members td:nth-child(12),.pf-reg-table.is-view.is-v-members td:nth-child(13){white-space:normal}
+.pf-reg-table.is-view.is-v-members th:nth-child(2){width:180px}
+.pf-reg-table.is-view.is-v-members th:nth-child(3){width:136px}
+.pf-reg-table.is-view.is-v-members th:nth-child(4){width:72px}
+.pf-reg-table.is-view.is-v-members th:nth-child(5){width:80px}
+.pf-reg-table.is-view.is-v-members th:nth-child(6){width:132px}
+.pf-reg-table.is-view.is-v-members th:nth-child(7){width:112px}
+.pf-reg-table.is-view.is-v-members th:nth-child(8){width:84px}
+.pf-reg-table.is-view.is-v-members th:nth-child(10){width:76px}
+.pf-reg-table.is-view.is-v-members th:nth-child(11){width:104px}
+.pf-reg-table.is-view.is-v-members th:nth-child(12){width:160px}
+.pf-reg-table.is-view.is-v-members th:nth-child(13){width:160px}
+#pf-tv-members .pf-table-foot{padding:12px 20px}
+
+/* ---------- Cam kết: đoạn cam kết + 2 dòng đồng ý (tích xanh / ô trống), dòng ký bên dưới ---------- */
+.pf-tv-commit{padding:16px 20px;border-bottom:1px solid var(--color-border)}
+.pf-tv-commit p{margin:0;font-size:14px;line-height:22px;color:var(--color-text)}
+.pf-tv-checks{display:grid;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.pf-tv-checks li{display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:22px;color:var(--color-text-muted)}
+.pf-tv-checks li.is-on{color:var(--color-text)}
+.pf-tv-check{display:grid;place-items:center;flex:none;width:16px;height:16px;margin-top:3px;border:1px solid #d6d9de;border-radius:4px;background:#fff}
+/* Đã đồng ý: ô xanh + dấu tích vẽ bằng viền (giống .pf-check:checked) */
+.pf-tv-checks li.is-on .pf-tv-check{border-color:var(--color-green);background:var(--color-green)}
+.pf-tv-checks li.is-on .pf-tv-check::after{content:"";width:8px;height:4px;border:solid #fff;border-width:0 0 2px 2px;transform:translateY(-1px) rotate(-45deg)}
+
+/* ---------- Quá trình xử lý: dòng thời gian trong thẻ (thẻ đang ẩn — TEAM_SHOW_STEPS trong ho-so.js) ---------- */
+.pf-tv-steps{padding:16px 20px 0}
+.pf-tv-steps .pf-timeline{margin:0}
+
+/* ---------- Chân modal: Xem phiếu PDF bên trái ---------- */
+.pf-view-foot .pf-tv-pdf{margin-right:auto}
+
+@media(max-width:1023px){
+  .pf-view-pair.is-even{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:767px){
+  .pf-view-foot .pf-tv-pdf{flex-basis:100%}
+}
+/* ==================== END SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB ==================== */
+
 /* ==================== SECTION: XEM TRƯỚC PHIẾU ĐĂNG KÝ ĐỘI, CLB (PDF) ==================== */
 /* ---------- Khung trình xem PDF: gần toàn màn, thanh công cụ tối + nền xám cuộn ---------- */
 .pf-pdf{width:calc(100% - 48px);max-width:1440px;height:calc(100% - 48px);max-height:none;padding:0;border:0;border-radius:12px;background:#474d54;box-shadow:0 20px 80px rgba(0,0,0,.3);overflow:hidden}

@@ -54,7 +54,8 @@ const viDate = (iso) => iso.split('-').reverse().join('/');
 const icon = (id, cls = 'icon') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
 const fillOptions = (select, values) => values.forEach((value) => select.add(new Option(value, value)));
 const kv = (rows) => `<dl class="pf-kv">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
-const timeline = (items) => `<ol class="pf-timeline">${items.map((i) => `<li class="${i.cls || ''}"><time datetime="${i.date}">${viDate(i.date)}</time><strong>${escapeHtml(i.title)}</strong>${i.meta ? `<span>${escapeHtml(i.meta)}</span>` : ''}</li>`).join('')}</ol>`;
+// Bước chưa có ngày (đang chờ xử lý): hiện chữ "Đang chờ" thay cho ngày
+const timeline = (items) => `<ol class="pf-timeline">${items.map((i) => `<li class="${i.cls || ''}">${i.date ? `<time datetime="${i.date}">${viDate(i.date)}</time>` : '<span>Đang chờ</span>'}<strong>${escapeHtml(i.title)}</strong>${i.meta ? `<span>${escapeHtml(i.meta)}</span>` : ''}</li>`).join('')}</ol>`;
 
 // ==================== DATA: chương trình & hồ sơ người yếu thế (minh họa) ====================
 // Bảng “Chương trình của tôi” hiện đủ trường như mẫu datatable (mã, ảnh, tên + mô tả, lĩnh vực, đơn vị, người phụ trách,
@@ -206,7 +207,7 @@ document.addEventListener('mouseout', (event) => { if (event.target.closest('[da
 document.addEventListener('focusin', (event) => { const el = event.target.closest('[data-tip]'); if (el) showTip(el); else hideTip(); });
 window.addEventListener('scroll', hideTip, { passive: true, capture: true });
 
-// ==================== BẢNG DỮ LIỆU: lọc, đánh số thứ tự, phân trang (dùng chung 2 danh sách) ====================
+// ==================== BẢNG DỮ LIỆU: lọc, đánh số thứ tự, phân trang (dùng chung các danh sách & bảng thành viên ở Xem chi tiết hồ sơ đội, CLB) ====================
 const createTable = ({ rows, body, empty, pager, range, renderRow, perPage = 10, perPageOptions = [10, 20, 50] }) => {
   const state = { filter: () => true, page: 1, perPage, shown: rows };
   const pageCount = () => Math.max(1, Math.ceil(state.shown.length / state.perPage));
@@ -239,7 +240,7 @@ const createTable = ({ rows, body, empty, pager, range, renderRow, perPage = 10,
     if (!button || button.disabled) return;
     state.page = Number(button.dataset.page);
     render();
-    body.closest('.pf-table-card').scrollIntoView({ block: 'nearest' });
+    body.closest('.pf-table-card, .pf-view-card').scrollIntoView({ block: 'nearest' });
   });
   pager.addEventListener('change', (event) => {
     if (!event.target.matches('[data-per-page]')) return;
@@ -992,19 +993,28 @@ const updateVolCounts = () => Object.entries(VOL_KINDS).forEach(([kind, k]) => {
 
 const volRow = (r, index) => {
   // Bản nháp: Xem · Sửa · Xóa hiện thẳng trên dòng; trạng thái khác: chỉ Xem
+  // Hồ sơ thành lập đội, CLB: Xem / tên hồ sơ mở modal chi tiết (#thanh-lap-doi/xem/<mã>); loại khác chưa có màn chi tiết → hộp thông báo xem trước
   const name = escapeHtml(r.name);
+  const view = r.type === 'DC' ? `#thanh-lap-doi/xem/${encodeURIComponent(r.id)}` : '';
+  const viewLabel = r.status === 'draft' ? `Xem bản nháp ${name}` : `Xem hồ sơ ${r.code}`;
+  const viewBtn = view
+    ? `<a class="pf-icon-btn" href="${view}" aria-label="${viewLabel}">${icon('eye')}</a>`
+    : `<button class="pf-icon-btn" type="button" data-panel="${viewLabel}" aria-label="${viewLabel}">${icon('eye')}</button>`;
   const actions = r.status === 'draft'
-    ? `<button class="pf-icon-btn" type="button" data-panel="Xem bản nháp ${name}" aria-label="Xem bản nháp ${name}">${icon('eye')}</button><button class="pf-icon-btn" type="button" data-panel="Sửa bản nháp ${name}" aria-label="Sửa bản nháp ${name}">${icon('pencil')}</button><button class="pf-icon-btn is-danger" type="button" data-vol-delete="${r.id}" aria-label="Xóa bản nháp ${name}">${icon('trash')}</button>`
-    : `<button class="pf-icon-btn" type="button" data-panel="Xem hồ sơ ${r.code}" aria-label="Xem hồ sơ ${r.code}">${icon('eye')}</button>`;
+    ? `${viewBtn}<button class="pf-icon-btn" type="button" data-panel="Sửa bản nháp ${name}" aria-label="Sửa bản nháp ${name}">${icon('pencil')}</button><button class="pf-icon-btn is-danger" type="button" data-vol-delete="${r.id}" aria-label="Xóa bản nháp ${name}">${icon('trash')}</button>`
+    : viewBtn;
+  const title = `<span class="pf-clamp-1" data-tip>${name}</span>`;
+  // Nơi xử lý: hồ sơ thành lập đội, CLB lấy theo Đơn vị quản lý của hồ sơ
+  const place = r.type === 'DC' ? teamRegData(r).unit : VOL_PLACE[r.type];
   return `<tr>
     ${rowIndex(index)}
     <td>
       <div class="pf-cell-stack">
-        <span class="pf-cell-title"><span class="pf-clamp-1" data-tip>${escapeHtml(r.name)}</span></span>
+        ${view ? `<a class="pf-cell-title" href="${view}">${title}</a>` : `<span class="pf-cell-title">${title}</span>`}
         <span class="pf-cell-line is-muted">Mã: ${r.code || 'Chưa có mã'}</span>
       </div>
     </td>
-    <td><span class="pf-clamp-2" data-tip>${escapeHtml(VOL_PLACE[r.type] || '')}</span></td>
+    <td><span class="pf-clamp-2" data-tip>${escapeHtml(place || '')}</span></td>
     <td class="pf-col-date">${viDate(r.created)}</td>
     <td class="pf-col-date">${r.submitted ? viDate(r.submitted) : '<span class="pf-muted">Chưa nộp</span>'}</td>
     <td class="pf-col-actions"><div class="pf-row-actions">${actions}</div></td>
@@ -1056,6 +1066,290 @@ const deleteVolDraft = async (r) => {
   updateVolCounts();
   showToast('Đã xóa bản nháp');
 };
+
+// ==================== SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB — modal phải cùng khung Xem chi tiết chương trình ====================
+// Mở theo #thanh-lap-doi/xem/<mã hồ sơ> (bản nháp dùng mã tạm NHAP-n). Chỉ đọc, đủ trường như biểu mẫu Đăng ký thành lập đội, CLB,
+// thẻ Quá trình xử lý theo trạng thái đang ẩn (TEAM_SHOW_STEPS). Xem phiếu PDF dùng chung trình xem PDF của biểu mẫu (openTeamPdf).
+// ---------- Dữ liệu hồ sơ (minh họa): suy từ tên & trạng thái của dòng VOL_REGS, cố định theo mã hồ sơ ----------
+const TEAM_ACCOUNT = { name: 'Nguyễn Ngọc Trâm', identity: '040196012345', dob: '12/05/1996', gender: 'Nữ', phone: '0912345678', email: 'tram.nguyen@gmail.com' };
+const TEAM_WARDS = ['Phường Thành Sen', 'Phường Trần Phú', 'Phường Hà Huy Tập', 'Xã Thạch Hạ'];
+const TEAM_BRANCHES = ['Không trực thuộc chi hội', 'Chi hội Tổ dân phố số 3', 'Chi hội Tổ dân phố số 5', 'Chi hội Trường THCS Thành Sen'];
+// Từ khóa trong tên → lĩnh vực hoạt động · mẫu hoạt động tình nguyện đã thực hiện ({n}: số lượng)
+const TEAM_FIELD_HINTS = [
+  [/hiến máu/i, 'Hiến máu', 'Tổ chức ngày hội hiến máu tình nguyện, tiếp nhận {n} đơn vị máu'],
+  [/sơ (cấp )?cứu|cấp cứu/i, 'Sơ cấp cứu', 'Tập huấn sơ cấp cứu ban đầu cho {n} người dân và học sinh'],
+  [/cứu hộ|cứu nạn|đuối nước|phản ứng|ứng phó|xung kích|thiên tai/i, 'Cứu hộ cứu nạn', 'Ứng trực cứu hộ, hỗ trợ {n} hộ dân sơ tán trong mùa mưa bão'],
+  [/bếp ăn|bữa cơm/i, 'Bếp ăn, Cơm cháo miễn phí', 'Duy trì bếp ăn 0 đồng, phát {n} suất cơm cho bệnh nhân và người nhà'],
+  [/cứu trợ|nhân đạo|khó khăn|vô gia cư|khuyết tật|cao tuổi|trẻ em|yêu thương|thiện nguyện|mùa thi|môi trường/i, 'Cứu trợ xã hội và trợ giúp nhân đạo', 'Thăm hỏi, trao {n} suất quà cho hộ nghèo, người có hoàn cảnh khó khăn'],
+  [/truyền thông|kỹ năng|thanh niên/i, 'Khác', 'Tổ chức {n} buổi truyền thông, sinh hoạt kỹ năng cho thanh thiếu niên'],
+];
+const TEAM_STREETS = ['Nguyễn Du', 'Phan Đình Phùng', 'Hà Huy Tập', 'Xuân Diệu', 'Trần Phú', 'Nguyễn Công Trứ'];
+const TEAM_LAST = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Phan', 'Võ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Dương'];
+const TEAM_MIDDLE = { Nam: ['Văn', 'Đức', 'Minh', 'Quang', 'Hữu'], Nữ: ['Thị', 'Ngọc', 'Thu', 'Thanh', 'Hồng'] };
+const TEAM_FIRST = { Nam: ['Hùng', 'Nam', 'Tuấn', 'Phúc', 'Long', 'Khánh', 'Sơn', 'Hải', 'Dũng', 'Thắng'], Nữ: ['Lan', 'Hoa', 'Mai', 'Hương', 'Linh', 'Trang', 'Hà', 'Yến', 'Nhung', 'Thảo'] };
+const TEAM_SKILLS = ['Sơ cấp cứu', 'Vận chuyển bệnh nhân', 'Khám, chữa bệnh', 'Truyền thông', 'Hướng dẫn kỹ thuật sinh kế', 'Viết tin bài'];
+const TEAM_RETURNED = ['Danh sách thành viên thiếu số định danh cá nhân của 2 thành viên; đề nghị bổ sung và nộp lại.', 'Địa chỉ sinh hoạt chưa ghi rõ tổ dân phố; đề nghị bổ sung và nộp lại.'];
+const TEAM_REJECTED = ['Trùng tên và địa bàn hoạt động với đội, câu lạc bộ đã được thành lập trên hệ thống.', 'Hồ sơ đã quá hạn bổ sung theo thông báo trả hồ sơ.'];
+// Số ngẫu nhiên cố định theo mã hồ sơ (cùng hồ sơ luôn ra cùng dữ liệu)
+const seededRandom = (text) => {
+  let seed = [...text].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 233280, 7);
+  return () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+};
+const teamRegCache = new Map();
+// Trả về dữ liệu đủ trường như teamFormData() của biểu mẫu (dùng chung cho phiếu PDF) + thông tin xử lý
+const teamRegData = (r) => {
+  if (teamRegCache.has(r.id)) return teamRegCache.get(r.id);
+  const rand = seededRandom(r.id + r.name);
+  const pick = (list) => list[Math.floor(rand() * list.length)];
+  const between = (min, max) => min + Math.floor(rand() * (max - min + 1));
+  const digits = (n) => Array.from({ length: n }, () => between(0, 9)).join('');
+  const lower = (text) => text.charAt(0).toLowerCase() + text.slice(1);
+  const ward = TEAM_WARDS.find((w) => r.name.includes(w.replace(/^(Phường|Xã) /, ''))) || TEAM_WARDS[0];
+  const place = ward.replace(/^(Phường|Xã) /, '');
+  const unit = /tỉnh/i.test(r.name) ? 'Hội Chữ thập đỏ tỉnh Hà Tĩnh' : `Hội Chữ thập đỏ ${lower(ward)}`;
+  const hints = TEAM_FIELD_HINTS.filter(([re]) => re.test(r.name));
+  if (!hints.length) hints.push(TEAM_FIELD_HINTS[4]);
+  if (hints.length === 1 && hints[0][1] !== 'Sơ cấp cứu') hints.push(TEAM_FIELD_HINTS[1]); // đội, CLB nào cũng tập huấn sơ cấp cứu
+  const fields = hints.map(([, field]) => field);
+  // Cơ quan chủ quản: đội, CLB trường học / khối cơ quan có quyết định thành lập
+  const school = /học đường|trường học/i.test(r.name);
+  const office = /khối cơ quan/i.test(r.name);
+  const parent = school ? `Trường THCS ${place}` : office ? `Văn phòng HĐND và UBND ${lower(ward)}` : '';
+  const decision = parent ? `${between(10, 99)}/QĐ-${school ? 'THCS' : 'UBND'}` : '';
+  // Hoạt động tình nguyện: 2–3 hoạt động trước ngày tạo hồ sơ (khoảng 1/5 hồ sơ chưa có hoạt động)
+  const actsNone = rand() < 0.2;
+  const acts = actsNone ? [] : hints.concat(hints).slice(0, between(2, 3)).map(([, , text], i) => {
+    const from = addDays(r.created, -(i + 1) * between(40, 70));
+    return [viDate(from), viDate(addDays(from, between(1, 20))), text.replace('{n}', between(3, 12) * 10)];
+  }).reverse();
+  // Thành viên: dòng đầu Chủ nhiệm (tài khoản đăng ký), 1–2 Phó Chủ nhiệm, còn lại Thành viên — tổng 8–20 người
+  const total = between(8, 20);
+  const deputies = between(1, 2);
+  const member = (role, i) => {
+    const gender = rand() < 0.5 ? 'Nam' : 'Nữ';
+    const year = String(between(1975, 2006));
+    return {
+      name: `${pick(TEAM_LAST)} ${pick(TEAM_MIDDLE[gender])} ${pick(TEAM_FIRST[gender])}`,
+      role, gender, year,
+      identity: `040${gender === 'Nam' ? 0 : 1}${year.slice(2)}${digits(6)}`,
+      phone: `09${digits(8)}`,
+      blood: pick(['A', 'B', 'AB', 'O', 'O', 'Chưa rõ']),
+      address: `Tổ dân phố số ${between(1, 12)}, ${ward}`,
+      education: i % 4 === 3 ? '9/12' : '12/12',
+      qualification: pick(['Trung cấp', 'Cao đẳng', 'Đại học', 'Đại học', 'Khác']),
+      activity: pick(fields),
+      skills: [...new Set([pick(TEAM_SKILLS), pick(TEAM_SKILLS)])].slice(0, between(1, 2)),
+    };
+  };
+  const leader = {
+    name: TEAM_ACCOUNT.name, role: 'Chủ nhiệm', gender: TEAM_ACCOUNT.gender, year: TEAM_ACCOUNT.dob.slice(-4), identity: TEAM_ACCOUNT.identity,
+    phone: TEAM_ACCOUNT.phone, blood: 'O', address: `Tổ dân phố số 3, ${ward}`, education: '12/12', qualification: 'Đại học', activity: fields[0], skills: ['Sơ cấp cứu', 'Truyền thông'],
+  };
+  const members = [leader, ...Array.from({ length: total - 1 }, (_, i) => member(i < deputies ? 'Phó Chủ nhiệm' : 'Thành viên', i))];
+  const draft = r.status === 'draft';
+  const data = {
+    name: r.name, unit, phone: TEAM_ACCOUNT.phone, email: TEAM_ACCOUNT.email,
+    branch: ward === TEAM_WARDS[0] ? (school ? TEAM_BRANCHES[3] : pick(TEAM_BRANCHES.slice(0, 3))) : TEAM_BRANCHES[0],
+    province: 'Tỉnh Hà Tĩnh', ward, address: `Số ${between(2, 120)}, đường ${pick(TEAM_STREETS)}`, parent, decision, fields,
+    leader: { name: TEAM_ACCOUNT.name, identity: TEAM_ACCOUNT.identity, dob: TEAM_ACCOUNT.dob, gender: TEAM_ACCOUNT.gender },
+    actsNone, acts, members,
+    // Bản nháp có thể chưa tích cam kết; hồ sơ đã nộp luôn đã đồng ý
+    agree: !draft || rand() < 0.5,
+    signPlace: draft && rand() < 0.5 ? '' : place,
+    signDate: viDate(r.submitted || r.created),
+    signer: TEAM_ACCOUNT.name,
+    confirmed: r.status === 'confirm' ? between(1, total - 2) : total - 1, // số thành viên (trừ Chủ nhiệm) đã xác nhận tham gia
+    reason: r.status === 'returned' ? pick(TEAM_RETURNED) : r.status === 'rejected' ? pick(TEAM_REJECTED) : '',
+  };
+  data.privacy = data.agree;
+  teamRegCache.set(r.id, data);
+  return data;
+};
+
+// ---------- Quá trình xử lý: các bước theo trạng thái hồ sơ (bước đang chờ không có ngày) ----------
+// Đang ẩn theo yêu cầu — đổi TEAM_SHOW_STEPS = true để hiện lại thẻ "Quá trình xử lý hồ sơ" cuối modal
+const TEAM_SHOW_STEPS = false;
+const teamRegSteps = (r, d) => {
+  const others = d.members.length - 1;
+  const steps = [{ date: r.created, title: 'Tạo hồ sơ', meta: `${d.leader.name} lưu bản nháp`, cls: 'is-muted' }];
+  if (r.status === 'draft') return [...steps, { title: 'Chưa nộp hồ sơ', meta: 'Hoàn thiện thông tin và bấm Nộp hồ sơ để gửi đến đơn vị quản lý', cls: 'is-upcoming' }];
+  steps.push({ date: r.submitted, title: 'Nộp hồ sơ', meta: `Gửi đến ${d.unit}` });
+  if (r.status === 'confirm') return [...steps, { title: 'Chờ người được đăng ký xác nhận', meta: `${d.confirmed}/${others} thành viên đã xác nhận tham gia đội, câu lạc bộ`, cls: 'is-upcoming' }];
+  steps.push({ date: addDays(r.submitted, 1), title: 'Các thành viên đã xác nhận tham gia', meta: `${others}/${others} thành viên đã xác nhận` });
+  if (r.status === 'new') return [...steps, { title: 'Chờ tiếp nhận', meta: `${d.unit} tiếp nhận và kiểm tra hồ sơ`, cls: 'is-upcoming' }];
+  const received = addDays(r.submitted, 2);
+  if (r.status === 'rejected') return [...steps, { date: addDays(received, 3), title: 'Từ chối hồ sơ', meta: d.reason, cls: 'is-alert' }];
+  steps.push({ date: received, title: 'Đã tiếp nhận hồ sơ', meta: `${d.unit} đang thẩm định hồ sơ` });
+  if (r.status === 'received') return [...steps, { title: 'Chờ thẩm định điều kiện thành lập', meta: 'Kết quả sẽ được thông báo qua tài khoản và email liên lạc', cls: 'is-upcoming' }];
+  if (r.status === 'returned') return [...steps, { date: addDays(received, 3), title: 'Trả hồ sơ', meta: d.reason, cls: 'is-alert' }];
+  const eligible = addDays(received, 5);
+  steps.push({ date: eligible, title: 'Hồ sơ đủ điều kiện thành lập' });
+  if (r.status === 'eligible') return [...steps, { title: 'Chờ ra quyết định và tạo đơn vị', meta: `${d.unit} ra quyết định thành lập đội, câu lạc bộ`, cls: 'is-upcoming' }];
+  return [...steps, { date: addDays(eligible, 3), title: 'Đã tạo đơn vị', meta: `Đội, câu lạc bộ được tạo trên hệ thống, trực thuộc ${d.unit}` }];
+};
+
+// ---------- Dựng nội dung modal: 3 ô thống kê · Thông tin chung | Chủ nhiệm · Địa chỉ & đơn vị quản lý | Cơ quan chủ quản · Hoạt động · Thành viên · Cam kết (· Quá trình xử lý — đang ẩn) ----------
+const TEAM_ROLE_TONE = { 'Chủ nhiệm': 'is-red', 'Phó Chủ nhiệm': 'is-blue' };
+// ---------- Danh sách thành viên: phân trang giống bảng danh sách bên ngoài (createTable): Tổng · nút trang · 10 / 20 / 50 dòng mỗi trang ----------
+const TV_MEMBER_HEADS = ['Họ và tên', 'Chức vụ', 'Giới tính', 'Năm sinh', 'Số định danh', 'Điện thoại', 'Nhóm máu', 'Địa chỉ', 'Văn hóa', 'Chuyên môn', 'Lĩnh vực hoạt động', 'Kỹ năng'];
+const tvMembersCard = `<div class="pf-view-table"><table class="pf-reg-table is-view is-v-members">
+    <thead><tr><th scope="col" class="pf-col-index">#</th>${TV_MEMBER_HEADS.map((t) => `<th scope="col">${t}</th>`).join('')}</tr></thead>
+    <tbody id="pf-tv-members-rows"></tbody>
+  </table></div>
+  <p class="pf-view-none" id="pf-tv-members-empty" hidden>Chưa có thành viên.</p>
+  <div class="pf-table-foot"><p class="pf-muted" id="pf-tv-members-range" aria-live="polite"></p><div class="pf-pager" id="pf-tv-members-pager"></div></div>`;
+const tvMemberRow = (m, index) => `<tr>${rowIndex(index)}${[
+  `<b>${escapeHtml(m.name)}</b>`,
+  `<span class="pf-tag ${TEAM_ROLE_TONE[m.role] || ''}">${m.role}</span>`,
+  m.gender, m.year, m.identity, m.phone, m.blood, escapeHtml(m.address), m.education, m.qualification, escapeHtml(m.activity), escapeHtml(m.skills.join(', ')),
+].map((c) => `<td>${c}</td>`).join('')}</tr>`;
+// Gọi sau khi đã dựng thẻ (tvMembersCard) vào modal
+const renderTeamMembers = (members) => createTable({
+  rows: members,
+  body: document.querySelector('#pf-tv-members-rows'),
+  empty: document.querySelector('#pf-tv-members-empty'),
+  pager: document.querySelector('#pf-tv-members-pager'),
+  range: document.querySelector('#pf-tv-members-range'),
+  renderRow: tvMemberRow,
+}).setFilter(() => true);
+const renderTeamView = (r) => {
+  const d = teamRegData(r);
+  const st = VOL_STATUS[r.status];
+  const dot = '<span aria-hidden="true">•</span>';
+  document.querySelector('#pf-tv-title').textContent = r.name;
+  document.querySelector('#pf-tv-sub').innerHTML = `<span>Mã hồ sơ: ${r.code ? `<b>${r.code}</b>` : '<span class="pf-muted">Chưa có mã</span>'}</span>${dot}<span class="pf-badge is-${st.tone}"><span class="pf-dot" aria-hidden="true"></span>${st.label}</span>${dot}<span>Ngày tạo: ${viDate(r.created)}</span>${r.submitted ? `${dot}<span>Ngày nộp: ${viDate(r.submitted)}</span>` : ''}`;
+  // Ghi chú đầu modal: bản nháp · chờ xác nhận · lý do trả hồ sơ / từ chối
+  const notes = {
+    draft: '<b>Ghi chú:</b> Hồ sơ chưa được nộp. Bấm “Chỉnh sửa” để hoàn thiện thông tin và nộp hồ sơ.',
+    confirm: `<b>Ghi chú:</b> Hồ sơ đang chờ các thành viên có tên trong danh sách xác nhận tham gia (${d.confirmed}/${d.members.length - 1} đã xác nhận).`,
+    returned: `<b>Lý do trả hồ sơ:</b> ${escapeHtml(d.reason)}`,
+    rejected: `<b>Lý do từ chối:</b> ${escapeHtml(d.reason)}`,
+  };
+  const note = document.querySelector('#pf-tv-note');
+  note.hidden = !notes[r.status];
+  note.className = `pf-view-note${r.status === 'rejected' ? ' is-red' : ''}`;
+  note.innerHTML = notes[r.status] || '';
+  // Chân modal: Chỉnh sửa (Bản nháp) · Chỉnh sửa và nộp lại (Đã trả hồ sơ); chưa nối biểu mẫu → hộp thông báo xem trước
+  const edit = document.querySelector('#pf-tv-edit');
+  const editLabel = { draft: 'Chỉnh sửa', returned: 'Chỉnh sửa và nộp lại' }[r.status];
+  edit.hidden = !editLabel;
+  if (editLabel) {
+    edit.querySelector('span').textContent = editLabel;
+    edit.dataset.panel = `${editLabel} hồ sơ ${r.name}`;
+  }
+
+  const fullAddress = [d.address, d.ward, d.province].join(', ');
+  const check = (on, text) => `<li class="${on ? 'is-on' : ''}"><span class="pf-tv-check" aria-hidden="true"></span><span>${text}<span class="visually-hidden">${on ? ' — đã đồng ý' : ' — chưa đồng ý'}</span></span></li>`;
+  document.querySelector('#pf-tv-body').innerHTML = `
+    <!-- Số liệu chính -->
+    <div class="pf-view-stats">
+      ${vStat('people', 'Số lượng thành viên', `${d.members.length} người`)}
+      ${vStat('calendar', 'Hoạt động tình nguyện đã thực hiện', d.acts.length ? `${d.acts.length} hoạt động` : 'Chưa có')}
+      ${vStat('layers', 'Lĩnh vực hoạt động', `${d.fields.length} lĩnh vực`)}
+    </div>
+
+    <!-- Thông tin chung · Chủ nhiệm: 2 thẻ cạnh nhau -->
+    <div class="pf-view-pair is-even">
+      ${vCard('pf-tv-general', 'Thông tin đội, câu lạc bộ', vKvs([
+        vKv('Tên đội, câu lạc bộ', vText(d.name)),
+        vKv('Số lượng thành viên', `${d.members.length} người`),
+        vKv('Lĩnh vực hoạt động', vTags(d.fields)),
+        vKv('Điện thoại liên lạc', vText(d.phone)),
+        vKv('Địa chỉ email', vText(d.email)),
+      ]))}
+      ${vCard('pf-tv-leader', 'Chủ nhiệm đội, câu lạc bộ', vKvs([
+        vKv('Họ và tên', vText(d.leader.name)),
+        vKv('Số định danh cá nhân', vText(d.leader.identity)),
+        vKv('Ngày, tháng, năm sinh', vText(d.leader.dob)),
+        vKv('Giới tính', vText(d.leader.gender)),
+        vKv('Nguồn thông tin', `<span class="pf-reg-badge">${icon('shield')}Lấy từ tài khoản định danh</span>`),
+      ]))}
+    </div>
+
+    <!-- Địa chỉ và đơn vị quản lý · Cơ quan chủ quản (nếu có) -->
+    <div class="pf-view-pair is-even">
+      ${vCard('pf-tv-address', 'Địa chỉ và đơn vị quản lý', vKvs([
+        vKv('Địa chỉ sinh hoạt', vText(fullAddress)),
+        vKv('Đơn vị quản lý', vText(d.unit)),
+        vKv('Chi hội trực thuộc', vText(d.branch)),
+      ]))}
+      ${vCard('pf-tv-parent', 'Thông tin cơ quan chủ quản (nếu có)', vKvs([
+        vKv('Cơ quan đội, CLB đang trực thuộc', d.parent ? vText(d.parent) : '<span class="pf-view-empty">Không có</span>'),
+        vKv('Số QĐ thành lập đội, CLB', d.decision ? vText(d.decision) : '<span class="pf-view-empty">Không có</span>'),
+      ]))}
+    </div>
+
+    ${vCard('pf-tv-acts', 'Hoạt động tình nguyện', vTable('is-v-acts', ['Từ ngày', 'Đến ngày', 'Nội dung hoạt động'],
+      d.acts.map(([from, to, text]) => [from, to, escapeHtml(text)]),
+      'Đội, câu lạc bộ chưa có hoạt động tình nguyện nào.'), d.acts.length ? `${d.acts.length} hoạt động` : '')}
+
+    ${vCard('pf-tv-members', 'Danh sách các thành viên đội, câu lạc bộ', tvMembersCard, `${d.members.length} người`)}
+
+    <!-- Cam kết · ký xác nhận -->
+    ${vCard('pf-tv-commit', 'Cam kết', `<div class="pf-tv-commit">
+      <p>Sau khi nghiên cứu Điều lệ Hội Chữ thập đỏ Việt Nam và Quy chế tổ chức và hoạt động của tình nguyện viên Chữ thập đỏ, chúng tôi tự nguyện đăng ký thành lập đội, câu lạc bộ nêu trên, chấp hành Điều lệ, Quy chế và sẵn sàng nhận nhiệm vụ do Hội giao.</p>
+      <ul class="pf-tv-checks">
+        ${check(d.agree, 'Tôi đã đọc Điều lệ, Quy chế và đồng ý với cam kết trên')}
+        ${check(d.privacy, 'Tôi đồng ý để Hội xử lý dữ liệu cá nhân trong hồ sơ cho mục đích xét duyệt và quản lý tình nguyện viên')}
+      </ul>
+    </div>
+    ${vKvs([
+      vKv('Nơi ký', vText(d.signPlace)),
+      vKv('Ngày ký', vText(d.signDate)),
+      vKv('Người đăng ký (TM đội, câu lạc bộ)', vText(d.signer)),
+    ])}`)}
+    ${TEAM_SHOW_STEPS ? vCard('pf-tv-steps', 'Quá trình xử lý hồ sơ', `<div class="pf-tv-steps">${timeline(teamRegSteps(r, d))}</div>`) : ''}`;
+  renderTeamMembers(d.members);
+};
+
+// ---------- Mở / đóng modal: theo #thanh-lap-doi/xem/<mã>; đóng thì trả đường dẫn về tab đang xem ----------
+const teamView = document.querySelector('#pf-team-view');
+const teamViewPanel = teamView.querySelector('.pf-reg-panel');
+const teamViewBody = document.querySelector('#pf-tv-body');
+let teamViewReg = null;
+let teamViewTrigger = null;
+let teamViewTimer;
+teamViewPanel.tabIndex = -1;
+const openTeamView = (id) => {
+  const r = findVolReg(id);
+  if (!r || r.type !== 'DC') {
+    showToast(`Không tìm thấy hồ sơ “${id}”.`);
+    closeTeamView();
+    return;
+  }
+  if (teamView.hidden) teamViewTrigger = document.activeElement;
+  teamViewReg = r;
+  renderTeamView(r);
+  clearTimeout(teamViewTimer);
+  teamView.hidden = false;
+  document.documentElement.classList.add('pf-reg-lock');
+  teamViewBody.scrollTop = 0;
+  void teamView.offsetWidth; // tính lại bố cục để hiệu ứng trượt chạy
+  teamView.classList.add('is-open');
+  teamViewPanel.focus({ preventScroll: true });
+};
+function closeTeamView(updateHash = true) {
+  if (teamView.hidden) return;
+  teamView.classList.remove('is-open');
+  document.documentElement.classList.remove('pf-reg-lock');
+  teamViewTimer = setTimeout(() => { teamView.hidden = true; }, viewReduced() ? 0 : 300);
+  teamViewReg = null;
+  if (updateHash && window.location.hash.startsWith('#thanh-lap-doi/xem/')) {
+    history.replaceState(null, '', `#thanh-lap-doi/${VOL_STATUS[volf.status || 'draft'].slug}`);
+  }
+  if (teamViewTrigger && document.contains(teamViewTrigger)) teamViewTrigger.focus();
+}
+teamView.querySelectorAll('[data-close-team-view]').forEach((button) => button.addEventListener('click', () => closeTeamView()));
+teamView.querySelector('[data-tv-pdf]').addEventListener('click', () => { if (teamViewReg) openTeamPdf(teamRegData(teamViewReg)); });document.addEventListener('keydown', (event) => {
+  if (teamView.hidden || dialog.open || teamPdf.open) return;
+  if (event.key === 'Escape') { closeTeamView(); return; }
+  if (event.key !== 'Tab') return;
+  const items = [...teamViewPanel.querySelectorAll('a[href], button:not([disabled])')].filter((el) => el.offsetParent !== null);
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (event.shiftKey && (document.activeElement === first || document.activeElement === teamViewPanel)) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
 
 // ==================== SECTION: CỘT TRÁI — số liệu tính từ dữ liệu ====================
 {
@@ -1146,6 +1440,7 @@ const showRoute = () => {
   const volKind = VOL_KINDS[screen] ? screen : '';
   let target = volKind ? 'tinh-nguyen-vien' : (screens.some((s) => s.dataset.screen === screen) ? screen : 'chuong-trinh');
   const isView = sub === 'xem' && code && target === 'chuong-trinh';
+  const isTeamView = sub === 'xem' && code && volKind === 'thanh-lap-doi';
   const isDetail = sub === 'xem' && code && target === 'nguoi-yeu-the';
   if (isDetail) target = `${target}-xem`;
   screens.forEach((s) => { s.hidden = s.dataset.screen !== target; });
@@ -1164,16 +1459,25 @@ const showRoute = () => {
     if (!isView || !document.querySelector('#ct-rows').children.length) applyProgramFilter();
   }
   if (target === 'nguoi-yeu-the') { vul.status = findStatus(VULNERABLE_STATUS, sub); applyVulnerableFilter(); }
-  if (target === 'tinh-nguyen-vien') { setVolKind(volKind); volf.status = findStatus(volStatuses(), sub) || 'draft'; applyVolFilter(); }
+  if (target === 'tinh-nguyen-vien') {
+    // Mở modal xem hồ sơ: giữ tab & bảng đang xem (giữ nút vừa bấm để trả focus khi đóng); mở thẳng link chi tiết thì hiện tab theo trạng thái hồ sơ
+    const sameKind = volf.kind === volKind;
+    setVolKind(volKind);
+    if (!isTeamView) volf.status = findStatus(volStatuses(), sub) || 'draft';
+    else if (!sameKind || !volStatuses()[volf.status]) volf.status = (findVolReg(decodeURIComponent(code)) || {}).status || 'draft';
+    if (!isTeamView || !sameKind || !document.querySelector('#vol-rows').children.length) applyVolFilter();
+  }
   renderTabs(target, { 'chuong-trinh': ct.status, 'tinh-nguyen-vien': volf.status }[target] ?? vul.status);
   // Chờ script chạy xong (readVnd khai báo ở cuối file) rồi mới dựng modal
   if (isView) setTimeout(() => openProgramView(decodeURIComponent(code)), 0);
   else closeProgramView(false);
+  if (isTeamView) openTeamView(decodeURIComponent(code));
+  else closeTeamView(false);
   if (target === 'nguoi-yeu-the-xem') renderVulnerableDetail(decodeURIComponent(code));
 };
 window.addEventListener('hashchange', () => {
   showRoute();
-  if (window.location.hash.startsWith('#chuong-trinh/xem/')) return; // mở modal: không cuộn trang
+  if (/^#(chuong-trinh|thanh-lap-doi)\/xem\//.test(window.location.hash)) return; // mở modal: không cuộn trang
   const top = document.querySelector('.pf-main').getBoundingClientRect().top + window.scrollY - 100;
   if (window.scrollY > top) window.scrollTo(0, Math.max(0, top));
 });
@@ -1938,43 +2242,58 @@ const pdfInfo = (label, v) => `<tr><td>${label}:</td><td>${escapeHtml(v || '')}<
 const pdfBox = (on) => `<span class="pf-pdf-box">${on ? '✓' : ''}</span>`;
 const pdfCell = (v, center) => `<td${center ? ' class="is-center"' : ''}>${escapeHtml(v || '')}</td>`;
 const pdfSlug = (v) => v.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^\w]+/g, '-').replace(/^-|-$/g, '');
-const pdfFileName = () => `Phieu-dang-ky-${pdfSlug(document.querySelector('#tm-name').value) || 'doi-clb'}`;
+let pdfName = 'Phieu-dang-ky';
+const pdfFileName = (name) => `Phieu-dang-ky-${pdfSlug(name || '') || 'doi-clb'}`;
+
+// ---------- Dữ liệu phiếu: đọc từ biểu mẫu đang nhập (hồ sơ đã lưu dùng teamRegData — XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB) ----------
+const teamFormData = () => {
+  const val = (id) => document.querySelector(`#${id}`).value.trim();
+  return {
+    name: val('tm-name'), unit: val('tm-unit'), branch: val('tm-branch'), phone: val('tm-phone'), email: val('tm-email'),
+    province: val('tm-province'), ward: val('tm-ward'), address: val('tm-address'), parent: val('tm-parent'), decision: val('tm-decision'),
+    fields: teamMultis[0].selected().map((o) => o.textContent),
+    leader: { name: val('tm-leader-name'), identity: val('tm-leader-id'), dob: val('tm-leader-dob'), gender: (leaderRadios.find((r) => r.checked) || {}).value || '' },
+    // Hoạt động tình nguyện: bỏ dòng chưa nhập nội dung
+    actsNone: actsNone.checked,
+    acts: [...actsSection.querySelectorAll('tbody tr')].map((row) => ['Từ ngày', 'Đến ngày', 'Nội dung hoạt động'].map((k) => row.querySelector(`[data-label="${k}"]`).value.trim())).filter((a) => a[2]),
+    members: memberEditor.data(),
+    agree: document.querySelector('#tm-agree').checked,
+    privacy: document.querySelector('#tm-privacy').checked,
+    signPlace: val('tm-sign-place'), signDate: val('tm-sign-date'), signer: val('tm-signer'),
+  };
+};
 
 // ---------- Nội dung: trả về HTML trang dọc (phiếu) và trang ngang (danh sách thành viên) ----------
-const teamPdfContent = () => {
-  const val = (id) => document.querySelector(`#${id}`).value.trim();
-  const fields = teamMultis[0].selected().map((o) => o.textContent).join(', ');
-  const gender = (leaderRadios.find((r) => r.checked) || {}).value;
-  const address = [val('tm-address'), val('tm-ward'), val('tm-province')].filter(Boolean).join(', ');
-  // Phần 2: hoạt động tình nguyện (bỏ dòng chưa nhập nội dung)
-  const acts = [...actsSection.querySelectorAll('tbody tr')].map((row) => ['Từ ngày', 'Đến ngày', 'Nội dung hoạt động'].map((k) => row.querySelector(`[data-label="${k}"]`).value.trim())).filter((a) => a[2]);
-  const actsHtml = actsNone.checked || !acts.length
-    ? `<p>${actsNone.checked ? 'Đội, câu lạc bộ chưa có hoạt động tình nguyện nào.' : '<span class="pf-pdf-blank is-long"></span>'}</p>`
+const teamPdfContent = (data) => {
+  const { acts, members } = data;
+  const fields = data.fields.join(', ');
+  const address = [data.address, data.ward, data.province].filter(Boolean).join(', ');
+  const actsHtml = data.actsNone || !acts.length
+    ? `<p>${data.actsNone ? 'Đội, câu lạc bộ chưa có hoạt động tình nguyện nào.' : '<span class="pf-pdf-blank is-long"></span>'}</p>`
     : `<table class="pf-pdf-table is-acts"><thead><tr><th style="width:52px">STT</th><th style="width:190px">Thời gian<br /><span class="pf-pdf-th-note">(từ ngày – đến ngày)</span></th><th>Nội dung hoạt động</th></tr></thead><tbody>${acts.map((a, i) => `<tr>${pdfCell(String(i + 1), true)}${pdfCell([a[0], a[1]].filter(Boolean).join(' – '), true)}${pdfCell(a[2])}</tr>`).join('')}</tbody></table>`;
   // Danh sách thành viên: nhóm I. Ban chủ nhiệm · II. Thành viên, STT đánh lại trong nhóm
-  const members = memberEditor.data();
   const group = (no, title, list) => (list.length ? `<tr class="is-group"><td class="is-center"><b>${no}</b></td><td colspan="12"><b>${title}</b></td></tr>` + list.map((m, i) => `<tr>${pdfCell(String(i + 1), true)}${pdfCell(m.name)}${pdfCell(m.role)}${pdfCell(m.gender, true)}${pdfCell(m.year, true)}${pdfCell(m.identity, true)}${pdfCell(m.phone, true)}${pdfCell(m.blood, true)}${pdfCell(m.address)}${pdfCell(m.education, true)}${pdfCell(m.qualification, true)}${pdfCell(m.activity)}${pdfCell(m.skills.join(', '))}</tr>`).join('') : '');
   const memberRows = group('I', 'BAN CHỦ NHIỆM', members.filter((m) => m.role !== 'Thành viên')) + group('II', 'THÀNH VIÊN', members.filter((m) => m.role === 'Thành viên'));
-  const [d, mo, y] = val('tm-sign-date').split('/');
-  const place = val('tm-sign-place');
+  const [d, mo, y] = data.signDate.split('/');
+  const place = data.signPlace;
   const portrait = `
     <div class="pf-pdf-motto"><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><b class="is-line">Độc lập - Tự do - Hạnh phúc</b></div>
     <h1 class="pf-pdf-title">ĐƠN ĐĂNG KÝ THÀNH LẬP ĐỘI, CÂU LẠC BỘ<br />TÌNH NGUYỆN VIÊN CHỮ THẬP ĐỎ</h1>
-    <p class="pf-pdf-to">Kính gửi: ${pdfVal(val('tm-unit'))}</p>
+    <p class="pf-pdf-to">Kính gửi: ${pdfVal(data.unit)}</p>
     <h2>1. Thông tin đội, câu lạc bộ</h2>
     <table class="pf-pdf-table is-info"><tbody>
-      ${pdfInfo('Tên đội, câu lạc bộ', val('tm-name'))}
+      ${pdfInfo('Tên đội, câu lạc bộ', data.name)}
       ${pdfInfo('Số lượng thành viên (đính kèm danh sách thành viên)', `${members.length} thành viên`)}
-      ${pdfInfo('Chủ nhiệm đội, câu lạc bộ', val('tm-leader-name'))}
-      ${pdfInfo('- Giới tính', gender)}
-      ${pdfInfo('- Ngày, tháng, năm sinh', val('tm-leader-dob'))}
-      ${pdfInfo('- Số định danh cá nhân', val('tm-leader-id'))}
+      ${pdfInfo('Chủ nhiệm đội, câu lạc bộ', data.leader.name)}
+      ${pdfInfo('- Giới tính', data.leader.gender)}
+      ${pdfInfo('- Ngày, tháng, năm sinh', data.leader.dob)}
+      ${pdfInfo('- Số định danh cá nhân', data.leader.identity)}
       ${pdfInfo('Địa chỉ sinh hoạt đội, câu lạc bộ', address)}
-      ${pdfInfo('Điện thoại liên lạc', val('tm-phone'))}
-      ${pdfInfo('Địa chỉ email', val('tm-email'))}
-      ${pdfInfo('Cơ quan hiện đội, câu lạc bộ đang trực thuộc (nếu có; ghi rõ số QĐ thành lập đội, câu lạc bộ)', [val('tm-parent'), val('tm-decision') && `QĐ thành lập số ${val('tm-decision')}`].filter(Boolean).join('; '))}
-      ${pdfInfo('Đơn vị quản lý (Hội Chữ thập đỏ)', val('tm-unit'))}
-      ${pdfInfo('Chi hội trực thuộc', val('tm-branch'))}
+      ${pdfInfo('Điện thoại liên lạc', data.phone)}
+      ${pdfInfo('Địa chỉ email', data.email)}
+      ${pdfInfo('Cơ quan hiện đội, câu lạc bộ đang trực thuộc (nếu có; ghi rõ số QĐ thành lập đội, câu lạc bộ)', [data.parent, data.decision && `QĐ thành lập số ${data.decision}`].filter(Boolean).join('; '))}
+      ${pdfInfo('Đơn vị quản lý (Hội Chữ thập đỏ)', data.unit)}
+      ${pdfInfo('Chi hội trực thuộc', data.branch)}
       ${pdfInfo('Lĩnh vực hoạt động của đội, câu lạc bộ', fields)}
     </tbody></table>
     <h2>2. Hoạt động tình nguyện</h2>
@@ -1983,19 +2302,19 @@ const teamPdfContent = () => {
     <p>Gồm ${members.length} người (danh sách kèm theo).</p>
     <h2>4. Cam kết</h2>
     <p class="pf-pdf-text">Sau khi nghiên cứu Điều lệ Hội Chữ thập đỏ Việt Nam và Quy chế tổ chức và hoạt động của tình nguyện viên Chữ thập đỏ, chúng tôi tự nguyện đăng ký thành lập đội, câu lạc bộ nêu trên, chấp hành Điều lệ, Quy chế và sẵn sàng nhận nhiệm vụ do Hội giao.</p>
-    <p class="pf-pdf-check">${pdfBox(document.querySelector('#tm-agree').checked)}Tôi đã đọc Điều lệ, Quy chế và đồng ý với cam kết trên.</p>
-    <p class="pf-pdf-check">${pdfBox(document.querySelector('#tm-privacy').checked)}Tôi đồng ý để Hội xử lý dữ liệu cá nhân trong hồ sơ cho mục đích xét duyệt và quản lý tình nguyện viên.</p>
+    <p class="pf-pdf-check">${pdfBox(data.agree)}Tôi đã đọc Điều lệ, Quy chế và đồng ý với cam kết trên.</p>
+    <p class="pf-pdf-check">${pdfBox(data.privacy)}Tôi đồng ý để Hội xử lý dữ liệu cá nhân trong hồ sơ cho mục đích xét duyệt và quản lý tình nguyện viên.</p>
     <div class="pf-pdf-sign">
       <div>
         <p class="pf-pdf-date">${place ? escapeHtml(place) : '<span class="pf-pdf-blank is-short"></span>'}, ngày ${d || '……'} tháng ${mo || '……'} năm ${y || '……'}</p>
         <p><b>NGƯỜI ĐĂNG KÝ</b></p>
         <p class="pf-pdf-note">(TM đội, câu lạc bộ — ký, ghi rõ họ tên)</p>
-        <p class="pf-pdf-signer"><b>${pdfVal(val('tm-signer'))}</b></p>
+        <p class="pf-pdf-signer"><b>${pdfVal(data.signer)}</b></p>
       </div>
     </div>`;
   const landscape = `
     <h1 class="pf-pdf-title is-list">DANH SÁCH CÁC THÀNH VIÊN ĐỘI, CÂU LẠC BỘ</h1>
-    <p class="pf-pdf-sub">${val('tm-name') ? escapeHtml(val('tm-name')) : 'Đội, câu lạc bộ: <span class="pf-pdf-blank"></span>'} · ${members.length} người</p>
+    <p class="pf-pdf-sub">${data.name ? escapeHtml(data.name) : 'Đội, câu lạc bộ: <span class="pf-pdf-blank"></span>'} · ${members.length} người</p>
     <table class="pf-pdf-table is-members"><thead><tr><th style="width:32px">STT</th><th style="width:130px">Họ và tên</th><th style="width:84px">Chức vụ</th><th style="width:44px">Giới tính</th><th style="width:44px">Năm sinh</th><th style="width:92px">Số định danh</th><th style="width:80px">Điện thoại</th><th style="width:44px">Nhóm máu</th><th>Địa chỉ</th><th style="width:48px">Văn hóa</th><th style="width:72px">Chuyên môn</th><th style="width:110px">Lĩnh vực hoạt động</th><th style="width:120px">Kỹ năng</th></tr></thead><tbody>${memberRows}</tbody></table>`;
   return { portrait, landscape };
 };
@@ -2088,12 +2407,14 @@ teamPdf.querySelector('[data-pdf-zoom-out]').addEventListener('click', () => set
 teamPdf.querySelector('[data-pdf-zoom-in]').addEventListener('click', () => setPdfZoom(PDF_ZOOMS[Math.min(PDF_ZOOMS.length - 1, PDF_ZOOMS.indexOf(pdfZoom) + 1)]));
 
 // ---------- Mở: dựng trang ở 100% (để đo đúng), đánh số trang, rồi chọn mức phóng vừa bề ngang ----------
-team.querySelector('[data-team-pdf]').addEventListener('click', () => {
-  teamPdf.querySelector('.pf-pdf-name').textContent = `${pdfFileName()}.pdf`;
+// data: teamFormData() (biểu mẫu đang nhập) hoặc teamRegData(hồ sơ) (modal Xem chi tiết hồ sơ)
+const openTeamPdf = (data) => {
+  pdfName = pdfFileName(data.name);
+  teamPdf.querySelector('.pf-pdf-name').textContent = `${pdfName}.pdf`;
   teamPdf.showModal();
   pdfPages.style.zoom = 1;
   pdfPages.replaceChildren();
-  const { portrait, landscape } = teamPdfContent();
+  const { portrait, landscape } = teamPdfContent(data);
   pdfFlow(portrait, false);
   pdfFlow(landscape, true);
   pdfPageList().forEach((page, i) => { page.querySelector('.pf-pdf-num').textContent = i + 1; page.setAttribute('aria-label', `Trang ${i + 1}`); });
@@ -2102,7 +2423,8 @@ team.querySelector('[data-team-pdf]').addEventListener('click', () => {
   setPdfZoom([...PDF_ZOOMS].reverse().find((z) => z <= Math.min(100, fit)) || PDF_ZOOMS[0]);
   pdfBody.scrollTop = 0;
   syncPdfPage();
-});
+};
+team.querySelector('[data-team-pdf]').addEventListener('click', () => openTeamPdf(teamFormData()));
 teamPdf.querySelector('[data-pdf-close]').addEventListener('click', () => teamPdf.close());
 
 // ---------- In / Tải về PDF: iframe ẩn chỉ chứa các trang + styles.css; mỗi trang 1 tờ A4 (dọc / ngang) ----------
@@ -2110,7 +2432,7 @@ const printTeamPdf = () => {
   const frame = document.createElement('iframe');
   frame.className = 'pf-pdf-frame';
   frame.setAttribute('aria-hidden', 'true');
-  frame.srcdoc = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>${escapeHtml(pdfFileName())}</title><base href="${escapeHtml(location.href)}"><link rel="stylesheet" href="styles.css"><style>@page{size:A4 portrait;margin:0}@page landscape{size:A4 landscape;margin:0}html,body{margin:0;background:#fff}.pf-pdf-pages{display:block;width:auto;min-width:0}.pf-pdf-page{box-shadow:none;break-after:page}.pf-pdf-page:last-child{break-after:auto}</style></head><body><div class="pf-pdf-pages">${pdfPages.innerHTML}</div></body></html>`;
+  frame.srcdoc = `<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>${escapeHtml(pdfName)}</title><base href="${escapeHtml(location.href)}"><link rel="stylesheet" href="styles.css"><style>@page{size:A4 portrait;margin:0}@page landscape{size:A4 landscape;margin:0}html,body{margin:0;background:#fff}.pf-pdf-pages{display:block;width:auto;min-width:0}.pf-pdf-page{box-shadow:none;break-after:page}.pf-pdf-page:last-child{break-after:auto}</style></head><body><div class="pf-pdf-pages">${pdfPages.innerHTML}</div></body></html>`;
   frame.addEventListener('load', () => {
     frame.contentWindow.focus();
     frame.contentWindow.print();

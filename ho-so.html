@@ -1005,6 +1005,34 @@
     </div>
     <!-- ==================== END SECTION: XEM CHI TIẾT CHƯƠNG TRÌNH ==================== -->
 
+    <!-- ==================== SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB — modal phải cùng khung Xem chi tiết chương trình (ho-so.js: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB) ==================== -->
+    <!-- Mở khi bấm nút mắt / tên hồ sơ ở danh sách #thanh-lap-doi (#thanh-lap-doi/xem/<mã>); chỉ đọc, đủ trường như biểu mẫu Đăng ký thành lập đội, CLB. Dữ liệu MINH HỌA. -->
+    <div class="pf-reg" id="pf-team-view" hidden>
+      <div class="pf-reg-overlay" data-close-team-view></div>
+      <section class="pf-reg-panel" role="dialog" aria-modal="true" aria-labelledby="pf-tv-title">
+        <!-- ---------- Đầu modal: tên đội, CLB · mã hồ sơ • trạng thái • ngày tạo • ngày nộp · ghi chú / lý do trả, từ chối · nút đóng ---------- -->
+        <header class="pf-reg-head">
+          <div class="pf-reg-head-top">
+            <div>
+              <h2 class="pf-title" id="pf-tv-title">Chi tiết hồ sơ đăng ký thành lập đội, câu lạc bộ</h2>
+              <p class="pf-lead pf-view-sub" id="pf-tv-sub"></p>
+              <p class="pf-view-note" id="pf-tv-note" hidden></p>
+            </div>
+            <button class="pf-icon-btn pf-reg-close" type="button" aria-label="Đóng chi tiết" data-close-team-view><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button>
+          </div>
+        </header>
+        <!-- ---------- Thân: 3 ô thống kê · Thông tin chung · Chủ nhiệm · Địa chỉ & đơn vị quản lý · Cơ quan chủ quản · Hoạt động · Thành viên · Cam kết (ho-so.js dựng; thẻ Quá trình xử lý đang ẩn — TEAM_SHOW_STEPS) ---------- -->
+        <div class="pf-reg-body pf-view-body" id="pf-tv-body"></div>
+        <!-- ---------- Chân modal: trái — Xem phiếu PDF · phải — Đóng · Chỉnh sửa (Bản nháp) / Chỉnh sửa và nộp lại (Đã trả hồ sơ) ---------- -->
+        <footer class="pf-reg-foot pf-view-foot">
+          <button class="pf-btn pf-btn-ghost pf-tv-pdf" type="button" data-tv-pdf><svg class="icon" aria-hidden="true"><use href="#document"/></svg>Xem phiếu PDF</button>
+          <button class="pf-btn pf-btn-ghost" type="button" data-close-team-view>Đóng</button>
+          <button class="pf-btn pf-btn-primary" type="button" id="pf-tv-edit" hidden><svg class="icon" aria-hidden="true"><use href="#pencil"/></svg><span>Chỉnh sửa</span></button>
+        </footer>
+      </section>
+    </div>
+    <!-- ==================== END SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB ==================== -->
+
     <p class="pf-toast" role="status" aria-live="polite" hidden></p>
 
     <!-- ==================== DIALOG: thông báo xem trước ==================== -->
