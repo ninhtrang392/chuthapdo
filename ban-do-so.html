@@ -63,7 +63,20 @@
       <symbol id="globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.5 3.6 5.3 3.6 8.5s-1.2 6-3.6 8.5c-2.4-2.5-3.6-5.3-3.6-8.5s1.2-6 3.6-8.5z"/></g></symbol>
       <symbol id="grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></g></symbol>
       <symbol id="close" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/></g></symbol>
+      <symbol id="truck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3.2v2.8h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="16.8" cy="17.5" r="1.8"/></g></symbol>
+      <symbol id="download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v11.5M7.5 10.5 12 15l4.5-4.5M4.5 19.5h15"/></g></symbol>
+      <symbol id="pencil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></g></symbol>
+      <symbol id="house" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5h4v5"/></g></symbol>
+      <symbol id="storm" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 4.5a7.5 7.5 0 0 1 7.5 7.5M12 19.5A7.5 7.5 0 0 1 4.5 12"/><circle cx="12" cy="12" r="2.6"/></g></symbol>
       <symbol id="alert-mark" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v6"/><path d="M12 16.6v.1"/></g></symbol>
+    </svg>
+
+    <!-- ==================== BẢN ĐỒ NỀN: bộ lọc màu cho nền "Bản đồ cơ bản" (ô Esri World Light Gray → đất kem, nước xanh, biên xám tím) ==================== -->
+    <svg class="bd-map-filters" width="0" height="0" aria-hidden="true" focusable="false">
+      <!-- ---------- Nước màu xanh phẳng (phóng to > 10) ---------- -->
+      <filter id="bd-tint-solid" color-interpolation-filters="sRGB"><feComponentTransfer><feFuncR type="table" tableValues="0.157 0.158 0.159 0.161 0.162 0.163 0.165 0.166 0.167 0.168 0.170 0.171 0.172 0.174 0.175 0.176 0.177 0.179 0.180 0.181 0.183 0.184 0.185 0.186 0.188 0.189 0.190 0.192 0.193 0.194 0.195 0.197 0.198 0.199 0.200 0.202 0.203 0.204 0.206 0.207 0.208 0.209 0.211 0.212 0.213 0.215 0.216 0.217 0.218 0.220 0.221 0.222 0.224 0.225 0.226 0.227 0.247 0.266 0.285 0.304 0.323 0.342 0.361 0.380 0.399 0.418 0.438 0.457 0.476 0.495 0.514 0.533 0.552 0.571 0.590 0.609 0.628 0.648 0.667 0.473 0.376 0.376 0.376 0.376 0.436 0.555 0.675 0.695 0.716 0.737 0.758 0.821 0.925 0.976 0.976 0.976 0.981 0.986 0.991 0.995 1.000"/><feFuncG type="table" tableValues="0.180 0.182 0.183 0.185 0.186 0.188 0.189 0.190 0.192 0.193 0.195 0.196 0.198 0.199 0.200 0.202 0.203 0.205 0.206 0.207 0.209 0.210 0.212 0.213 0.215 0.216 0.217 0.219 0.220 0.222 0.223 0.225 0.226 0.227 0.229 0.230 0.232 0.233 0.235 0.236 0.237 0.239 0.240 0.242 0.243 0.245 0.246 0.247 0.249 0.250 0.252 0.253 0.255 0.256 0.257 0.259 0.277 0.295 0.313 0.331 0.349 0.367 0.385 0.403 0.421 0.440 0.458 0.476 0.494 0.512 0.530 0.548 0.566 0.584 0.602 0.620 0.638 0.656 0.675 0.732 0.761 0.761 0.761 0.761 0.745 0.714 0.682 0.703 0.724 0.745 0.766 0.824 0.918 0.965 0.965 0.965 0.972 0.979 0.986 0.993 1.000"/><feFuncB type="table" tableValues="0.220 0.221 0.223 0.225 0.226 0.228 0.230 0.232 0.233 0.235 0.237 0.238 0.240 0.242 0.244 0.245 0.247 0.249 0.250 0.252 0.254 0.256 0.257 0.259 0.261 0.262 0.264 0.266 0.268 0.269 0.271 0.273 0.274 0.276 0.278 0.280 0.281 0.283 0.285 0.286 0.288 0.290 0.291 0.293 0.295 0.297 0.298 0.300 0.302 0.303 0.305 0.307 0.309 0.310 0.312 0.314 0.332 0.351 0.370 0.389 0.408 0.426 0.445 0.464 0.483 0.501 0.520 0.539 0.558 0.576 0.595 0.614 0.633 0.651 0.670 0.689 0.708 0.726 0.745 0.860 0.918 0.918 0.918 0.918 0.888 0.828 0.769 0.786 0.803 0.821 0.838 0.871 0.918 0.941 0.941 0.941 0.953 0.965 0.976 0.988 1.000"/></feComponentTransfer></filter>
+      <!-- ---------- Nước trong suốt để lộ lớp độ sâu đại dương bên dưới (zoom ≤ 10) ---------- -->
+      <filter id="bd-tint-ocean" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  1 0 0 0 0"/><feComponentTransfer><feFuncR type="table" tableValues="0.157 0.158 0.159 0.161 0.162 0.163 0.165 0.166 0.167 0.168 0.170 0.171 0.172 0.174 0.175 0.176 0.177 0.179 0.180 0.181 0.183 0.184 0.185 0.186 0.188 0.189 0.190 0.192 0.193 0.194 0.195 0.197 0.198 0.199 0.200 0.202 0.203 0.204 0.206 0.207 0.208 0.209 0.211 0.212 0.213 0.215 0.216 0.217 0.218 0.220 0.221 0.222 0.224 0.225 0.226 0.227 0.247 0.266 0.285 0.304 0.323 0.342 0.361 0.380 0.399 0.418 0.438 0.457 0.476 0.495 0.514 0.533 0.552 0.571 0.590 0.609 0.628 0.648 0.667 0.473 0.376 0.376 0.376 0.376 0.436 0.555 0.675 0.695 0.716 0.737 0.758 0.821 0.925 0.976 0.976 0.976 0.981 0.986 0.991 0.995 1.000"/><feFuncG type="table" tableValues="0.180 0.182 0.183 0.185 0.186 0.188 0.189 0.190 0.192 0.193 0.195 0.196 0.198 0.199 0.200 0.202 0.203 0.205 0.206 0.207 0.209 0.210 0.212 0.213 0.215 0.216 0.217 0.219 0.220 0.222 0.223 0.225 0.226 0.227 0.229 0.230 0.232 0.233 0.235 0.236 0.237 0.239 0.240 0.242 0.243 0.245 0.246 0.247 0.249 0.250 0.252 0.253 0.255 0.256 0.257 0.259 0.277 0.295 0.313 0.331 0.349 0.367 0.385 0.403 0.421 0.440 0.458 0.476 0.494 0.512 0.530 0.548 0.566 0.584 0.602 0.620 0.638 0.656 0.675 0.732 0.761 0.761 0.761 0.761 0.745 0.714 0.682 0.703 0.724 0.745 0.766 0.824 0.918 0.965 0.965 0.965 0.972 0.979 0.986 0.993 1.000"/><feFuncB type="table" tableValues="0.220 0.221 0.223 0.225 0.226 0.228 0.230 0.232 0.233 0.235 0.237 0.238 0.240 0.242 0.244 0.245 0.247 0.249 0.250 0.252 0.254 0.256 0.257 0.259 0.261 0.262 0.264 0.266 0.268 0.269 0.271 0.273 0.274 0.276 0.278 0.280 0.281 0.283 0.285 0.286 0.288 0.290 0.291 0.293 0.295 0.297 0.298 0.300 0.302 0.303 0.305 0.307 0.309 0.310 0.312 0.314 0.332 0.351 0.370 0.389 0.408 0.426 0.445 0.464 0.483 0.501 0.520 0.539 0.558 0.576 0.595 0.614 0.633 0.651 0.670 0.689 0.708 0.726 0.745 0.860 0.918 0.918 0.918 0.918 0.888 0.828 0.769 0.786 0.803 0.821 0.838 0.871 0.918 0.941 0.941 0.941 0.953 0.965 0.976 0.988 1.000"/><feFuncA type="table" tableValues="1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 0.667 0.000 0.000 0.000 0.000 0.000 0.118 0.706 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000 1.000"/></feComponentTransfer></filter>
     </svg>
 
     <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
@@ -95,17 +108,43 @@
       <!-- ---------- Thanh công cụ: tiêu đề · tìm kiếm · tỉnh · xã · Bộ lọc nâng cao · Đặt lại (UI KIT pf-input, pf-btn) ---------- -->
       <div class="map-toolbar">
         <div class="map-brand"><h1 class="map-brand-title">Bản đồ Nhân đạo Quốc gia</h1></div>
-        <label class="pf-input is-search bd-search">
+        <label class="pf-input is-search bd-search" data-tools="overview">
           <svg class="icon" aria-hidden="true"><use href="#search"/></svg>
           <span class="visually-hidden">Tìm theo tên, số điện thoại, địa chỉ</span>
           <input id="bd-search" type="search" placeholder="Tìm theo tên, số điện thoại, địa chỉ" autocomplete="off" aria-describedby="bd-search-hint" />
         </label>
         <span class="visually-hidden" id="bd-search-hint">Nhập từ 2 ký tự. Tìm kiếm sau khi ngừng gõ nửa giây.</span>
-        <div class="bd-filter-bar" id="bd-filter-body" role="group" aria-label="Bộ lọc">
-          <div class="pf-input bd-filter-item"><select id="bd-province" aria-label="Tỉnh, thành phố"><option value="">Tất cả tỉnh, thành phố</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+        <!-- ---------- Tab Nguồn lực: ô tìm địa phương / kho / điểm tập kết, cùng vị trí và kiểu ô tìm kiếm tab Tổng quan; danh sách gợi ý thả xuống ---------- -->
+        <div class="bd-search bd-res-search" data-tools="resources" hidden>
+          <label class="pf-input is-search"><svg class="icon" aria-hidden="true"><use href="#search"/></svg><input id="bd-res-search" type="search" placeholder="Tìm địa phương, kho, điểm tập kết..." aria-label="Tìm địa phương, kho, điểm tập kết" autocomplete="off" aria-controls="bd-res-results" aria-expanded="false" /></label>
+          <ul class="bd-res-results" id="bd-res-results" aria-label="Kết quả tìm kiếm" hidden></ul>
+        </div>
+        <div class="bd-filter-bar" id="bd-filter-body" role="group" aria-label="Bộ lọc" data-tools="overview">
+          <div class="pf-input bd-filter-item"><select id="bd-province" aria-label="Phạm vi: tỉnh, thành phố"><option value="">Toàn quốc</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
           <div class="pf-input bd-filter-item"><select id="bd-ward" aria-label="Xã, phường" disabled><option value="">Tất cả xã, phường</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <!-- ---------- Thời gian: Hiện tại · 7 ngày qua · 30 ngày qua · Tùy chọn (hộp chọn từ ngày – đến ngày) ---------- -->
+          <div class="bd-filter-item is-time">
+            <div class="pf-input"><svg class="icon bd-time-icon" aria-hidden="true"><use href="#calendar"/></svg><select id="bd-time" aria-label="Thời gian"><option value="">Hiện tại</option><option value="7d">7 ngày qua</option><option value="30d">30 ngày qua</option><option value="custom">Tùy chọn</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+            <div class="bd-time-pop" id="bd-time-pop" role="group" aria-label="Khoảng thời gian tùy chọn" hidden>
+              <label class="pf-field"><span>Từ ngày</span><span class="pf-input"><input type="date" id="bd-time-from" /></span></label>
+              <label class="pf-field"><span>Đến ngày</span><span class="pf-input"><input type="date" id="bd-time-to" /></span></label>
+              <p class="bd-time-error" id="bd-time-error" role="alert"></p>
+              <div class="bd-time-actions"><button type="button" class="pf-btn pf-btn-ghost pf-btn-sm" id="bd-time-cancel">Hủy</button><button type="button" class="pf-btn pf-btn-primary pf-btn-sm" id="bd-time-apply">Áp dụng</button></div>
+            </div>
+          </div>
           <button class="pf-btn pf-btn-ghost pf-adv-toggle" type="button" id="bd-adv-toggle" aria-expanded="false" aria-controls="bd-adv"><svg class="icon" aria-hidden="true"><use href="#sliders"/></svg>Bộ lọc nâng cao<span class="pf-filter-count" id="bd-adv-count" hidden></span></button>
           <button type="button" class="pf-btn pf-btn-ghost bd-reset" id="bd-reset"><svg class="icon" aria-hidden="true"><use href="#refresh"/></svg>Đặt lại</button>
+        </div>
+        <!-- ---------- Bộ lọc tab Nguồn lực, đổi theo tab con (data-sub): nhóm nhu cầu · mức ưu tiên · chương trình · nguồn lực · trạng thái · phạm vi · thời gian (ban-do-so-nguon-luc.js) ---------- -->
+        <div class="bd-filter-bar bd-res-tools" id="bd-res-tools" role="group" aria-label="Bộ lọc nguồn lực" data-tools="resources" hidden>
+          <div class="pf-input bd-filter-item" data-sub="hotspots"><select id="bd-res-need" aria-label="Nhóm nhu cầu"><option value="">Tất cả nhóm nhu cầu</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <div class="bd-filter-item" data-sub="hotspots"><details class="bd-multi" id="bd-res-priority-picker"><summary aria-labelledby="bd-res-priority-label bd-res-priority-value"><span class="visually-hidden" id="bd-res-priority-label">Mức ưu tiên</span><span id="bd-res-priority-value">Khẩn cấp, Cao</span><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></summary><div class="bd-options" id="bd-res-priority-options"></div></details></div>
+          <div class="pf-input bd-filter-item" data-sub="balance track"><select id="bd-res-program" aria-label="Chương trình"><option value="">Tất cả chương trình</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <div class="pf-input bd-filter-item" data-sub="balance"><select id="bd-res-group" aria-label="Nguồn lực"><option value="">Tất cả nguồn lực</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <div class="pf-input bd-filter-item" data-sub="track"><select id="bd-res-status" aria-label="Trạng thái lệnh"><option value="">Tất cả trạng thái</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <div class="pf-input bd-filter-item" data-sub="hotspots balance track"><select id="bd-res-scope" aria-label="Phạm vi"><option value="">Toàn quốc</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <div class="pf-input bd-filter-item" data-sub="balance"><select id="bd-res-time" aria-label="Thời gian"><option value="">Hiện tại</option><option value="7d">7 ngày qua</option><option value="30d">30 ngày qua</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <button type="button" class="pf-btn pf-btn-ghost bd-reset" id="bd-res-reset"><svg class="icon" aria-hidden="true"><use href="#refresh"/></svg>Đặt lại</button>
         </div>
       </div>
 
@@ -121,17 +160,22 @@
       <div class="map-dashboard" id="bd-dashboard">
         <!-- ==================== SECTION: CỘT TRÁI — lớp bản đồ (chia nhóm) ==================== -->
         <aside class="md-panel md-filters" id="bd-left" aria-label="Lớp bản đồ">
+          <!-- ---------- Thanh biểu tượng lớp khi thu gọn cột: mỗi lớp của tab đang chọn 1 nút bật / tắt, rê chuột / focus hiện tooltip (ban-do-so.js: LỚP BẢN ĐỒ THU GỌN dựng) ---------- -->
+          <div class="bd-rail" id="bd-rail" role="group" aria-label="Bật / tắt lớp bản đồ"></div>
           <!-- ---------- Lớp bản đồ: nhóm Tổ chức hội · Con người · Hạ tầng hỗ trợ · Hạ tầng nhân đạo · Chương trình, mỗi nhóm thu gọn / mở bằng mũi tên ở tiêu đề nhóm, mỗi lớp 1 công tắc (ban-do-so.js dựng) ---------- -->
           <section class="bd-card bd-layers-card">
-            <h2 class="bd-card-title"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg>Lớp bản đồ</h2>
+            <!-- ---------- Tiêu đề cột + nút Bật / Tắt tất cả cùng hàng (nút của tab Tổng quan hoặc Nguồn lực, đổi theo tab) ---------- -->
+            <div class="bd-card-head">
+              <h2 class="bd-card-title"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg>Lớp bản đồ</h2>
+              <button type="button" class="md-link" id="bd-layers-all" data-tab-only="overview">Bật tất cả</button>
+              <button type="button" class="md-link" id="bd-res-layers-all" data-tab-only="resources" hidden>Tắt tất cả</button>
+            </div>
             <div id="bd-layers-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-overview">
               <fieldset id="bd-layers" class="md-layers"><legend class="visually-hidden">Chọn lớp bản đồ</legend></fieldset>
             </div>
-            <!-- ---------- Tab Nguồn lực: công tắc lớp Điều phối nguồn lực · lọc Loại nguồn lực (thẻ) · Tình trạng (mức cân đối) ---------- -->
-            <div id="bd-relief-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-relief" hidden>
-              <label class="md-layer bd-layer" style="--layer-color:#e5232f"><span class="md-layer-icon" aria-hidden="true"><svg class="icon"><use href="#hand-heart"/></svg></span><span class="md-layer-text"><strong class="bd-layer-name">Điều phối nguồn lực</strong><small><span id="bd-relief-count">0</span> địa bàn</small></span><input class="md-switch" type="checkbox" data-extra="relief" /></label>
-              <fieldset class="bd-extra-group"><legend class="bd-extra-title">Loại nguồn lực</legend><div class="md-chips" id="bd-resource-filter"></div></fieldset>
-              <fieldset class="bd-extra-group"><legend class="bd-extra-title">Tình trạng</legend><div class="md-status-list" id="bd-status-filter"></div></fieldset>
+            <!-- ---------- Tab Nguồn lực: Lớp dữ liệu chia nhóm như tab Tổng quan (Cân đối & điều phối · Hạ tầng nhân đạo · Thiên tai – rủi ro) — ban-do-so-nguon-luc.js dựng ---------- -->
+            <div id="bd-res-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-resources" hidden>
+              <fieldset id="bd-res-layers" class="md-layers"><legend class="visually-hidden">Chọn lớp dữ liệu nguồn lực</legend></fieldset>
             </div>
             <!-- ---------- Tab Thời tiết: công tắc Cảnh báo nguy hiểm · Cần theo dõi (nhãn cảnh báo trên bản đồ) ---------- -->
             <div id="bd-weather-body" class="bd-card-body" role="tabpanel" aria-labelledby="bd-tab-weather" hidden>
@@ -147,7 +191,7 @@
           <!-- ---------- Tab lớp bản đồ trên góc trái bản đồ (kiểu nút nhóm md-basemap của bản cũ): Tổng quan · Nguồn lực · Thời tiết — đổi nội dung cột Lớp bản đồ (ban-do-so.js: LỚP BẢN ĐỒ: tab) ---------- -->
           <div class="md-basemap bd-tabs" role="tablist" aria-label="Nhóm lớp bản đồ">
             <button type="button" role="tab" id="bd-tab-overview" aria-selected="true" aria-controls="bd-layers-body">Tổng quan</button>
-            <button type="button" role="tab" id="bd-tab-relief" aria-selected="false" aria-controls="bd-relief-body" tabindex="-1">Nguồn lực</button>
+            <button type="button" role="tab" id="bd-tab-resources" aria-selected="false" aria-controls="bd-res-body" tabindex="-1">Nguồn lực</button>
             <button type="button" role="tab" id="bd-tab-weather" aria-selected="false" aria-controls="bd-weather-body" tabindex="-1">Thời tiết</button>
           </div>
           <!-- ---------- Nút thu gọn / mở cột trái, cột phải (ban-do-so.js: CỘT BÊN) ---------- -->
@@ -164,8 +208,11 @@
             <div class="bd-zoom"><button type="button" class="bd-map-button" id="bd-zoom-in" aria-label="Phóng to" title="Phóng to"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg></button><button type="button" class="bd-map-button" id="bd-zoom-out" aria-label="Thu nhỏ" title="Thu nhỏ"><svg class="icon" aria-hidden="true"><use href="#minus"/></svg></button></div>
           </div>
           <div class="bd-map-notice" id="bd-map-notice" role="status" hidden></div>
-          <div class="bd-focus-note" id="bd-focus-note" hidden><span>Đang định vị bản ghi</span><button type="button" id="bd-exit-focus">Hiện tất cả kết quả</button></div>
+          <div class="bd-focus-note" id="bd-focus-note" hidden><span>Đang định vị đối tượng</span><button type="button" id="bd-exit-focus">Hiện tất cả kết quả</button></div>
           <p class="bd-map-caption" id="bd-map-caption">Vị trí và thông tin trên bản đồ là dữ liệu minh họa.</p>
+          <!-- ---------- Tab Nguồn lực: chú giải (mức ưu tiên · mức đáp ứng · lệnh đang chọn · trạng thái lệnh) và dòng hướng dẫn ---------- -->
+          <div class="bd-res-legend" id="bd-res-legend" hidden></div>
+          <p class="bd-res-hint" id="bd-res-hint" hidden></p>
         </section>
         <!-- ==================== END SECTION: BẢN ĐỒ ==================== -->
 
@@ -176,8 +223,19 @@
             <div class="bd-results-body" id="bd-results-body" tabindex="0" aria-label="Danh sách kết quả, cuộn để xem thêm">
               <table class="bd-results"><thead><tr><th scope="col">Tên</th><th scope="col">Địa chỉ</th></tr></thead><tbody id="bd-rows"></tbody></table>
               <p id="bd-empty" class="bd-empty" role="status">Đang tải dữ liệu…</p>
-              <button type="button" class="bd-load-more" id="bd-load-more" hidden>Xem thêm 50 bản ghi</button>
+              <button type="button" class="bd-load-more" id="bd-load-more" hidden>Xem thêm 50 kết quả</button>
             </div>
+          </section>
+          <!-- ---------- Tab Nguồn lực: tab con Điểm nóng · Cân đối & điều phối · Theo dõi tuyến (kèm số lượng) — ban-do-so-nguon-luc.js dựng ---------- -->
+          <section class="bd-card bd-res-card" id="bd-res-card" aria-label="Nguồn lực" hidden>
+            <div class="bd-subtabs" role="tablist" aria-label="Nguồn lực">
+              <button type="button" role="tab" id="bd-sub-hotspots" data-sub="hotspots" aria-selected="true" aria-controls="bd-res-hotspots">Điểm nóng<span class="pf-tab-count" data-sub-count="hotspots">0</span></button>
+              <button type="button" role="tab" id="bd-sub-balance" data-sub="balance" aria-selected="false" aria-controls="bd-res-balance" tabindex="-1">Cân đối &amp; điều phối<span class="pf-tab-count" data-sub-count="balance">0</span></button>
+              <button type="button" role="tab" id="bd-sub-track" data-sub="track" aria-selected="false" aria-controls="bd-res-track" tabindex="-1">Theo dõi tuyến<span class="pf-tab-count" data-sub-count="track">0</span></button>
+            </div>
+            <div class="bd-res-panel" id="bd-res-hotspots" role="tabpanel" aria-labelledby="bd-sub-hotspots"></div>
+            <div class="bd-res-panel" id="bd-res-balance" role="tabpanel" aria-labelledby="bd-sub-balance" hidden></div>
+            <div class="bd-res-panel" id="bd-res-track" role="tabpanel" aria-labelledby="bd-sub-track" hidden></div>
           </section>
         </aside>
         <!-- ==================== END SECTION: CỘT PHẢI ==================== -->
@@ -186,6 +244,15 @@
       <noscript><p>Vui lòng bật JavaScript để sử dụng tìm kiếm và bộ lọc bản đồ.</p></noscript>
     </main>
     <!-- ==================== END SECTION: BẢN ĐỒ SỐ ==================== -->
+    <!-- ==================== SECTION: DIALOG NGUỒN LỰC — tạo / chỉnh sửa lệnh điều phối, từ chối, báo sự cố, cập nhật phân phối, xác nhận hủy (ban-do-so-nguon-luc.js dựng nội dung) ==================== -->
+    <dialog class="bd-dialog bd-order-dialog" id="bd-order-dialog" aria-labelledby="bd-order-title"><form class="bd-dialog-form" id="bd-order-form" novalidate></form></dialog>
+    <dialog class="bd-dialog is-small" id="bd-action-dialog" aria-labelledby="bd-action-title"><form class="bd-dialog-form" id="bd-action-form" novalidate></form></dialog>
+    <dialog class="bd-dialog is-small" id="bd-confirm-dialog" aria-labelledby="bd-confirm-title">
+      <div class="bd-dialog-head"><h2 id="bd-confirm-title">Hủy tạo lệnh điều phối?</h2></div>
+      <p class="bd-dialog-text">Dữ liệu đã nhập sẽ không được lưu.</p>
+      <div class="bd-dialog-foot"><button type="button" class="pf-btn pf-btn-ghost" id="bd-confirm-keep">Tiếp tục nhập</button><button type="button" class="pf-btn pf-btn-primary" id="bd-confirm-discard">Hủy lệnh</button></div>
+    </dialog>
+    <!-- ==================== END SECTION: DIALOG NGUỒN LỰC ==================== -->
     <dialog class="info-dialog bd-record-dialog" id="bd-record-dialog" aria-labelledby="bd-record-title"><button class="dialog-close" type="button" aria-label="Đóng hồ sơ">×</button><span class="pf-badge is-orange">Hồ sơ minh họa</span><h2 id="bd-record-title"></h2><div id="bd-record-content"></div><button class="button button-primary dialog-done" type="button">Đóng</button></dialog>
 
     <!-- ==================== FOOTER ==================== -->
@@ -248,7 +315,10 @@
     <script src="vendor/leaflet/leaflet.markercluster.js" defer></script>
     <script src="ban-do-so-model.js" defer></script>
     <script src="ban-do-so-locations.js" defer></script>
+    <script src="ban-do-so-nguon-luc-data.js" defer></script>
     <script src="ban-do-so-data.js" defer></script>
+    <script src="ban-do-so-nguon-luc-model.js" defer></script>
+    <script src="ban-do-so-nguon-luc.js" defer></script>
     <script src="ban-do-so.js" defer></script>
   </body>
 </html>

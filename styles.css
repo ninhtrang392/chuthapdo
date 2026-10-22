@@ -84,6 +84,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 .account-dropdown a:hover,.account-dropdown a:focus-visible{outline:none;background:var(--color-surface-alt)}
 .account-dropdown a[aria-current="page"]{background:#e6effd}
 .account-dropdown .icon{width:18px;height:18px;color:var(--color-text-muted)}
+/* Đăng xuất: cuối menu, vạch ngăn phía trên, chữ và biểu tượng màu đỏ */
+.account-sep{height:1px;margin:4px 0;background:var(--color-surface-alt)}
+.account-dropdown .account-logout,.account-dropdown .account-logout .icon{color:var(--color-primary)}
+.account-dropdown .account-logout:hover,.account-dropdown .account-logout:focus-visible{background:#fdecec}
 @media(max-width:1120px){.account-dropdown{right:-4px;width:min(280px,calc(100vw - 16px))}}
 @media(prefers-reduced-motion:reduce){.account-dropdown{animation:none}}
 
