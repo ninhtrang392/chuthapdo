@@ -8,6 +8,8 @@ const URL_ = process.env.MAP_TEST_URL || 'http://127.0.0.1:5501/ban-do-so.html';
   const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || undefined });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', acceptDownloads: true, permissions: ['clipboard-read', 'clipboard-write'] });
   const page = await context.newPage(); const errors = []; page.on('pageerror', (e) => errors.push(e.message));
+  // Trang chính chạy chế độ cán bộ (có thao tác) để kiểm luồng tạo / duyệt / từ chối / theo dõi; chế độ chỉ xem (mặc định) kiểm ở trang riêng
+  await page.addInitScript(() => { window.DigitalMapResourceConfig = { staffMode: true }; });
   let checks = 0; const check = async (name, fn) => { await fn(); checks += 1; console.log('PASS ' + name); };
   const toast = async () => (await page.locator('#bd-toast').textContent()).trim();
   const search = async (text) => { await page.locator('#bd-search').fill(text); await page.waitForTimeout(650); };
@@ -203,6 +205,20 @@ const URL_ = process.env.MAP_TEST_URL || 'http://127.0.0.1:5501/ban-do-so.html';
     assert.equal(await page.locator('.bd-map-tag.is-source').count(), 1);
     assert.equal(await page.locator('.bd-map-tag.is-target').count(), 1);
     assert((await page.locator('#bd-res-legend').textContent()).includes('Lệnh đang chọn'));
+  });
+  await check('View-only (default): title Danh sách điểm nóng instead of sub-tabs, no Xuất danh sách / Xem cân đối tỉnh; staff-only tabs and actions hidden', async () => {
+    const view = await context.newPage();
+    await view.goto(URL_, { waitUntil: 'domcontentloaded' });
+    await view.locator('[data-record]').first().waitFor();
+    await view.locator('#bd-tab-resources').click();
+    assert.equal((await view.locator('#bd-res-title').innerText()).replace(/\s*\n\s*/g, ' | '), 'Danh sách điểm nóng | 6 điểm nóng');
+    assert(await view.locator('#bd-res-card .bd-subtabs').isHidden());
+    assert(await view.locator('#bd-sub-balance').isHidden());
+    assert(await view.locator('#bd-sub-track').isHidden());
+    assert(await view.locator('.bd-hot-card').count() > 0);
+    assert.equal(await view.locator('[data-export], [data-view-balance], #bd-res-hotspots .bd-res-foot').count(), 0);
+    assert(await view.locator('#bd-res-balance').isHidden());
+    await view.close();
   });
   await check('Track: 7 milestones, confirm arrival → TB13, report incident → TB14', async () => {
     await page.locator('#bd-sub-track').click();

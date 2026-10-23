@@ -680,9 +680,9 @@ h1 span{display:block;font-weight:700;text-shadow:none;filter:drop-shadow(0 2px 
 .news-item:focus-within{outline:3px solid #9b0722;outline-offset:3px}
 .news-title a:focus-visible{outline:none}
 
-/* ---------- Lưới bài viết: bài nổi bật (trái) + danh sách 4 bài (phải) ---------- */
-/* Hai cột cao bằng nhau: chiều cao theo danh sách bên phải, ảnh bài nổi bật co giãn lấp phần còn lại */
-.news-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:clamp(24px,3vw,40px);align-items:stretch}
+/* ---------- Lưới bài viết: bài nổi bật (trái) + danh sách 3 bài (phải) ---------- */
+/* Hai cột rộng và cao bằng nhau: chiều cao theo danh sách bên phải, ảnh bài nổi bật phủ kín thẻ */
+.news-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,3vw,40px);align-items:stretch}
 .news-item{cursor:pointer}
 .news-item .media-photo img{transition:transform .6s ease}
 .news-item:hover .media-photo img{transform:scale(calc(var(--zoom,1) * 1.04))}
@@ -691,12 +691,16 @@ h1 span{display:block;font-weight:700;text-shadow:none;filter:drop-shadow(0 2px 
 .news-meta{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;margin:0 0 8px;font-size:12.5px;color:var(--color-text-muted);font-variant-numeric:tabular-nums}
 .news-cat{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-primary)}
 
-/* ---------- Bài nổi bật: ảnh trên, chữ dưới ---------- */
-.news-feature{display:flex;flex-direction:column;min-height:0}
-.news-feature .media{flex:1 1 0;min-height:260px;border-radius:12px}
-.news-feature .news-body{padding-top:20px}
-.news-feature .news-title{font-size:clamp(20px,1.7vw,24px);font-weight:700;line-height:1.35}
-.news-feature .news-desc{font-size:15.5px}
+/* ---------- Bài nổi bật: ảnh phủ kín thẻ, chữ trắng đè lên đáy ảnh ---------- */
+/* .news-body giữ position mặc định để lớp phủ .stretched vẫn trùm cả thẻ */
+.news-feature{display:flex;flex-direction:column;justify-content:flex-end;min-height:400px;border-radius:12px;overflow:hidden;isolation:isolate}
+.news-feature .media{position:absolute;inset:0;z-index:-1}
+.news-feature .media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.45) 60%,rgba(0,0,0,.85) 100%)}
+.news-feature .news-body{padding:24px}
+.news-feature .news-meta{margin-bottom:8px;font-size:13px;color:rgba(255,255,255,.85)}
+.news-feature .news-title{font-size:clamp(20px,2vw,24px);font-weight:700;line-height:1.35;color:#fff}
+.news-feature:hover .news-title{color:#fff}
+.news-feature .news-desc{margin-top:10px;font-size:15px;color:rgba(255,255,255,.85)}
 
 /* ---------- Danh sách bên phải: ảnh nhỏ trái, chữ phải, ngăn bằng đường kẻ ---------- */
 .news-list{display:flex;flex-direction:column;justify-content:space-between}
@@ -712,9 +716,11 @@ h1 span{display:block;font-weight:700;text-shadow:none;filter:drop-shadow(0 2px 
 /* ---------- Responsive: tin tức ---------- */
 @media(max-width:1023px){
   .news-grid{grid-template-columns:1fr}
-  .news-feature .media{flex:none;aspect-ratio:16 / 10}
+  .news-feature{min-height:420px}
 }
 @media(max-width:600px){
+  .news-feature{min-height:360px}
+  .news-feature .news-body{padding:20px}
   .news-row{grid-template-columns:104px minmax(0,1fr);gap:14px;padding-block:14px}
   .news-row .news-title{font-size:15px}
   .news-row .news-desc{display:none}
@@ -1393,6 +1399,9 @@ html.has-smoother{scroll-behavior:auto}
 .pf-filter-count{display:grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--red);font-size:12px;font-weight:700;color:#fff}
 .pf-adv-panel{padding:16px 20px;border:1px solid var(--color-border);border-radius:16px;background:#fff}
 .pf-adv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+/* Bộ lọc Chương trình: cột Thời gian triển khai (2 ô ngày Từ – Đến) rộng gấp rưỡi các cột chọn; 2 ô ngày luôn nằm ngang */
+.pf-adv-grid.is-programs{grid-template-columns:minmax(0,2fr) minmax(0,2fr) minmax(0,3fr) minmax(0,2fr)}
+.pf-adv-field .pf-reg-range{grid-template-columns:repeat(2,minmax(0,1fr))}
 .pf-adv-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:13px;font-weight:500;line-height:18px;color:var(--color-text)}
 .pf-adv-foot{display:flex;justify-content:flex-end;margin-top:12px}
 
@@ -2162,7 +2171,7 @@ html.pf-reg-lock{overflow:hidden}
 }
 @media(max-width:1279px){
   .pf-layout{grid-template-columns:240px minmax(0,1fr);gap:24px}
-  .pf-adv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pf-adv-grid,.pf-adv-grid.is-programs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .pf-detail-grid{grid-template-columns:minmax(0,1fr)}
   .pf-head-tools .pf-input.is-search{width:220px}
 }
@@ -2191,7 +2200,7 @@ html.pf-reg-lock{overflow:hidden}
   .pf-head-tools{width:100%}
   .pf-head-tools .pf-input.is-search,.pf-head-tools .pf-input.is-select{flex:1 1 100%;width:auto}
   .pf-head-tools .pf-btn{flex:1 1 0}
-  .pf-adv-grid{grid-template-columns:minmax(0,1fr)}
+  .pf-adv-grid,.pf-adv-grid.is-programs{grid-template-columns:minmax(0,1fr)}
   /* Bảng → thẻ: mỗi dòng 1 thẻ, ô chính chiếm cả hàng, các ô gộp chia 2 cột, thao tác ở góc phải */
   .pf-table-card{border:0;border-radius:0;background:none;overflow:visible}
   .pf-table-scroll{overflow:visible}

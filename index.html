@@ -625,7 +625,7 @@
 
       <!-- ==================== SECTION 07: TIN TỨC VÀ BÀI VIẾT NHÂN ĐẠO ==================== -->
       <!-- Dữ liệu minh họa: chuyên mục, tiêu đề, ngày đăng, ảnh, đường dẫn phải lấy từ CMS.
-           Bố cục: bài nổi bật bên trái (ảnh trên, chữ dưới) + danh sách 4 bài bên phải (ảnh nhỏ trái, chữ phải, ngăn bằng đường kẻ).
+           Bố cục: bài nổi bật bên trái (chữ trắng đè lên ảnh, nền tối dần phía dưới) + danh sách 3 bài bên phải (ảnh nhỏ trái, chữ phải, ngăn bằng đường kẻ).
            Cả bài bấm được (link tiêu đề phủ toàn bài, .stretched). -->
       <section class="section news" id="tin-tuc" aria-labelledby="news-title">
         <div class="container">
@@ -635,13 +635,13 @@
 
           <!-- Ảnh minh họa: Emages/ảnh minh họa/ — thay bằng ảnh bài viết từ CMS -->
           <div class="news-grid">
-            <!-- ---------- Bài nổi bật: ảnh lớn phía trên, chữ phía dưới ---------- -->
+            <!-- ---------- Bài nổi bật: ảnh phủ kín thẻ, ngày + tiêu đề + tóm tắt đè lên đáy ảnh ---------- -->
             <article class="news-item news-feature" data-category="hoat-dong" data-reveal>
               <div class="media media-photo" style="--focus:50% 40%">
                 <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg" alt="Tình nguyện viên Chữ thập đỏ trao quà cho hai em nhỏ" width="1156" height="758" loading="lazy" />
               </div>
               <div class="news-body">
-                <p class="news-meta"><span class="news-cat">Hoạt động Hội</span><time datetime="2026-10-02">02/10/2026</time></p>
+                <p class="news-meta"><time datetime="2026-10-02">02/10/2026</time></p>
                 <h3 class="news-title"><a class="stretched" href="#" data-panel="Bài viết">Những món quà đầu tiên sau lũ: hành trình của đội tình nguyện viên trẻ</a></h3>
                 <p class="news-desc">Ghi lại một ngày cùng các tình nguyện viên vượt đường ngập để mang nhu yếu phẩm đến từng hộ dân còn bị chia cắt, lắng nghe câu chuyện vượt lũ và cùng bà con dọn dẹp, sửa sang lại nhà cửa.</p>
               </div>
@@ -681,17 +681,6 @@
                   <p class="news-desc">Mỗi suất quà gồm gạo, nhu yếu phẩm và tiền mặt, được cán bộ Hội trao tận tay từng gia đình neo đơn trong xã.</p>
                 </div>
               </article>
-
-              <article class="news-item news-row" data-category="nhan-dao" data-reveal>
-                <div class="media media-photo" style="--focus:50% 45%">
-                  <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/trao-qua-hoc-sinh.jpg" alt="Trao tiền hỗ trợ cho em học sinh có hoàn cảnh khó khăn" width="2033" height="1240" loading="lazy" />
-                </div>
-                <div class="news-body">
-                  <p class="news-meta"><span class="news-cat">Nhân đạo</span><time datetime="2026-09-12">12/09/2026</time></p>
-                  <h3 class="news-title"><a class="stretched" href="#" data-panel="Bài viết">Tiếp sức đến trường cho học sinh có hoàn cảnh khó khăn</a></h3>
-                  <p class="news-desc">Hội trao học bổng, sách vở và đồ dùng học tập cho các em học sinh nghèo vượt khó trước thềm năm học mới.</p>
-                </div>
-              </article>
             </div>
           </div>
         </div>
@@ -700,8 +689,9 @@
 
       <!-- ==================== SECTION: ĐƠN VỊ ĐỒNG HÀNH (BIDV & GTEL) ==================== -->
       <!-- Đơn vị trao tặng & đồng phát triển hệ thống. Ảnh: Emages/Đơn vị đồng hành/picture6.avif (lễ ký kết).
-           Bố cục: ảnh trái, chữ phải (nhãn, tên đơn vị, lời cảm ơn, đồng phát triển, trích dẫn). -->
-      <section class="section sponsor" id="dong-hanh" aria-labelledby="sponsor-title">
+           Bố cục: ảnh trái, chữ phải (nhãn, tên đơn vị, lời cảm ơn, đồng phát triển, trích dẫn).
+           Đang ẩn (thuộc tính hidden) — bỏ hidden để hiện lại. -->
+      <section class="section sponsor" id="dong-hanh" aria-labelledby="sponsor-title" hidden>
         <div class="container sponsor-grid">
           <!-- ---------- Ảnh lễ ký kết + chú thích ---------- -->
           <figure class="sponsor-media media media-photo" style="--focus:50% 55%" data-reveal>

@@ -6,13 +6,13 @@
 /* ---------- Khối trong cột bên: phân cách bằng đường kẻ như md-block / md-acc của bản cũ ---------- */
 .bd-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:16px;box-shadow:0 3px 16px #20212209;overflow:hidden}.bd-card h2{margin:0;font-size:14px}
 .md-panel .bd-card{border:0;border-radius:0;box-shadow:none;overflow:visible}.md-panel .bd-card + .bd-card{margin-top:4px;border-top:1px solid var(--color-border)}.md-panel .bd-card[hidden] + .bd-card{margin-top:0;border-top:0}
-/* Tiêu đề 2 cột (Lớp bản đồ, Danh sách dữ liệu): tĩnh, cùng cỡ chữ md-acc-head của bản cũ */.bd-card .bd-card-title{display:flex;align-items:center;gap:10px;min-height:44px;margin:0;padding:8px 0;font-size:16px;font-weight:700;color:var(--color-text)}.bd-card-title>.icon{flex:none;width:20px;height:20px;color:var(--color-primary)}.bd-card-body{padding:4px 0 16px}.bd-card-body[hidden]{display:none}
+/* Tiêu đề 2 cột (Lớp bản đồ, Danh sách địa điểm): tĩnh, cùng cỡ chữ md-acc-head của bản cũ */.bd-card .bd-card-title{display:flex;align-items:center;gap:10px;min-height:44px;margin:0;padding:8px 0;font-size:16px;font-weight:700;color:var(--color-text)}.bd-card-title>.icon{flex:none;width:20px;height:20px;color:var(--color-primary)}.bd-card-body{padding:4px 0 16px}.bd-card-body[hidden]{display:none}
 /* ---------- Cột trái: lớp bản đồ — tiêu đề nhóm (chữ hoa, xám) · dòng lớp kiểu md-layer bản cũ: biểu tượng (màu lớp khi bật, xám khi tắt; không nền) · tên + số bản ghi · công tắc; cột trái 340px: nhỏ nhất mà mọi tên lớp vẫn tối đa 2 dòng (đo 2026-10-21; 335px trở xuống bắt đầu xuống thêm dòng) ---------- */
 /* 3 khung (cột trái, bản đồ, cột phải) bo góc 12px thay cho 24px của bản cũ */.bd-page .md-panel,.bd-page .md-map{border-radius:12px}.map-dashboard{--md-left:340px}
 .bd-layers-card fieldset{min-width:0;margin:0;padding:0;border:0}
 /* ---------- Tab Tổng quan · Nguồn lực · Thời tiết: nút nhóm trên góc trái bản đồ (md-basemap của bản cũ), tab đang chọn tô đỏ ---------- */
 .md-basemap.bd-tabs button[aria-selected=true]{background:linear-gradient(180deg,#ec3a42,var(--color-primary));color:#fff;box-shadow:0 4px 12px rgba(185,28,43,.3)}.md-basemap.bd-tabs button:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
-.bd-card-body[role=tabpanel][hidden]{display:none}
+.bd-card-body[role=tabpanel][hidden]{display:none}.bd-orders-head [data-create][hidden],.bd-subtabs [role=tab][hidden],.bd-subtabs[hidden],.bd-card-title[hidden]{display:none}
 /* ---------- Tab Nguồn lực, Thời tiết: nhóm lọc (tiêu đề chữ hoa xám như tiêu đề nhóm lớp) ---------- */
 .bd-extra-group{min-width:0;margin:12px 0 0;padding:0;border:0}.bd-extra-title{margin:0 0 8px;padding:0;font-size:13px;font-weight:600;line-height:18px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0}.bd-extra-group .md-status-list label{padding:6px 2px}
 .bd-layer-group + .bd-layer-group{margin-top:8px}
@@ -72,6 +72,17 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 @media(max-width:650px){.bd-filter-item{flex-basis:calc(50% - 6px);max-width:none}.bd-adv-grid{grid-template-columns:minmax(0,1fr)}.map-toolbar .bd-search{flex:1 1 100%;min-width:0}.map-brand-title span{display:block;margin:2px 0 0;padding:0;border:0;font-size:13px}.bd-map .leaflet-control-scale{display:none}.bd-map-notice{left:12px;right:62px;font-size:11px}.bd-focus-note{left:12px;bottom:45px;transform:none;flex-direction:column;gap:4px;font-size:11px}.bd-focus-note button{font-size:11px}.bd-popup .leaflet-popup-content{width:290px!important;font-size:12px}.bd-detail>div{grid-template-columns:84px 1fr;gap:8px}.bd-detail dd{font-size:11px}.bd-record-dialog .bd-detail>div{grid-template-columns:100px 1fr}}
 @media(max-width:380px){.bd-popup .leaflet-popup-content{width:calc(100vw - 96px)!important}.bd-detail>div{grid-template-columns:72px 1fr;gap:7px}.bd-popup .bd-detail dt{font-size:10px}.bd-popup .bd-detail dd{font-size:10px}}
 /* ==================== END SECTION: BẢN ĐỒ SỐ ==================== */
+/* ==================== SECTION: TAB NGUỒN LỰC CHỈ XEM — ẩn cột Lớp bản đồ ==================== */
+/* .is-res-public (ban-do-so-nguon-luc.js, khi không bật staffMode) + .is-resources: ẩn hẳn cột trái, kể cả thanh biểu tượng khi đã thu gọn; bản đồ giãn ra */
+.bd-page .map-dashboard.is-resources.is-res-public > .md-filters,.bd-page .map-dashboard.is-resources.is-res-public > .md-map > .md-panel-toggle.is-left{display:none}
+@media(min-width:1101px){
+  .bd-page .map-dashboard.is-resources.is-res-public{grid-template-columns:minmax(0,1fr) var(--md-right)}
+  .bd-page .map-dashboard.is-resources.is-res-public > .md-map{margin-left:0}
+}
+@media(max-width:1100px){
+  .bd-page .map-dashboard.is-resources.is-res-public > .md-summary{grid-column:1 / -1}
+}
+
 /* ==================== SECTION: CỘT TRÁI THU GỌN — thanh biểu tượng lớp bản đồ ==================== */
 /* ---------- Thanh biểu tượng: chỉ hiện khi thu gọn cột trái trên màn hình rộng; cột còn 64px thay vì ẩn hẳn ---------- */
 .bd-rail{display:none;flex-direction:column;align-items:center;gap:4px}
@@ -127,7 +138,7 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 .bd-card-head .bd-card-title{flex:1;min-width:0}
 .bd-card-head .md-link{flex:none;padding:4px 0;font-size:13px}
 .bd-card-head .md-link[hidden]{display:none}
-/* ---------- Danh sách dữ liệu: tên đối tượng + tên lớp ---------- */
+/* ---------- Danh sách địa điểm: tên đối tượng + tên lớp ---------- */
 .bd-results button > span{display:flex;flex-direction:column;min-width:0}
 .bd-row-layer{font-size:11px;font-weight:400;line-height:16px;color:var(--color-text-muted)}
 /* ---------- Popup chi tiết ĐTK / Người yếu thế / Chương trình ---------- */
@@ -138,7 +149,8 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 .bd-popup-body{padding:15px 20px 20px}
 /* Tiêu đề là dòng đầu (danh sách tại điểm, cân đối tỉnh): bù 1px trên/dưới cho cao 24px bằng dấu X */
 .bd-popup-header>h3:first-child{margin:1px 0}
-.bd-popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+/* Hàng tên + nhãn trạng thái (ĐTK, Người yếu thế): nằm dưới hàng dấu X nên lấn vào 28px chừa cho X, nhãn luôn sát lề phải 20px */
+.bd-popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-right:-28px}
 .bd-popup-head h3{margin:0}
 .bd-popup-head .pf-badge{flex:none;margin-top:2px;font-size:12px;line-height:20px}
 /* Hàng đầu popup cao 24px bằng nút đóng để thẳng hàng với dấu X */
@@ -173,6 +185,8 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 /* ==================== SECTION: TAB NGUỒN LỰC — điểm nóng, cân đối & điều phối, theo dõi tuyến ==================== */
 /* ---------- Thanh bộ lọc nguồn lực: ô chọn nhiều Mức ưu tiên dùng chung khung ô bộ lọc nâng cao ---------- */
 .bd-res-tools .bd-filter-item{position:relative}
+/* Thời gian (Cân đối & điều phối): đủ rộng để hiện khoảng tùy chọn "dd/mm – dd/mm" */
+.bd-res-tools .bd-filter-item.is-time{flex:0 0 184px}
 .bd-res-tools .bd-multi summary{min-width:180px}
 .bd-res-tools .bd-options label{align-items:center}
 .bd-res-tools .bd-options input{margin-top:0}
@@ -214,7 +228,9 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 /* ---------- Thẻ điểm nóng (SRS 3.4 #9, mockup 4): nhãn mức · tỉnh · loại thiên tai · HPS; 3 số liệu; nhóm nhu cầu (màu theo tông pf-tag của web) ---------- */
 .bd-hot-card{position:relative;padding:12px;border:1px solid var(--color-border);border-radius:12px;background:#fff;transition:box-shadow .2s,border-color .2s}
 .bd-hot-card:hover{box-shadow:0 4px 14px rgba(20,30,50,.08)}
-.bd-hot-card.is-selected{border-color:var(--color-primary-soft);background:#fff7f7;box-shadow:0 0 0 3px rgba(185,28,43,.08)}
+/* Thẻ đang chọn: vạch đỏ 4px bên trái (box-shadow inset theo bo góc), viền giữ màu xám, nền trắng như thẻ thường */
+.bd-hot-card.is-selected{box-shadow:inset 4px 0 0 var(--color-primary)}
+.bd-hot-card.is-selected:hover{box-shadow:inset 4px 0 0 var(--color-primary),0 4px 14px rgba(20,30,50,.08)}
 .bd-hot-card:has(.bd-hot-hit:focus-visible){outline:3px solid #9b0722;outline-offset:2px}
 .bd-hot-top{display:flex;align-items:center;gap:8px;min-width:0}
 .bd-prio{display:grid;flex:none;place-items:center;min-width:28px;height:20px;padding:0 6px;border-radius:6px;background:var(--c);font-size:12px;font-weight:700;line-height:20px;color:#fff}
@@ -321,12 +337,12 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 .bd-prov{display:inline-flex;flex-direction:column;align-items:center;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.92);box-shadow:0 1px 4px rgba(0,0,0,.18);font-size:11px;font-weight:700;line-height:14px;color:var(--color-text);white-space:nowrap}
 .bd-prov b{font-size:10px;font-weight:600;color:var(--color-text-muted)}
 .bd-prov.is-dim{opacity:.7}
-.bd-prov.is-selected{background:#24272c;color:#fff}
-.bd-prov.is-selected b{color:#d6d9de}
+.bd-prov.is-selected{background:#1d4ed8;color:#fff}
+.bd-prov.is-selected b{color:#dbe6ff}
 .bd-hot-pin{display:inline-flex;align-items:center;gap:6px;padding:3px 8px 3px 3px;border-radius:999px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);font-size:11px;font-weight:700;line-height:16px;white-space:nowrap}
 .bd-hot-pin b{display:grid;place-items:center;min-width:24px;height:20px;padding:0 4px;border-radius:999px;background:var(--c);color:#fff}
 .bd-hot-pin.is-stacked{padding:2px;transform:translate(-50%,-160%)}
-.bd-hot-pin.is-selected{box-shadow:0 0 0 3px #24272c,0 2px 6px rgba(0,0,0,.2)}
+.bd-hot-pin.is-selected{box-shadow:0 0 0 3px #1d4ed8,0 2px 6px rgba(0,0,0,.2)}
 .bd-map-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:8px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:11px;font-weight:600;line-height:16px;color:var(--color-text);white-space:nowrap}
 .bd-map-tag small{display:block;font-size:10px;font-weight:500;line-height:14px;color:var(--color-text-muted)}
 .bd-map-tag > span{display:flex;flex-direction:column}
@@ -353,17 +369,21 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 /* ---------- Popup Cân đối nguồn lực của tỉnh: bảng thừa/thiếu ---------- */
 .bd-popup.is-balance .leaflet-popup-content{width:calc(var(--bd-balance-w,520px) + 40px)!important;max-width:calc(100vw - 36px)}
 .bd-popup.is-balance .bd-popup-sub{margin:4px 0 0;font-weight:400;color:var(--color-text-muted)}
-.bd-balance{width:100%;border-collapse:collapse;font-size:11px;line-height:16px}
-.bd-balance th{padding:6px 3px;font-size:11px;font-weight:500;color:var(--color-text-muted);text-align:left;white-space:nowrap}
-.bd-balance td{padding:6px 3px;border-top:1px solid var(--color-border);vertical-align:middle}
-.bd-balance td:first-child{font-weight:600;white-space:nowrap}
-.bd-balance td:first-child small,.bd-balance th small{display:block;padding-left:16px;font-size:10px;font-weight:400;line-height:14px;color:var(--color-text-muted)}
-.bd-balance th small{display:inline;padding:0}
-.bd-balance td:first-child .bd-level-dot{margin-right:6px}
+/* Cột: Loại nguồn lực (chữ xám) · Nhóm (chấm mức + tên đậm) · Nhu cầu · Hiện có · Thiếu/Thừa (số, căn phải) · Thao tác (chỉ chế độ cán bộ) */
+.bd-balance{width:100%;border-collapse:collapse;font-size:13px;line-height:20px}
+.bd-balance th{padding:8px 4px;font-size:12px;font-weight:500;line-height:16px;color:var(--color-text-muted);text-align:left;white-space:nowrap}
+.bd-balance th.is-num{text-align:right}
+.bd-balance td{padding:8px 4px;border-top:1px solid var(--color-border);vertical-align:middle}
+.bd-balance th:first-child,.bd-balance td:first-child{padding-left:0}
+.bd-balance th:last-child,.bd-balance td:last-child{padding-right:0}
+/* Khung hẹp: "Vật tư – tài chính" xuống 2 dòng để các cột số không bị cắt */
+.bd-balance-type{min-width:64px;color:var(--color-text-muted)}
+.bd-balance-name{font-weight:600;white-space:nowrap}
+.bd-balance-name .bd-level-dot{margin-right:8px}
 .bd-balance .is-neg,.bd-supply-table .is-neg{font-weight:700;color:#b91c2b}
 .bd-balance .is-pos{font-weight:700;color:#00573a}
-.bd-balance .pf-btn-sm{height:26px;padding:0 6px;font-size:11px;white-space:nowrap}
-.bd-balance-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;font-size:11px;line-height:16px;color:var(--color-text-muted)}
+.bd-balance .pf-btn-sm{height:28px;padding:0 8px;font-size:12px;white-space:nowrap}
+.bd-balance-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;font-size:12px;line-height:18px;color:var(--color-text-muted)}
 .bd-balance-foot .pf-btn{flex:none}
 
 /* ==================== SECTION: DIALOG NGUỒN LỰC — tạo lệnh điều phối, từ chối, báo sự cố, cập nhật phân phối, xác nhận hủy ==================== */

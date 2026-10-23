@@ -61,12 +61,13 @@ const timeline = (items) => `<ol class="pf-timeline">${items.map((i) => `<li cla
 // Bảng “Chương trình của tôi” hiện đủ trường như mẫu datatable (mã, ảnh, tên + mô tả, lĩnh vực, đơn vị, người phụ trách,
 // địa bàn, mục tiêu, thời gian triển khai, trạng thái, ngày tạo); màn chi tiết thêm tiến độ, số đã nhận và lịch sử xử lý.
 const IMG = 'Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/';
+// Thứ tự khai báo = thứ tự tab: Bản nháp · Đang chờ duyệt · Đang hoạt động · Đã kết thúc · Từ chối phê duyệt
 const PROGRAM_STATUS = {
-  active: { label: 'Đang hoạt động', tone: 'green', slug: 'hoat-dong' },
+  draft: { label: 'Bản nháp', tone: 'neutral', slug: 'ban-nhap' },
   pending: { label: 'Đang chờ duyệt', tone: 'orange', slug: 'cho-duyet' },
+  active: { label: 'Đang hoạt động', tone: 'green', slug: 'hoat-dong' },
   done: { label: 'Đã kết thúc', tone: 'blue', slug: 'hoan-thanh' },
   rejected: { label: 'Từ chối phê duyệt', tone: 'red', slug: 'tu-choi' },
-  draft: { label: 'Bản nháp', tone: 'neutral', slug: 'ban-nhap' },
 };
 const PROGRAMS = [
   { code: 'CT-2026-040', img: '3.-028ae9de1f.jpg', name: 'Tiếp sức đến trường vùng cao', desc: 'Học bổng, sách vở và áo ấm cho 1.200 học sinh các điểm trường vùng cao huyện Đồng Văn trước mùa đông.', field: 'Giáo dục & Khuyến học', tone: 'blue', unit: 'Hội CTĐ Huyện Đồng Văn', owner: 'Vàng Seo Sùng', area: 'Hà Giang', goal: '800 triệu ₫', raised: '680 triệu ₫', pct: 85, period: '28/09/2026 – 20/11/2026', note: 'Đạt 85% mục tiêu', status: 'active', created: '2026-09-28', updated: '2026-10-12', detail: 'tiep-suc-den-truong' },
@@ -282,14 +283,16 @@ const ct = {
   status: '',
   search: document.querySelector('#ct-search'),
   field: document.querySelector('#ct-field'),
-  area: document.querySelector('#ct-area'),
-  progress: document.querySelector('#ct-progress'),
+  creator: document.querySelector('#ct-creator'),
+  from: document.querySelector('#ct-from'),
+  to: document.querySelector('#ct-to'),
   budget: document.querySelector('#ct-budget'),
 };
-const ctFilters = [ct.field, ct.area, ct.progress, ct.budget];
+const ctFilters = [ct.field, ct.creator, ct.from, ct.to, ct.budget];
 fillOptions(ct.field, [...new Set(PROGRAMS.map((p) => p.field))]);
-fillOptions(ct.area, [...new Set(PROGRAMS.map((p) => p.area))].sort((a, b) => a.localeCompare(b, 'vi')));
-const countProgramFilters = setupFilterPanel('ct-filters', ctFilters);
+fillOptions(ct.creator, [...new Set(PROGRAMS.map((p) => p.creator))].sort((a, b) => a.localeCompare(b, 'vi')));
+// Khoảng Từ – Đến tính là 1 điều kiện khi đếm số bộ lọc đang áp dụng
+const countProgramFilters = setupFilterPanel('ct-filters', [ct.field, ct.creator, { get value() { return ct.from.value || ct.to.value; } }, ct.budget]);
 
 // Thời gian triển khai “dd/mm/yyyy – dd/mm/yyyy” tách thành 2 mục: Từ · Đến (mỗi mục 1 dòng)
 const periodLines = (period) => {
@@ -336,11 +339,15 @@ const programTable = createTable({
   renderRow: programRow,
 });
 
-const PROGRESS_MATCH = {
-  none: (p) => !p.pct,
-  low: (p) => p.pct > 0 && p.pct < 50,
-  mid: (p) => p.pct >= 50 && p.pct < 100,
-  reached: (p) => p.pct >= 100,
+// Thời gian triển khai “dd/mm/yyyy – dd/mm/yyyy” → [yyyy-mm-dd, yyyy-mm-dd]; chưa xác định → null (bị loại khi lọc theo ngày)
+const periodRange = (period) => {
+  const parts = period.split(' – ');
+  return parts.length === 2 ? parts.map((d) => d.split('/').reverse().join('-')) : null;
+};
+const matchPeriod = (p) => {
+  if (!ct.from.value && !ct.to.value) return true;
+  const range = periodRange(p.period);
+  return Boolean(range) && (!ct.from.value || range[1] >= ct.from.value) && (!ct.to.value || range[0] <= ct.to.value);
 };
 const BUDGET_MATCH = {
   small: (p) => p.goalValue !== null && p.goalValue < 300,
@@ -352,8 +359,8 @@ const applyProgramFilter = () => {
   programTable.setFilter((p) => (!query || fold(`${p.code} ${p.name}`).includes(query))
     && (!ct.status || p.status === ct.status)
     && (!ct.field.value || p.field === ct.field.value)
-    && (!ct.area.value || p.area === ct.area.value)
-    && (!ct.progress.value || PROGRESS_MATCH[ct.progress.value](p))
+    && (!ct.creator.value || p.creator === ct.creator.value)
+    && matchPeriod(p)
     && (!ct.budget.value || BUDGET_MATCH[ct.budget.value](p)));
   countProgramFilters();
 };
@@ -361,6 +368,7 @@ ct.search.addEventListener('input', applyProgramFilter);
 ctFilters.forEach((el) => el.addEventListener('change', applyProgramFilter));
 document.querySelector('#ct-reset').addEventListener('click', () => {
   ctFilters.forEach((el) => { el.value = ''; });
+  document.querySelectorAll('#ct-filters [data-vi-date] input[type="text"]').forEach((el) => { el.value = ''; });
   applyProgramFilter();
 });
 
@@ -1381,7 +1389,7 @@ teamView.querySelector('[data-tv-pdf]').addEventListener('click', () => { if (te
 
 // ==================== SECTION: TAB TRẠNG THÁI — dựng theo màn hình danh sách đang mở ====================
 const TAB_SOURCES = {
-  // Chương trình không có tab “Tất cả”: mặc định mở tab trạng thái đầu tiên (Đang hoạt động)
+  // Chương trình không có tab “Tất cả”: mặc định mở tab Đang hoạt động (tab thứ 3)
   'chuong-trinh': { map: PROGRAM_STATUS, rows: PROGRAMS },
   'nguoi-yeu-the': { map: VULNERABLE_STATUS, rows: VULNERABLE, all: 'Tất cả hồ sơ' },
   // Đăng ký hồ sơ không có tab “Tất cả”: mặc định mở tab đầu tiên (Bản nháp); tab và số đếm theo loại hồ sơ đang mở
@@ -1801,8 +1809,8 @@ const maskVi = (value) => {
   const digits = value.replace(/\D/g, '').slice(0, 8);
   return [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4)].filter(Boolean).join('/');
 };
-// Dùng chung cho mọi drawer biểu mẫu (.pf-reg): Đăng ký chương trình, Đăng ký thành lập đội, CLB
-document.querySelectorAll('.pf-reg').forEach((drawer) => {
+// Dùng chung cho mọi drawer biểu mẫu (.pf-reg): Đăng ký chương trình, Đăng ký thành lập đội, CLB · và bộ lọc Chương trình (Thời gian triển khai)
+document.querySelectorAll('.pf-reg, #ct-filters').forEach((drawer) => {
   drawer.addEventListener('click', (event) => {
     const button = event.target.closest('.pf-date-btn');
     if (!button) return;

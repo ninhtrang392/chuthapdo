@@ -651,7 +651,7 @@
   });
   document.addEventListener('click', (event) => { document.querySelectorAll('.bd-multi[open]').forEach((details) => { if (!details.contains(event.target)) details.open = false; }); });
   // ==================== LỚP BẢN ĐỒ: tab Tổng quan · Nguồn lực · Thời tiết ====================
-  // Nguồn lực (ban-do-so-nguon-luc.js) và Thời tiết là lớp riêng, không vào Danh sách dữ liệu và số lượng của các lớp Tổng quan.
+  // Nguồn lực (ban-do-so-nguon-luc.js) và Thời tiết là lớp riêng, không vào Danh sách địa điểm và số lượng của các lớp Tổng quan.
   // ---------- Tab: bấm hoặc phím ← → Home End để chuyển; Nguồn lực đổi cả thanh bộ lọc, cột phải và ẩn ghim Tổng quan ----------
   const tabs = [...document.querySelectorAll('.bd-tabs [role="tab"]')];
   const tabListeners = [];
@@ -678,7 +678,7 @@
       $('.bd-results-card').hidden = resources;
       $('#bd-dashboard').classList.toggle('is-resources', resources);
       $('#bd-res-card').hidden = !resources;
-      $('#bd-right').setAttribute('aria-label', resources ? 'Nguồn lực' : 'Danh sách dữ liệu');
+      $('#bd-right').setAttribute('aria-label', resources ? 'Nguồn lực' : 'Danh sách địa điểm');
       panelLabels.right = resources ? 'cột nguồn lực' : 'cột danh sách dữ liệu';
       panelToggles.forEach((button) => setPanel(button, button.getAttribute('aria-expanded') === 'true'));
       if (resources) { exitFocus(); closePopup(); }

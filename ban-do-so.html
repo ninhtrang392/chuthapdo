@@ -143,7 +143,16 @@
           <div class="pf-input bd-filter-item" data-sub="balance"><select id="bd-res-group" aria-label="Nguồn lực"><option value="">Tất cả nguồn lực</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
           <div class="pf-input bd-filter-item" data-sub="track"><select id="bd-res-status" aria-label="Trạng thái lệnh"><option value="">Tất cả trạng thái</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
           <div class="pf-input bd-filter-item" data-sub="hotspots balance track"><select id="bd-res-scope" aria-label="Phạm vi"><option value="">Toàn quốc</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
-          <div class="pf-input bd-filter-item" data-sub="balance"><select id="bd-res-time" aria-label="Thời gian"><option value="">Hiện tại</option><option value="7d">7 ngày qua</option><option value="30d">30 ngày qua</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+          <!-- ---------- Thời gian (Cân đối & điều phối): Hiện tại · 7 ngày qua · 30 ngày qua · Tùy chọn (hộp chọn từ ngày – đến ngày, như tab Tổng quan) ---------- -->
+          <div class="bd-filter-item is-time" data-sub="balance">
+            <div class="pf-input"><svg class="icon bd-time-icon" aria-hidden="true"><use href="#calendar"/></svg><select id="bd-res-time" aria-label="Thời gian"><option value="">Hiện tại</option><option value="7d">7 ngày qua</option><option value="30d">30 ngày qua</option><option value="custom">Tùy chọn</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+            <div class="bd-time-pop" id="bd-res-time-pop" role="group" aria-label="Khoảng thời gian tùy chọn" hidden>
+              <label class="pf-field"><span>Từ ngày</span><span class="pf-input"><input type="date" id="bd-res-time-from" /></span></label>
+              <label class="pf-field"><span>Đến ngày</span><span class="pf-input"><input type="date" id="bd-res-time-to" /></span></label>
+              <p class="bd-time-error" id="bd-res-time-error" role="alert"></p>
+              <div class="bd-time-actions"><button type="button" class="pf-btn pf-btn-ghost pf-btn-sm" id="bd-res-time-cancel">Hủy</button><button type="button" class="pf-btn pf-btn-primary pf-btn-sm" id="bd-res-time-apply">Áp dụng</button></div>
+            </div>
+          </div>
           <button type="button" class="pf-btn pf-btn-ghost bd-reset" id="bd-res-reset"><svg class="icon" aria-hidden="true"><use href="#refresh"/></svg>Đặt lại</button>
         </div>
       </div>
@@ -217,17 +226,18 @@
         <!-- ==================== END SECTION: BẢN ĐỒ ==================== -->
 
         <!-- ==================== SECTION: CỘT PHẢI — danh sách dữ liệu ==================== -->
-        <aside class="md-panel md-summary" id="bd-right" aria-label="Danh sách dữ liệu">
+        <aside class="md-panel md-summary" id="bd-right" aria-label="Danh sách địa điểm">
           <section class="bd-card bd-results-card">
-            <h2 class="bd-card-title"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Danh sách dữ liệu<span id="bd-total" class="bd-total" aria-live="polite">Đang tải…</span></h2>
+            <h2 class="bd-card-title"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Danh sách địa điểm<span id="bd-total" class="bd-total" aria-live="polite">Đang tải…</span></h2>
             <div class="bd-results-body" id="bd-results-body" tabindex="0" aria-label="Danh sách kết quả, cuộn để xem thêm">
               <table class="bd-results"><thead><tr><th scope="col">Tên</th><th scope="col">Địa chỉ</th></tr></thead><tbody id="bd-rows"></tbody></table>
               <p id="bd-empty" class="bd-empty" role="status">Đang tải dữ liệu…</p>
               <button type="button" class="bd-load-more" id="bd-load-more" hidden>Xem thêm 50 kết quả</button>
             </div>
           </section>
-          <!-- ---------- Tab Nguồn lực: tab con Điểm nóng · Cân đối & điều phối · Theo dõi tuyến (kèm số lượng) — ban-do-so-nguon-luc.js dựng ---------- -->
+          <!-- ---------- Tab Nguồn lực: chỉ xem → tiêu đề "Danh sách điểm nóng" (như Danh sách địa điểm); chế độ cán bộ → tab con Điểm nóng · Cân đối & điều phối · Theo dõi tuyến (kèm số lượng) — ban-do-so-nguon-luc.js dựng ---------- -->
           <section class="bd-card bd-res-card" id="bd-res-card" aria-label="Nguồn lực" hidden>
+            <h2 class="bd-card-title" id="bd-res-title" hidden><svg class="icon" aria-hidden="true"><use href="#alert"/></svg>Danh sách điểm nóng<span id="bd-res-total" class="bd-total" aria-live="polite"></span></h2>
             <div class="bd-subtabs" role="tablist" aria-label="Nguồn lực">
               <button type="button" role="tab" id="bd-sub-hotspots" data-sub="hotspots" aria-selected="true" aria-controls="bd-res-hotspots">Điểm nóng<span class="pf-tab-count" data-sub-count="hotspots">0</span></button>
               <button type="button" role="tab" id="bd-sub-balance" data-sub="balance" aria-selected="false" aria-controls="bd-res-balance" tabindex="-1">Cân đối &amp; điều phối<span class="pf-tab-count" data-sub-count="balance">0</span></button>

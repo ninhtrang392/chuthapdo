@@ -70,6 +70,13 @@
     done: { label: 'Hoàn thành', statuses: ['delivered', 'distributed'] },
     rejected: { label: 'Từ chối', statuses: ['rejected'] },
   };
+  // Nhãn lọc khối Điều phối nguồn lực ở chế độ chỉ xem (web portal cho người dân): không có Nháp, Từ chối
+  const VIEW_FILTERS = {
+    all: { label: 'Tất cả', statuses: ['pending', 'approved', 'preparing', 'shipping', 'arrived', 'delivered', 'distributed'] },
+    confirm: { label: 'Chờ xác nhận', statuses: ['pending'] },
+    accepted: { label: 'Đã nhận lệnh', statuses: ['approved', 'preparing', 'shipping', 'arrived'] },
+    done: { label: 'Hoàn thành', statuses: ['delivered', 'distributed'] },
+  };
   // Theo dõi tuyến: chỉ lệnh từ Đã phê duyệt trở đi (SRS 3.9 #3, #5)
   const TRACK_STATUSES = ['approved', 'preparing', 'shipping', 'arrived', 'delivered', 'distributed'];
   const TRACK_FILTERS = {
@@ -144,5 +151,5 @@
     if (lateRows.length) warnings.push('TB08');
     return { ok: !errors.length, errors, warnings, total, over: over.map((r) => r.depot), late: lateRows.map((r) => r.depot) };
   }
-  return { PRIORITIES, LEVELS, STATUSES, FILTERS, TRACK_STATUSES, TRACK_FILTERS, MILESTONES, NEXT_ACTION, coverage, level, percent, provinceCoverage, balanceRows, visibleTo, inFilter, canApprove, canReject, canEdit, nextOrderId, distanceKm, travelMinutes, durationText, shortDuration, progress, validateOrder };
+  return { PRIORITIES, LEVELS, STATUSES, FILTERS, VIEW_FILTERS, TRACK_STATUSES, TRACK_FILTERS, MILESTONES, NEXT_ACTION, coverage, level, percent, provinceCoverage, balanceRows, visibleTo, inFilter, canApprove, canReject, canEdit, nextOrderId, distanceKm, travelMinutes, durationText, shortDuration, progress, validateOrder };
 });

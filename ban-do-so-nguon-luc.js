@@ -25,10 +25,12 @@
     balance: { hotspots: false, balance: true, routes: true, vehicles: false, depots: true, storm: false, roads: true },
     track: { hotspots: false, balance: true, routes: true, vehicles: true, depots: true, storm: false, roads: true },
   };
-  const filterDefaults = () => ({ need: '', priorities: new Set(['P1', 'P2']), program: '', group: '', status: '', scope: '', time: '' });
+  const filterDefaults = () => ({ need: '', priorities: new Set(['P1', 'P2']), program: '', group: '', status: '', scope: '', time: '', from: '', to: '' });
   // Sức chở mỗi xe theo nhóm nguồn lực → gợi ý phương tiện
   const CAPACITY = { water: 1000, rice: 5, blanket: 1500, medkit: 300, unit: 8, truck: 1, volunteer: 16 };
   const VIETNAM = [[8.3, 102], [23.5, 110]];
+  // Viền + nhãn tỉnh đang chọn: xanh dương đậm (khác màu "Dư nguồn lực" #2f6fe4 để vẫn thấy viền trên tỉnh dư); CSS .bd-prov.is-selected, .bd-hot-pin.is-selected dùng cùng màu
+  const SELECTED_COLOR = '#1d4ed8';
 
   window.DigitalMapResources = {
     async init(app) {
@@ -47,7 +49,9 @@
       const receiverPlace = (d) => d.name.match(/xã .+$/)?.[0] || shortDepot(d);
       const qtyText = (group, qty) => `${fmt.format(qty)} ${R.groups[group].unit}`;
       const badge = (label, tone) => `<span class="pf-badge is-${tone}">${esc(label)}</span>`;
-      const statusBadge = (o) => badge(RM.STATUSES[o.status].label, RM.STATUSES[o.status].tone) + (o.incident ? badge('Sự cố', 'red') : '');
+      // Chế độ chỉ xem: lệnh Chờ duyệt hiện "Chờ xác nhận" cho khớp nhãn lọc
+      const statusLabel = (o) => !STAFF && o.status === 'pending' ? RM.VIEW_FILTERS.confirm.label : RM.STATUSES[o.status].label;
+      const statusBadge = (o) => badge(statusLabel(o), RM.STATUSES[o.status].tone) + (o.incident ? badge('Sự cố', 'red') : '');
       const shortage = (provinceId, group) => { const b = R.provinces[provinceId]?.balance[group]; return b ? Math.max(0, b[0] - b[1]) : 0; };
       const latlng = (d) => [d.lat, d.lng];
       // Quãng đường, thời gian, lộ trình của lệnh (dịch vụ định tuyến thật thay thế phần ước tính)
@@ -75,10 +79,28 @@
           return { id, ...p, pct, level: RM.level(pct) };
         });
       }
-      const inTime = (o) => !S.f.time || Date.parse(o.createdAt) >= Date.now() - (S.f.time === '7d' ? 7 : 30) * 86400e3;
+      // Thời gian tạo lệnh: 7 / 30 ngày qua, hoặc Tùy chọn từ ngày – đến ngày (giờ Việt Nam, gồm trọn ngày cuối)
+      const inTime = (o) => {
+        if (!S.f.time) return true;
+        const at = Date.parse(o.createdAt);
+        if (S.f.time !== 'custom') return at >= Date.now() - (S.f.time === '7d' ? 7 : 30) * 86400e3;
+        return (!S.f.from || at >= Date.parse(`${S.f.from}T00:00:00+07:00`)) && (!S.f.to || at <= Date.parse(`${S.f.to}T23:59:59+07:00`));
+      };
       const orderProvince = (o) => depot(o.target)?.province;
       const baseOrders = () => R.orders.filter((o) => RM.visibleTo(o, me) && (!S.f.program || o.program === S.f.program) && (!S.f.scope || orderProvince(o) === S.f.scope || depot(o.source)?.province === S.f.scope));
-      const balanceOrders = (filter = S.orderFilter) => baseOrders().filter((o) => inTime(o) && RM.inFilter(o, filter));
+      // ---------- Web portal cho người dân: chỉ xem, không thao tác ----------
+      // Mặc định: khối Điều phối nguồn lực lọc theo Tất cả · Chờ xác nhận · Đã nhận lệnh · Hoàn thành (RM.VIEW_FILTERS, không có Nháp, Từ chối); ẩn mọi thao tác (Tạo lệnh, Điều phối, Chỉnh sửa / Từ chối / Phê duyệt, Báo sự cố, cập nhật trạng thái).
+      // Chế độ cán bộ (giữ nguyên code thao tác): window.DigitalMapResourceConfig = { staffMode: true } trước khi tải trang
+      const STAFF = window.DigitalMapResourceConfig?.staffMode === true;
+      // Chỉ xem: ẩn cột Lớp bản đồ (CSS .is-res-public) → lớp Cân đối nguồn lực bật sẵn để bấm tỉnh nào cũng mở bảng cân đối
+      if (!STAFF) {
+        PRESETS.hotspots.balance = true;
+        S.layers.balance = true;
+        $('#bd-dashboard').classList.add('is-res-public');
+      }
+      const ORDER_FILTER_SET = STAFF ? RM.FILTERS : RM.VIEW_FILTERS;
+      const ORDER_FILTERS = Object.keys(ORDER_FILTER_SET);
+      const balanceOrders = (filter = S.orderFilter) => baseOrders().filter((o) => inTime(o) && ORDER_FILTER_SET[filter].statuses.includes(o.status));
       const trackOrders = (filter = S.trackFilter) => baseOrders().filter((o) => RM.TRACK_STATUSES.includes(o.status) && (!S.f.status || o.status === S.f.status) && RM.TRACK_FILTERS[filter].test(o));
       const selectedOrder = () => R.orders.find((o) => o.id === S.order);
 
@@ -95,18 +117,38 @@
         tools.querySelectorAll('[data-sub]').forEach((item) => { item.hidden = !item.dataset.sub.split(' ').includes(S.sub); });
         $('#bd-res-need').value = S.f.need; $('#bd-res-program').value = S.f.program; $('#bd-res-group').value = S.f.group;
         $('#bd-res-status').value = S.f.status; $('#bd-res-scope').value = S.f.scope; $('#bd-res-time').value = S.f.time;
+        timeCustom.textContent = S.f.time === 'custom' ? `${shortDay(S.f.from)} – ${shortDay(S.f.to)}` : 'Tùy chọn';
+        if (!S.f.from && !S.f.to) { $('#bd-res-time-from').value = ''; $('#bd-res-time-to').value = ''; }
         $('#bd-res-priority-options').querySelectorAll('input').forEach((input) => { input.checked = S.f.priorities.has(input.value); });
         const chosen = Object.keys(RM.PRIORITIES).filter((key) => S.f.priorities.has(key));
         $('#bd-res-priority-value').textContent = chosen.length === 4 ? 'Tất cả mức ưu tiên' : chosen.length ? chosen.map((key) => RM.PRIORITIES[key].label).join(', ') : 'Chưa chọn mức ưu tiên';
       }
       const bindSelect = (id, key) => $(id).addEventListener('change', (event) => { S.f[key] = event.target.value; if (key === 'scope') { S.prevScope = null; closeBalancePopup({ restore: false }); fitScope(); } render(); });
-      [['#bd-res-need', 'need'], ['#bd-res-program', 'program'], ['#bd-res-group', 'group'], ['#bd-res-status', 'status'], ['#bd-res-scope', 'scope'], ['#bd-res-time', 'time']].forEach(([id, key]) => bindSelect(id, key));
+      [['#bd-res-need', 'need'], ['#bd-res-program', 'program'], ['#bd-res-group', 'group'], ['#bd-res-status', 'status'], ['#bd-res-scope', 'scope']].forEach(([id, key]) => bindSelect(id, key));
+      // ---------- Thời gian: chọn "Tùy chọn" mở hộp từ ngày – đến ngày; Áp dụng thì ô hiển thị khoảng đã chọn ----------
+      const timeSelect = $('#bd-res-time'), timeCustom = timeSelect.querySelector('option[value="custom"]'), timePop = $('#bd-res-time-pop');
+      const setTimePop = (open) => { timePop.hidden = !open; if (open) $('#bd-res-time-from').focus(); };
+      const shortDay = (value) => value ? value.split('-').reverse().slice(0, 2).join('/') : '…';
+      timeSelect.addEventListener('change', () => {
+        if (timeSelect.value === 'custom') { setTimePop(true); return; }
+        Object.assign(S.f, { time: timeSelect.value, from: '', to: '' });
+        setTimePop(false); render();
+      });
+      $('#bd-res-time-apply').addEventListener('click', () => {
+        const from = $('#bd-res-time-from').value, to = $('#bd-res-time-to').value;
+        if (!from && !to) { $('#bd-res-time-error').textContent = 'Vui lòng chọn ít nhất một ngày.'; return; }
+        if (from && to && from > to) { $('#bd-res-time-error').textContent = 'Ngày bắt đầu phải trước ngày kết thúc.'; return; }
+        $('#bd-res-time-error').textContent = '';
+        Object.assign(S.f, { time: 'custom', from, to });
+        setTimePop(false); render();
+      });
+      $('#bd-res-time-cancel').addEventListener('click', () => { timeSelect.value = S.f.time; $('#bd-res-time-error').textContent = ''; setTimePop(false); timeSelect.focus(); });
       $('#bd-res-priority-options').addEventListener('change', (event) => { if (event.target.checked) S.f.priorities.add(event.target.value); else S.f.priorities.delete(event.target.value); render(); });
       document.addEventListener('click', (event) => { const picker = $('#bd-res-priority-picker'); if (picker.open && !picker.contains(event.target)) picker.open = false; });
       $('#bd-res-reset').addEventListener('click', () => {
         closeBalancePopup({ restore: false });
         Object.assign(S, { f: filterDefaults(), layers: { ...PRESETS[S.sub] }, hot: null, province: null, prevScope: null, order: null, orderFilter: 'all', trackFilter: 'all' });
-        $('#bd-res-search').value = ''; showResults([]);
+        $('#bd-res-search').value = ''; showResults([]); setTimePop(false);
         render(); map?.fitBounds(VIETNAM, { ...app.pad(), animate: false });
       });
       function fitScope() {
@@ -227,10 +269,10 @@
           const at = center(p.id);
           if (!at) return;
           const color = RM.LEVELS[p.level].color, selected = p.id === focus;
-          // Theo dõi tuyến: lớp cân đối chỉ làm nền (làm mờ), không bấm được
-          const interactive = S.sub === 'balance';
+          // Bấm tỉnh → bảng cân đối nguồn lực (cả ở Điểm nóng / chế độ chỉ xem); Theo dõi tuyến: lớp cân đối chỉ làm nền (làm mờ), không bấm được
+          const interactive = S.sub !== 'track';
           const shape = R.shapes?.[p.id] ? L.geoJSON(R.shapes[p.id], { interactive }) : L.circle(at, { radius: 30000, interactive });
-          shape.setStyle({ color: selected ? '#24272c' : '#ffffff', weight: selected ? 3 : 1, fillColor: color, fillOpacity: dim ? .2 : .5, bubblingMouseEvents: false });
+          shape.setStyle({ color: selected ? SELECTED_COLOR : '#ffffff', weight: selected ? 3 : 1, fillColor: color, fillOpacity: dim ? .2 : .5, bubblingMouseEvents: false });
           shape.on('click', () => selectProvince(p.id));
           shape.bindTooltip(`${provinceFull(p.id)} · mức đáp ứng ${RM.percent(p.pct)}% (${RM.LEVELS[p.level].label})`, { sticky: true }).addTo(G.provinces);
           label(at, `<span class="bd-prov${selected ? ' is-selected' : ''}${dim ? ' is-dim' : ''}" style="--c:${color}"><b>${esc(provinceName(p.id))}</b>${RM.percent(p.pct)}%</span>`).addTo(G.provinces);
@@ -241,7 +283,7 @@
           if (!at) return;
           const color = RM.PRIORITIES[h.priority].color, selected = h.id === focus;
           if (!S.layers.balance) {
-            L.circle(at, { radius: 36000, color: selected ? '#24272c' : color, weight: selected ? 3 : 1, fillColor: color, fillOpacity: selected ? .6 : .42, bubblingMouseEvents: false })
+            L.circle(at, { radius: 36000, color: selected ? SELECTED_COLOR : color, weight: selected ? 3 : 1, fillColor: color, fillOpacity: selected ? .6 : .42, bubblingMouseEvents: false })
               .on('click', () => selectHotspot(h.id)).bindTooltip(`${provinceFull(h.id)} · ${RM.PRIORITIES[h.priority].short} · HPS ${h.hps}`, { sticky: true }).addTo(G.provinces);
           }
           label(at, `<span data-p="${h.priority}" class="bd-hot-pin${selected ? ' is-selected' : ''}${S.layers.balance ? ' is-stacked' : ''}" style="--c:${color}"><b>${h.priority}</b>${S.layers.balance ? '' : esc(provinceName(h.id))}</span>`).addTo(G.provinces);
@@ -311,28 +353,33 @@
         const pct = RM.provinceCoverage(p.balance);
         const shortRows = rows.filter((r) => r.short);
         const sign = (n) => n > 0 ? `+${fmt.format(n)}` : n < 0 ? `−${fmt.format(-n)}` : '0';
-        return `<div class="bd-popup-header"><h3>Tỉnh ${esc(provinceName(id))} · Cân đối nguồn lực</h3>
-          <p class="bd-popup-sub">Chương trình ${esc(programName(p.program))} · cập nhật ${clock(p.updatedAt)} · mức đáp ứng: <b style="color:${RM.LEVELS[RM.level(pct)].color}">${RM.LEVELS[RM.level(pct)].label} (${RM.percent(pct)}%)</b></p></div>
-          <div class="bd-popup-body"><div class="bd-goods-scroll"><table class="bd-balance"><thead><tr><th scope="col">Nhóm <small>(loại nguồn lực)</small></th><th scope="col">Nhu cầu</th><th scope="col">Hiện có</th><th scope="col">Thiếu/Thừa</th><th scope="col">Thao tác</th></tr></thead>
-          <tbody>${rows.map((r) => `<tr><td><span class="bd-level-dot" style="--c:${RM.LEVELS[r.level].color}" title="${esc(RM.LEVELS[r.level].label)}"></span>${esc(r.label)}<small>${esc(r.type)}</small></td><td class="is-num">${esc(qtyText(r.key, r.need))}</td><td class="is-num">${fmt.format(r.have)}</td><td class="is-num ${r.diff < 0 ? 'is-neg' : r.diff > 0 ? 'is-pos' : ''}">${sign(r.diff)}</td><td>${r.short ? `<button type="button" class="pf-btn pf-btn-soft pf-btn-sm" data-dispatch="${r.key}" data-province="${id}">Điều phối</button>` : '—'}</td></tr>`).join('')}</tbody></table></div>
-          <div class="bd-balance-foot"><span>${shortRows.length}/${rows.length} nhóm đang thiếu · Mức đáp ứng = Hiện có ÷ Nhu cầu × 100%</span>${shortRows.length ? `<button type="button" class="pf-btn pf-btn-primary pf-btn-sm" data-dispatch-all="${id}">Điều phối tất cả nhóm thiếu</button>` : ''}</div></div>`;
+        return `<div class="bd-popup-header"><h3>${esc(provinceFull(id))} · Cân đối nguồn lực</h3>
+          <p class="bd-popup-sub">Chương trình: ${esc(programName(p.program))} · cập nhật ${clock(p.updatedAt)} · mức đáp ứng: <b style="color:${RM.LEVELS[RM.level(pct)].color}">${RM.LEVELS[RM.level(pct)].label} (${RM.percent(pct)}%)</b></p></div>
+          <div class="bd-popup-body"><div class="bd-goods-scroll"><table class="bd-balance"><thead><tr><th scope="col">Loại nguồn lực</th><th scope="col">Nhóm</th><th scope="col" class="is-num">Nhu cầu</th><th scope="col" class="is-num">Hiện có</th><th scope="col" class="is-num">Thiếu/Thừa</th>${STAFF ? '<th scope="col">Thao tác</th>' : ''}</tr></thead>
+          <tbody>${rows.map((r) => `<tr><td class="bd-balance-type">${esc(r.type)}</td><td class="bd-balance-name"><span class="bd-level-dot" style="--c:${RM.LEVELS[r.level].color}" title="${esc(RM.LEVELS[r.level].label)}"></span>${esc(r.label)}</td><td class="is-num">${esc(qtyText(r.key, r.need))}</td><td class="is-num">${fmt.format(r.have)}</td><td class="is-num ${r.diff < 0 ? 'is-neg' : r.diff > 0 ? 'is-pos' : ''}">${sign(r.diff)}</td>${STAFF ? `<td>${r.short ? `<button type="button" class="pf-btn pf-btn-soft pf-btn-sm" data-dispatch="${r.key}" data-province="${id}">Điều phối</button>` : '—'}</td>` : ''}</tr>`).join('')}</tbody></table></div>
+          <div class="bd-balance-foot"><span>${shortRows.length}/${rows.length} nhóm đang thiếu · Mức đáp ứng = Hiện có ÷ Nhu cầu × 100%</span>${STAFF && shortRows.length ? `<button type="button" class="pf-btn pf-btn-primary pf-btn-sm" data-dispatch-all="${id}">Điều phối tất cả nhóm thiếu</button>` : ''}</div></div>`;
       }
       // Bấm tỉnh: viền đậm, phóng tới tỉnh; Phạm vi tự đổi theo tỉnh, đóng popup thì trả về giá trị trước (SRS 3.6 #2)
+      // Tab Điểm nóng (gồm chế độ chỉ xem) đang bật lớp Cân đối nguồn lực → mở bảng ngay, giữ nguyên tab con
       function selectProvince(id) {
         if (!R.provinces[id]) { toast('Tỉnh này chưa có dữ liệu cân đối nguồn lực.'); return; }
-        if (S.sub === 'hotspots') { if (R.provinces[id].priority) selectHotspot(id); return; }
-        if (S.sub !== 'balance') setSub('balance');
+        if (S.sub === 'hotspots' && !S.layers.balance) { if (R.provinces[id].priority) selectHotspot(id); return; }
+        if (S.sub === 'track') setSub('balance');
+        // Chỉ tab Cân đối & điều phối đổi Phạm vi theo tỉnh; tab Điểm nóng giữ Phạm vi để danh sách điểm nóng không bị lọc trống
+        const followScope = S.sub === 'balance';
         const previous = balancePopup;
-        if (!previous) S.prevScope = S.f.scope;
+        if (!previous && followScope) S.prevScope = S.f.scope;
         balancePopup = null;
         previous?.remove();
-        S.province = id; S.f.scope = id; S.order = null;
+        S.province = id; S.order = null;
+        if (followScope) S.f.scope = id;
         render();
         if (!map) return;
         map.setView(center(id), 8, { animate: false });
         const width = Math.max(300, Math.min(560, map.getSize().x - 116));
         $('#digital-map').style.setProperty('--bd-balance-w', width + 'px');
-        const popup = L.popup({ className: 'bd-popup is-balance', maxWidth: width, minWidth: width, maxHeight: Math.max(220, map.getSize().y - 150), autoPanPaddingTopLeft: [24, 72], autoPanPaddingBottomRight: [76, 24] }).setLatLng(center(id)).setContent(balanceHtml(id));
+        // closeOnClick: false — Leaflet đóng popup ở "preclick" làm vẽ lại lớp tỉnh, mất cú bấm sang tỉnh khác; bấm chỗ trống trên bản đồ đóng popup (map 'click' bên dưới)
+        const popup = L.popup({ className: 'bd-popup is-balance', closeOnClick: false, maxWidth: width, minWidth: width, maxHeight: Math.max(220, map.getSize().y - 150), autoPanPaddingTopLeft: [24, 72], autoPanPaddingBottomRight: [76, 24] }).setLatLng(center(id)).setContent(balanceHtml(id));
         balancePopup = popup;
         popup.on('remove', () => { if (balancePopup === popup) { balancePopup = null; restoreScope(); } });
         popup.openOn(map);
@@ -353,6 +400,8 @@
         if (restore) restoreScope(); else { S.province = null; S.prevScope = null; }
       }
       function refreshBalancePopup() { if (balancePopup && S.province) balancePopup.setContent(balanceHtml(S.province)); }
+      // Vùng tỉnh có bubblingMouseEvents: false → map 'click' chỉ đến khi bấm chỗ trống
+      map?.on('click', () => { if (balancePopup) closeBalancePopup(); });
       $('#digital-map').addEventListener('click', (event) => {
         const one = event.target.closest('[data-dispatch]');
         if (one) openOrderDialog({ province: one.dataset.province, group: one.dataset.dispatch });
@@ -362,7 +411,17 @@
 
       // ==================== CỘT PHẢI: tab con ====================
       const subTabs = [...document.querySelectorAll('#bd-res-card [role="tab"]')];
+      // Chế độ chỉ xem: ẩn tab con Cân đối & điều phối, Theo dõi tuyến (code giữ nguyên, bật lại bằng staffMode)
+      // Chỉ còn Điểm nóng → bỏ thanh tab, hiện tiêu đề "Danh sách điểm nóng" cùng kiểu "Danh sách địa điểm" (tab Tổng quan)
+      if (!STAFF) {
+        subTabs.filter((tab) => tab.dataset.sub !== 'hotspots').forEach((tab) => { tab.hidden = true; });
+        $('#bd-res-card .bd-subtabs').hidden = true;
+        $('#bd-res-title').hidden = false;
+        $('#bd-res-hotspots').setAttribute('aria-labelledby', 'bd-res-title');
+      }
+      const shownTabs = subTabs.filter((tab) => !tab.hidden);
       function setSub(sub, focus = false) {
+        if (!STAFF) sub = 'hotspots';
         closeBalancePopup({ restore: true });
         S.sub = sub;
         S.layers = { ...PRESETS[sub] };
@@ -377,13 +436,13 @@
         });
         render();
       }
-      subTabs.forEach((tab, i) => {
+      shownTabs.forEach((tab, i) => {
         tab.addEventListener('click', () => setSub(tab.dataset.sub));
         tab.addEventListener('keydown', (event) => {
-          const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: subTabs.length - 1 }[event.key];
+          const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: shownTabs.length - 1 }[event.key];
           if (next === undefined) return;
           event.preventDefault();
-          setSub(subTabs[(next + subTabs.length) % subTabs.length].dataset.sub, true);
+          setSub(shownTabs[(next + shownTabs.length) % shownTabs.length].dataset.sub, true);
         });
       });
       // ---------- Điểm nóng (SRS 3.4): nhãn đếm theo mức · thẻ điểm nóng xếp theo HPS · Xuất danh sách · Xem cân đối tỉnh ----------
@@ -394,18 +453,17 @@
         // Số tỉnh theo mức (không phụ thuộc mức đang chọn) hiện trong bộ lọc Mức ưu tiên trên thanh công cụ
         Object.keys(RM.PRIORITIES).forEach((key) => { const count = $(`[data-priority-count="${key}"]`); if (count) count.textContent = `${all.filter((h) => h.priority === key).length} tỉnh`; });
         // ---------- Thẻ điểm nóng (SRS 3.4 #9, mockup 4): nhãn mức · tỉnh · loại thiên tai · HPS; Ảnh hưởng · Chưa hỗ trợ · Xã nóng nhất; Nhóm nhu cầu ----------
-        // Màu nhãn nhóm nhu cầu theo tông pf-tag của web (xanh dương, cam, xanh lá; còn lại xám)
-        const NEED_TONE = { 'Thiếu nước': 'is-blue', 'Thiếu lương thực': 'is-orange', 'Thiếu nhân lực': 'is-green', 'Thiếu thuốc': 'is-green' };
+        // Nhãn nhóm nhu cầu: 1 màu info (pf-tag is-blue) cho mọi nhóm
         const card = (h) => {
           const p = RM.PRIORITIES[h.priority], selected = h.id === S.hot;
           return `<li><article class="bd-hot-card${selected ? ' is-selected' : ''}" data-p="${h.priority}" style="--c:${p.color}">
             <div class="bd-hot-top"><span class="bd-prio" title="${esc(p.short)}">${h.priority}</span><h3><button type="button" class="bd-hot-hit" data-hotspot="${h.id}" aria-pressed="${selected}">${esc(provinceName(h.id))}</button></h3><span class="pf-tag bd-hot-hazard">${esc(h.hazard)}</span><span class="bd-hps">HPS ${h.hps}</span></div>
             <dl class="bd-hot-stats"><div><dt>Ảnh hưởng</dt><dd>${fmt.format(h.affected)}</dd></div><div><dt>Chưa hỗ trợ</dt><dd>${fmt.format(h.unsupported)}</dd></div><div><dt>Xã nóng nhất</dt><dd>${esc(h.hotWards)}</dd></div></dl>
-            <p class="bd-hot-needs"><span>Nhóm nhu cầu:</span>${h.needs.map((n) => `<span class="pf-tag ${NEED_TONE[n] || ''}">${esc(n)}</span>`).join('')}</p></article></li>`;
+            <p class="bd-hot-needs"><span>Nhóm nhu cầu:</span>${h.needs.map((n) => `<span class="pf-tag is-blue">${esc(n)}</span>`).join('')}</p></article></li>`;
         };
         $('#bd-res-hotspots').innerHTML = `<div class="bd-res-scroll">
           ${list.length ? `<ul class="bd-hot-list">${list.map(card).join('')}</ul>` : '<p class="bd-empty">Không tìm thấy dữ liệu phù hợp.</p>'}</div>
-          <div class="bd-res-foot"><button type="button" class="pf-btn pf-btn-ghost" data-export ${list.length ? '' : 'disabled'}>${icon('download')}Xuất danh sách</button><button type="button" class="pf-btn pf-btn-primary" data-view-balance ${S.hot ? '' : 'disabled'}><span>Xem cân đối tỉnh ${S.hot ? esc(provinceName(S.hot)) : ''}</span>${icon('chevron-right')}</button></div>`;
+          ${!STAFF ? '' : `<div class="bd-res-foot"><button type="button" class="pf-btn pf-btn-ghost" data-export ${list.length ? '' : 'disabled'}>${icon('download')}Xuất danh sách</button><button type="button" class="pf-btn pf-btn-primary" data-view-balance ${S.hot ? '' : 'disabled'}><span>Xem cân đối tỉnh ${S.hot ? esc(provinceName(S.hot)) : ''}</span>${icon('chevron-right')}</button></div>`}`;
       }
       function selectHotspot(id) {
         S.hot = id;
@@ -451,7 +509,7 @@
         ];
         if (o.note) rows.push(['Ghi chú', o.note]);
         if (o.rejectReason) rows.push(['Lý do từ chối', o.rejectReason]);
-        const actions = o.status === 'draft' ? `<button type="button" class="pf-btn pf-btn-primary pf-btn-sm" data-resume="${esc(o.id)}">${icon('pencil')}Tiếp tục soạn</button>`
+        const actions = !STAFF ? '' : o.status === 'draft' ? `<button type="button" class="pf-btn pf-btn-primary pf-btn-sm" data-resume="${esc(o.id)}">${icon('pencil')}Tiếp tục soạn</button>`
           : o.status === 'pending' ? `${RM.canEdit(o, me) ? `<button type="button" class="pf-btn pf-btn-ghost pf-btn-sm" data-edit="${esc(o.id)}">Chỉnh sửa</button>` : ''}${RM.canReject(o, me) ? `<button type="button" class="pf-btn pf-btn-ghost pf-btn-sm is-danger" data-reject="${esc(o.id)}">Từ chối</button>` : ''}${RM.canApprove(o, me) ? `<button type="button" class="pf-btn pf-btn-green pf-btn-sm" data-approve="${esc(o.id)}">${icon('check')}Phê duyệt</button>` : '<span class="bd-order-note">Bạn là người tạo lệnh nên không phê duyệt được.</span>'}` : '';
         return `<div class="bd-order-body"><dl class="bd-order-dl">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${actions ? `<div class="bd-order-actions">${actions}</div>` : ''}</div>`;
       }
@@ -460,7 +518,8 @@
         const compact = Boolean(S.order);
         const provinces = balanceList().filter((p) => scopeOk(p.id));
         const dist = Object.entries(RM.LEVELS).map(([key, l]) => [key, l, provinces.filter((p) => p.level === key).length]);
-        const counts = Object.fromEntries(Object.keys(RM.FILTERS).map((key) => [key, balanceOrders(key).length]));
+        if (!ORDER_FILTERS.includes(S.orderFilter)) S.orderFilter = 'all';
+        const counts = Object.fromEntries(ORDER_FILTERS.map((key) => [key, balanceOrders(key).length]));
         const list = balanceOrders();
         const stat = (cls, title, short, value, sub, extra = '') => `<div class="bd-stat${cls}"><span>${compact ? short : title}</span><strong>${value}</strong>${compact ? '' : `<small>${sub}</small>${extra}`}</div>`;
         $('#bd-res-balance').innerHTML = `<div class="bd-res-scroll">
@@ -472,8 +531,8 @@
             ${stat(' is-ok', 'Nguồn lực có thể điều phối', 'Điều phối được', `${st.depots} ĐTK dư`, `${st.trucks} xe · ${fmt.format(st.volunteers)} TNV sẵn sàng`)}
           </div>
           ${compact ? '' : `<div class="bd-dist"><p>Phân bổ ${provinces.length} tỉnh theo mức đáp ứng</p><div class="bd-dist-bar" role="img" aria-label="${dist.map(([, l, n]) => `${l.label} ${n}`).join(', ')}">${dist.filter(([, , n]) => n).map(([, l, n]) => `<i style="flex:${n};background:${l.color}"></i>`).join('')}</div><ul class="bd-dist-legend">${dist.map(([, l, n]) => `<li><span class="bd-level-dot" style="--c:${l.color}"></span>${esc(l.label)} <b>${n}</b></li>`).join('')}</ul></div>`}
-          <div class="bd-orders-head"><h3>Điều phối nguồn lực</h3><button type="button" class="pf-btn pf-btn-primary pf-btn-sm" data-create>${icon('plus')}Tạo lệnh điều phối</button></div>
-          <div class="bd-chips" role="group" aria-label="Lọc theo trạng thái lệnh">${Object.entries(RM.FILTERS).map(([key, f]) => `<button type="button" class="bd-chip" data-order-filter="${key}" aria-pressed="${S.orderFilter === key}">${esc(f.label)}<b>${counts[key]}</b></button>`).join('')}</div>
+          <div class="bd-orders-head"><h3>Điều phối nguồn lực</h3><button type="button" class="pf-btn pf-btn-primary pf-btn-sm" data-create${STAFF ? '' : ' hidden'}>${icon('plus')}Tạo lệnh điều phối</button></div>
+          <div class="bd-chips" role="group" aria-label="Lọc theo trạng thái lệnh">${ORDER_FILTERS.map((key) => [key, ORDER_FILTER_SET[key]]).map(([key, f]) => `<button type="button" class="bd-chip" data-order-filter="${key}" aria-pressed="${S.orderFilter === key}">${esc(f.label)}<b>${counts[key]}</b></button>`).join('')}</div>
           ${list.length ? `<ul class="bd-order-list">${list.map((o) => orderCard(o, 'balance')).join('')}</ul>` : '<p class="bd-empty">Không tìm thấy dữ liệu phù hợp.</p>'}</div>`;
       }
       function selectOrder(id) {
@@ -520,7 +579,7 @@
         $('#bd-res-track').innerHTML = `<div class="bd-res-scroll">
           <div class="bd-chips" role="group" aria-label="Lọc nhanh lệnh">${Object.entries(RM.TRACK_FILTERS).map(([key, f]) => `<button type="button" class="bd-chip${key === 'incident' ? ' is-danger' : ''}" data-track-filter="${key}" aria-pressed="${S.trackFilter === key}">${esc(f.label)}<b>${counts[key]}</b></button>`).join('')}</div>
           ${list.length ? `<ul class="bd-order-list">${list.map((x) => orderCard(x, 'track')).join('')}</ul>` : '<p class="bd-empty">Không tìm thấy dữ liệu phù hợp.</p>'}</div>
-          <div class="bd-res-foot"><button type="button" class="pf-btn pf-btn-ghost is-danger" data-incident ${canReport ? '' : 'disabled'}>Báo sự cố</button>${next ? `<button type="button" class="pf-btn pf-btn-primary" data-advance title="${esc(next.who)}">${esc(next.label)}</button>` : `<button type="button" class="pf-btn pf-btn-primary" disabled>${o ? 'Lệnh đã hoàn tất' : 'Chọn một lệnh'}</button>`}</div>`;
+          ${!STAFF ? '' : `<div class="bd-res-foot"><button type="button" class="pf-btn pf-btn-ghost is-danger" data-incident ${canReport ? '' : 'disabled'}>Báo sự cố</button>${next ? `<button type="button" class="pf-btn pf-btn-primary" data-advance title="${esc(next.who)}">${esc(next.label)}</button>` : `<button type="button" class="pf-btn pf-btn-primary" disabled>${o ? 'Lệnh đã hoàn tất' : 'Chọn một lệnh'}</button>`}</div>`}`;
       }
       $('#bd-res-track').addEventListener('click', (event) => {
         const target = event.target.closest('button');
@@ -544,6 +603,8 @@
           const all = hotspotList({ ignorePriority: true });
           const on = Object.keys(RM.PRIORITIES).filter((key) => S.f.priorities.has(key));
           html = `<h2>Mức độ ưu tiên nhân đạo</h2><p>Đang lọc: ${esc(on.map((key) => RM.PRIORITIES[key].label).join(', ') || 'không mức nào')}</p><ul>${Object.entries(RM.PRIORITIES).map(([key, p]) => `<li class="${S.f.priorities.has(key) ? '' : 'is-off'}"><span class="bd-level-dot" style="--c:${p.color}"></span>${esc(p.short)}<b>${all.filter((h) => h.priority === key).length} tỉnh</b></li>`).join('')}</ul>`;
+          // Lớp Cân đối đang bật: màu tỉnh theo mức đáp ứng, mức ưu tiên chỉ còn ở nhãn P1–P4 → thêm chú giải mức đáp ứng
+          if (S.layers.balance) html += `<h2>Mức đáp ứng theo tỉnh</h2><p>Bấm vào tỉnh để xem bảng cân đối</p><ul>${Object.values(RM.LEVELS).map((l) => `<li><span class="bd-level-dot is-square" style="--c:${l.color}"></span>${esc(l.label)}<b>${esc(l.range)}</b></li>`).join('')}</ul>`;
         } else if (S.sub === 'balance' && o && o.status !== 'draft') {
           html = `<h2>Lệnh đang chọn</h2><p>${esc(o.id)} · ${esc(RM.STATUSES[o.status].label)}</p><ul><li><span class="bd-line"></span>Lộ trình đề xuất</li><li><span class="bd-line is-dashed"></span>Đoạn đường gián đoạn</li><li><span class="bd-level-dot is-square" style="--c:#f2c230"></span>Màu tỉnh: mức đáp ứng (làm mờ)</li></ul>`;
         } else if (S.sub === 'balance') {
@@ -561,6 +622,7 @@
         subTabs.forEach((tab) => {
           const n = tab.dataset.sub === 'hotspots' ? hotspotList().length : tab.dataset.sub === 'balance' ? balanceOrders('all').length : trackOrders('all').length;
           tab.querySelector('[data-sub-count]').textContent = n;
+          if (tab.dataset.sub === 'hotspots') $('#bd-res-total').textContent = `${fmt.format(n)} điểm nóng`;
         });
         if (S.sub === 'hotspots') renderHotspots();
         if (S.sub === 'balance') renderBalance();
