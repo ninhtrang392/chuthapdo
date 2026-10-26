@@ -28,7 +28,8 @@
   const filterDefaults = () => ({ need: '', priorities: new Set(['P1', 'P2']), program: '', group: '', status: '', scope: '', time: '', from: '', to: '' });
   // Sức chở mỗi xe theo nhóm nguồn lực → gợi ý phương tiện
   const CAPACITY = { water: 1000, rice: 5, blanket: 1500, medkit: 300, unit: 8, truck: 1, volunteer: 16 };
-  const VIETNAM = [[8.3, 102], [23.5, 110]];
+  // Gồm cả Quần đảo Hoàng Sa, Quần đảo Trường Sa (kinh độ tới 115°E) — trùng VIETNAM_BOUNDS trong ban-do-so.js
+  const VIETNAM = [[8.3, 102], [23.5, 115]];
   // Viền + nhãn tỉnh đang chọn: xanh dương đậm (khác màu "Dư nguồn lực" #2f6fe4 để vẫn thấy viền trên tỉnh dư); CSS .bd-prov.is-selected, .bd-hot-pin.is-selected dùng cùng màu
   const SELECTED_COLOR = '#1d4ed8';
 

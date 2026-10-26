@@ -68,37 +68,11 @@
       lastSeen: `2026-10-08T${String(9 + i % 8).padStart(2, '0')}:32:00+07:00`, locationShared: true, canView: i % 5 !== 4,
     });
   }
-  // ---------- Lớp bổ sung (SRS Người yếu thế, chương trình và bảng cân đối nguồn lực) ----------
+  // ---------- Lớp bổ sung: Người yếu thế, Cơ sở PCCC, Điểm nhân đạo, Điểm hiến máu, Trạm sơ cấp cứu ----------
   const day = (offset) => new Date(Date.now() + offset * 86400e3).toISOString();
   const photo = (file) => `Emages/${encodeURIComponent('ảnh minh họa')}/${encodeURIComponent(file)}`;
   const PHOTOS_V = ['1358142_gen-h-235_1777566365.jpg', 'trao-qua-hoc-sinh.jpg', '1-1-3-9134.avif', 'z765570465791.jpg', '01 1.jpg', 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg'];
   const unitOf = (province, ward) => units.some((u) => u.id === `ward-${ward}`) ? `ward-${ward}` : `province-${province}`;
-  // Điểm tập kết hàng hóa: dùng chung danh sách ĐTK của tab Nguồn lực (ban-do-so-nguon-luc-data.js)
-  const R = window.DigitalMapResourceData;
-  const STOCK = { water: ['Nước uống', 'thùng', '2027-03'], rice: ['Gạo', 'tấn', '2027-01'], blanket: ['Chăn', 'chiếc', null], medkit: ['Bộ y tế', 'bộ', '2026-12'], volunteer: null, truck: null, unit: null };
-  (R?.depots || []).forEach((d, i) => {
-    const program = R.programs.find((p) => p.id === d.programs[0]);
-    const goods = d.goods || Object.entries(d.available).filter(([key]) => STOCK[key]).map(([key, qty], j) => ['Hiện vật', STOCK[key][0], STOCK[key][1], qty, Math.round(qty * (.3 + j * .1)), STOCK[key][2]]);
-    records.push({ id: `goods-${d.id}`, layer: 'goods', name: d.name, unitId: d.id === 'd-tw' ? 'national' : unitOf(d.province, d.ward), province: d.province, ward: d.ward, lat: d.lat, lng: d.lng, address: d.address,
-      status: d.status, program, unit: d.unit, manager: d.manager, phone: d.phone, from: d.period.from, to: d.period.to, photos: d.photos, photoCount: d.photoCount,
-      goods: (goods.length ? goods : [['Tiền', 'Tiền mặt', 'đồng', 20000000 + i * 5000000, 10000000, null]]).map(([kind, item, unit, stock, given, expiry]) => ({ kind, item, unit, stock, given, expiry })) });
-  });
-  // Điểm tập kết cấp thôn (chỉ ở tab Tổng quan): nhiều điểm trong cùng xã để bấm số của xã ra danh sách Tên điểm · Thuộc chương trình
-  const VILLAGE_DEPOTS = [
-    ['454', 'Đông Anh', 'thôn Lực Canh', 21.1512, 105.8391, 0, 'Lê Thị Hoa', '0912 300 411'],
-    ['454', 'Đông Anh', 'thôn Cổ Dương', 21.1368, 105.8556, 1, 'Trần Văn Khải', '0912 300 412'],
-    ['454', 'Đông Anh', 'thôn Tiên Hội', 21.1466, 105.8618, 0, 'Phạm Thị Lụa', '0912 300 413'],
-    ['376', 'Sóc Sơn', 'thôn Đông Xuân', 21.2650, 105.8390, 0, 'Ngô Văn Hải', '0904 220 131'],
-    ['376', 'Sóc Sơn', 'thôn Thắng Trí', 21.2489, 105.8601, 1, 'Vũ Thị Mai', '0904 220 132'],
-    ['382', 'Kim Anh', 'thôn Ninh Bắc', 21.2296, 105.7731, 0, 'Đỗ Văn Tùng', '0983 410 221'],
-    ['382', 'Kim Anh', 'thôn Thanh Nhàn', 21.2381, 105.7652, 1, 'Hoàng Thị Yến', '0983 410 222'],
-  ];
-  const base = records.find((r) => r.id === 'goods-d-hn-da');
-  if (base) VILLAGE_DEPOTS.forEach(([ward, xa, thon, lat, lng, p, manager, phone], i) => {
-    records.push({ ...base, id: `goods-village-${i}`, name: `Điểm tập kết ${thon[0].toUpperCase()}${thon.slice(1)}, xã ${xa}`, unitId: unitOf('1', ward), ward, lat, lng,
-      address: `Nhà văn hóa ${thon}, xã ${xa}, Thành phố Hà Nội`, program: R.programs[p], unit: `Hội Chữ thập đỏ xã ${xa}`, manager, phone, photoCount: 3 + (i % 3),
-      goods: [{ kind: 'Hiện vật', item: 'Nước uống', unit: 'thùng', stock: 200 + i * 40, given: 80 + i * 10, expiry: '2027-03' }, { kind: 'Hiện vật', item: 'Chăn', unit: 'chiếc', stock: 60 + i * 15, given: 20, expiry: null }] });
-  });
   // Người yếu thế: mã hồ sơ, nhóm đối tượng, mức độ cấp thiết; không lưu họ tên trên bản đồ
   const GROUPS = ['Người cao tuổi neo đơn', 'Người khuyết tật', 'Trẻ em có hoàn cảnh đặc biệt', 'Hộ nghèo', 'Trẻ em mồ côi', 'Phụ nữ đơn thân nuôi con nhỏ'];
   const NEEDS = [['Lương thực, thực phẩm', 'Chăm sóc tại nhà'], ['Xe lăn', 'Hỗ trợ sinh kế'], ['Học bổng', 'Đồ dùng học tập'], ['Sửa chữa nhà ở', 'Lương thực, thực phẩm'], ['Sữa, dinh dưỡng'], ['Hỗ trợ sinh kế']];
@@ -123,29 +97,20 @@
       seq += 6;
     }
   });
-  // Địa bàn triển khai chương trình thiện nguyện: chỉ Đang triển khai / Đã hoàn thành được hiển thị
-  const PROGRAMS = [
-    { id: 'CT-2026-HN-0152', name: 'Áo ấm cho em vùng cao 2026', status: 'active', fields: ['Cứu trợ xã hội và trợ giúp nhân đạo', 'Khác'], from: day(-20), to: day(70), ward: '9574', lat: 21.1405, lng: 105.5046, slug: 'tiep-suc-den-truong', cover: 'trao-qua-hoc-sinh.jpg' },
-    { id: 'CT-2026-HN-0148', name: 'Nhà nhân ái Sơn Tây', status: 'active', fields: ['Cứu trợ xã hội và trợ giúp nhân đạo'], from: day(-45), to: day(40), ward: '9574', lat: 21.1361, lng: 105.5108, slug: 'mai-am-nhan-ai', cover: '1-1-3-9134.avif' },
-    { id: 'CT-2026-HN-0131', name: 'Hành trình đỏ 2026 – điểm Sơn Tây', status: 'done', fields: ['Hiến máu'], from: day(-120), to: day(-60), ward: '9574', lat: 21.1442, lng: 105.4981, slug: 'hien-mau-mua-he', cover: 'Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg' },
-    { id: 'CT-2026-HN-0155', name: 'Bữa cơm yêu thương Sơn Tây', status: 'pending', fields: ['Bếp ăn, Cơm cháo miễn phí'], from: day(10), to: day(90), ward: '9574', lat: 21.1388, lng: 105.5012, slug: '', cover: 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg' },
-    { id: 'CT-2026-HN-0140', name: 'Sơ cấp cứu cộng đồng Sóc Sơn', status: 'active', fields: ['Sơ cấp cứu'], from: day(-30), to: day(30), ward: '376', lat: 21.2655, lng: 105.8297, slug: '', cover: 'Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg' },
-    { id: 'CT-2026-HN-0119', name: 'Khám bệnh miễn phí người cao tuổi Đông Anh', status: 'done', fields: ['Khám chữa bệnh'], from: day(-150), to: day(-100), ward: '454', lat: 21.1369, lng: 105.8562, slug: 'kham-benh-nguoi-cao-tuoi', cover: '2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg' },
-  ];
-  PROGRAMS.forEach((p, i) => {
-    const ward = locations.find((x) => x.id === '1').wards.find((w) => w.id === p.ward);
-    records.push({ ...p, layer: 'programs', unitId: 'province-1', province: '1', address: `${ward.name}, Thành phố Hà Nội`, creatorType: 'Đơn vị Hội', owner: 'Hội Chữ thập đỏ Thành phố Hà Nội', phone: '0243 825 0032',
-      url: p.slug ? `chuong-trinh.html?id=${p.slug}` : 'chuong-trinh.html', cover: photo(p.cover), photos: [photo(PHOTOS_V[i % PHOTOS_V.length]), photo(PHOTOS_V[(i + 2) % PHOTOS_V.length]), photo(PHOTOS_V[(i + 4) % PHOTOS_V.length])], photoCount: 4 + i });
-  });
+  // Điểm nhân đạo: loại hình/chức năng, cấp độ, nhu cầu địa phương/căn cứ lựa chọn, nhóm đối tượng hưởng lợi, số điện thoại
+  const HUMANITARIAN = {
+    'Điểm nhân đạo Hội CTĐ xã Đông Anh': { kind: 'Điểm sơ cấp cứu', level: '3', basis: '', beneficiaries: 'Người có nhu cầu sinh kế', phone: '0123456789' },
+    'Điểm nhân đạo thôn Đông Xuân, xã Sóc Sơn': { kind: 'Điểm cứu trợ, phát quà', level: '2', basis: 'Thôn thường xuyên ngập úng mùa mưa bão', beneficiaries: 'Hộ nghèo, người cao tuổi neo đơn', phone: '0900 000 214' },
+    'Điểm nhân đạo chợ Kim Anh': { kind: 'Bếp ăn, cơm cháo miễn phí', level: '1', basis: 'Khu chợ đông người lao động thu nhập thấp', beneficiaries: 'Người lao động tự do, người vô gia cư', phone: '0900 000 382' },
+  };
   // Lớp chưa có mockup popup (SRS 1.2 ngoài phạm vi): vài điểm mẫu, popup thông tin chung
   [
     ['fire', 'Đội Cảnh sát PCCC và CNCH khu vực Đông Anh', '454', 21.1388, 105.8501], ['fire', 'Đội Cảnh sát PCCC và CNCH khu vực Sóc Sơn', '376', 21.2533, 105.8455],
-    ['shelters', 'Trường THCS Sóc Sơn – nơi sơ tán', '376', 21.2598, 105.8521], ['shelters', 'Nhà văn hóa xã Kim Anh', '382', 21.2389, 105.7702], ['shelters', 'UBND xã Đông Anh', '454', 21.1452, 105.8418],
-    ['relief', 'Điểm cứu trợ thôn Đông Xuân', '376', 21.2611, 105.8389], ['kitchens', 'Bếp ăn 0 đồng Bệnh viện Đông Anh', '454', 21.1417, 105.8535],
+    ['humanitarian', 'Điểm nhân đạo Hội CTĐ xã Đông Anh', '454', 21.1430, 105.8460], ['humanitarian', 'Điểm nhân đạo thôn Đông Xuân, xã Sóc Sơn', '376', 21.2611, 105.8389], ['humanitarian', 'Điểm nhân đạo chợ Kim Anh', '382', 21.2340, 105.7690],
     ['blood', 'Điểm hiến máu Trung tâm Hội nghị Đông Anh', '454', 21.1463, 105.8492], ['firstaid', 'Trạm sơ cấp cứu Hội CTĐ xã Kim Anh', '382', 21.2371, 105.7646], ['firstaid', 'Trạm sơ cấp cứu chợ Sóc Sơn', '376', 21.2546, 105.8513],
   ].forEach(([layer, name, wardId, lat, lng], i) => {
     const ward = locations.find((x) => x.id === '1').wards.find((w) => w.id === wardId);
-    records.push({ id: `${layer}-hn-${i}`, layer, name, unitId: unitOf('1', wardId), province: '1', ward: wardId, lat, lng, address: `${ward.name}, Thành phố Hà Nội` });
+    records.push({ id: `${layer}-hn-${i}`, layer, name, unitId: unitOf('1', wardId), province: '1', ward: wardId, lat, lng, address: `${ward.name}, Thành phố Hà Nội`, ...HUMANITARIAN[name] });
   });
   // Các mẫu ngoài phạm vi / thiếu tọa độ kiểm tra BR-01, BR-03, BR-08.
   records.push({ ...records.find((r) => r.layer === 'volunteers'), id: 'outside-scope', name: 'Tình nguyện viên ngoài đơn vị', unitId: 'province-79', province: '79', lat: 10.78, lng: 106.7, canView: false });

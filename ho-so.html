@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261016-29" />
+    <link rel="stylesheet" href="styles.css?v=20261023-13" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -56,8 +56,10 @@
       <symbol id="pencil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.83 2.83 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></g></symbol>
       <symbol id="dots-vertical" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="5.5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18.5" r="1.7"/></g></symbol>
       <symbol id="filter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V19l-4-2v-4.5z"/></g></symbol>
+      <symbol id="share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="17.5" cy="5.5" r="2.5"/><circle cx="6.5" cy="12" r="2.5"/><circle cx="17.5" cy="18.5" r="2.5"/><path d="m8.7 10.7 6.6-3.9M8.7 13.3l6.6 3.9"/></g></symbol>
       <symbol id="download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></g></symbol>
       <!-- document lấy từ index.html; trash, upload vẽ thêm cho khung tải tệp (drawer đăng ký chương trình) -->
+      <symbol id="plus-square" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M12 8v8M8 12h8"/></g></symbol>
       <symbol id="document" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
       <symbol id="trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.5h15M9.5 6.5V4.8c0-.7.6-1.3 1.3-1.3h2.4c.7 0 1.3.6 1.3 1.3v1.7M6.5 6.5l.8 12.2c.1 1 .9 1.8 1.9 1.8h5.6c1 0 1.8-.8 1.9-1.8l.8-12.2M10 10.5v6M14 10.5v6"/></g></symbol>
       <!-- page-arrow: mũi tên phân trang, lấy từ component Pagination/Small trong Figma (nút trước lật ngang bằng CSS) -->
@@ -74,7 +76,7 @@
       </a>
       <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
-        <a href="index.html#chuong-trinh">Chương trình</a>
+        <a href="chuong-trinh-thien-nguyen.html">Chương trình</a>
         <a href="ban-do-so.html">Bản đồ số</a>
         <a href="index.html#cong-khai">Công khai</a>
         <a href="index.html#tin-tuc">Tin tức</a>
@@ -315,10 +317,14 @@
                 <label class="pf-adv-field"><span>Thời gian tạo</span>
                   <span class="pf-input is-select"><select id="vol-time"><option value="">Tất cả thời gian</option><option value="7">7 ngày qua</option><option value="30">30 ngày qua</option><option value="year">Năm nay</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span>
                 </label>
+                <!-- Trạng thái: chỉ hiện ở tab Tất cả (tab khác đã là 1 trạng thái); danh sách trạng thái theo loại hồ sơ đang mở (ho-so.js: syncVolStatusFilter) -->
+                <label class="pf-adv-field" id="vol-status-field" hidden><span>Trạng thái</span>
+                  <span class="pf-input is-select"><select id="vol-status-filter"><option value="">Tất cả trạng thái</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span>
+                </label>
               </div>
               <div class="pf-adv-foot"><button class="pf-link-btn" type="button" id="vol-reset"><svg class="icon" aria-hidden="true"><use href="#close"/></svg>Xóa bộ lọc</button></div>
             </div>
-            <!-- ---------- Bảng: STT · tên đơn vị + mã hồ sơ · nơi xử lý · ngày tạo · ngày nộp · thao tác (trạng thái xem theo tab) (ho-so.js: SECTION ĐĂNG KÝ HỒ SƠ) ---------- -->
+            <!-- ---------- Bảng: STT · tên đơn vị + mã hồ sơ · nơi xử lý · trạng thái · ngày tạo · ngày nộp · thao tác (ho-so.js: SECTION ĐĂNG KÝ HỒ SƠ) ---------- -->
             <div class="pf-table-card">
               <div class="pf-table-scroll">
                 <table class="pf-table is-volunteer">
@@ -327,6 +333,7 @@
                       <th scope="col" class="pf-col-index">STT</th>
                       <th scope="col" id="vol-name-col">Tên đội, CLB và mã hồ sơ</th>
                       <th scope="col">Nơi xử lý hồ sơ</th>
+                      <th scope="col">Trạng thái</th>
                       <th scope="col">Ngày tạo</th>
                       <th scope="col">Ngày nộp</th>
                       <th scope="col" class="pf-col-actions"><span class="visually-hidden">Thao tác</span></th>
@@ -430,7 +437,7 @@
         </div>
         <nav class="footer-col" aria-label="Giới thiệu">
           <h2>Giới thiệu</h2>
-          <a href="index.html#chuong-trinh">Chương trình</a>
+          <a href="chuong-trinh-thien-nguyen.html">Chương trình</a>
           <a href="ban-do-so.html">Bản đồ số</a>
           <a href="index.html#cong-khai">Công khai</a>
           <a href="index.html#tin-tuc">Tin tức</a>
@@ -935,6 +942,134 @@
       </section>
     </div>
     <!-- ==================== END SECTION: ĐĂNG KÝ THÀNH LẬP ĐỘI, CLB ==================== -->
+    <!-- ==================== SECTION: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB — drawer phải cùng khung Đăng ký thành lập đội, CLB (ho-so.js: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB) ==================== -->
+    <!-- Mở từ nút Thêm mới của danh sách #gia-nhap-doi. Thông tin cá nhân lấy từ tài khoản định danh (khóa, trừ Điện thoại, Nhóm máu); Cam kết như form thành lập. Dữ liệu điền sẵn là MINH HỌA. -->
+    <div class="pf-reg" id="pf-join" hidden>
+      <div class="pf-reg-overlay" data-close-join></div>
+      <section class="pf-reg-panel" role="dialog" aria-modal="true" aria-labelledby="pf-join-title">
+        <!-- ---------- Đầu drawer: tiêu đề, nút đóng ---------- -->
+        <header class="pf-reg-head">
+          <div class="pf-reg-head-top">
+            <div>
+              <h2 class="pf-title" id="pf-join-title">Đăng ký gia nhập đội, câu lạc bộ tình nguyện viên</h2>
+              <p class="pf-lead">Các trường có dấu <span class="pf-req">*</span> là bắt buộc.</p>
+            </div>
+            <button class="pf-icon-btn pf-reg-close" type="button" aria-label="Đóng biểu mẫu" data-close-join><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button>
+          </div>
+        </header>
+
+        <form class="pf-reg-form" id="pf-join-form" novalidate>
+          <div class="pf-reg-body">
+            <!-- ---------- Phần 1: Thông tin cá nhân — lấy từ tài khoản định danh (khóa); Điện thoại, Nhóm máu tự nhập ---------- -->
+            <section class="pf-reg-section" aria-labelledby="pf-join-s1-title">
+              <div class="pf-reg-section-head"><h3 id="pf-join-s1-title">1. Thông tin cá nhân</h3><span class="pf-reg-badge"><svg class="icon" aria-hidden="true"><use href="#shield"/></svg>Lấy từ tài khoản định danh</span></div>
+              <div class="pf-fields">
+                <div class="pf-field">
+                  <label for="jn-name">Họ và tên</label>
+                  <div class="pf-control is-locked"><input id="jn-name" type="text" value="Nguyễn Ngọc Trâm" readonly /></div>
+                </div>
+                <div class="pf-field">
+                  <label for="jn-identity">Số định danh cá nhân</label>
+                  <div class="pf-control is-locked"><input id="jn-identity" type="text" value="040196012345" readonly /></div>
+                </div>
+                <!-- Giới tính · Năm sinh · Điện thoại · Nhóm máu: 1 hàng 4 cột (dùng hàng 4 cột của form thành lập) -->
+                <div class="pf-team-row4">
+                  <div class="pf-field">
+                    <label for="jn-gender">Giới tính</label>
+                    <div class="pf-control is-locked"><input id="jn-gender" type="text" value="Nữ" readonly /></div>
+                  </div>
+                  <div class="pf-field">
+                    <label for="jn-year">Năm sinh</label>
+                    <div class="pf-control is-locked"><input id="jn-year" type="text" value="1996" readonly /></div>
+                  </div>
+                  <div class="pf-field">
+                    <label for="jn-phone">Điện thoại<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control"><input id="jn-phone" type="tel" value="0912345678" placeholder="Nhập số điện thoại" autocomplete="tel" maxlength="10" required /></div>
+                  </div>
+                  <div class="pf-field">
+                    <label for="jn-blood">Nhóm máu<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control is-select"><select id="jn-blood" required><option value="" selected>Chọn nhóm máu</option><option>A</option><option>B</option><option>AB</option><option>O</option><option>Chưa rõ</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- Phần 2: Thông tin tình nguyện viên — lĩnh vực (chọn 1) · kỹ năng (chọn nhiều, 1 dòng: tràn thì hiện nút +N) chia đều 2 cột ---------- -->
+            <section class="pf-reg-section" aria-labelledby="pf-join-s2-title">
+              <div class="pf-reg-section-head"><h3 id="pf-join-s2-title">2. Thông tin tình nguyện viên</h3></div>
+              <div class="pf-fields">
+                <div class="pf-field">
+                  <label for="jn-field">Lĩnh vực hoạt động<span class="pf-req" aria-hidden="true">*</span></label>
+                  <div class="pf-control is-select"><select id="jn-field" required><option value="" selected>Chọn lĩnh vực hoạt động</option><option>Hiến máu</option><option>Sơ cấp cứu</option><option>Cứu hộ cứu nạn</option><option>Bếp ăn, Cơm cháo miễn phí</option><option>Cứu trợ xã hội và trợ giúp nhân đạo</option><option>Hiến mô, tạng</option><option>Công nghệ thông tin</option><option>Khám chữa bệnh</option><option>Khác</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                </div>
+                <div class="pf-field">
+                  <span class="pf-label" id="jn-skills-label">Kỹ năng<span class="pf-req" aria-hidden="true">*</span></span>
+                  <div class="pf-multi" data-multi data-required data-one-line data-placeholder="Chọn kỹ năng">
+                    <div class="pf-multi-box"><span class="pf-multi-chips"></span><button class="pf-multi-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="jn-skills-label"><svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button></div>
+                    <ul class="pf-multi-list" role="listbox" aria-multiselectable="true" aria-labelledby="jn-skills-label" hidden>
+                      <!-- Danh mục Kỹ năng theo đặc tả (mục 3.1) -->
+                      <li role="option" aria-selected="false">Sơ cấp cứu</li>
+                      <li role="option" aria-selected="false">Sơ cứu tâm lý</li>
+                      <li role="option" aria-selected="false">Khám, chữa bệnh</li>
+                      <li role="option" aria-selected="false">Viết tin bài</li>
+                      <li role="option" aria-selected="false">Truyền thông số (TikTok, CapCut,…)</li>
+                      <li role="option" aria-selected="false">Xây dựng kênh truyền thông</li>
+                      <li role="option" aria-selected="false">Hướng dẫn kỹ thuật sinh kế theo nghề</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- Phần 3: Đội, câu lạc bộ muốn gia nhập — lưới 2 cột: Tỉnh · Phường/xã → Đơn vị quản lý (tự chọn Hội cấp xã) · Đội, CLB của đơn vị ---------- -->
+            <section class="pf-reg-section" aria-labelledby="pf-join-s3-title">
+              <div class="pf-reg-section-head"><h3 id="pf-join-s3-title">3. Đội, câu lạc bộ muốn gia nhập</h3></div>
+              <div class="pf-fields">
+                <div class="pf-field">
+                  <label for="jn-province">Tỉnh/Thành phố<span class="pf-req" aria-hidden="true">*</span></label>
+                  <div class="pf-control is-select"><select id="jn-province" required><option value="">Chọn tỉnh/thành phố</option><option selected>Tỉnh Hà Tĩnh</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                </div>
+                <div class="pf-field">
+                  <label for="jn-ward">Phường/xã<span class="pf-req" aria-hidden="true">*</span></label>
+                  <div class="pf-control is-select"><select id="jn-ward" required><option value="" selected>Chọn phường/xã</option><option>Phường Thành Sen</option><option>Phường Trần Phú</option><option>Phường Hà Huy Tập</option><option>Xã Thạch Hạ</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                </div>
+                <div class="pf-field">
+                  <label for="jn-unit">Đơn vị quản lý<span class="pf-req" aria-hidden="true">*</span></label>
+                  <div class="pf-control is-select"><select id="jn-unit" required><option value="" selected>Chọn đơn vị quản lý</option><option>Hội Chữ thập đỏ tỉnh Hà Tĩnh</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                </div>
+                <div class="pf-field">
+                  <label for="jn-club">Đội, câu lạc bộ<span class="pf-req" aria-hidden="true">*</span></label>
+                  <div class="pf-control is-select"><select id="jn-club" required disabled><option value="" selected>Chọn đơn vị quản lý trước</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ---------- Phần 4: Cam kết (như form thành lập, đổi sang gia nhập) ---------- -->
+            <section class="pf-reg-section" aria-labelledby="pf-join-s4-title">
+              <div class="pf-reg-section-head"><h3 id="pf-join-s4-title">4. Cam kết</h3></div>
+              <div class="pf-fields">
+                <div class="pf-field is-wide pf-team-commit">
+                  <p>Sau khi nghiên cứu Điều lệ Hội Chữ thập đỏ Việt Nam và Quy chế tổ chức và hoạt động của tình nguyện viên Chữ thập đỏ, tôi tự nguyện đăng ký gia nhập đội, câu lạc bộ nêu trên, chấp hành Điều lệ, Quy chế và sẵn sàng nhận nhiệm vụ do Hội giao.</p>
+                  <p class="pf-team-links"><a href="#" data-panel="Điều lệ Hội Chữ thập đỏ Việt Nam">Đọc Điều lệ Hội Chữ thập đỏ Việt Nam</a><a href="#" data-panel="Quy chế tổ chức và hoạt động của tình nguyện viên Chữ thập đỏ">Đọc Quy chế tổ chức và hoạt động của tình nguyện viên Chữ thập đỏ</a></p>
+                  <label class="pf-reg-check"><input class="pf-check" type="checkbox" id="jn-agree" required />Tôi đã đọc Điều lệ, Quy chế và đồng ý với cam kết trên<span class="pf-req" aria-hidden="true">*</span></label>
+                  <label class="pf-reg-check"><input class="pf-check" type="checkbox" id="jn-privacy" required />Tôi đồng ý để Hội xử lý dữ liệu cá nhân trong hồ sơ cho mục đích xét duyệt và quản lý tình nguyện viên<span class="pf-req" aria-hidden="true">*</span></label>
+                  <p class="pf-error" id="jn-commit-error" hidden>Vui lòng đọc và đồng ý với cam kết</p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- ---------- Chân drawer: trạng thái lưu · Hủy · Lưu nháp · Nộp hồ sơ ---------- -->
+          <footer class="pf-reg-foot">
+            <p class="pf-hint" id="pf-join-status" aria-live="polite"></p>
+            <button class="pf-btn pf-btn-ghost" type="button" data-close-join>Hủy</button>
+            <button class="pf-btn pf-btn-ghost" type="button" data-join-draft>Lưu nháp</button>
+            <button class="pf-btn pf-btn-primary" type="submit">Nộp hồ sơ</button>
+          </footer>
+        </form>
+      </section>
+    </div>
+    <!-- ==================== END SECTION: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB ==================== -->
 
     <!-- ==================== SECTION: XEM TRƯỚC PHIẾU ĐĂNG KÝ ĐỘI, CLB (PDF) ==================== -->
     <!-- Mở từ nút "Xem trước phiếu PDF" ở chân drawer, kiểu trình xem PDF: thanh công cụ tối · các trang A4 trên nền xám (ho-so.js: XEM TRƯỚC PHIẾU ĐĂNG KÝ ĐỘI, CLB).
@@ -976,12 +1111,12 @@
     </dialog>
     <!-- ==================== END SECTION: XÁC NHẬN NỘP HỒ SƠ ĐỘI, CLB ==================== -->
 
-    <!-- ==================== SECTION: XEM CHI TIẾT CHƯƠNG TRÌNH — modal phải (cùng cỡ Đăng ký): 3 ô thống kê · Tổng quan · Đơn vị & liên hệ · Nguồn lực · Hàng hóa · Phân công · Hồ sơ (ho-so.js: XEM CHI TIẾT CHƯƠNG TRÌNH) ==================== -->
+    <!-- ==================== SECTION: XEM CHI TIẾT CHƯƠNG TRÌNH — modal phải (cùng cỡ Đăng ký), bố cục trang chiến dịch: ảnh · gây quỹ · kê khai chi · tab Câu chuyện / Hoạt động / Danh sách ủng hộ / Hồ sơ chương trình · Cập nhật · Top 5 người ủng hộ (ho-so.js: XEM CHI TIẾT CHƯƠNG TRÌNH) ==================== -->
     <!-- Mở khi bấm nút mắt / "Xem chi tiết" (#chuong-trinh/xem/<mã>); nội dung chỉ đọc, dựng từ dữ liệu minh họa. -->
     <div class="pf-reg" id="pf-view" hidden>
       <div class="pf-reg-overlay" data-close-view></div>
       <section class="pf-reg-panel" role="dialog" aria-modal="true" aria-labelledby="pf-view-title">
-        <!-- ---------- Đầu modal: tên chương trình · mã • trạng thái • ngày tạo · lý do/ghi chú duyệt · nút đóng ---------- -->
+        <!-- ---------- Đầu modal: tên chương trình · nhãn lĩnh vực · Khẩn cấp · trạng thái • mã • ngày tạo · lý do/ghi chú duyệt · nút đóng ---------- -->
         <header class="pf-reg-head">
           <div class="pf-reg-head-top">
             <div>
@@ -992,11 +1127,10 @@
             <button class="pf-icon-btn pf-reg-close" type="button" aria-label="Đóng chi tiết" data-close-view><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button>
           </div>
         </header>
-        <!-- ---------- Thân: 3 ô thống kê · Tổng quan chương trình · Đơn vị tổ chức & liên hệ · Nguồn lực · Hàng hóa · Phân công · Hồ sơ pháp lý (ho-so.js dựng) ---------- -->
+        <!-- ---------- Thân (ho-so.js dựng): bộ ảnh | gây quỹ (Quyên góp = mã QR ủng hộ, Xuất sao kê, Chia sẻ) + người vận động · kê khai khoản chi · tab (tab Hồ sơ chương trình = 3 ô thống kê, Tổng quan, Đơn vị & liên hệ, Nguồn lực, Hàng hóa, Phân công, Hồ sơ pháp lý) · Cập nhật · Top 5 ---------- -->
         <div class="pf-reg-body pf-view-body" id="pf-view-body"></div>
-        <!-- ---------- Chân modal: trái — Xem mã QR ủng hộ · Trang công khai (chỉ khi Đang hoạt động — ho-so.js) · phải — Đóng · Chỉnh sửa (chỉ khi Bản nháp — ho-so.js) ---------- -->
+        <!-- ---------- Chân modal: trái — Trang công khai (chỉ khi Đang hoạt động — ho-so.js) · phải — Đóng · Chỉnh sửa (chỉ khi Bản nháp — ho-so.js) ---------- -->
         <footer class="pf-reg-foot pf-view-foot">
-          <button class="pf-btn pf-btn-ghost pf-view-qr" type="button" id="pf-view-qr" hidden><svg class="icon" aria-hidden="true"><use href="#qr"/></svg>Xem mã QR ủng hộ</button>
           <a class="pf-btn pf-btn-public" id="pf-view-public" href="#" hidden><svg class="icon" aria-hidden="true"><use href="#eye"/></svg>Trang công khai</a>
           <button class="pf-btn pf-btn-ghost" type="button" data-close-view>Đóng</button>
           <button class="pf-btn pf-btn-primary" type="button" id="pf-view-edit" hidden><svg class="icon" aria-hidden="true"><use href="#pencil"/></svg>Chỉnh sửa</button>
@@ -1007,6 +1141,7 @@
 
     <!-- ==================== SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB — modal phải cùng khung Xem chi tiết chương trình (ho-so.js: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB) ==================== -->
     <!-- Mở khi bấm nút mắt / tên hồ sơ ở danh sách #thanh-lap-doi (#thanh-lap-doi/xem/<mã>); chỉ đọc, đủ trường như biểu mẫu Đăng ký thành lập đội, CLB. Dữ liệu MINH HỌA. -->
+    <!-- ---------- Dùng chung cho XEM CHI TIẾT HỒ SƠ GIA NHẬP ĐỘI, CLB (#gia-nhap-doi/xem/<mã>; ho-so.js: renderJoinView) — cùng khung thành lập, thêm thẻ Trả lời từ đội, CLB, không có Tiến trình xử lý; ẩn Xem phiếu PDF; Đã trả hồ sơ → nút Tạo hồ sơ mới từ hồ sơ này ---------- -->
     <div class="pf-reg" id="pf-team-view" hidden>
       <div class="pf-reg-overlay" data-close-team-view></div>
       <section class="pf-reg-panel" role="dialog" aria-modal="true" aria-labelledby="pf-tv-title">
@@ -1048,7 +1183,7 @@
     <script src="flow.js" defer></script>
     <script src="account-menu.js" defer></script>
     <script src="vendor/xlsx.full.min.js" defer></script>
-    <script src="team-members.js?v=20261016-7" defer></script>
-    <script src="ho-so.js?v=20261016-18" defer></script>
+    <script src="team-members.js?v=20261023-1" defer></script>
+    <script src="ho-so.js?v=20261023-11" defer></script>
   </body>
 </html>

@@ -604,7 +604,49 @@ const vDocs = (docs) => (docs.length ? `<ul class="pf-view-docs">${docs.map((d) 
   </div>
 </li>`).join('')}</ul>` : '<p class="pf-view-none">Chưa có tài liệu đính kèm.</p>');
 
-// ---------- Dựng nội dung modal: 3 ô thống kê · Tổng quan · Đơn vị & liên hệ | Nguồn lực · Hàng hóa · Phân công · Hồ sơ ----------
+// ---------- Trang chiến dịch (bố cục như trang gây quỹ công khai): ảnh · gây quỹ · kê khai chi · tab · cập nhật · top ủng hộ ----------
+// Ảnh minh họa xoay vòng theo mã chương trình (ảnh đầu = ảnh banner của chương trình)
+const PV_PHOTOS = ['3.-028ae9de1f.jpg', 'trao-qua-hoc-sinh.jpg', 'z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg', '1358142_gen-h-235_1777566365.jpg', 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg', '01%201.jpg', 'z765570465791.jpg', 'Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg', '2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg'];
+const PV_DONORS = [['Công ty CP Tập đoàn Hòa Phát', 'org'], ['Nguyễn Văn An', 'user'], ['Nhà hảo tâm ẩn danh', 'heart'], ['Trần Thị Mai', 'user'], ['Công ty TNHH Minh Long', 'org'], ['Nhóm thiện nguyện Ánh Dương', 'people'], ['Lê Hoàng Nam', 'user'], ['Phạm Thu Hằng', 'user'], ['Đỗ Quang Huy', 'user'], ['Vũ Ngọc Lan', 'user']];
+const PV_MESSAGES = ['Chung tay cùng chương trình, mong các hoàn cảnh sớm vượt qua khó khăn.', 'Một chút tấm lòng gửi tới bà con.', 'Chúc chương trình thành công tốt đẹp!', '', 'Thay mặt tập thể cán bộ công ty gửi lời hỏi thăm.', 'Góp sức nhỏ, lan tỏa yêu thương.', '', 'Mong sớm đạt mục tiêu.', 'Ủng hộ định kỳ hằng tháng.', ''];
+const pvVnd = (n) => `${vVnd(Math.round(n))} VND`;
+const pvMoney = (n) => `${vVnd(Math.round(n))}đ`;
+// Số liệu gây quỹ minh họa theo trạng thái: chỉ Đang hoạt động / Đã kết thúc mới có tiền đã nhận, lượt ủng hộ, khoản chi
+const programFund = (p, f) => {
+  const open = ['active', 'done'].includes(p.status);
+  const money = f.money || 0;
+  const raised = open && money ? Math.round((money * p.pct) / 100 + (Number(p.code.slice(-3)) * 1018)) : 0;
+  const donors = open ? Math.max(12, Math.round((raised || p.pct * 1e6) / 2.6e6)) : 0;
+  const end = f.runTo ? new Date(f.runTo.split('/').reverse().join('-')) : null;
+  const days = end ? Math.ceil((end - new Date()) / 86400000) : null;
+  const spent = p.status === 'done' ? raised * 0.97 : raised * 0.36;
+  const proven = p.status === 'done' ? spent : spent * 0.78;
+  return { open, money, raised, donors, days, spent, proven, unproven: spent - proven, left: raised - spent };
+};
+// Danh sách ủng hộ minh họa: 10 lượt gần nhất, số tiền theo tỷ lệ số đã nhận; Top 5 lấy từ danh sách này
+const programDonations = (p, fund) => {
+  if (!fund.open) return [];
+  const base = fund.raised || 2e8;
+  const ratios = [0.052, 0.071, 0.024, 0.009, 0.037, 0.016, 0.006, 0.011, 0.004, 0.0025];
+  return PV_DONORS.map(([name, kind], i) => ({ name, kind, amount: Math.round((base * ratios[i]) / 100000) * 100000, date: viDate(addDays(p.created, 3 + i * 4)), message: PV_MESSAGES[i] }));
+};
+const pvAvatar = (kind, cls = 'pf-pv-avatar') => `<span class="${cls}${kind === 'org' ? ' is-org' : ''}" aria-hidden="true">${icon(kind === 'org' ? 'building' : kind)}</span>`;
+// Bục vinh danh Top 3 (dùng chung kiểu .podium của trang chủ) + hạng 4–5 dạng dòng
+const pvPodium = (top) => {
+  const card = (d, rank) => `<li class="podium-item rank-${rank}">
+    <article class="podium-card">
+      <span class="podium-avatar-wrap" aria-hidden="true">${rank === 1 ? '<span class="podium-crown"><img src="Emages/misc_16_02-03.webp" alt="" width="46" height="46" /></span>' : ''}<span class="podium-avatar${d.kind === 'org' ? ' is-org' : ''}">${icon(d.kind === 'org' ? 'building' : d.kind)}</span></span>
+      <h4 class="podium-name">${escapeHtml(d.name)}</h4>
+      <p class="podium-sub">Ủng hộ ngày ${d.date}</p>
+      <p class="podium-total">${pvMoney(d.amount)}</p>
+    </article>
+    <div class="podium-base" aria-hidden="true"><img class="base-emblem" src="Emages/rank-${rank}.webp" alt="" width="320" height="320" loading="lazy" /></div>
+  </li>`;
+  const rest = top.slice(3).map((d, i) => `<li class="rl-item"><span class="rl-rank">${i + 4}</span>${pvAvatar(d.kind, 'rl-avatar')}<span class="rl-info"><span class="rl-name">${escapeHtml(d.name)}</span><span class="rl-meta">Ủng hộ ngày ${d.date}</span></span><span class="rl-end"><span class="rl-total">${pvMoney(d.amount)}</span></span></li>`).join('');
+  return `<ol class="podium">${top.slice(0, 3).map((d, i) => card(d, i + 1)).join('')}</ol>${rest ? `<ol class="ranking-list pf-pv-rest">${rest}</ol>` : ''}`;
+};
+
+// ---------- Dựng nội dung modal: ảnh + gây quỹ · kê khai chi · tab Câu chuyện / Hoạt động / Danh sách ủng hộ / Hồ sơ chương trình · Cập nhật · Top 5 ----------
 const renderProgramView = (p) => {
   const f = programForm(p);
   const st = PROGRAM_STATUS[p.status];
@@ -613,21 +655,19 @@ const renderProgramView = (p) => {
   const note = document.querySelector('#pf-view-note');
   const dot = '<span aria-hidden="true">•</span>';
   document.querySelector('#pf-view-title').textContent = p.name;
-  document.querySelector('#pf-view-sub').innerHTML = `<span>Mã chương trình: <b>${p.code}</b></span>${dot}<span class="pf-badge is-${st.tone}"><span class="pf-dot" aria-hidden="true"></span>${st.label}</span>${dot}<span>Ngày tạo: ${viDate(p.created)}</span>`;
+  // Dưới tiêu đề: nhãn lĩnh vực · nhãn Khẩn cấp (mức ưu tiên cao) · trạng thái · mã · ngày tạo
+  document.querySelector('#pf-view-sub').innerHTML = `<span class="pf-tag pf-pv-field">${icon('heart')}${escapeHtml(p.field)}</span>${f.priority === 'urgent' ? '<span class="pf-pv-urgent">Khẩn cấp</span>' : ''}<span class="pf-badge is-${st.tone}"><span class="pf-dot" aria-hidden="true"></span>${st.label}</span>${dot}<span>Mã chương trình: <b>${p.code}</b></span>${dot}<span>Ngày tạo: ${viDate(p.created)}</span>`;
   // Lý do từ chối / ghi chú duyệt: thông tin của hồ sơ → hiển thị ở đầu modal
   note.hidden = !(reasons.length || p.status === 'pending');
   note.className = `pf-view-note${reasons.length ? ' is-red' : ''}`;
   note.innerHTML = reasons.length ? `<b>Lý do từ chối:</b> ${reasons.map(escapeHtml).join('; ')}` : `<b>Ghi chú:</b> ${vText(p.note)}`;
-  // Chân modal: Xem mã QR ủng hộ · Trang công khai chỉ hiện khi chương trình Đang hoạt động; Chỉnh sửa chỉ khi Bản nháp
+  // Chân modal: Trang công khai chỉ hiện khi chương trình Đang hoạt động; Chỉnh sửa chỉ khi Bản nháp (mã QR ủng hộ = nút Quyên góp trong khối gây quỹ)
   const isActive = p.status === 'active';
-  const qrBtn = document.querySelector('#pf-view-qr');
   const publicLink = document.querySelector('#pf-view-public');
-  qrBtn.hidden = !isActive;
   // Bản nháp: thêm nút Chỉnh sửa
   const editBtn = document.querySelector('#pf-view-edit');
   editBtn.hidden = p.status !== 'draft';
   editBtn.dataset.panel = `Chỉnh sửa chương trình ${p.code}`;
-  qrBtn.dataset.panel = `Mã QR ủng hộ chương trình ${p.code}`;
   publicLink.hidden = !isActive;
   if (p.detail) {
     publicLink.href = `chuong-trinh.html?id=${p.detail}`;
@@ -638,7 +678,99 @@ const renderProgramView = (p) => {
     publicLink.dataset.panel = `Trang công khai chương trình ${p.code}`;
   }
   const target = (f.target || '').replace(/^-\s*/, '');
+  const fund = programFund(p, f);
+  const donations = programDonations(p, fund);
+  const top = [...donations].sort((a, b) => b.amount - a.amount).slice(0, 5);
+  const photos = [p.img, ...PV_PHOTOS.filter((x) => x !== p.img)].slice(0, 5);
+  const shift = Number(p.code.slice(-2)) % 4;
+  photos.splice(1, 4, ...photos.slice(1).slice(shift), ...photos.slice(1).slice(0, shift));
+  const isMoney = Boolean(fund.money);
+  const pct = fund.open ? p.pct : 0;
+  const daysText = p.status === 'done' ? 'Đã kết thúc' : !fund.open ? 'Chưa mở vận động' : fund.days > 0 ? `${fund.days} ngày` : 'Hết hạn';
+  const isOrg = p.creator === 'Tổ chức';
+  const activities = [
+    { date: p.created, title: 'Khởi tạo chương trình', meta: `${p.owner} · ${p.unit}` },
+    ...(p.status !== 'draft' ? [{ date: addDays(p.created, 2), title: 'Gửi hồ sơ đề nghị phê duyệt', meta: `${f.docs.length} tệp hồ sơ đính kèm` }] : []),
+    ...(p.status === 'rejected' ? [{ date: p.updated, title: 'Từ chối phê duyệt', meta: p.note, cls: 'is-red' }] : []),
+    ...(p.status === 'pending' ? [{ date: p.updated, title: 'Đang chờ Hội phê duyệt', meta: p.note, cls: 'is-current' }] : []),
+    ...(fund.open ? [{ date: addDays(p.created, 5), title: 'Hội phê duyệt, mở tiếp nhận ủng hộ', meta: `Thời gian vận động ${vRange(f.raiseFrom, f.raiseTo)}` }, { date: p.updated, title: `Đăng cập nhật: ${p.name}`, meta: p.note }] : []),
+    ...(p.status === 'done' ? [{ date: p.updated, title: 'Kết thúc chương trình, công khai sao kê', meta: 'Đã công bố kết quả và chứng từ chi' }] : []),
+  ].sort((a, b) => a.date.localeCompare(b.date));
+  const goalText = isMoney ? pvVnd(fund.money) : vText(p.goal);
+  // Câu chuyện: dựng từ thông tin đăng ký; phần sau "Mục tiêu" thu gọn, bấm Xem thêm để mở
+  const story = `<article class="pf-pv-story">
+      <h3 class="pf-pv-story-title">${escapeHtml(p.name)}</h3>
+      <p class="pf-pv-story-meta">${goalText} – ${f.people ? `${vVnd(f.people)} người hưởng lợi` : escapeHtml(p.area)} – ${escapeHtml(p.field)} – ${escapeHtml(p.area)}</p>
+      <p>${escapeHtml(p.desc)} ${escapeHtml(f.goal)}</p>
+      <p>Tại ${escapeHtml(p.area)}, ${escapeHtml(f.support.charAt(0).toLowerCase() + f.support.slice(1))} là nhu cầu cấp thiết của ${escapeHtml(f.groups.join(', ').toLowerCase())}. Vì vậy, ${escapeHtml(p.unit)} phát động chương trình:</p>
+      <blockquote class="pf-pv-quote"><p class="pf-pv-quote-title">“${escapeHtml(p.name)}”</p><p>${escapeHtml(p.field)} – Chung tay vì cộng đồng</p></blockquote>
+      <p>Mục tiêu: ${isMoney ? `Vận động ${pvVnd(fund.money)} để ` : ''}${escapeHtml(target.charAt(0).toLowerCase() + target.slice(1))}</p>
+      <div class="pf-pv-more" id="pf-pv-more" hidden>
+        <p>Thời gian triển khai: ${vRange(f.runFrom, f.runTo) || 'Chưa xác định'}. Thời gian tiếp nhận vận động đóng góp: ${vRange(f.raiseFrom, f.raiseTo) || 'Chưa xác định'}.</p>
+        <p>Nguồn lực cần huy động: ${escapeHtml(f.resources.join(', '))}. Hình thức vận động: ${escapeHtml(f.campaign.join(', '))}. Hàng hóa tập kết tại ${escapeHtml(f.depot)}.</p>
+        <p>Mọi đóng góp được ${escapeHtml(p.unit)} tiếp nhận, sử dụng đúng mục đích và công khai sao kê, chứng từ chi trên trang chương trình. Liên hệ: ${escapeHtml(p.owner)} · ${escapeHtml(f.phone)} · ${escapeHtml(f.email)}.</p>
+      </div>
+      <button class="pf-pv-link" type="button" data-pv-more aria-expanded="false" aria-controls="pf-pv-more"><span>Xem thêm</span>${icon('arrow')}</button>
+    </article>`;
+  const updateItem = fund.open ? `<article class="pf-pv-update">
+      <p class="pf-pv-update-meta"><time datetime="${p.updated}">${viDate(p.updated)}</time><span aria-hidden="true">•</span><b>${escapeHtml(p.unit)}</b></p>
+      <h4 class="pf-pv-update-title">${escapeHtml(p.name)}</h4>
+      <p class="pf-pv-update-text">${escapeHtml(p.note)}. ${escapeHtml(p.desc)} Ban tổ chức gửi lời cảm ơn tới các nhà hảo tâm đã đồng hành cùng chương trình…</p>
+      <div class="pf-pv-update-photos">${[...photos.slice(1), photos[0]].slice(0, 4).map((src, i) => `<button class="pf-pv-update-photo" type="button" data-pv-photo="${(i + 1) % 5}" aria-label="Xem ảnh ${i + 1}"><img src="${IMG}${src}" alt="" loading="lazy" /></button>`).join('')}<span class="pf-pv-update-photo is-more" aria-label="Còn 4 ảnh">+4</span></div>
+    </article>` : '<p class="pf-view-none">Chương trình chưa có cập nhật nào.</p>';
+  const tab = (id, label, selected) => `<button type="button" role="tab" id="pf-pv-tab-${id}" aria-controls="pf-pv-panel-${id}" aria-selected="${selected}" ${selected ? '' : 'tabindex="-1"'}>${label}</button>`;
   document.querySelector('#pf-view-body').innerHTML = `
+    <!-- Đầu trang: bộ ảnh (trái) · gây quỹ + người vận động, kê khai khoản chi (phải) -->
+    <div class="pf-pv-top">
+      <div class="pf-pv-gallery">
+        <figure class="pf-pv-main">
+          <img id="pf-pv-main-img" src="${IMG}${photos[0]}" alt="Ảnh chương trình ${escapeHtml(p.name)}" />
+          <div class="pf-pv-nav"><button class="pf-pv-nav-btn is-prev" type="button" data-pv-step="-1" aria-label="Ảnh trước">${icon('chevron-right')}</button><button class="pf-pv-nav-btn" type="button" data-pv-step="1" aria-label="Ảnh sau">${icon('chevron-right')}</button></div>
+        </figure>
+        <div class="pf-pv-thumbs" role="group" aria-label="Ảnh chương trình">${photos.map((src, i) => `<button class="pf-pv-thumb" type="button" data-pv-photo="${i}" aria-pressed="${i === 0}" aria-label="Ảnh ${i + 1}"><img src="${IMG}${src}" alt="" loading="lazy" /></button>`).join('')}</div>
+      </div>
+      <div class="pf-pv-side">
+        <section class="pf-pv-card pf-pv-fund" aria-label="Tiến độ gây quỹ">
+          <div class="pf-pv-fund-head">
+            <div><p class="pf-pv-cap">Đã đạt được</p><p class="pf-pv-raised">${isMoney ? pvVnd(fund.raised) : (fund.open ? vText(p.raised) : '0')}</p></div>
+            <div class="is-goal"><p class="pf-pv-cap">Mục tiêu chiến dịch</p><p class="pf-pv-goal">${goalText}</p></div>
+          </div>
+          <div class="pf-pv-progress"><span class="pf-pv-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(pct, 100)}"><span style="width:${Math.min(pct, 100)}%"></span></span><b>${pct}%</b></div>
+          <div class="pf-pv-meta"><span>${icon('heart')}Lượt ủng hộ: <b>${vVnd(fund.donors)}</b></span><span>${icon('clock')}Thời gian còn lại: <b>${daysText}</b></span></div>
+          ${isActive ? `<button class="pf-btn pf-btn-primary pf-pv-donate" type="button" data-panel="Mã QR ủng hộ chương trình ${p.code}">${icon('heart')}Quyên góp</button>` : ''}
+          ${fund.open ? `<div class="pf-pv-actions">
+            <button class="pf-btn pf-btn-ghost" type="button" data-panel="Sao kê chương trình ${p.code}">${icon('document')}Xuất sao kê</button>
+            ${isActive ? `<button class="pf-btn pf-btn-public" type="button" data-panel="Chia sẻ chương trình ${p.code}">${icon('share')}Chia sẻ &amp; Lan tỏa</button>` : ''}
+          </div>` : ''}
+          <div class="pf-pv-org">
+            ${pvAvatar(isOrg ? 'org' : 'user')}
+            <div class="pf-pv-org-text"><p class="pf-pv-cap">Người vận động</p><p class="pf-pv-org-name">${escapeHtml(isOrg ? p.unit : p.owner)}</p><span class="pf-badge is-green">Đã xác minh</span></div>
+            <a class="pf-icon-btn" href="tel:${f.phone.replace(/\s/g, '')}" aria-label="Gọi ${escapeHtml(f.phone)}" title="${escapeHtml(f.phone)}">${icon('phone')}</a>
+          </div>
+        </section>
+        <section class="pf-pv-card pf-pv-spend" aria-labelledby="pf-pv-spend-title">
+          <h3 id="pf-pv-spend-title">Kê khai khoản chi</h3>
+          <dl class="pf-pv-spend-grid">
+            <div><dt>Tổng số tiền đã chi</dt><dd>${pvVnd(fund.spent)}</dd></div>
+            <div><dt>Có chứng từ</dt><dd>${pvVnd(fund.proven)}</dd></div>
+            <div><dt>Chưa có chứng từ</dt><dd>${pvVnd(fund.unproven)}</dd></div>
+            <div><dt>Số tiền còn lại</dt><dd>${fund.open && isMoney ? pvVnd(fund.left) : vEmpty}</dd></div>
+          </dl>
+        </section>
+      </div>
+    </div>
+
+    <!-- Tab: Câu chuyện · Hoạt động · Danh sách ủng hộ · Hồ sơ chương trình (thông tin đăng ký) -->
+    <div class="pf-pv-tabs" role="tablist" aria-label="Nội dung chương trình">
+      ${tab('story', 'Câu chuyện', true)}${tab('acts', `Hoạt động (${activities.length})`, false)}${tab('donors', `Danh sách ủng hộ (${vVnd(fund.donors)})`, false)}${tab('profile', 'Hồ sơ chương trình', false)}
+    </div>
+    <div class="pf-pv-panel" id="pf-pv-panel-story" role="tabpanel" aria-labelledby="pf-pv-tab-story">${story}</div>
+    <div class="pf-pv-panel" id="pf-pv-panel-acts" role="tabpanel" aria-labelledby="pf-pv-tab-acts" hidden>${timeline(activities)}</div>
+    <div class="pf-pv-panel" id="pf-pv-panel-donors" role="tabpanel" aria-labelledby="pf-pv-tab-donors" hidden>
+      ${donations.length ? `<div class="pf-view-card">${vTable('is-v-donors', ['Người ủng hộ', 'Số tiền', 'Thời gian', 'Lời nhắn'], donations.map((d) => [`<span class="pf-pv-donor">${pvAvatar(d.kind)}<b>${escapeHtml(d.name)}</b></span>`, `<b class="pf-pv-amount">${pvMoney(d.amount)}</b>`, d.date, d.message ? escapeHtml(d.message) : vEmpty]), '')}
+      <p class="pf-view-none">Hiển thị 10 lượt ủng hộ gần nhất / ${vVnd(fund.donors)} lượt.</p></div>` : '<p class="pf-view-none">Chương trình chưa mở tiếp nhận ủng hộ.</p>'}
+    </div>
+    <div class="pf-pv-panel pf-pv-profile" id="pf-pv-panel-profile" role="tabpanel" aria-labelledby="pf-pv-tab-profile" hidden>
     <!-- Số liệu chính -->
     <div class="pf-view-stats" id="pf-v-overview">
       ${vStat('layers', 'Mục tiêu quyên góp (VND)', f.money ? `${vVnd(f.money)} VND` : vText(p.goal))}
@@ -692,8 +824,23 @@ const renderProgramView = (p) => {
       f.assign.map(([unit, person, task, date]) => [`<b>${escapeHtml(unit)}</b>`, escapeHtml(person), escapeHtml(task), escapeHtml(date || '—')]),
       'Chưa phân công đầu mối.'), `${f.assign.length} đầu mối`)}
 
-    ${vCard('pf-v-docs', 'Hồ sơ đề án &amp; Văn bản pháp lý đính kèm', vDocs(f.docs), `${f.docs.length} tệp`)}`;
+    ${vCard('pf-v-docs', 'Hồ sơ đề án &amp; Văn bản pháp lý đính kèm', vDocs(f.docs), `${f.docs.length} tệp`)}
+    </div>
+
+    <!-- Cập nhật của ban tổ chức -->
+    <section class="pf-pv-card pf-pv-updates" aria-labelledby="pf-pv-updates-title">
+      <h3 id="pf-pv-updates-title">Cập nhật (${fund.open ? 1 : 0})</h3>
+      ${updateItem}
+    </section>
+
+    <!-- Top 5 người ủng hộ nhiều nhất: bục vinh danh như trang chủ, nền ảnh mờ -->
+    ${top.length ? `<section class="ranking pf-pv-top5" aria-labelledby="pf-pv-top5-title">
+      <h3 class="pf-pv-top5-title" id="pf-pv-top5-title">Top 5 người ủng hộ nhiều nhất</h3>
+      ${pvPodium(top)}
+    </section>` : ''}`;
   pfViewGoods = f.goods;
+  pfViewPhotos = photos;
+  pfViewPhoto = 0;
   renderViewGoods(1);
 };
 
@@ -737,7 +884,47 @@ function closeProgramView(updateHash = true) {
   if (pfViewTrigger && document.contains(pfViewTrigger)) pfViewTrigger.focus();
 }
 pfView.querySelectorAll('[data-close-view]').forEach((button) => button.addEventListener('click', () => closeProgramView()));
+// ---------- Trang chiến dịch: đổi ảnh (ảnh nhỏ, nút trước/sau), tab nội dung, Xem thêm câu chuyện ----------
+let pfViewPhotos = [];
+let pfViewPhoto = 0;
+const showViewPhoto = (index) => {
+  if (!pfViewPhotos.length) return;
+  pfViewPhoto = (index + pfViewPhotos.length) % pfViewPhotos.length;
+  pfViewBody.querySelector('#pf-pv-main-img').src = `${IMG}${pfViewPhotos[pfViewPhoto]}`;
+  pfViewBody.querySelectorAll('.pf-pv-thumb').forEach((b, i) => b.setAttribute('aria-pressed', String(i === pfViewPhoto)));
+};
+const selectViewTab = (button) => {
+  pfViewBody.querySelectorAll('.pf-pv-tabs [role="tab"]').forEach((t) => {
+    const on = t === button;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+  });
+};
+pfViewBody.addEventListener('keydown', (event) => {
+  const tabBtn = event.target.closest('.pf-pv-tabs [role="tab"]');
+  if (!tabBtn || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  const tabs = [...pfViewBody.querySelectorAll('.pf-pv-tabs [role="tab"]')];
+  const i = tabs.indexOf(tabBtn);
+  const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (i + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+  event.preventDefault();
+  selectViewTab(tabs[next]);
+  tabs[next].focus();
+});
 pfViewBody.addEventListener('click', (event) => {
+  const photoBtn = event.target.closest('[data-pv-photo]');
+  if (photoBtn) { showViewPhoto(Number(photoBtn.dataset.pvPhoto)); if (photoBtn.classList.contains('pf-pv-update-photo')) pfViewBody.querySelector('.pf-pv-main').scrollIntoView({ block: 'nearest', behavior: viewReduced() ? 'auto' : 'smooth' }); }
+  const stepBtn = event.target.closest('[data-pv-step]');
+  if (stepBtn) showViewPhoto(pfViewPhoto + Number(stepBtn.dataset.pvStep));
+  const tabBtn = event.target.closest('.pf-pv-tabs [role="tab"]');
+  if (tabBtn) selectViewTab(tabBtn);
+  const moreBtn = event.target.closest('[data-pv-more]');
+  if (moreBtn) {
+    const open = moreBtn.getAttribute('aria-expanded') !== 'true';
+    moreBtn.setAttribute('aria-expanded', String(open));
+    pfViewBody.querySelector('#pf-pv-more').hidden = !open;
+    moreBtn.querySelector('span').textContent = open ? 'Thu gọn' : 'Xem thêm';
+  }
   if (event.target.closest('[data-download], [data-preview]')) showToast('Bản xem trước — tệp chưa được tải từ hệ thống.');
   // Phân trang Danh sách hàng hóa nhận
   const pageBtn = event.target.closest('[data-goods-page]');
@@ -899,6 +1086,8 @@ const VOL_KINDS = {
   'gia-nhap-doi': { type: 'GC', label: 'Đăng ký gia nhập đội, câu lạc bộ tình nguyện viên', unit: 'đội, CLB', found: false },
 };
 const VOL_PLACE = { DC: 'Hội Chữ thập đỏ phường Thành Sen', GC: 'Chủ nhiệm, phó chủ nhiệm' };
+// Loại hồ sơ có modal xem chi tiết → đường dẫn (#<loại>/xem/<mã>)
+const VOL_VIEW_KIND = { DC: 'thanh-lap-doi', GC: 'gia-nhap-doi' };
 // only: 'found' → chỉ hồ sơ thành lập (Chờ người được đăng ký xác nhận, Đã tạo đơn vị) · 'join' → chỉ hồ sơ gia nhập (Đã kết nạp)
 const VOL_STATUS = {
   draft: { label: 'Bản nháp', tone: 'neutral', slug: 'ban-nhap' },
@@ -964,16 +1153,19 @@ const VOL_REGS = [
   ['42.18073.DC.2026.0013', 'DC', 'Đội tình nguyện viên Cứu hộ giao thông Trần Phú', 'rejected', '2026-06-10', '2026-06-10'],
   ['42.18073.DC.2025.0019', 'DC', 'Câu lạc bộ Hiến máu nhân đạo Hà Huy Tập', 'rejected', '2025-11-20', '2025-11-21'],
   ['42.18073.DC.2025.0017', 'DC', 'Đội tình nguyện viên Tiếp sức mùa thi Thạch Hạ', 'rejected', '2025-09-30', '2025-09-30'],
-].map(([code, type, name, status, created, submitted], i) => ({ id: code || `NHAP-${i + 1}`, code, type, name, status, created, submitted }))
-  .sort((a, b) => (Boolean(a.submitted) - Boolean(b.submitted)) || (b.submitted || b.created).localeCompare(a.submitted || a.created));
+].map(([code, type, name, status, created, submitted], i) => ({ id: code || `NHAP-${i + 1}`, code, type, name, status, created, submitted }));
+// Bản nháp (chưa nộp) lên đầu, sau đó theo ngày nộp giảm dần — dùng lại khi thêm hồ sơ từ biểu mẫu
+const volSort = (a, b) => (Boolean(a.submitted) - Boolean(b.submitted)) || (b.submitted || b.created).localeCompare(a.submitted || a.created);
+VOL_REGS.sort(volSort);
 const findVolReg = (id) => VOL_REGS.find((r) => r.id === id);
 const volf = {
   kind: 'thanh-lap-doi',
   status: '',
   search: document.querySelector('#vol-search'),
   time: document.querySelector('#vol-time'),
+  statusSel: document.querySelector('#vol-status-filter'),
 };
-const volFilters = [volf.time];
+const volFilters = [volf.time, volf.statusSel];
 const countVolFilters = setupFilterPanel('vol-filters', volFilters);
 // Trạng thái áp dụng cho loại đang mở · hồ sơ của loại đang mở
 const volStatuses = () => {
@@ -988,12 +1180,14 @@ const setVolKind = (kind) => {
   document.querySelector('#vol-heading').textContent = k.label;
   volf.search.placeholder = `Tìm mã hồ sơ, tên ${k.unit}`;
   document.querySelector('#vol-name-col').textContent = `Tên ${k.unit} và mã hồ sơ`;
-  // Thêm mới: thành lập đội, CLB mở biểu mẫu đăng ký; các loại khác chưa có biểu mẫu → hộp thông báo xem trước
+  // Thêm mới: thành lập đội, CLB / gia nhập đội, CLB mở biểu mẫu đăng ký; loại chi hội chưa có biểu mẫu → hộp thông báo xem trước
   const add = document.querySelector('#vol-add');
-  const hasForm = kind === 'thanh-lap-doi';
-  add.toggleAttribute('data-open-team', hasForm);
-  add.setAttribute('aria-haspopup', hasForm ? 'dialog' : 'false');
-  if (hasForm) delete add.dataset.panel; else add.dataset.panel = k.label;
+  const form = { 'thanh-lap-doi': 'data-open-team', 'gia-nhap-doi': 'data-open-join' }[kind];
+  add.removeAttribute('data-open-team');
+  add.removeAttribute('data-open-join');
+  if (form) add.setAttribute(form, '');
+  add.setAttribute('aria-haspopup', form ? 'dialog' : 'false');
+  if (form) delete add.dataset.panel; else add.dataset.panel = k.label;
 };
 const updateVolCounts = () => Object.entries(VOL_KINDS).forEach(([kind, k]) => {
   document.querySelector(`[data-count="${kind}"]`).textContent = VOL_REGS.filter((r) => r.type === k.type).length;
@@ -1001,19 +1195,27 @@ const updateVolCounts = () => Object.entries(VOL_KINDS).forEach(([kind, k]) => {
 
 const volRow = (r, index) => {
   // Bản nháp: Xem · Sửa · Xóa hiện thẳng trên dòng; trạng thái khác: chỉ Xem
-  // Hồ sơ thành lập đội, CLB: Xem / tên hồ sơ mở modal chi tiết (#thanh-lap-doi/xem/<mã>); loại khác chưa có màn chi tiết → hộp thông báo xem trước
+  // Hồ sơ thành lập / gia nhập đội, CLB: Xem / tên hồ sơ mở modal chi tiết (#thanh-lap-doi/xem/<mã>, #gia-nhap-doi/xem/<mã>); loại chi hội chưa có màn chi tiết → hộp thông báo xem trước
+  // Hồ sơ gia nhập đội, CLB (đặc tả CD-00): Bản nháp → Tiếp tục điền · Xóa nháp (không có màn xem); Đã trả hồ sơ → Xem hồ sơ · Tạo hồ sơ mới từ hồ sơ này
   const name = escapeHtml(r.name);
-  const view = r.type === 'DC' ? `#thanh-lap-doi/xem/${encodeURIComponent(r.id)}` : '';
+  const joinDraft = r.type === 'GC' && r.status === 'draft';
+  const view = VOL_VIEW_KIND[r.type] && !joinDraft ? `#${VOL_VIEW_KIND[r.type]}/xem/${encodeURIComponent(r.id)}` : '';
   const viewLabel = r.status === 'draft' ? `Xem bản nháp ${name}` : `Xem hồ sơ ${r.code}`;
   const viewBtn = view
     ? `<a class="pf-icon-btn" href="${view}" aria-label="${viewLabel}">${icon('eye')}</a>`
     : `<button class="pf-icon-btn" type="button" data-panel="${viewLabel}" aria-label="${viewLabel}">${icon('eye')}</button>`;
-  const actions = r.status === 'draft'
+  // Đã trả hồ sơ: thêm nút Tạo hồ sơ mới từ hồ sơ này (sao chép thông tin sang biểu mẫu Thêm mới để sửa và nộp lại)
+  const copyBtn = `<button class="pf-icon-btn" type="button" ${['DC', 'GC'].includes(r.type) ? `data-vol-copy="${r.id}"` : `data-panel="Tạo hồ sơ mới từ hồ sơ ${r.code}"`} aria-label="Tạo hồ sơ mới từ hồ sơ ${r.code}" title="Tạo hồ sơ mới từ hồ sơ này">${icon('plus-square')}</button>`;
+  const actions = joinDraft
+    ? `<button class="pf-icon-btn" type="button" data-vol-edit="${r.id}" aria-label="Tiếp tục điền ${name}" title="Tiếp tục điền">${icon('pencil')}</button><button class="pf-icon-btn is-danger" type="button" data-vol-delete="${r.id}" aria-label="Xóa nháp ${name}" title="Xóa nháp">${icon('trash')}</button>`
+    : r.status === 'returned' ? `${viewBtn}${copyBtn}` : r.status === 'draft'
     ? `${viewBtn}<button class="pf-icon-btn" type="button" data-panel="Sửa bản nháp ${name}" aria-label="Sửa bản nháp ${name}">${icon('pencil')}</button><button class="pf-icon-btn is-danger" type="button" data-vol-delete="${r.id}" aria-label="Xóa bản nháp ${name}">${icon('trash')}</button>`
     : viewBtn;
   const title = `<span class="pf-clamp-1" data-tip>${name}</span>`;
   // Nơi xử lý: hồ sơ thành lập đội, CLB lấy theo Đơn vị quản lý của hồ sơ
   const place = r.type === 'DC' ? teamRegData(r).unit : VOL_PLACE[r.type];
+  // Trạng thái: nhãn ngắn như tên tab (Chờ xác nhận), tên đầy đủ khi rê chuột
+  const st = VOL_STATUS[r.status];
   return `<tr>
     ${rowIndex(index)}
     <td>
@@ -1023,6 +1225,7 @@ const volRow = (r, index) => {
       </div>
     </td>
     <td><span class="pf-clamp-2" data-tip>${escapeHtml(place || '')}</span></td>
+    <td><span class="pf-badge is-${st.tone}" title="${st.label}"><span class="pf-dot" aria-hidden="true"></span>${st.tab || st.label}</span></td>
     <td class="pf-col-date">${viDate(r.created)}</td>
     <td class="pf-col-date">${r.submitted ? viDate(r.submitted) : '<span class="pf-muted">Chưa nộp</span>'}</td>
     <td class="pf-col-actions"><div class="pf-row-actions">${actions}</div></td>
@@ -1046,11 +1249,21 @@ const createdWithin = (iso, value) => {
   if (value === 'year') return created.getFullYear() === now.getFullYear();
   return (now - created) / 86400000 <= Number(value);
 };
+// Bộ lọc Trạng thái: chỉ ở tab Tất cả; dựng lại lựa chọn theo loại hồ sơ (giữ giá trị nếu còn hợp lệ), tab trạng thái khác thì xóa giá trị
+const syncVolStatusFilter = () => {
+  const map = volStatuses();
+  const keep = volf.status ? '' : (map[volf.statusSel.value] ? volf.statusSel.value : '');
+  volf.statusSel.innerHTML = '<option value="">Tất cả trạng thái</option>' + Object.entries(map).map(([key, st]) => `<option value="${key}">${st.tab || st.label}</option>`).join('');
+  volf.statusSel.value = keep;
+  document.querySelector('#vol-status-field').hidden = Boolean(volf.status);
+};
 const applyVolFilter = () => {
+  syncVolStatusFilter();
   const query = fold(volf.search.value.trim());
   volTable.setFilter((r) => (!query || fold(`${r.code || ''} ${r.name}`).includes(query))
     && r.type === VOL_KINDS[volf.kind].type
     && (!volf.status || r.status === volf.status)
+    && (!volf.statusSel.value || r.status === volf.statusSel.value)
     && createdWithin(r.created, volf.time.value));
   countVolFilters();
 };
@@ -1063,12 +1276,25 @@ document.querySelector('#vol-reset').addEventListener('click', () => {
 document.querySelector('#vol-rows').addEventListener('click', (event) => {
   const button = event.target.closest('[data-vol-delete]');
   if (button) deleteVolDraft(findVolReg(button.dataset.volDelete));
+  const copy = event.target.closest('[data-vol-copy]');
+  if (copy) copyVolReg(findVolReg(copy.dataset.volCopy), copy);
+  const edit = event.target.closest('[data-vol-edit]');
+  if (edit) editJoinDraft(findVolReg(edit.dataset.volEdit), edit);
 });
+// Tạo hồ sơ mới từ hồ sơ đã trả: thành lập / gia nhập đội, CLB mở biểu mẫu Thêm mới đã điền sẵn (prefillTeam, prefillJoin); loại chi hội chưa có biểu mẫu → hộp thông báo xem trước
+const copyVolReg = (r, trigger) => {
+  if (r.type === 'GC') { prefillJoin(r); openJoin(trigger); } else { prefillTeam(r); openTeam(trigger); }
+  showToast(`Đã sao chép thông tin từ hồ sơ ${r.code}. Kiểm tra, chỉnh sửa rồi nộp lại.`);
+};
 // Xóa nháp: hỏi xác nhận bằng hộp xác nhận dùng chung (window.confirmAction), đồng ý mới xóa thật (bản nháp chưa có mã)
 const deleteVolDraft = async (r) => {
-  const yes = await window.confirmAction({ title: 'Xóa bản ghi', text: 'Bạn có chắc chắn muốn xóa bản ghi này không?', ok: 'Xóa' });
+  // Hồ sơ gia nhập đội, CLB dùng câu hỏi theo đặc tả (Xóa nháp – xác nhận)
+  const yes = await window.confirmAction(r.type === 'GC'
+    ? { title: 'Xóa nháp', text: 'Bạn có chắc chắn muốn xóa bản nháp này?', ok: 'Xóa' }
+    : { title: 'Xóa bản ghi', text: 'Bạn có chắc chắn muốn xóa bản ghi này không?', ok: 'Xóa' });
   if (!yes) return;
   VOL_REGS.splice(VOL_REGS.indexOf(r), 1);
+  if (joinEditId === r.id) joinEditId = null;
   applyVolFilter();
   renderTabs('tinh-nguyen-vien', volf.status);
   updateVolCounts();
@@ -1241,6 +1467,8 @@ const renderTeamView = (r) => {
   const edit = document.querySelector('#pf-tv-edit');
   const editLabel = { draft: 'Chỉnh sửa', returned: 'Chỉnh sửa và nộp lại' }[r.status];
   edit.hidden = !editLabel;
+  edit.querySelector('use').setAttribute('href', '#pencil');
+  delete edit.dataset.volCopy;
   if (editLabel) {
     edit.querySelector('span').textContent = editLabel;
     edit.dataset.panel = `${editLabel} hồ sơ ${r.name}`;
@@ -1310,7 +1538,7 @@ const renderTeamView = (r) => {
   renderTeamMembers(d.members);
 };
 
-// ---------- Mở / đóng modal: theo #thanh-lap-doi/xem/<mã>; đóng thì trả đường dẫn về tab đang xem ----------
+// ---------- Mở / đóng modal: theo #thanh-lap-doi/xem/<mã> hoặc #gia-nhap-doi/xem/<mã> (dùng chung modal, gia nhập dựng bằng renderJoinView); đóng thì trả đường dẫn về tab đang xem ----------
 const teamView = document.querySelector('#pf-team-view');
 const teamViewPanel = teamView.querySelector('.pf-reg-panel');
 const teamViewBody = document.querySelector('#pf-tv-body');
@@ -1320,14 +1548,23 @@ let teamViewTimer;
 teamViewPanel.tabIndex = -1;
 const openTeamView = (id) => {
   const r = findVolReg(id);
-  if (!r || r.type !== 'DC') {
+  if (!r || r.type !== VOL_KINDS[volf.kind].type || !VOL_VIEW_KIND[r.type]) {
     showToast(`Không tìm thấy hồ sơ “${id}”.`);
     closeTeamView();
     return;
   }
+  // Bản nháp gia nhập đội, CLB không có màn xem → mở lại biểu mẫu (Tiếp tục điền); chờ script chạy xong vì biểu mẫu khai báo phía dưới
+  if (r.type === 'GC' && r.status === 'draft') {
+    closeTeamView();
+    history.replaceState(null, '', `#gia-nhap-doi${volf.status ? `/${VOL_STATUS[volf.status].slug}` : ''}`);
+    setTimeout(() => editJoinDraft(r, null), 0);
+    return;
+  }
   if (teamView.hidden) teamViewTrigger = document.activeElement;
   teamViewReg = r;
-  renderTeamView(r);
+  // Phiếu PDF chỉ có ở hồ sơ thành lập
+  teamView.querySelector('[data-tv-pdf]').hidden = r.type !== 'DC';
+  if (r.type === 'GC') renderJoinView(r); else renderTeamView(r);
   clearTimeout(teamViewTimer);
   teamView.hidden = false;
   document.documentElement.classList.add('pf-reg-lock');
@@ -1342,8 +1579,8 @@ function closeTeamView(updateHash = true) {
   document.documentElement.classList.remove('pf-reg-lock');
   teamViewTimer = setTimeout(() => { teamView.hidden = true; }, viewReduced() ? 0 : 300);
   teamViewReg = null;
-  if (updateHash && window.location.hash.startsWith('#thanh-lap-doi/xem/')) {
-    history.replaceState(null, '', `#thanh-lap-doi/${VOL_STATUS[volf.status || 'draft'].slug}`);
+  if (updateHash && /^#(thanh-lap-doi|gia-nhap-doi)\/xem\//.test(window.location.hash)) {
+    history.replaceState(null, '', `#${volf.kind}${volf.status ? `/${VOL_STATUS[volf.status].slug}` : ''}`);
   }
   if (teamViewTrigger && document.contains(teamViewTrigger)) teamViewTrigger.focus();
 }
@@ -1358,6 +1595,169 @@ teamView.querySelector('[data-tv-pdf]').addEventListener('click', () => { if (te
   if (event.shiftKey && (document.activeElement === first || document.activeElement === teamViewPanel)) { event.preventDefault(); last.focus(); }
   else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
 });
+// ==================== END SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB ====================
+
+// ==================== SECTION: XEM CHI TIẾT HỒ SƠ GIA NHẬP ĐỘI, CLB — dùng chung modal #pf-team-view (đặc tả CD-04a) ====================
+// Mở theo #gia-nhap-doi/xem/<mã hồ sơ>; chỉ hồ sơ đã nộp (Bản nháp không có màn xem — mở lại biểu mẫu bằng Tiếp tục điền).
+// Cùng khung Xem chi tiết hồ sơ thành lập: đầu modal (mã, trạng thái, ngày tạo, ngày nộp, lý do trả/từ chối) · 3 ô số liệu · Thông tin cá nhân | Thông tin tình nguyện viên + Đội, CLB · Cam kết · Trả lời từ đội, câu lạc bộ. Không có Tiến trình xử lý.
+// Chân modal: Đã trả hồ sơ → Tạo hồ sơ mới từ hồ sơ này (như nút trên dòng danh sách).
+// ---------- Đội, CLB → phường/xã, đơn vị quản lý (minh họa: suy theo tên; đội, CLB cấp tỉnh do Hội cấp tỉnh quản lý) ----------
+const JOIN_PROVINCE_UNIT = 'Hội Chữ thập đỏ tỉnh Hà Tĩnh';
+const clubWard = (name) => TEAM_WARDS.find((w) => name.includes(w.replace(/^(Phường|Xã) /, ''))) || TEAM_WARDS[0];
+const clubUnit = (name) => {
+  if (/tỉnh|Hà Tĩnh/i.test(name)) return JOIN_PROVINCE_UNIT;
+  const ward = clubWard(name);
+  return `Hội Chữ thập đỏ ${ward.charAt(0).toLowerCase()}${ward.slice(1)}`;
+};
+
+// ---------- Danh mục (đặc tả mục 3.1): Lĩnh vực hoạt động · Kỹ năng ----------
+const JOIN_FIELDS = ['Hiến máu', 'Sơ cấp cứu', 'Cứu hộ cứu nạn', 'Bếp ăn, Cơm cháo miễn phí', 'Cứu trợ xã hội và trợ giúp nhân đạo', 'Hiến mô, tạng', 'Công nghệ thông tin', 'Khám chữa bệnh', 'Khác'];
+const JOIN_SKILLS = ['Sơ cấp cứu', 'Sơ cứu tâm lý', 'Khám, chữa bệnh', 'Viết tin bài', 'Truyền thông số (TikTok, CapCut,…)', 'Xây dựng kênh truyền thông', 'Hướng dẫn kỹ thuật sinh kế theo nghề'];
+// Nội dung cần bổ sung (Đã trả hồ sơ — bước xác minh) · lý do từ chối (Đã từ chối — bước kiểm tra dữ liệu)
+const JOIN_RETURNED = ['số điện thoại liên lạc không liên hệ được để xác minh', 'kỹ năng đăng ký chưa phù hợp với lĩnh vực hoạt động của đội, câu lạc bộ'];
+const JOIN_REJECTED = ['người nộp đã là thành viên đang sinh hoạt của đội, câu lạc bộ', 'đội, câu lạc bộ đã đủ số lượng thành viên theo kế hoạch năm'];
+const pad2 = (n) => String(n).padStart(2, '0');
+const isoToday = () => { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; };
+
+// ---------- Dữ liệu hồ sơ (minh họa): cố định theo mã hồ sơ; hồ sơ tạo từ biểu mẫu lưu dữ liệu thật vào joinRegCache ----------
+// Dùng chung cho màn xem, Tiếp tục điền (bản nháp) và Tạo hồ sơ mới từ hồ sơ đã trả (prefillJoin)
+const joinRegCache = new Map();
+const joinRegData = (r) => {
+  if (joinRegCache.has(r.id)) return joinRegCache.get(r.id);
+  const rand = seededRandom(r.id + r.name);
+  const pick = (list) => list[Math.floor(rand() * list.length)];
+  const between = (min, max) => min + Math.floor(rand() * (max - min + 1));
+  const draft = r.status === 'draft';
+  const blood = pick(['A', 'B', 'AB', 'O', 'O']);
+  // Mốc xử lý: nộp → tiếp nhận (0–2 ngày) → xác minh (1–3 ngày) → kết nạp (1–3 ngày); từ chối ở bước kiểm tra dữ liệu, trả hồ sơ ở bước xác minh
+  const stamp = (iso) => `${viDate(iso)} ${pad2(between(7, 20))}:${pad2(between(0, 59))}`;
+  const submitted = r.submitted || r.created;
+  const received = addDays(submitted, between(0, 2));
+  const verified = addDays(received, between(1, 3));
+  const admitted = addDays(verified, between(1, 3));
+  const data = {
+    name: TEAM_ACCOUNT.name, identity: TEAM_ACCOUNT.identity, gender: TEAM_ACCOUNT.gender, year: TEAM_ACCOUNT.dob.slice(-4), phone: TEAM_ACCOUNT.phone,
+    blood: draft && rand() < 0.5 ? '' : blood, // bản nháp có thể chưa chọn nhóm máu
+    field: (TEAM_FIELD_HINTS.find(([re]) => re.test(r.name)) || [])[1] || pick(JOIN_FIELDS),
+    skills: [...new Set([pick(JOIN_SKILLS), pick(JOIN_SKILLS), pick(JOIN_SKILLS)])].slice(0, between(1, 3)),
+    province: 'Tỉnh Hà Tĩnh', ward: clubWard(r.name), unit: clubUnit(r.name), club: r.name,
+    // Bản nháp có thể chưa tích cam kết; hồ sơ đã nộp luôn đã đồng ý
+    agree: !draft || rand() < 0.5,
+    reason: r.status === 'returned' ? pick(JOIN_RETURNED) : r.status === 'rejected' ? pick(JOIN_REJECTED) : '',
+    times: {
+      submitted: stamp(submitted), received: stamp(received), verified: stamp(verified), admitted: stamp(admitted),
+      rejected: stamp(addDays(submitted, between(0, 2))), admittedDate: viDate(admitted),
+    },
+    card: `${(r.code || '42.18073').split('.').slice(0, 2).join('.')}.TNV.${String(between(20, 160)).padStart(3, '0')}.1`, // Số thẻ tình nguyện viên khi kết nạp
+  };
+  data.privacy = data.agree;
+  joinRegCache.set(r.id, data);
+  return data;
+};
+
+// ---------- Trả lời từ đội, câu lạc bộ: theo mẫu trả lời của từng bước (đặc tả 7.2, 8.1, 9.2), mới nhất lên đầu; danh xưng bà/ông theo giới tính ----------
+const joinReplies = (r, d) => {
+  const title = d.gender === 'Nữ' ? 'bà' : 'ông';
+  const dear = `Kính gửi ${title} ${d.name},`;
+  const kind = /^Đội/.test(d.club) ? 'Đội' : 'Câu lạc bộ';
+  const t = d.times;
+  const list = [];
+  if (r.status === 'rejected') list.push([t.rejected, `${dear} Hồ sơ ${r.code} không được tiếp nhận vì: ${d.reason}.`]);
+  if (['received', 'eligible', 'admitted', 'returned'].includes(r.status)) list.push([t.received, `${dear} ${d.club} đã tiếp nhận hồ sơ ${r.code}. Ban chủ nhiệm sẽ liên hệ để xác minh.`]);
+  if (['eligible', 'admitted'].includes(r.status)) list.push([t.verified, `${dear} Hồ sơ ${r.code} đã được xác minh và đủ điều kiện gia nhập ${d.club}. ${kind} sẽ thông báo khi hoàn tất kết nạp.`]);
+  if (r.status === 'returned') list.push([t.verified, `${dear} Hồ sơ ${r.code} chưa đáp ứng yêu cầu: ${d.reason}. Vui lòng hoàn thiện và nộp hồ sơ mới.`]);
+  if (r.status === 'admitted') list.push([t.admitted, `${dear} ${title.charAt(0).toUpperCase()}${title.slice(1)} đã được kết nạp vào ${d.club} từ ngày ${t.admittedDate}, số thẻ tình nguyện viên ${d.card}.`]);
+  return list.reverse();
+};
+const joinRepliesHtml = (replies, club) => (replies.length
+  ? `<ul class="pf-jv-replies">${replies.map(([time, text]) => `<li><p class="pf-jv-reply-from"><b>${escapeHtml(club)}</b><span>${time}</span></p><p>${escapeHtml(text)}</p></li>`).join('')}</ul>`
+  : '<p class="pf-view-none">Chưa có trả lời</p>');
+
+// ---------- Dựng nội dung modal — cùng khung Xem chi tiết hồ sơ thành lập (renderTeamView): đầu modal · 3 ô số liệu · cặp thẻ · Cam kết · Trả lời (không có Tiến trình xử lý) ----------
+const renderJoinView = (r) => {
+  const d = joinRegData(r);
+  const st = VOL_STATUS[r.status];
+  const dot = '<span aria-hidden="true">•</span>';
+  document.querySelector('#pf-tv-title').textContent = r.name;
+  document.querySelector('#pf-tv-sub').innerHTML = `<span>Mã hồ sơ: <b>${r.code}</b></span>${dot}<span class="pf-badge is-${st.tone}"><span class="pf-dot" aria-hidden="true"></span>${st.label}</span>${dot}<span>Ngày tạo: ${viDate(r.created)}</span>${dot}<span>Ngày nộp: ${viDate(r.submitted)}</span>`;
+  // Ghi chú đầu modal như hồ sơ thành lập: lý do trả hồ sơ / từ chối
+  const notes = {
+    returned: `<b>Lý do trả hồ sơ:</b> ${escapeHtml(d.reason.charAt(0).toUpperCase() + d.reason.slice(1))}.`,
+    rejected: `<b>Lý do từ chối:</b> ${escapeHtml(d.reason.charAt(0).toUpperCase() + d.reason.slice(1))}.`,
+  };
+  const note = document.querySelector('#pf-tv-note');
+  note.hidden = !notes[r.status];
+  note.className = `pf-view-note${r.status === 'rejected' ? ' is-red' : ''}`;
+  note.innerHTML = notes[r.status] || '';
+  // Chân modal: chỉ Đã trả hồ sơ có nút chính — Tạo hồ sơ mới từ hồ sơ này (mở biểu mẫu Thêm mới đã điền sẵn)
+  const edit = document.querySelector('#pf-tv-edit');
+  edit.hidden = r.status !== 'returned';
+  delete edit.dataset.panel;
+  delete edit.dataset.volCopy;
+  if (r.status === 'returned') {
+    edit.querySelector('span').textContent = 'Tạo hồ sơ mới từ hồ sơ này';
+    edit.querySelector('use').setAttribute('href', '#plus-square');
+    edit.dataset.volCopy = r.id;
+  }
+
+  const check = (on, text) => `<li class="${on ? 'is-on' : ''}"><span class="pf-tv-check" aria-hidden="true"></span><span>${text}<span class="visually-hidden">${on ? ' — đã đồng ý' : ' — chưa đồng ý'}</span></span></li>`;
+  const replies = joinReplies(r, d);
+  document.querySelector('#pf-tv-body').innerHTML = `
+    <!-- Số liệu chính -->
+    <div class="pf-view-stats">
+      ${vStat('layers', 'Lĩnh vực hoạt động', vText(d.field))}
+      ${vStat('hand-heart', 'Kỹ năng đăng ký', d.skills.length ? `${d.skills.length} kỹ năng` : '')}
+      ${vStat('calendar', 'Ngày nộp hồ sơ', viDate(r.submitted))}
+    </div>
+
+    <!-- Thông tin cá nhân | Thông tin tình nguyện viên + Đội, CLB muốn gia nhập (xếp chồng) -->
+    <div class="pf-view-pair is-even">
+      ${vCard('pf-jv-person', 'Thông tin cá nhân', vKvs([
+        vKv('Họ và tên', vText(d.name)),
+        vKv('Số định danh cá nhân', vText(d.identity)),
+        vKv('Giới tính', vText(d.gender)),
+        vKv('Năm sinh', vText(d.year)),
+        vKv('Điện thoại', vText(d.phone)),
+        vKv('Nhóm máu', vText(d.blood)),
+        vKv('Nguồn thông tin', `<span class="pf-reg-badge">${icon('shield')}Lấy từ tài khoản định danh</span>`),
+      ]))}
+      <div class="pf-jv-stack">
+        ${vCard('pf-jv-volunteer', 'Thông tin tình nguyện viên', vKvs([
+          vKv('Lĩnh vực hoạt động', vTags(d.field ? [d.field] : [])),
+          vKv('Kỹ năng', vTags(d.skills)),
+        ]))}
+        ${vCard('pf-jv-club', 'Đội, câu lạc bộ muốn gia nhập', vKvs([
+          vKv('Đội, câu lạc bộ', vText(d.club)),
+          vKv('Đơn vị quản lý', vText(d.unit)),
+          vKv('Phường/xã', vText(d.ward)),
+          vKv('Tỉnh/Thành phố', vText(d.province)),
+        ]))}
+      </div>
+    </div>
+
+    <!-- Cam kết · xác nhận nộp -->
+    ${vCard('pf-jv-commit', 'Cam kết', `<div class="pf-tv-commit">
+      <p>Sau khi nghiên cứu Điều lệ Hội Chữ thập đỏ Việt Nam và Quy chế tổ chức và hoạt động của tình nguyện viên Chữ thập đỏ, tôi tự nguyện đăng ký gia nhập đội, câu lạc bộ nêu trên, chấp hành Điều lệ, Quy chế và sẵn sàng nhận nhiệm vụ do Hội giao.</p>
+      <ul class="pf-tv-checks">
+        ${check(d.agree, 'Tôi đã đọc Điều lệ, Quy chế và đồng ý với cam kết trên')}
+        ${check(d.privacy, 'Tôi đồng ý để Hội xử lý dữ liệu cá nhân trong hồ sơ cho mục đích xét duyệt và quản lý tình nguyện viên')}
+      </ul>
+    </div>
+    ${vKvs([vKv('Xác nhận', `Bằng tài khoản định danh · ${d.times.submitted}`)])}`)}
+
+    <!-- Trả lời từ đội, câu lạc bộ -->
+    ${vCard('pf-jv-replies', 'Trả lời từ đội, câu lạc bộ', joinRepliesHtml(replies, r.name), replies.length ? `${replies.length} trả lời` : '')}`;
+};
+
+// ---------- Nút Tạo hồ sơ mới từ hồ sơ này ở chân modal: đóng modal rồi mở biểu mẫu gia nhập đã điền sẵn (copyVolReg) ----------
+document.querySelector('#pf-tv-edit').addEventListener('click', (event) => {
+  const id = event.currentTarget.dataset.volCopy;
+  if (!id) return;
+  const trigger = teamViewTrigger;
+  closeTeamView();
+  copyVolReg(findVolReg(id), trigger);
+});
+// ==================== END SECTION: XEM CHI TIẾT HỒ SƠ GIA NHẬP ĐỘI, CLB ====================
 
 // ==================== SECTION: CỘT TRÁI — số liệu tính từ dữ liệu ====================
 {
@@ -1392,8 +1792,8 @@ const TAB_SOURCES = {
   // Chương trình không có tab “Tất cả”: mặc định mở tab Đang hoạt động (tab thứ 3)
   'chuong-trinh': { map: PROGRAM_STATUS, rows: PROGRAMS },
   'nguoi-yeu-the': { map: VULNERABLE_STATUS, rows: VULNERABLE, all: 'Tất cả hồ sơ' },
-  // Đăng ký hồ sơ không có tab “Tất cả”: mặc định mở tab đầu tiên (Bản nháp); tab và số đếm theo loại hồ sơ đang mở
-  'tinh-nguyen-vien': () => ({ map: volStatuses(), rows: volKindRows(), href: volf.kind }),
+  // Đăng ký hồ sơ: tab đầu “Tất cả” (mặc định khi mở từ menu), sau đó các trạng thái; tab và số đếm theo loại hồ sơ đang mở
+  'tinh-nguyen-vien': () => ({ map: volStatuses(), rows: volKindRows(), href: volf.kind, all: 'Tất cả' }),
 };
 const tabs = document.querySelector('#pf-tabs');
 // ---------- Mũi tên cuộn tab: hiện khi tab tràn khung; tab đang chọn luôn được cuộn vào khung nhìn ----------
@@ -1448,7 +1848,7 @@ const showRoute = () => {
   const volKind = VOL_KINDS[screen] ? screen : '';
   let target = volKind ? 'tinh-nguyen-vien' : (screens.some((s) => s.dataset.screen === screen) ? screen : 'chuong-trinh');
   const isView = sub === 'xem' && code && target === 'chuong-trinh';
-  const isTeamView = sub === 'xem' && code && volKind === 'thanh-lap-doi';
+  const isTeamView = sub === 'xem' && code && Object.values(VOL_VIEW_KIND).includes(volKind);
   const isDetail = sub === 'xem' && code && target === 'nguoi-yeu-the';
   if (isDetail) target = `${target}-xem`;
   screens.forEach((s) => { s.hidden = s.dataset.screen !== target; });
@@ -1471,8 +1871,8 @@ const showRoute = () => {
     // Mở modal xem hồ sơ: giữ tab & bảng đang xem (giữ nút vừa bấm để trả focus khi đóng); mở thẳng link chi tiết thì hiện tab theo trạng thái hồ sơ
     const sameKind = volf.kind === volKind;
     setVolKind(volKind);
-    if (!isTeamView) volf.status = findStatus(volStatuses(), sub) || 'draft';
-    else if (!sameKind || !volStatuses()[volf.status]) volf.status = (findVolReg(decodeURIComponent(code)) || {}).status || 'draft';
+    if (!isTeamView) volf.status = findStatus(volStatuses(), sub);
+    else if (!sameKind || (volf.status && !volStatuses()[volf.status])) volf.status = (findVolReg(decodeURIComponent(code)) || {}).status || 'draft';
     if (!isTeamView || !sameKind || !document.querySelector('#vol-rows').children.length) applyVolFilter();
   }
   renderTabs(target, { 'chuong-trinh': ct.status, 'tinh-nguyen-vien': volf.status }[target] ?? vul.status);
@@ -1732,7 +2132,9 @@ const setupMulti = (root, index) => {
     }
   });
   render();
-  return { root, setOpen, isOpen, selected, refit: fitChips, closePop };
+  // Chọn sẵn theo danh sách giá trị (nạp dữ liệu từ hồ sơ có sẵn)
+  const setValues = (values) => { options.forEach((o) => o.setAttribute('aria-selected', String(values.includes(o.textContent)))); render(); };
+  return { root, setOpen, isOpen, selected, setValues, refit: fitChips, closePop };
 };
 const regMultis = [...reg.querySelectorAll('[data-multi]')].map(setupMulti);
 document.addEventListener('click', (event) => {
@@ -2130,6 +2532,39 @@ teamLeader.addEventListener('change', (event) => {
   if (event.target.name === 'tm-leader-gender') { leaderGender.closest('.pf-field').classList.remove('is-invalid'); syncLeaderRow(); }
 });
 syncLeaderRow();
+
+// ---------- Tạo hồ sơ mới từ hồ sơ đã trả: điền sẵn biểu mẫu bằng thông tin hồ sơ cũ (Chủ nhiệm vẫn lấy theo tài khoản, cam kết phải tích lại) ----------
+const prefillTeam = (r) => {
+  const d = teamRegData(r);
+  const set = (id, value) => { const el = document.querySelector(`#${id}`); el.value = value || ''; };
+  teamForm.querySelectorAll('.pf-field.is-invalid').forEach((field) => field.classList.remove('is-invalid'));
+  set('tm-name', d.name); set('tm-phone', d.phone); set('tm-email', d.email); set('tm-province', d.province);
+  set('tm-ward', d.ward);
+  teamWard.dispatchEvent(new Event('change')); // dựng lại danh sách Đơn vị quản lý theo phường/xã
+  set('tm-unit', d.unit); set('tm-branch', d.branch); set('tm-address', d.address); set('tm-parent', d.parent); set('tm-decision', d.decision);
+  teamMultis[0].setValues(d.fields);
+  // Hoạt động tình nguyện: xóa dòng cũ, thêm lại từng hoạt động
+  actsNone.checked = d.actsNone;
+  actsSection.classList.toggle('is-none', d.actsNone);
+  const actsBody = actsSection.querySelector('tbody');
+  actsBody.replaceChildren();
+  d.acts.forEach(([from, to, text]) => {
+    actsSection.querySelector('[data-list-add]').click();
+    const row = actsBody.lastElementChild;
+    row.querySelector('[data-label="Từ ngày"]').value = from;
+    row.querySelector('[data-label="Đến ngày"]').value = to;
+    const natives = row.querySelectorAll('.pf-date-native');
+    if (natives[0]) natives[0].value = viToIso(from);
+    if (natives[1]) natives[1].value = viToIso(to);
+    row.querySelector('[data-label="Nội dung hoạt động"]').value = text;
+  });
+  memberEditor.load(d.members);
+  syncLeaderRow();
+  // Hồ sơ mới: cam kết chưa tích, nơi ký để trống
+  ['tm-agree', 'tm-privacy'].forEach((id) => { document.querySelector(`#${id}`).checked = false; });
+  set('tm-sign-place', '');
+  teamStatus.textContent = `Tạo mới từ hồ sơ ${r.code}`;
+};
 document.querySelector('#tm-phone').addEventListener('input', (event) => { event.target.value = event.target.value.replace(/\D/g, ''); });
 
 // ---------- Lưu nháp · Nộp hồ sơ (kiểm tra trường bắt buộc, điện thoại 10 số bắt đầu bằng 0, cam kết) ----------
@@ -2216,6 +2651,254 @@ teamForm.addEventListener('submit', (event) => {
     showToast('Nộp hồ sơ thành công (bản xem trước — chưa gửi lên hệ thống).');
   });
 });
+
+// ==================== SECTION: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB — drawer cùng khung Đăng ký thành lập đội, CLB (đặc tả CD-04) ====================
+// Mở từ: Thêm mới (form trống) · Tiếp tục điền (bản nháp) · Tạo hồ sơ mới từ hồ sơ đã trả (điền sẵn, cam kết tích lại).
+// Thông tin cá nhân lấy từ tài khoản định danh (TEAM_ACCOUNT). Lưu nháp → dòng Bản nháp trên danh sách; Nộp hồ sơ → cấp mã, trạng thái Mới, mở màn xem hồ sơ.
+const join = document.querySelector('#pf-join');
+const joinPanel = join.querySelector('.pf-reg-panel');
+const joinBody = join.querySelector('.pf-reg-body');
+const joinForm = document.querySelector('#pf-join-form');
+const joinStatus = document.querySelector('#pf-join-status');
+const joinSubmit = joinForm.querySelector('[type="submit"]');
+const joinSkills = setupMulti(join.querySelector('[data-multi]'), 90);
+let joinTrigger = null;
+let joinEditId = null; // bản nháp đang sửa (Tiếp tục điền / sau lần Lưu nháp đầu tiên)
+let joinSaved = ''; // dữ liệu lúc mở / lưu gần nhất — khác thì hỏi trước khi rời form
+joinPanel.tabIndex = -1;
+
+// ---------- Đội, CLB đang hoạt động (minh họa): đội, CLB đã thành lập + đội, CLB trong các hồ sơ gia nhập; đơn vị quản lý suy theo tên (clubUnit — XEM CHI TIẾT HỒ SƠ GIA NHẬP) ----------
+const JOIN_CLUBS = [...new Set(VOL_REGS.filter((r) => r.type === 'GC' || r.status === 'created').map((r) => r.name))]
+  .map((name) => ({ name, unit: clubUnit(name) }))
+  .sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+// Đội, CLB người nộp đang sinh hoạt (minh họa): đã kết nạp qua hồ sơ gia nhập · đội, CLB do mình thành lập (Chủ nhiệm)
+const joinMemberOf = (club) => VOL_REGS.some((r) => r.name === club && ((r.type === 'GC' && r.status === 'admitted') || (r.type === 'DC' && r.status === 'created')));
+// Hồ sơ gia nhập khác đang xử lý (Mới, Đã tiếp nhận, Đã đủ điều kiện) với cùng đội, CLB (BR-03)
+const joinPending = (club) => VOL_REGS.find((r) => r.type === 'GC' && r.name === club && ['new', 'received', 'eligible'].includes(r.status));
+
+// ---------- Tỉnh/Thành phố → Phường/xã → Đơn vị quản lý (tự chọn Hội cấp xã, vẫn chọn được Hội cấp tỉnh) → Đội, CLB; đổi cấp trên thì xóa các cấp dưới ----------
+const joinProvince = document.querySelector('#jn-province');
+const joinWard = document.querySelector('#jn-ward');
+const joinUnit = document.querySelector('#jn-unit');
+const joinClub = document.querySelector('#jn-club');
+const fillJoinClubs = () => {
+  const clubs = JOIN_CLUBS.filter((c) => c.unit === joinUnit.value);
+  joinClub.disabled = !joinUnit.value;
+  joinClub.innerHTML = `<option value="">${joinUnit.value ? (clubs.length ? 'Chọn đội, câu lạc bộ' : 'Đơn vị chưa có đội, câu lạc bộ') : 'Chọn đơn vị quản lý trước'}</option>`
+    + clubs.map((c) => `<option>${escapeHtml(c.name)}</option>`).join('');
+  checkJoinClub();
+};
+// Chọn đội, CLB mình đang là thành viên: tô đỏ, báo dưới trường, khóa Nộp hồ sơ (BR-04)
+const checkJoinClub = () => {
+  const field = joinClub.closest('.pf-field');
+  const member = Boolean(joinClub.value) && joinMemberOf(joinClub.value);
+  field.classList.toggle('is-invalid', member);
+  if (member) syncFieldErrors(joinForm, new Map([[field, `Bạn đã là thành viên của ${joinClub.value}`]]));
+  joinSubmit.disabled = member;
+};
+joinProvince.addEventListener('change', () => {
+  joinWard.value = '';
+  joinWard.disabled = !joinProvince.value;
+  joinWard.dispatchEvent(new Event('change'));
+});
+joinWard.addEventListener('change', () => {
+  const ward = joinWard.value;
+  joinUnit.innerHTML = '<option value="">Chọn đơn vị quản lý</option>'
+    + (ward ? `<option selected>Hội Chữ thập đỏ ${ward.charAt(0).toLowerCase()}${ward.slice(1)}</option>` : '')
+    + (joinProvince.value ? `<option>${JOIN_PROVINCE_UNIT}</option>` : '');
+  joinUnit.closest('.pf-field').classList.remove('is-invalid');
+  fillJoinClubs();
+});
+joinUnit.addEventListener('change', fillJoinClubs);
+joinClub.addEventListener('change', checkJoinClub);
+document.querySelector('#jn-phone').addEventListener('input', (event) => { event.target.value = event.target.value.replace(/\D/g, ''); });
+
+// ---------- Đọc / điền dữ liệu biểu mẫu ----------
+const joinFormData = () => ({
+  name: TEAM_ACCOUNT.name, identity: TEAM_ACCOUNT.identity, gender: TEAM_ACCOUNT.gender, year: TEAM_ACCOUNT.dob.slice(-4),
+  phone: document.querySelector('#jn-phone').value.trim(),
+  blood: document.querySelector('#jn-blood').value,
+  field: document.querySelector('#jn-field').value,
+  skills: joinSkills.selected().map((o) => o.textContent),
+  province: joinProvince.value, ward: joinWard.value, unit: joinUnit.value, club: joinClub.value,
+  agree: document.querySelector('#jn-agree').checked,
+  privacy: document.querySelector('#jn-privacy').checked,
+});
+const loadJoin = (d) => {
+  joinForm.querySelectorAll('.pf-field.is-invalid').forEach((field) => field.classList.remove('is-invalid'));
+  document.querySelector('#jn-commit-error').hidden = true;
+  document.querySelector('#jn-phone').value = d.phone;
+  document.querySelector('#jn-blood').value = d.blood;
+  document.querySelector('#jn-field').value = d.field;
+  joinSkills.setValues(d.skills);
+  joinProvince.value = d.province;
+  joinWard.disabled = !d.province;
+  joinWard.value = d.ward;
+  joinWard.dispatchEvent(new Event('change'));
+  if (d.unit) { joinUnit.value = d.unit; fillJoinClubs(); }
+  joinClub.value = d.club;
+  checkJoinClub();
+  document.querySelector('#jn-agree').checked = d.agree;
+  document.querySelector('#jn-privacy').checked = d.privacy;
+};
+// Thêm mới: form trống — tỉnh mặc định theo địa chỉ thường trú của tài khoản, điện thoại lấy từ tài khoản
+const resetJoin = () => {
+  joinEditId = null;
+  loadJoin({ phone: TEAM_ACCOUNT.phone, blood: '', field: '', skills: [], province: 'Tỉnh Hà Tĩnh', ward: '', unit: '', club: '', agree: false, privacy: false });
+  joinStatus.textContent = '';
+};
+// Tiếp tục điền bản nháp: mở lại đủ dữ liệu đã lưu
+const editJoinDraft = (r, trigger) => {
+  loadJoin(joinRegData(r));
+  joinEditId = r.id;
+  joinStatus.textContent = 'Đang sửa bản nháp';
+  openJoin(trigger);
+};
+// Tạo hồ sơ mới từ hồ sơ gia nhập đã trả: điền lại dữ liệu hồ sơ cũ, trừ Cam kết phải tích lại; nộp thì cấp mã mới, hồ sơ cũ giữ nguyên
+const prefillJoin = (r) => {
+  loadJoin({ ...joinRegData(r), agree: false, privacy: false });
+  joinEditId = null;
+  joinStatus.textContent = `Tạo mới từ hồ sơ ${r.code}`;
+};
+
+// ---------- Mở / đóng: như drawer Đăng ký thành lập; rời form khi còn dữ liệu chưa lưu thì hỏi xác nhận ----------
+const openJoin = (trigger) => {
+  joinTrigger = trigger;
+  joinSaved = JSON.stringify(joinFormData());
+  join.hidden = false;
+  document.documentElement.classList.add('pf-reg-lock');
+  joinBody.scrollTop = 0;
+  requestAnimationFrame(() => {
+    join.classList.add('is-open');
+    joinPanel.focus({ preventScroll: true });
+    joinSkills.refit();
+  });
+};
+const closeJoin = () => {
+  join.classList.remove('is-open');
+  document.documentElement.classList.remove('pf-reg-lock');
+  setTimeout(() => { join.hidden = true; }, regReduced() ? 0 : 300);
+  if (joinTrigger && document.contains(joinTrigger)) joinTrigger.focus();
+};
+const requestCloseJoin = async () => {
+  if (JSON.stringify(joinFormData()) !== joinSaved) {
+    const yes = await confirmAction({ title: 'Rời khỏi biểu mẫu', text: 'Dữ liệu chưa được lưu. Bạn có muốn rời khỏi trang?', ok: 'Đồng ý' });
+    if (!yes) return;
+  }
+  closeJoin();
+};
+document.addEventListener('click', (event) => {
+  const trigger = event.target.closest('[data-open-join]');
+  if (trigger) { resetJoin(); openJoin(trigger); }
+  if (joinSkills.isOpen() && !joinSkills.root.contains(event.target)) joinSkills.setOpen(false);
+});
+join.querySelectorAll('[data-close-join]').forEach((button) => button.addEventListener('click', requestCloseJoin));
+document.addEventListener('keydown', (event) => {
+  if (join.hidden || dialog.open || teamConfirm.open) return;
+  if (event.key === 'Escape') {
+    if (joinSkills.isOpen()) joinSkills.setOpen(false, true); else requestCloseJoin();
+    return;
+  }
+  if (event.key !== 'Tab') return;
+  const items = [...joinPanel.querySelectorAll('a[href], button:not([disabled]), input:not([readonly]), select:not([disabled])')].filter((el) => el.offsetParent !== null);
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (event.shiftKey && (document.activeElement === first || document.activeElement === joinPanel)) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
+
+// ---------- Ghi hồ sơ vào danh sách: Lưu nháp (Bản nháp, chưa có mã) · Nộp hồ sơ (cấp mã [Mã tỉnh].[Mã xã].GC.[Năm].[STT 4 số], Hội cấp tỉnh dùng Mã xã 00000) ----------
+const refreshVolList = () => {
+  VOL_REGS.sort(volSort);
+  applyVolFilter();
+  renderTabs('tinh-nguyen-vien', volf.status);
+  updateVolCounts();
+};
+const nextJoinCode = (unit) => {
+  const prefix = `42.${unit === JOIN_PROVINCE_UNIT ? '00000' : '18073'}.GC.${new Date().getFullYear()}.`;
+  const last = Math.max(0, ...VOL_REGS.filter((r) => r.code && r.code.startsWith(prefix)).map((r) => Number(r.code.slice(prefix.length))));
+  return `${prefix}${String(last + 1).padStart(4, '0')}`;
+};
+const nextDraftId = () => `NHAP-${Math.max(0, ...VOL_REGS.map((r) => (/^NHAP-(\d+)$/.exec(r.id) || [0, 0])[1]).map(Number)) + 1}`;
+join.querySelector('[data-join-draft]').addEventListener('click', () => {
+  const d = joinFormData();
+  let r = joinEditId && findVolReg(joinEditId);
+  if (!r) {
+    r = { id: nextDraftId(), code: null, type: 'GC', status: 'draft', created: isoToday(), submitted: null };
+    VOL_REGS.push(r);
+    joinEditId = r.id;
+  }
+  r.name = d.club || 'Chưa chọn đội, câu lạc bộ';
+  joinRegCache.set(r.id, { ...d, reason: '', times: {} });
+  refreshVolList();
+  joinSaved = JSON.stringify(d);
+  joinStatus.textContent = `Đã lưu nháp lúc ${nowTime()}`;
+  showToast('Đã lưu nháp hồ sơ');
+});
+joinForm.addEventListener('input', (event) => {
+  const field = event.target.closest('.pf-field');
+  if (field && event.target.value && event.target.value.trim()) field.classList.remove('is-invalid');
+});
+joinForm.addEventListener('change', (event) => {
+  const field = event.target.closest('.pf-field');
+  if (field && event.target.matches('select:not(#jn-club)') && event.target.value) field.classList.remove('is-invalid');
+  if (event.target.matches('#jn-agree, #jn-privacy') && document.querySelector('#jn-agree').checked && document.querySelector('#jn-privacy').checked) {
+    document.querySelector('#jn-commit-error').hidden = true;
+    event.target.closest('.pf-field').classList.remove('is-invalid');
+  }
+});
+// Kiểm tra bắt buộc / định dạng · đã là thành viên (BR-04) · đã có hồ sơ đang xử lý với cùng đội, CLB (BR-03) · cam kết
+const validateJoin = () => {
+  const invalid = new Map();
+  const bad = (field, msg) => { if (field && !invalid.has(field)) invalid.set(field, msg); };
+  joinForm.querySelectorAll('input[required]:not([type="checkbox"]), select[required]').forEach((el) => {
+    const field = el.closest('.pf-field');
+    if (!el.value.trim()) bad(field, `Vui lòng ${el.tagName === 'SELECT' ? 'chọn' : 'nhập'} ${fieldName(field)}.`);
+  });
+  const phone = document.querySelector('#jn-phone');
+  if (phone.value && !/^0\d{9}$/.test(phone.value)) bad(phone.closest('.pf-field'), 'Số điện thoại không hợp lệ');
+  if (!joinSkills.selected().length) { const field = joinSkills.root.closest('.pf-field'); bad(field, `Vui lòng chọn ${fieldName(field)}.`); }
+  if (joinClub.value) {
+    const pending = joinPending(joinClub.value);
+    if (joinMemberOf(joinClub.value)) bad(joinClub.closest('.pf-field'), `Bạn đã là thành viên của ${joinClub.value}`);
+    else if (pending) bad(joinClub.closest('.pf-field'), `Bạn đã có hồ sơ ${pending.code} đang xử lý với đơn vị này`);
+  }
+  const agreed = document.querySelector('#jn-agree').checked && document.querySelector('#jn-privacy').checked;
+  document.querySelector('#jn-commit-error').hidden = agreed;
+  if (!agreed) bad(document.querySelector('#jn-agree').closest('.pf-field'));
+  joinForm.querySelectorAll('.pf-field').forEach((field) => field.classList.toggle('is-invalid', invalid.has(field)));
+  syncFieldErrors(joinForm, invalid);
+  return [...joinForm.querySelectorAll('.pf-field.is-invalid')];
+};
+joinForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const invalid = validateJoin();
+  if (invalid.length) {
+    invalid[0].scrollIntoView({ behavior: regReduced() ? 'auto' : 'smooth', block: 'center' });
+    const focusable = invalid[0].querySelector('input:not([readonly]), select, button');
+    if (focusable) focusable.focus({ preventScroll: true });
+    showToast(`Còn ${invalid.length} trường cần kiểm tra lại.`);
+    return;
+  }
+  confirmAction({ title: 'Xác nhận nộp hồ sơ', text: 'Bạn có chắc chắn muốn nộp hồ sơ không?', ok: 'Nộp hồ sơ' }).then((yes) => {
+    if (!yes) return;
+    // Nộp từ bản nháp: dùng lại dòng nháp; nộp mới: thêm dòng. Hồ sơ cũ (đã trả) giữ nguyên trạng thái.
+    const d = joinFormData();
+    let r = joinEditId && findVolReg(joinEditId);
+    if (r) joinRegCache.delete(r.id);
+    else { r = { type: 'GC', created: isoToday() }; VOL_REGS.push(r); }
+    const code = nextJoinCode(d.unit);
+    Object.assign(r, { id: code, code, name: d.club, status: 'new', submitted: isoToday() });
+    joinRegCache.set(code, { ...d, reason: '', times: { submitted: `${viDate(isoToday())} ${nowTime()}` } });
+    joinEditId = null;
+    refreshVolList();
+    closeJoin();
+    showToast(`Nộp hồ sơ thành công. Mã hồ sơ: ${code}`);
+    // Chuyển sang màn xem hồ sơ vừa nộp
+    window.location.hash = `#gia-nhap-doi/xem/${encodeURIComponent(code)}`;
+  });
+});
+// ==================== END SECTION: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB ====================
 
 // ==================== XÁC NHẬN NỘP HỒ SƠ ĐỘI, CLB ====================
 // Hộp xác nhận dùng chung: confirmAction({ title, text, ok }) → Promise<boolean> (true khi bấm nút đồng ý).

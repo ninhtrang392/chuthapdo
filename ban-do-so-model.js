@@ -13,16 +13,12 @@
     volunteers: { name: 'Tình nguyện viên', unit: 'người', color: '#2F5FB3', icon: 'user', columns: ['Họ và tên', 'Chuyên môn'] },
     police: { name: 'Trụ sở công an', unit: 'trụ sở', color: '#3D3A8C', icon: 'bd-shield', columns: ['Tên trụ sở', 'Địa chỉ'] },
     medical: { name: 'Cơ sở y tế', unit: 'cơ sở', color: '#D9730D', icon: 'plus', columns: ['Tên trụ sở', 'Địa chỉ'] },
-    // Lớp bổ sung theo SRS Người yếu thế, chương trình và bảng cân đối nguồn lực (tắt sẵn khi mở trang)
+    // Lớp bổ sung (tắt sẵn khi mở trang)
     vulnerable: { name: 'Người yếu thế', unit: 'hồ sơ', color: '#7C4DDB', icon: 'people', columns: ['Mã hồ sơ', 'Nhóm đối tượng', 'Mức độ cấp thiết'] },
     fire: { name: 'Cơ sở PCCC', unit: 'cơ sở', color: '#E5232F', icon: 'alert', columns: ['Tên cơ sở', 'Địa chỉ'] },
-    shelters: { name: 'Trường học, nhà văn hóa, nơi sơ tán, UBND', unit: 'địa điểm', color: '#5B6B7A', icon: 'building', columns: ['Tên địa điểm', 'Địa chỉ'] },
-    goods: { name: 'Điểm tập kết hàng hóa', unit: 'điểm', color: '#8A5A2B', icon: 'box', columns: ['Tên điểm', 'Thuộc chương trình'] },
-    relief: { name: 'Điểm cứu trợ', unit: 'điểm', color: '#C2410C', icon: 'hand-heart', columns: ['Tên điểm', 'Địa chỉ'] },
-    kitchens: { name: 'Bếp ăn', unit: 'bếp', color: '#B7791F', icon: 'wheat', columns: ['Tên bếp ăn', 'Địa chỉ'] },
+    humanitarian: { name: 'Điểm nhân đạo', unit: 'điểm', color: '#C2410C', icon: 'hand-heart', columns: ['Tên điểm', 'Địa chỉ'] },
     blood: { name: 'Điểm hiến máu', unit: 'điểm', color: '#B91C2B', icon: 'drop', columns: ['Tên điểm', 'Địa chỉ'] },
     firstaid: { name: 'Trạm sơ cấp cứu', unit: 'trạm', color: '#0E7490', icon: 'medkit', columns: ['Tên trạm', 'Địa chỉ'] },
-    programs: { name: 'Chương trình thiện nguyện', unit: 'chương trình', color: '#22A06B', icon: 'heart-solid', columns: ['Tên chương trình', 'Trạng thái'] },
   };
   // Lớp bật sẵn khi mở trang / Đặt lại: 5 lớp có dữ liệu theo UC-BD
   const defaults = ['offices', 'clubs', 'volunteers', 'police', 'medical'];
@@ -42,7 +38,6 @@
   };
   // Người yếu thế: chỉ hiện mã hồ sơ · nhóm đối tượng, không hiện họ tên (SRS 3.2 #1)
   const urgency = { very: { label: 'Rất cấp thiết', tone: 'red' }, urgent: { label: 'Cấp thiết', tone: 'orange' }, normal: { label: 'Bình thường', tone: 'green' } };
-  const programStatus = { active: { label: 'Đang triển khai', tone: 'blue' }, done: { label: 'Đã hoàn thành', tone: 'green' } };
   const displayName = (record) => record.layer === 'vulnerable' ? `${record.code} · ${record.group}` : record.name;
   // Bộ lọc Thời gian (SRS 3.1 #3): Hiện tại = không lọc; 7 / 30 ngày qua; Tùy chọn từ ngày – đến ngày
   const TIME_RANGES = { '': 'Hiện tại', '7d': '7 ngày qua', '30d': '30 ngày qua', custom: 'Tùy chọn' };
@@ -57,7 +52,7 @@
     }
     return null;
   }
-  // Đối tượng có mốc thời gian (ngày đánh giá, thời gian tập kết, thời gian triển khai) phải giao với khoảng đã chọn; lớp không có mốc thời gian luôn hiện
+  // Đối tượng có mốc thời gian (ngày đánh giá hồ sơ người yếu thế) phải giao với khoảng đã chọn; lớp không có mốc thời gian luôn hiện
   function inTime(record, state, now) {
     const range = timeWindow(state, now);
     if (!range) return true;
@@ -72,14 +67,12 @@
     if (record.layer === 'volunteers' && (!record.locationShared || !record.lastSeen)) return false;
     // Người không có quyền không thấy lớp Người yếu thế (NL04); quyền xem từng hồ sơ vẫn kiểm tra ở máy chủ khi mở chi tiết
     if (record.layer === 'vulnerable' && !context.canViewVulnerable) return false;
-    // Chỉ hiển thị chương trình Đang triển khai, Đã hoàn thành (SRS 3.3 #1)
-    if (record.layer === 'programs' && !programStatus[record.status]) return false;
     return !['clubs', 'volunteers'].includes(record.layer) || context.national || descendant(record.unitId, context.unitId, units);
   }
-  // Lĩnh vực: Đội, CLB TNV và Địa bàn chương trình; Kỹ năng: Tình nguyện viên; Đơn vị: các lớp có đơn vị quản lý (SRS 3.1 #7)
-  const FIELD_LAYERS = ['clubs', 'programs'];
+  // Lĩnh vực: Đội, CLB TNV; Kỹ năng: Tình nguyện viên; Đơn vị: các lớp có đơn vị quản lý (SRS 3.1 #7)
+  const FIELD_LAYERS = ['clubs'];
   const SKILL_LAYERS = ['volunteers'];
-  const UNIT_LAYERS = ['offices', 'clubs', 'volunteers', 'goods', 'programs'];
+  const UNIT_LAYERS = ['offices', 'clubs', 'volunteers'];
   function matches(record, state, units, now = Date.now()) {
     if (state.province && record.province !== state.province) return false;
     if (state.ward && record.ward !== state.ward) return false;
@@ -107,5 +100,5 @@
     }
     return 'Khu vực đã chọn';
   }
-  return { layers, fields, skills, order, defaults, urgency, programStatus, TIME_RANGES, FIELD_LAYERS, SKILL_LAYERS, UNIT_LAYERS, fold, validPosition, descendant, displayName, timeWindow, inTime, initialState, eligible, matches, select, pointTitle };
+  return { layers, fields, skills, order, defaults, urgency, TIME_RANGES, FIELD_LAYERS, SKILL_LAYERS, UNIT_LAYERS, fold, validPosition, descendant, displayName, timeWindow, inTime, initialState, eligible, matches, select, pointTitle };
 });

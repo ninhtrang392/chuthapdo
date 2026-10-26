@@ -228,5 +228,12 @@ function createTeamMembers(root, countInput) {
   });
   render();
   // data(): bản sao danh sách thành viên (dùng cho phiếu xem trước PDF)
-  return { validate, syncLeader(values) { Object.assign(leader, values); render(); }, data: () => members.map(m => ({ ...m, skills: [...m.skills] })) };
+  // load: nạp danh sách từ hồ sơ có sẵn (tạo hồ sơ mới từ hồ sơ đã trả) — dòng Chủ nhiệm giữ nguyên định danh, chỉ lấy các cột còn lại
+  function load(list) {
+    const [head, ...rest] = list;
+    if (head) Object.assign(leader, { blood: head.blood, address: head.address, education: head.education, qualification: head.qualification, activity: head.activity, skills: [...head.skills] });
+    members = [leader, ...rest.map(m => ({ ...blank(m.role), ...m, id: nextId++, skills: [...m.skills] }))];
+    checked = new Set(); reviewed = true; render();
+  }
+  return { validate, load, syncLeader(values) { Object.assign(leader, values); render(); }, data: () => members.map(m => ({ ...m, skills: [...m.skills] })) };
 }

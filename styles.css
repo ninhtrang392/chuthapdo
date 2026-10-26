@@ -931,6 +931,112 @@ html.has-smoother{scroll-behavior:auto}
   .breadcrumb-current{max-width:100%}
 }
 
+/* ==================== PAGE: DANH SÁCH CHƯƠNG TRÌNH THIỆN NGUYỆN (chuong-trinh-thien-nguyen.html) ==================== */
+.cp-page{padding:var(--header-h) 0 clamp(56px,8vw,96px);background:#fff;color:var(--color-text)}
+
+/* ==================== SECTION: HERO CHƯƠNG TRÌNH ==================== */
+/* ---------- Ảnh nền bàn tay nâng trái tim, phủ tối ấm để chữ trắng dễ đọc ---------- */
+.cp-hero{position:relative;isolation:isolate;display:flex;align-items:center;min-height:clamp(260px,34vh,340px);padding:48px 0;overflow:hidden;background:#7a1d1f}
+.cp-hero::before{content:'';position:absolute;inset:0;z-index:-2;background:url('Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.png') 70% center / cover no-repeat}
+.cp-hero::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(40,12,8,.55) 0%,rgba(60,18,10,.62) 100%)}
+.cp-hero-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
+.cp-title{margin:0;font-size:clamp(30px,3.4vw,46px);font-weight:700;line-height:1.2;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.25)}
+.cp-lead{margin:10px 0 0;font-size:16px;line-height:24px;color:rgba(255,255,255,.9)}
+/* ---------- Tìm kiếm: ô trắng bo tròn + nút Tạo chiến dịch ---------- */
+.cp-search{display:flex;align-items:center;gap:12px;width:min(720px,100%);margin-top:28px}
+.cp-search-box{display:flex;flex:1;align-items:center;gap:10px;min-width:0;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.9);border-radius:var(--radius-btn);background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.18);transition:box-shadow .2s}
+.cp-search-box:focus-within{box-shadow:0 0 0 3px rgba(255,255,255,.45),0 8px 24px rgba(0,0,0,.18)}
+.cp-search-box .icon{flex:none;width:18px;height:18px;color:#8a9097}
+.cp-search-box input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;font:inherit;font-size:15px;color:var(--color-text)}
+.cp-search-box input::placeholder{color:#8a9097}
+.cp-create{flex:none;min-height:48px}
+
+/* ==================== SECTION: DANH SÁCH CHƯƠNG TRÌNH ==================== */
+/* Không bo khung: tiêu đề, bộ lọc và lưới thẻ nằm thẳng trên nền trang */
+.cp-list{margin-top:40px}
+/* ---------- Đầu danh sách: tiêu đề + nút Bộ lọc ---------- */
+.cp-list-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.cp-list-title{margin:0;font-size:22px;font-weight:700;line-height:30px;scroll-margin-top:calc(var(--header-h) + 24px)}
+.cp-filter-toggle{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:1px solid var(--color-border);border-radius:var(--radius-btn-sm);background:#fff;font:inherit;font-size:14px;font-weight:500;color:var(--color-text);cursor:pointer;transition:border-color .2s,background .2s}
+.cp-filter-toggle:hover{border-color:#d6d9de;background:var(--color-surface-alt)}
+.cp-filter-toggle[aria-expanded="true"]{border-color:var(--color-primary);background:#fdecec;color:var(--color-primary)}
+.cp-filter-toggle .icon{width:18px;height:18px}
+.cp-filter-count{display:grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--color-primary);font-size:12px;font-weight:700;color:#fff}
+.cp-filter-count[hidden]{display:none}
+/* ---------- Bảng lọc: 4 ô chọn + Xóa bộ lọc ---------- */
+.cp-filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;align-items:end;gap:16px;margin-top:16px;padding:16px 20px;border:1px solid var(--color-border);border-radius:16px;background:#fff}
+.cp-filters[hidden]{display:none}
+.cp-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:13px;font-weight:500;line-height:18px}
+.cp-clear{height:40px;padding:0 4px;border:0;background:none;font:inherit;font-size:14px;font-weight:500;color:var(--color-primary);cursor:pointer}
+.cp-clear:hover{text-decoration:underline}
+/* ---------- Lưới thẻ: 4 cột ---------- */
+.cp-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:20px}
+.cp-card{position:relative;display:flex;flex-direction:column;min-width:0;border:1px solid var(--color-border);border-radius:14px;background:#fff;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.cp-card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(20,30,50,.1)}
+.cp-card:focus-within{box-shadow:0 0 0 3px rgba(185,28,43,.25)}
+.cp-card-media{position:relative;background:var(--color-surface-alt);overflow:hidden}
+.cp-card-media img{display:block;width:100%;aspect-ratio:16 / 10;object-fit:cover;transition:transform .5s}
+.cp-card:hover .cp-card-media img{transform:scale(1.04)}
+/* Nhãn mức độ ưu tiên: góc trên trái ảnh, chấm màu theo mức (Khẩn cấp nền đỏ) */
+.cp-priority{position:absolute;top:10px;left:10px;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:#fff;font-size:12px;font-weight:600;line-height:18px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.cp-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.cp-priority.is-urgent{background:var(--color-primary);color:#fff}
+.cp-priority.is-medium{color:#b45309}
+.cp-priority.is-low{color:var(--color-green)}
+.cp-card-body{display:flex;flex:1;flex-direction:column;gap:8px;padding:14px 16px 16px}
+.cp-place{display:flex;align-items:center;gap:6px;margin:0;font-size:13px;line-height:18px;color:var(--color-text-muted)}
+.cp-place .icon{flex:none;width:14px;height:14px;color:var(--color-primary)}
+.cp-card-title{display:-webkit-box;min-height:44px;margin:0;overflow:hidden;font-size:15px;font-weight:600;line-height:22px;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
+.cp-card-title a{color:inherit}
+.cp-card:hover .cp-card-title a{color:var(--color-primary)}
+.cp-card-title a:focus-visible{outline:none}
+.cp-figures{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:auto;padding-top:4px}
+.cp-raised{font-size:20px;font-weight:700;line-height:28px;color:var(--color-text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cp-goal{font-size:12px;line-height:16px;color:var(--color-text-muted);white-space:nowrap}
+.cp-bar{height:6px;border-radius:999px;background:#fdecec;overflow:hidden}
+.cp-bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ec3a42,var(--color-primary))}
+.cp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;line-height:16px;color:var(--color-text-muted)}
+.cp-meta span{display:inline-flex;align-items:center;gap:4px}
+.cp-meta .icon{width:13px;height:13px}
+/* Nút Ủng hộ ngay: nằm trên lớp phủ .stretched để bấm được riêng */
+.cp-donate{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;align-self:flex-end;min-width:50%;height:34px;margin-top:4px;padding:0 16px;border-radius:var(--radius-btn-sm);background:linear-gradient(180deg,#ec3a42,var(--color-primary));font-size:13px;font-weight:600;color:#fff;transition:box-shadow .2s,filter .2s}
+.cp-donate:hover{color:#fff;filter:brightness(1.05);box-shadow:0 6px 14px rgba(185,28,43,.28)}
+.cp-donate:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
+.cp-empty{margin:24px 0 0;padding:40px 16px;border:1px dashed var(--color-border);border-radius:14px;font-size:14px;color:var(--color-text-muted);text-align:center}
+.cp-empty[hidden]{display:none}
+/* ---------- Phân trang: ô vuông bo góc, trang hiện tại nền đỏ ---------- */
+.cp-pager{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:28px}
+.cp-pager:empty{display:none}
+.cp-page-btn{display:grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border:1px solid var(--color-border);border-radius:8px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:var(--color-text);cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.cp-page-btn:hover:not(:disabled):not([aria-current]){border-color:var(--color-primary);color:var(--color-primary)}
+.cp-page-btn[aria-current="page"]{border-color:var(--color-primary);background:var(--color-primary);color:#fff}
+.cp-page-btn:disabled{color:#b4b9bf;cursor:default}
+.cp-page-btn .icon{width:16px;height:16px}
+.cp-page-btn.is-prev .icon{transform:scaleX(-1)}
+.cp-page-btn:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
+.cp-page-gap{min-width:20px;font-size:14px;color:var(--color-text-muted);text-align:center}
+
+/* ---------- Responsive: 3 → 2 → 1 cột ---------- */
+@media(max-width:1200px){
+  .cp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cp-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cp-clear{justify-self:start}
+}
+@media(max-width:900px){
+  .cp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+}
+@media(max-width:600px){
+  .cp-hero{padding:36px 0}
+  .cp-search{flex-direction:column;align-items:stretch}
+  .cp-list{margin-top:28px}
+  .cp-list-title{font-size:18px;line-height:26px}
+  .cp-filters{grid-template-columns:minmax(0,1fr)}
+  .cp-grid{grid-template-columns:minmax(0,1fr)}
+  .cp-donate{align-self:stretch}
+}
+@media(prefers-reduced-motion:reduce){.cp-card,.cp-card-media img{transition:none}.cp-card:hover{transform:none}.cp-card:hover .cp-card-media img{transform:none}}
+/* ==================== END PAGE: DANH SÁCH CHƯƠNG TRÌNH THIỆN NGUYỆN ==================== */
+
 /* ==================== PAGE: BẢN ĐỒ SỐ (ban-do-so.html) ==================== */
 .navigation a[aria-current="page"]{color:var(--color-primary)}
 .map-page{--st-critical:#e5232f;--st-short:#f39a2b;--st-near:#f2c230;--st-enough:#22a06b;--st-surplus:#2f6fe4;padding:calc(var(--header-h) + 16px) max(var(--gutter),calc((100% - 1760px) / 2)) 24px;background:#f4f5f7;color:var(--color-text)}
@@ -1365,6 +1471,8 @@ html.has-smoother{scroll-behavior:auto}
 .pf-btn-sm .icon{width:16px;height:16px}
 .pf-btn-primary{background:var(--red);color:#fff}
 .pf-btn-primary:hover{background:#d91d25}
+/* ---------- Nút bị khóa (vd. Nộp hồ sơ khi đã là thành viên đội, CLB): mờ 50%, không đổi màu khi rê chuột ---------- */
+.pf-btn:disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
 .pf-btn-green{background:#2f8f57;color:#fff}
 .pf-btn-green:hover{background:#14824f}
 .pf-btn-ghost{border-color:var(--color-border);background:#fff;color:var(--color-text)}
@@ -1403,6 +1511,7 @@ html.has-smoother{scroll-behavior:auto}
 .pf-adv-grid.is-programs{grid-template-columns:minmax(0,2fr) minmax(0,2fr) minmax(0,3fr) minmax(0,2fr)}
 .pf-adv-field .pf-reg-range{grid-template-columns:repeat(2,minmax(0,1fr))}
 .pf-adv-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:13px;font-weight:500;line-height:18px;color:var(--color-text)}
+.pf-adv-field[hidden]{display:none}
 .pf-adv-foot{display:flex;justify-content:flex-end;margin-top:12px}
 
 /* ---------- Bảng dữ liệu: ô gộp nhiều trường, mỗi trường 1 dòng ---------- */
@@ -1412,10 +1521,12 @@ html.has-smoother{scroll-behavior:auto}
 .pf-table.is-programs{min-width:1072px}
 .pf-table.is-vulnerable{min-width:880px}
 /* ---------- Đăng ký hồ sơ: hồ sơ đăng ký thành lập / gia nhập chi hội, đội, CLB ---------- */
-.pf-table.is-volunteer{min-width:760px}
-/* Nơi xử lý 300px · Ngày tạo 104px · Ngày nộp 104px · cột tên + mã nhận phần còn lại */
-.pf-table.is-volunteer th:nth-child(3){width:300px}
-.pf-table.is-volunteer th:nth-child(4),.pf-table.is-volunteer th:nth-child(5){width:104px}
+.pf-table.is-volunteer{min-width:900px}
+/* Nơi xử lý 232px · Trạng thái 140px · Ngày tạo 104px · Ngày nộp 104px · cột tên + mã nhận phần còn lại */
+.pf-table.is-volunteer th:nth-child(3){width:232px}
+.pf-table.is-volunteer th:nth-child(4){width:140px}
+.pf-table.is-volunteer th:nth-child(5),.pf-table.is-volunteer th:nth-child(6){width:104px}
+.pf-table.is-volunteer td:nth-child(4) .pf-badge{gap:6px;white-space:nowrap}
 .pf-table.is-volunteer .pf-col-actions{width:108px}
 .pf-icon-btn.is-danger:hover{color:var(--color-primary)}
 .pf-btn-caret{width:16px;height:16px;margin-right:-4px}
@@ -1742,6 +1853,8 @@ html.pf-reg-lock{overflow:hidden}
 /* Hàng 3 cột: Nơi ký · Ngày ký (hẹp 180, vừa dd/mm/yyyy) · Người đăng ký — 2 cột ngoài chia đôi phần còn lại (phần 4 Cam kết); màn hẹp xuống 1 cột */
 .pf-team-row3{display:grid;grid-column:1 / -1;grid-template-columns:minmax(0,1fr) 180px minmax(0,1fr);gap:16px 20px}
 @media(max-width:767px){.pf-team-row3{grid-template-columns:minmax(0,1fr)}}
+/* ==================== SECTION: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB — dùng chung khung, lưới 2 cột (.pf-fields), cam kết của form thành lập; không có quy tắc riêng ==================== */
+/* ==================== END SECTION: ĐĂNG KÝ GIA NHẬP ĐỘI, CLB ==================== */
 .pf-reg-checks:has(.pf-radio-group) legend{margin-bottom:0}
 .pf-reg-group{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;grid-column:1 / -1;margin-top:4px;padding-top:16px;border-top:1px solid var(--color-border)}
 .pf-reg-group h4{margin:0;font-size:14px;font-weight:600;line-height:20px;color:var(--color-text)}
@@ -1903,7 +2016,7 @@ html.pf-reg-lock{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.pf-reg-overlay,.pf-reg-panel{transition:none}}
 /* ==================== END SECTION: ĐĂNG KÝ CHƯƠNG TRÌNH ==================== */
 
-/* ==================== SECTION: XEM CHI TIẾT CHƯƠNG TRÌNH — modal phải (cùng cỡ Đăng ký): 3 ô thống kê · Tổng quan · Đơn vị & liên hệ · Nguồn lực · Hàng hóa · Phân công · Hồ sơ ==================== */
+/* ==================== SECTION: XEM CHI TIẾT CHƯƠNG TRÌNH — modal phải (cùng cỡ Đăng ký), bố cục trang chiến dịch: ảnh · gây quỹ · kê khai chi · tab (Hồ sơ chương trình = 3 ô thống kê · Tổng quan · Đơn vị & liên hệ · Nguồn lực · Hàng hóa · Phân công · Hồ sơ) · Cập nhật · Top 5 ==================== */
 /* ---------- Đầu modal: tiêu đề · mã • trạng thái • ngày tạo · lý do/ghi chú ---------- */
 .pf-view-sub{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .pf-view-sub .pf-badge{gap:6px;padding:2px 10px;border-radius:999px}
@@ -1913,6 +2026,8 @@ html.pf-reg-lock{overflow:hidden}
 
 /* ---------- Thân: các khối xếp dọc, cuộn chung ---------- */
 .pf-view-body{gap:16px;padding:16px 24px 24px;scroll-padding-top:16px}
+/* Khối có overflow (thanh tab, dải Top 5) không bị co lại trong thân cuộn */
+.pf-view-body > *{flex:none}
 
 /* ---------- Ô số liệu: biểu tượng màu info (nền xanh nhạt) · nhãn · giá trị ---------- */
 .pf-view-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -1994,8 +2109,125 @@ html.pf-reg-lock{overflow:hidden}
 .pf-view-doc-meta .pf-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
 .pf-view-doc-actions{display:flex;flex:none;gap:12px}
 
-/* ---------- Chân modal: chỉ nút Đóng bên phải ---------- */
-/* ---------- Chân modal: QR ủng hộ · Trang công khai (trái) · Đóng (phải) ---------- */
+/* ---------- Trang chiến dịch — dưới tiêu đề: nhãn lĩnh vực (xám, biểu tượng tim) · Khẩn cấp (đỏ) ---------- */
+.pf-tag.pf-pv-field{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;font-size:12px;line-height:20px}
+.pf-pv-field .icon{width:13px;height:13px}
+.pf-pv-urgent{padding:2px 10px;border-radius:999px;background:var(--color-primary);font-size:12px;font-weight:600;line-height:20px;color:#fff}
+
+/* ---------- Trang chiến dịch — đầu trang: bộ ảnh (trái) · gây quỹ, kê khai chi (phải) ---------- */
+.pf-pv-top{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr);align-items:start;gap:20px}
+.pf-pv-gallery{display:flex;flex-direction:column;gap:12px;min-width:0}
+.pf-pv-main{position:relative;margin:0;border-radius:12px;background:var(--color-surface-alt);overflow:hidden}
+.pf-pv-main img{display:block;width:100%;aspect-ratio:16 / 10;object-fit:cover}
+.pf-pv-nav{position:absolute;right:16px;bottom:16px;display:flex;gap:8px}
+.pf-pv-nav-btn{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:8px;background:#fff;color:var(--color-text);box-shadow:0 2px 8px rgba(20,30,50,.18);cursor:pointer}
+.pf-pv-nav-btn:hover{color:var(--color-primary)}
+.pf-pv-nav-btn .icon{width:18px;height:18px}
+.pf-pv-nav-btn.is-prev .icon{transform:scaleX(-1)}
+.pf-pv-thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.pf-pv-thumb{padding:0;border:2px solid transparent;border-radius:10px;background:var(--color-surface-alt);overflow:hidden;cursor:pointer}
+.pf-pv-thumb img{display:block;width:100%;aspect-ratio:4 / 3;object-fit:cover}
+.pf-pv-thumb[aria-pressed="true"]{border-color:var(--color-primary)}
+.pf-pv-thumb:focus-visible,.pf-pv-nav-btn:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
+.pf-pv-side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pf-pv-card{min-width:0;padding:20px;border:1px solid var(--color-border);border-radius:12px;background:#fff}
+.pf-pv-card h3{margin:0;font-size:16px;font-weight:600;line-height:24px;color:var(--color-text)}
+.pf-pv-cap{margin:0;font-size:12px;font-weight:500;line-height:16px;color:var(--color-text-muted);text-transform:uppercase}
+
+/* ---------- Khối gây quỹ: đã đạt · mục tiêu · thanh tiến độ · lượt ủng hộ, thời gian còn lại · nút · người vận động ---------- */
+.pf-pv-fund{display:flex;flex-direction:column;gap:16px}
+.pf-pv-fund-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.pf-pv-fund-head .is-goal{text-align:right}
+.pf-pv-raised{margin:4px 0 0;font-size:26px;font-weight:700;line-height:32px;color:var(--color-primary);font-variant-numeric:tabular-nums}
+.pf-pv-goal{margin:4px 0 0;font-size:14px;font-weight:600;line-height:20px;color:var(--color-text);font-variant-numeric:tabular-nums}
+.pf-pv-progress{display:flex;align-items:center;gap:12px;margin-top:-4px}
+.pf-pv-bar{flex:1;height:8px;border-radius:999px;background:#fdecec;overflow:hidden}
+.pf-pv-bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ec3a42,var(--color-primary))}
+.pf-pv-progress b{flex:none;font-size:13px;font-weight:700;line-height:18px;color:var(--color-primary)}
+.pf-pv-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;font-size:13px;line-height:18px;color:var(--color-text-muted)}
+.pf-pv-meta span{display:inline-flex;align-items:center;gap:6px}
+.pf-pv-meta .icon{width:15px;height:15px}
+.pf-pv-meta b{font-weight:600;color:var(--color-text)}
+.pf-pv-donate{width:100%;justify-content:center}
+.pf-pv-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:12px;margin-top:-4px}
+.pf-pv-actions .pf-btn{justify-content:center}
+.pf-pv-org{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--color-border)}
+.pf-pv-avatar{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#fde4e5,#f6c6c9);color:var(--color-primary)}
+.pf-pv-avatar.is-org{border-radius:12px;background:linear-gradient(135deg,#f6f7f9,#e7e9ed);color:var(--color-text)}
+.pf-pv-avatar .icon{width:20px;height:20px}
+.pf-pv-org-text{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex:1;min-width:0}
+.pf-pv-org-name{margin:0;font-size:14px;font-weight:600;line-height:20px;color:var(--color-text);overflow-wrap:anywhere}
+
+/* ---------- Kê khai khoản chi: lưới 2 × 2 ---------- */
+.pf-pv-spend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:12px 0 0}
+.pf-pv-spend-grid div{padding:12px 0}
+.pf-pv-spend-grid div:nth-child(even){padding-left:16px;border-left:1px solid var(--color-border)}
+.pf-pv-spend-grid div:nth-child(n+3){border-top:1px solid var(--color-border)}
+.pf-pv-spend-grid dt{font-size:13px;line-height:18px;color:var(--color-text-muted)}
+.pf-pv-spend-grid dd{margin:4px 0 0;font-size:18px;font-weight:700;line-height:26px;color:var(--color-text);font-variant-numeric:tabular-nums}
+.pf-pv-spend-grid dd .pf-view-empty{font-size:14px;font-weight:600}
+
+/* ---------- Tab nội dung: chữ + gạch chân đỏ ở tab đang chọn ---------- */
+.pf-pv-tabs{display:flex;gap:28px;border-bottom:1px solid var(--color-border);overflow-x:auto;scrollbar-width:none}
+.pf-pv-tabs button{flex:none;padding:12px 0;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;font-size:14px;font-weight:500;line-height:20px;color:var(--color-text-muted);cursor:pointer}
+.pf-pv-tabs button:hover{color:var(--color-text)}
+.pf-pv-tabs button[aria-selected="true"]{border-bottom-color:var(--color-primary);color:var(--color-primary)}
+.pf-pv-tabs button:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
+.pf-pv-panel[hidden]{display:none}
+.pf-pv-profile{display:flex;flex-direction:column;gap:16px}
+.pf-pv-panel .pf-timeline{margin:0}
+.pf-pv-donor{display:inline-flex;align-items:center;gap:10px}
+.pf-pv-donor .pf-pv-avatar{width:32px;height:32px}
+.pf-pv-donor .pf-pv-avatar .icon{width:16px;height:16px}
+.pf-pv-amount{color:var(--color-primary)}
+.pf-view-table .pf-reg-table.is-v-donors{min-width:720px;table-layout:fixed}
+.pf-reg-table.is-view.is-v-donors th:nth-child(2){width:34%}
+.pf-reg-table.is-view.is-v-donors th:nth-child(3){width:16%}
+.pf-reg-table.is-view.is-v-donors th:nth-child(4){width:14%}
+
+/* ---------- Câu chuyện: tiêu đề chữ hoa · dòng tóm tắt · đoạn văn · khung trích đỏ nhạt · Xem thêm ---------- */
+.pf-pv-story{display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:22px;color:var(--color-text)}
+.pf-pv-story p,.pf-pv-more p{margin:0}
+.pf-pv-more{display:flex;flex-direction:column;gap:12px}
+.pf-pv-more[hidden]{display:none}
+.pf-pv-story-title{margin:0;font-size:15px;font-weight:700;line-height:22px;text-transform:uppercase}
+.pf-pv-story-meta{color:var(--color-text-muted)}
+.pf-pv-quote{margin:4px 0;padding:16px 20px;border-radius:12px;background:#fdecec;color:var(--color-text)}
+.pf-pv-quote-title{font-size:18px;font-weight:700;line-height:26px;color:var(--color-primary);text-transform:uppercase}
+.pf-pv-link{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;padding:0;border:0;background:none;font-size:14px;font-weight:600;line-height:20px;color:var(--color-primary);cursor:pointer}
+.pf-pv-link .icon{width:16px;height:16px;transition:transform .2s}
+.pf-pv-link[aria-expanded="true"] .icon{transform:rotate(-90deg)}
+
+/* ---------- Cập nhật: ngày · đơn vị · tiêu đề · trích đoạn · 4 ảnh + ô "+N" ---------- */
+.pf-pv-updates{display:flex;flex-direction:column;gap:16px}
+.pf-pv-updates h3{font-size:18px}
+.pf-pv-updates .pf-view-none{padding:0}
+.pf-pv-update{display:flex;flex-direction:column;gap:6px;padding-left:16px;border-left:2px solid #f6c9cb}
+.pf-pv-update-meta{display:flex;flex-wrap:wrap;gap:6px;margin:0;font-size:12px;line-height:18px;color:var(--color-text-muted)}
+.pf-pv-update-meta b{font-weight:600;color:var(--color-text)}
+.pf-pv-update-title{margin:0;font-size:14px;font-weight:700;line-height:20px;text-transform:uppercase}
+.pf-pv-update-text{display:-webkit-box;margin:0;overflow:hidden;font-size:13px;line-height:20px;color:var(--color-text-muted);-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
+.pf-pv-update-photos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:8px}
+.pf-pv-update-photo{display:block;padding:0;border:0;border-radius:8px;background:var(--color-surface-alt);overflow:hidden;cursor:pointer}
+.pf-pv-update-photo img{display:block;width:100%;aspect-ratio:4 / 3;object-fit:cover;transition:transform .3s}
+.pf-pv-update-photo:hover img{transform:scale(1.04)}
+.pf-pv-update-photo.is-more{display:grid;place-items:center;aspect-ratio:4 / 3;background:#24272c;font-size:20px;font-weight:700;color:#fff;cursor:default}
+
+/* ---------- Top 5 người ủng hộ: dải nền ảnh mờ hết bề ngang thân modal, bục vinh danh như trang chủ (.ranking, .podium) ---------- */
+.pf-pv-top5{margin:8px -24px -24px;padding:32px 24px 40px}
+.pf-pv-top5-title{margin:0 0 56px;font-size:20px;font-weight:700;line-height:28px;color:var(--color-text)}
+.pf-pv-top5 .podium{max-width:860px}
+.pf-pv-top5 .podium-name{font-size:15px}
+.pf-pv-top5 .rank-1 .podium-name{font-size:17px}
+.pf-pv-top5 .podium-sub{margin-top:6px}
+.pf-pv-top5 .podium-total{margin-top:8px;font-size:22px}
+.pf-pv-top5 .rank-1 .podium-total{font-size:26px}
+.pf-pv-top5 .podium-base{--h:96px;--emblem:64px}
+.pf-pv-top5 .rank-1 .podium-base{--h:120px;--emblem:80px}
+.pf-pv-top5 .rank-3 .podium-base{--h:84px;--emblem:56px}
+.pf-pv-rest{grid-template-rows:none;grid-auto-flow:row;max-width:860px;margin-top:32px}
+
+/* ---------- Chân modal: Trang công khai (trái) · Đóng · Chỉnh sửa (phải) ---------- */
 .pf-view-foot{justify-content:flex-end}
 .pf-view-foot .pf-btn-public{margin-right:auto}
 .pf-view-foot .pf-btn[hidden]{display:none}
@@ -2003,6 +2235,7 @@ html.pf-reg-lock{overflow:hidden}
 .pf-btn-public:hover{border-color:#efa9ad;background:#fbdcdd}
 
 @media(max-width:1023px){
+  .pf-pv-top{grid-template-columns:minmax(0,1fr)}
   .pf-view-pair{grid-template-columns:minmax(0,1fr)}
   /* Tổng quan: ảnh banner + lĩnh vực, ưu tiên lên trên, dòng thông tin xuống dưới */
   .pf-view-overview{grid-template-columns:minmax(0,1fr)}
@@ -2012,6 +2245,12 @@ html.pf-reg-lock{overflow:hidden}
 }
 @media(max-width:767px){
   .pf-view-body{padding:16px}
+  .pf-pv-top5{margin:8px -16px -16px;padding:24px 16px 32px}
+  .pf-pv-top5-title{margin-bottom:24px}
+  .pf-pv-thumbs,.pf-pv-update-photos{gap:6px}
+  .pf-pv-fund-head{flex-wrap:wrap}
+  .pf-pv-fund-head .is-goal{text-align:left}
+  .pf-pv-raised{font-size:22px;line-height:28px}
   .pf-view-stats{grid-template-columns:minmax(0,1fr)}
   .pf-view-kv{grid-template-columns:minmax(0,1fr);gap:2px}
   .pf-view-doc{flex-wrap:wrap}
@@ -2072,6 +2311,19 @@ html.pf-reg-lock{overflow:hidden}
   .pf-view-foot .pf-tv-pdf{flex-basis:100%}
 }
 /* ==================== END SECTION: XEM CHI TIẾT HỒ SƠ THÀNH LẬP ĐỘI, CLB ==================== */
+
+/* ==================== SECTION: XEM CHI TIẾT HỒ SƠ GIA NHẬP ĐỘI, CLB — dùng chung modal & khối của Xem chi tiết hồ sơ thành lập ==================== */
+/* ---------- Cột phải: Thông tin tình nguyện viên + Đội, CLB muốn gia nhập xếp chồng, thẻ cuối kéo dài bằng thẻ Thông tin cá nhân ---------- */
+.pf-jv-stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pf-jv-stack > :last-child{flex:1}
+/* ---------- Trả lời từ đội, câu lạc bộ: mới nhất lên đầu ---------- */
+.pf-jv-replies{margin:0;padding:12px 20px;list-style:none;display:flex;flex-direction:column;gap:12px}
+.pf-jv-replies li{padding:12px;border-radius:8px;background:#f7f8f9}
+.pf-jv-replies p{margin:0;font-size:13px;line-height:20px;color:var(--color-text)}
+.pf-jv-reply-from{display:flex;flex-direction:column;margin-bottom:4px !important}
+.pf-jv-reply-from b{font-weight:600}
+.pf-jv-reply-from span{font-size:12px;line-height:18px;color:var(--color-text-muted)}
+/* ==================== END SECTION: XEM CHI TIẾT HỒ SƠ GIA NHẬP ĐỘI, CLB ==================== */
 
 /* ==================== SECTION: XEM TRƯỚC PHIẾU ĐĂNG KÝ ĐỘI, CLB (PDF) ==================== */
 /* ---------- Khung trình xem PDF: gần toàn màn, thanh công cụ tối + nền xám cuộn ---------- */

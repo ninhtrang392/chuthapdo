@@ -141,7 +141,7 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 /* ---------- Danh sách địa điểm: tên đối tượng + tên lớp ---------- */
 .bd-results button > span{display:flex;flex-direction:column;min-width:0}
 .bd-row-layer{font-size:11px;font-weight:400;line-height:16px;color:var(--color-text-muted)}
-/* ---------- Popup chi tiết ĐTK / Người yếu thế / Chương trình ---------- */
+/* ---------- Popup chi tiết Người yếu thế ---------- */
 .bd-popup.is-wide .leaflet-popup-content{width:420px!important}
 /* ---------- Khung popup: phần đầu dính trên, hàng nút (.bd-popup-actions, .bd-balance-foot) dính dưới khi cuộn, đường kẻ ngang hết chiều rộng; chừa 48px bên phải cho dấu X ---------- */
 /* Khoảng trống nhìn thấy (tính theo nét chữ, đã trừ khoảng thừa của line-height): viền → nhãn lớp ~24px, nhãn → tiêu đề ~17px, tiêu đề → đường kẻ ~23px, đường kẻ → dòng đầu ~20px */
@@ -165,20 +165,9 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 .bd-detail dd .pf-badge{font-size:11px;line-height:16px}
 .bd-popup-sub{margin:20px 0 8px;font-size:13px;font-weight:600}
 .bd-goods-scroll{overflow-x:auto}
-.bd-goods{width:100%;border-collapse:collapse;font-size:11px;line-height:16px}
-.bd-goods th{padding:6px;font-weight:500;color:var(--color-text-muted);text-align:left;white-space:nowrap}
-.bd-goods td{padding:6px;border-top:1px solid var(--color-border);vertical-align:middle}
-.bd-goods small{color:var(--color-text-muted)}
-.bd-goods .pf-badge{font-size:11px;line-height:16px;padding:0 6px}
-.bd-goods .is-num,.bd-balance .is-num,.bd-supply-table .is-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.bd-expiry{display:inline-flex;align-items:center;gap:4px;font-weight:700;color:#b45309}
-.bd-expiry .icon{width:12px;height:12px}
+.bd-balance .is-num,.bd-supply-table .is-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .bd-popup-actions .button .icon{width:14px;height:14px}
 .bd-popup-actions a.button-primary,.bd-popup-actions a.button-primary:hover{color:#fff}
-.bd-cover{position:relative;height:120px;margin:0 0 12px;border-radius:10px;background:var(--color-surface-alt);overflow:hidden}
-.bd-cover img{display:block;width:100%;height:100%;object-fit:cover}
-.bd-cover .pf-badge{position:absolute;top:8px;left:8px;font-size:11px;line-height:16px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-.bd-link{color:#2257b8;overflow-wrap:anywhere}
 .bd-popup-table.is-3-cols th:first-child{width:40%}
 .bd-popup-table .pf-badge{font-size:12px;line-height:20px;padding:0 8px;white-space:nowrap}
 
@@ -354,6 +343,10 @@ body.bd-fullscreen{overflow:hidden}body.bd-fullscreen>.header{visibility:hidden}
 .bd-map-tag.is-source,.bd-map-tag.is-target{transform:translate(-50%,calc(-100% - 16px))}
 .bd-map-tag.is-source .icon{color:#8A5A2B}
 .bd-map-tag.is-target .icon{color:var(--color-primary)}
+/* ---------- Chủ quyền: nhãn Quần đảo Hoàng Sa, Quần đảo Trường Sa — chữ nghiêng xanh biển, viền chữ trắng để đọc được trên mọi nền ---------- */
+.bd-island{position:absolute;display:flex;flex-direction:column;align-items:center;font-size:13px;font-style:italic;font-weight:700;line-height:16px;color:#0b4f8a;white-space:nowrap;text-shadow:1px 0 #fff,-1px 0 #fff,0 1px #fff,0 -1px #fff,1px 1px #fff,-1px -1px #fff,1px -1px #fff,-1px 1px #fff,0 0 4px #fff;transform:translate(-50%,-50%)}
+.bd-island small{font-size:11px;font-weight:600;line-height:14px}
+.bd-dark-base .bd-island{color:#cfe6ff;text-shadow:1px 0 #1d2630,-1px 0 #1d2630,0 1px #1d2630,0 -1px #1d2630,1px 1px #1d2630,-1px -1px #1d2630,1px -1px #1d2630,-1px 1px #1d2630,0 0 4px #1d2630}
 .bd-storm-eye{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(124,77,219,.18);color:#7c4ddb}
 .bd-storm-eye .icon{width:26px;height:26px;animation:bd-spin 3s linear infinite}
 @keyframes bd-spin{to{transform:rotate(-360deg)}}

@@ -25,6 +25,20 @@
   let oceanTile = null;
   // Lớp độ sâu đại dương chỉ có dữ liệu tới zoom 10 → phóng to hơn thì nước dùng màu xanh phẳng
   const OCEAN_MAX_ZOOM = 10;
+  // Khung nhìn toàn quốc: đất liền + Quần đảo Hoàng Sa, Quần đảo Trường Sa (kinh độ tới 115°E)
+  const VIETNAM_BOUNDS = [[8.3, 102], [23.5, 115]];
+  // ---------- Chủ quyền: nhãn Quần đảo Hoàng Sa, Quần đảo Trường Sa (luôn hiện trên mọi nền, không bấm được) ----------
+  const ISLANDS = [
+    { name: 'Quần đảo Hoàng Sa', at: [16.5, 112] },
+    { name: 'Quần đảo Trường Sa', at: [10.2, 114.2] },
+  ];
+  function addIslands() {
+    const pane = map.createPane('bd-sovereignty');
+    pane.style.zIndex = 450;
+    pane.style.pointerEvents = 'none';
+    ISLANDS.forEach((island) => L.marker(island.at, { pane: 'bd-sovereignty', interactive: false, keyboard: false,
+      icon: L.divIcon({ className: 'bd-map-label-host', html: `<span class="bd-island">${esc(island.name)}<small>(Việt Nam)</small></span>`, iconSize: null }) }).addTo(map));
+  }
   const syncOcean = () => { if (map) $('#digital-map').classList.toggle('is-ocean', Boolean(oceanTile) && map.getZoom() <= OCEAN_MAX_ZOOM); };
   const toast = (message) => {
     $('#bd-toast').textContent = message;
@@ -82,42 +96,16 @@
   const dayText = (value) => { const text = dateText(value); return text === '—' ? text : text.split(', ')[1]; };
   // Ảnh: tối đa 3 ảnh thu nhỏ, ảnh cuối ghi +N khi còn ảnh khác (SRS 3.1 #12)
   const thumbs = (photos = [], total = photos.length) => photos.length ? `<span class="bd-thumbs">${photos.slice(0, 3).map((src, i) => `<span class="bd-thumb"><img src="${esc(src)}" alt="" loading="lazy" />${i === 2 && total > 3 ? `<b>+${total - 3}</b>` : ''}</span>`).join('')}</span>` : '—';
-  // HSD dạng tháng/năm; còn dưới ngưỡng (mặc định 3 tháng, cấu hình trong Quản lý danh mục) → màu cảnh báo kèm biểu tượng
-  const expiryCell = (value) => {
-    if (!value) return '—';
-    const [year, month] = value.split('-').map(Number);
-    const today = new Date();
-    const left = year * 12 + month - (today.getFullYear() * 12 + today.getMonth() + 1);
-    const text = `${String(month).padStart(2, '0')}/${year}`;
-    return left < (data.context.expiryWarnMonths ?? 3) ? `<span class="bd-expiry" title="Sắp hết hạn sử dụng">${text}${icon('alert')}</span>` : text;
-  };
   const dl = (rows) => `<dl class="bd-detail">${rows.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join('')}</dl>`;
   // ---------- Khung popup: phần đầu (nút quay lại · nhãn lớp · tên, dấu X cùng hàng nhãn) · đường kẻ ngang · phần thân ----------
   const frame = (head, body, back = '') => `<div class="bd-popup-header">${back}${head}</div><div class="bd-popup-body">${body}</div>`;
   const kindLabel = (record, extra = '') => { const layer = M.layers[record.layer]; return `<div class="bd-popup-kind" style="--layer-color:${layer.color}">${icon(layer.icon)}${esc(layer.name)}${extra}</div>`; };
-  // ---------- Popup chi tiết Điểm tập kết hàng hóa (SRS 3.1 #12–15) ----------
-  function goodsHtml(r, back) {
-    const goods = (r.goods || []).map((g) => `<tr><td>${badge(g.kind, g.kind === 'Tiền' ? 'blue' : 'orange')}</td><td>${esc(g.item)} <small>(${esc(g.unit)})</small></td><td class="is-num">${fmt.format(g.stock)}</td><td class="is-num">${fmt.format(g.given)}</td><td class="is-num">${expiryCell(g.expiry)}</td></tr>`).join('');
-    return frame(`${kindLabel(r)}<div class="bd-popup-head"><h3>${esc(r.name)}</h3>${r.status === 'paused' ? badge('Tạm dừng', 'orange') : badge('Đang hoạt động', 'green')}</div>`, `${thumbs(r.photos, r.photoCount)}
-      ${dl([['Địa chỉ cụ thể', esc(r.address)], ['Thuộc chương trình', r.program ? `<a href="${esc(r.program.url)}" target="_blank" rel="noopener">${esc(r.program.name)}</a>` : '—'], ['Đơn vị phụ trách', esc(r.unit || '—')], ['Người phụ trách', esc([r.manager, r.phone].filter(Boolean).join(' · ') || '—')], ['Thời gian tập kết', `${dayText(r.from)} – ${dayText(r.to)}`]])}
-      <p class="bd-popup-sub">Hàng hóa đang lưu trữ</p>
-      <div class="bd-goods-scroll"><table class="bd-goods"><thead><tr><th scope="col">Loại</th><th scope="col">Hàng hóa</th><th scope="col">Tồn hiện tại</th><th scope="col">Đã phân phát</th><th scope="col">HSD</th></tr></thead><tbody>${goods || '<tr><td colspan="5">Chưa có hàng hóa.</td></tr>'}</tbody></table></div>
-      <div class="bd-popup-actions"><button type="button" class="button button-outline" data-directions="${esc(r.id)}">Chỉ đường</button>${r.program ? `<a class="button button-primary" href="${esc(r.program.url)}" target="_blank" rel="noopener">Xem chương trình${icon('chevron-right')}</a>` : ''}</div>`, back);
-  }
   // ---------- Popup chi tiết hồ sơ Người yếu thế (SRS 3.2 #3–6) ----------
   function vulnerableHtml(r, back) {
     const level = M.urgency[r.urgency] || M.urgency.normal;
     return frame(`${kindLabel(r)}<div class="bd-popup-head"><h3>Hồ sơ ${esc(r.code)}</h3>${badge(level.label, level.tone)}</div>`, `
       ${dl([['Mã hồ sơ', esc(r.code)], ['Địa chỉ cụ thể', esc(r.address)], ['Loại đối tượng', esc(r.kind)], ['Nhóm đối tượng yếu thế', esc(r.group)], ['Mức độ cấp thiết', `${badge(level.label, level.tone)} <small>đánh giá ${dayText(r.date)}</small>`], ['Nhu cầu trợ giúp', tags(r.needs)], ['Hình ảnh', thumbs(r.photos, r.photoCount)]])}
       <div class="bd-popup-actions"><button type="button" class="button button-outline" data-directions="${esc(r.id)}">Chỉ đường</button><a class="button button-primary" href="${esc(r.profileUrl || 'ho-so.html#nguoi-yeu-the')}" target="_blank" rel="noopener">Xem thông tin chi tiết${icon('chevron-right')}</a></div>`, back);
-  }
-  // ---------- Popup chi tiết chương trình thiện nguyện (SRS 3.3 #2–4) ----------
-  function programHtml(r, back) {
-    const status = M.programStatus[r.status];
-    const link = new URL(r.url, location.href).href;
-    return frame(`${kindLabel(r)}<h3>${esc(r.name)}</h3>`, `<div class="bd-cover"><img src="${esc(r.cover)}" alt="" loading="lazy" />${badge(status.label, status.tone)}</div>
-      ${dl([['Mã chương trình', esc(r.id)], ['Lĩnh vực', tags(r.fields)], ['Thời gian triển khai', `${dayText(r.from)} – ${dayText(r.to)}`], ['Đối tượng tạo', esc(r.creatorType)], ['Tên, SĐT', esc(`${r.owner} · ${r.phone}`)], ['Link chương trình', `<a class="bd-link" href="${esc(link)}" target="_blank" rel="noopener">${esc(link.replace(/^https?:\/\//, ''))}</a>`], ['Hình ảnh', thumbs(r.photos, r.photoCount)]])}
-      <div class="bd-popup-actions"><button type="button" class="button button-outline" data-copy-link="${esc(link)}">Sao chép link</button><a class="button button-primary" href="${esc(r.url)}" target="_blank" rel="noopener">Xem chương trình${icon('chevron-right')}</a></div>`, back);
   }
   function detailHtml(record) {
     const rows = [];
@@ -129,19 +117,18 @@
       rows.push(['Điện thoại', esc(record.phone || '—')], ['Đơn vị quản lý', esc(manager)], ['Chuyên môn', tags(record.skills)], ['Trực tuyến lần cuối', esc(dateText(record.lastSeen))], ['Địa chỉ', esc(record.address || '—')]);
     }
     if (['police', 'medical'].includes(record.layer)) rows.push(['Địa chỉ', esc(record.address || '—')]);
+    if (record.layer === 'humanitarian') rows.push(['Địa chỉ', esc(record.address || '—')], ['Đơn vị quản lý trực tiếp', esc(unitName(record.unitId))], ['Loại hình/chức năng', esc(record.kind || '—')], ['Cấp độ', esc(record.level || '—')], ['Nhu cầu địa phương/căn cứ lựa chọn', esc(record.basis || '—')], ['Nhóm đối tượng hưởng lợi', esc(record.beneficiaries || '—')], ['Số điện thoại', esc(record.phone || '—')]);
     // Lớp chưa có mockup popup (SRS 1.2 ngoài phạm vi): thông tin chung; tên và loại đã ở phần đầu popup
-    if (['fire', 'shelters', 'relief', 'kitchens', 'blood', 'firstaid'].includes(record.layer)) rows.push(['Địa chỉ', esc(record.address || '—')]);
+    if (['fire', 'blood', 'firstaid'].includes(record.layer)) rows.push(['Địa chỉ', esc(record.address || '—')]);
     return dl(rows);
   }
   const mayView = (record) => ['offices', 'clubs', 'volunteers'].includes(record.layer) && source.canViewRecord?.(record, data.context) === true;
   const viewLabel = (record) => record.layer === 'volunteers' ? 'Xem hồ sơ' : record.layer === 'clubs' ? 'Xem thông tin đội, CLB' : 'Xem thông tin đơn vị';
-  const WIDE_POPUP = ['goods', 'vulnerable', 'programs'];
+  const WIDE_POPUP = ['vulnerable'];
   // Lớp gom theo xã trên bản đồ: mọi lớp trừ Trụ sở Hội. Bấm số của xã mở danh sách (cột theo M.layers[key].columns), bấm tên mở chi tiết
   const WARD_LAYERS = M.order.filter((key) => key !== 'offices');
   function popupHtml(record, back = '') {
-    if (record.layer === 'goods') return goodsHtml(record, back);
     if (record.layer === 'vulnerable') return vulnerableHtml(record, back);
-    if (record.layer === 'programs') return programHtml(record, back);
     return frame(`${kindLabel(record)}<h3>${esc(record.name)}</h3>`, `${detailHtml(record)}<div class="bd-popup-actions">${record.layer !== 'volunteers' ? `<button type="button" class="button ${mayView(record) ? 'button-outline' : 'button-primary'}" data-directions="${esc(record.id)}">Chỉ đường</button>` : ''}${mayView(record) ? `<button type="button" class="button button-primary" data-profile="${esc(record.id)}">${viewLabel(record)}</button>` : ''}</div>`, back);
   }
   // Mũi nhọn popup chỉ đúng đỉnh biểu tượng đã chọn (ghim neo ở đáy, cụm neo ở tâm): đo khoảng từ điểm neo tới mép trên icon
@@ -202,11 +189,9 @@
     if (r.layer === 'offices') return [esc(r.leader || '—')];
     if (r.layer === 'clubs') return [esc((r.fields || []).join('; ') || '—')];
     if (r.layer === 'volunteers') return [esc((r.skills || []).join('; ') || '—')];
-    if (r.layer === 'goods') return [esc(r.program?.name || '—')];
     // Trụ sở công an, Cơ sở y tế: cột Địa chỉ chỉ gồm số nhà, đường (UC-BD 8.4, 8.5); địa chỉ đầy đủ ở popup chi tiết
     if (['police', 'medical'].includes(r.layer)) return [esc(r.street || '—')];
     if (r.layer === 'vulnerable') { const level = M.urgency[r.urgency] || M.urgency.normal; return [esc(r.group), badge(level.label, level.tone)]; }
-    if (r.layer === 'programs') { const status = M.programStatus[r.status]; return [badge(status.label, status.tone)]; }
     return [esc(r.address || '—')];
   }
   function showPointList(rows, latlng, element) {
@@ -223,7 +208,7 @@
       const group = keys.length > 1 ? `<h4 style="--layer-color:${M.layers[key].color}">${icon(M.layers[key].icon)}${esc(M.layers[key].name)}${count(items.length)}</h4>` : '';
       return `${group}<table class="bd-popup-table is-${M.layers[key].columns.length}-cols"><thead><tr>${M.layers[key].columns.map((c) => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${items.map((r) => `<tr><td><button type="button" data-point-record="${esc(r.id)}">${esc(name(r))}</button></td>${pointCells(r).map((cell) => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
     }).join('');
-    const wide = rows.some((r) => ['vulnerable', 'goods', 'programs'].includes(r.layer));
+    const wide = rows.some((r) => WIDE_POPUP.includes(r.layer));
     showPopup(latlng, frame(`${kind}<h3>${esc(title)}</h3>`, `<div class="bd-popup-group">${body}</div>`), { wide, anchor: element });
     highlight(element);
   }
@@ -239,7 +224,7 @@
     groups.forEach((group) => group.clearLayers());
     markers.clear();
     const rows = state.focusedId ? result.rows.filter((r) => r.id === state.focusedId) : result.rows;
-    // ---------- Tình nguyện viên, Điểm tập kết hàng hóa: gom theo xã, mỗi xã một biểu tượng số không tách nhỏ hơn; bấm số mở danh sách của xã ----------
+    // ---------- Các lớp trừ Trụ sở Hội: gom theo xã, mỗi xã một biểu tượng số không tách nhỏ hơn; bấm số mở danh sách của xã ----------
     const wards = new Map();
     if (!state.focusedId) rows.filter((r) => WARD_LAYERS.includes(r.layer) && r.ward).forEach((r) => {
       const id = `${r.layer}|${r.province}|${r.ward}`;
@@ -305,7 +290,7 @@
     M.order.forEach((key) => {
       const group = L.markerClusterGroup ? L.markerClusterGroup({ maxClusterRadius: 42, showCoverageOnHover: false, zoomToBoundsOnClick: false, spiderfyOnMaxZoom: false, animate: false,
         iconCreateFunction: (cluster) => {
-          // Biểu tượng xã (Tình nguyện viên, Điểm tập kết) mang sẵn số đối tượng: cụm cộng dồn theo số đối tượng, không đếm theo số biểu tượng
+          // Biểu tượng xã mang sẵn số đối tượng: cụm cộng dồn theo số đối tượng, không đếm theo số biểu tượng
           const count = cluster.getAllChildMarkers().reduce((n, marker) => n + (marker.options.count || 1), 0); const size = count > 99 ? 48 : count > 9 ? 42 : 36;
           return L.divIcon({ className: 'bd-cluster-host', html: `<span class="bd-cluster" style="--layer-color:${M.layers[key].color}" aria-label="${esc(M.layers[key].name)}: ${fmt.format(count)} ${esc(M.layers[key].unit)}">${fmt.format(count)}</span>`, iconSize: [size, size] });
         },
@@ -320,7 +305,7 @@
           const all = same ? result.rows.filter((r) => coordinatesEqual(r, rows[0])) : rows;
           showPointList(all, event.layer.getLatLng(), event.layer.getElement());
         } else if (WARD_LAYERS.includes(key)) {
-          // Cụm Tình nguyện viên / Điểm tập kết hàng hóa: phóng tới vùng của cụm để tách thành các xã (mỗi xã một biểu tượng số)
+          // Cụm các lớp gom theo xã: phóng tới vùng của cụm để tách thành các xã (mỗi xã một biểu tượng số)
           closePopup();
           const before = map.getZoom();
           const bounds = L.latLngBounds(children.map((marker) => marker.getLatLng()));
@@ -340,7 +325,8 @@
     map.on('zoomend', syncOcean);
     map.on('zoomend', () => { $('#bd-zoom-in').disabled = map.getZoom() >= map.getMaxZoom(); $('#bd-zoom-out').disabled = map.getZoom() <= map.getMinZoom(); });
     changeBase('basic');
-    map.fitBounds(data.context.national ? [[8.3, 102], [23.5, 110]] : data.context.bounds, { ...pad(), animate: false });
+    addIslands();
+    map.fitBounds(data.context.national ? VIETNAM_BOUNDS : data.context.bounds, { ...pad(), animate: false });
     let mobileLayout = window.innerWidth <= 650;
     new ResizeObserver(() => {
       map.invalidateSize();
@@ -382,9 +368,8 @@
   const LAYER_GROUPS = [
     ['Tổ chức hội', [['offices', 'Trụ sở hội'], ['clubs', 'Đội, CLB tình nguyện viên']]],
     ['Con người', [['volunteers', 'Tình nguyện viên'], ['vulnerable', 'Người yếu thế']]],
-    ['Hạ tầng hỗ trợ', [['medical', 'Bệnh viện, cơ sở y tế'], ['police', 'Công an'], ['fire', 'Cơ sở PCCC'], ['shelters', 'Trường học, nhà văn hóa, nơi sơ tán, UBND']]],
-    ['Hạ tầng nhân đạo', [['goods', 'Điểm tập kết hàng hóa'], ['relief', 'Điểm cứu trợ'], ['kitchens', 'Bếp ăn'], ['blood', 'Điểm hiến máu'], ['firstaid', 'Trạm sơ cấp cứu']]],
-    ['Chương trình', [['programs', 'Địa bàn triển khai chương trình thiện nguyện']]],
+    ['Hạ tầng hỗ trợ', [['medical', 'Bệnh viện, cơ sở y tế'], ['police', 'Công an'], ['fire', 'Cơ sở PCCC']]],
+    ['Hạ tầng nhân đạo', [['humanitarian', 'Điểm nhân đạo'], ['blood', 'Điểm hiến máu'], ['firstaid', 'Trạm sơ cấp cứu']]],
   ];
   // Liên kết "Bật tất cả" (SRS 3.1 #6) nằm cùng hàng tiêu đề "Lớp bản đồ"; khi mọi lớp đang bật thì đổi thành "Tắt tất cả"
   $('#bd-layers').insertAdjacentHTML('beforeend', LAYER_GROUPS.map(([title, items], g) => `<div class="bd-layer-group" role="group" aria-labelledby="bd-layer-group-${g}"><h3 class="bd-layer-group-title"><button type="button" class="bd-layer-group-toggle" id="bd-layer-group-${g}" aria-expanded="true" aria-controls="bd-layer-group-body-${g}">${esc(title)}${icon('chevron-down')}</button></h3><div class="bd-layer-group-body" id="bd-layer-group-body-${g}">${items.map(([key, label]) => `<label class="md-layer bd-layer" style="--layer-color:${M.layers[key].color}"><span class="md-layer-icon" aria-hidden="true">${icon(M.layers[key].icon)}</span><span class="md-layer-text"><strong class="bd-layer-name">${esc(label)}</strong><small><span data-count="${key}">0</span> ${esc(M.layers[key].unit)}</small></span><input class="md-switch" type="checkbox" data-layer="${key}" ${state.layers.has(key) ? 'checked' : ''} /></label>`).join('')}</div></div>`).join(''));
@@ -435,7 +420,7 @@
   }
   function fitRegion() {
     if (!map) return;
-    if (!state.province) { map.fitBounds(data.context.national ? [[8.3, 102], [23.5, 110]] : data.context.bounds, { ...pad(), animate: false }); return; }
+    if (!state.province) { map.fitBounds(data.context.national ? VIETNAM_BOUNDS : data.context.bounds, { ...pad(), animate: false }); return; }
     // Nguồn thật có thể cung cấp bounds cho tỉnh/xã; mẫu dùng tọa độ gần đúng.
     const province = data.locations.find((p) => p.id === state.province);
     const ward = province?.wards.find((w) => w.id === state.ward);
@@ -561,7 +546,7 @@
   wideMap.addEventListener('change', () => panelToggles.forEach((button) => setPanel(button, button.getAttribute('aria-expanded') === 'true')));
   // ---------- Thao tác popup và tra cứu hồ sơ nguồn ----------
   function showRecordDialog(record) {
-    $('#bd-record-title').textContent = record.layer === 'volunteers' ? 'Thông tin tình nguyện viên' : record.layer === 'vulnerable' ? 'Hồ sơ người yếu thế' : record.layer === 'programs' ? 'Thông tin chương trình' : ['offices', 'clubs'].includes(record.layer) ? 'Thông tin tổ chức' : 'Thông tin địa điểm';
+    $('#bd-record-title').textContent = record.layer === 'volunteers' ? 'Thông tin tình nguyện viên' : record.layer === 'vulnerable' ? 'Hồ sơ người yếu thế' : ['offices', 'clubs'].includes(record.layer) ? 'Thông tin tổ chức' : 'Thông tin địa điểm';
     $('#bd-record-content').innerHTML = WIDE_POPUP.includes(record.layer) ? popupHtml(record) : `<h3>${esc(record.name)}</h3>${detailHtml(record)}`;
     $('#bd-record-dialog').showModal();
   }
@@ -592,20 +577,7 @@
     if (route) directions(route.dataset.directions);
     if (profile) openProfile(profile.dataset.profile);
     if (event.target.closest('[data-back-list]') && lastList) showPointList(...lastList);
-    const copy = event.target.closest('[data-copy-link]');
-    if (copy) copyLink(copy.dataset.copyLink);
   });
-  // NL03: sao chép link chương trình → TB03
-  async function copyLink(link) {
-    try { await navigator.clipboard.writeText(link); }
-    catch {
-      const field = Object.assign(document.createElement('textarea'), { value: link });
-      document.body.append(field); field.select();
-      const copied = document.execCommand('copy'); field.remove();
-      if (!copied) { toast('Không sao chép được link. Vui lòng thử lại.'); return; }
-    }
-    toast('Đã sao chép link chương trình.');
-  }
   // ---------- UC-BD-08: nền, vị trí, zoom và toàn màn hình trong cửa sổ ----------
   function setBases(open) { $('#bd-bases').hidden = !open; $('#bd-base-toggle').setAttribute('aria-expanded', String(open)); }
   $('#bd-base-options').innerHTML = Object.entries(bases).map(([key, base]) => `<button type="button" class="bd-base-option" data-base="${key}" aria-pressed="${key === 'basic'}"><span class="bd-base-preview ${base.preview}" aria-hidden="true"></span>${base.name}</button>`).join('');
