@@ -3295,7 +3295,7 @@ html.pf-reg-lock{overflow:hidden}
 /* Dùng lại: .breadcrumb · .sponsor-kicker · .section-title · .sponsor-lead · .button · .link-arrow · .impact-widget (dải số liệu) ·
    .partner-logo (ô logo) · .founders-dot (chấm chuyển trang) · .cp-card (thẻ người đồng hành); chỉ thêm bố cục banner, lưới và thẻ */
 .dh-page{padding-top:var(--header-h);background:#fff;color:var(--color-text)}
-.dh-page .partner-logo .logo-gtinx{object-fit:cover} /* logo GTINX có lề trong suốt rộng → cắt sát chữ */
+.dh-page .partner-logo .logo-gtinx{object-fit:contain} /* trang này dùng gtinx.png đã cắt sát chữ → contain, không cắt */
 .partner-logo.is-text{display:grid;place-items:center;font-size:15px;font-weight:600;line-height:20px;color:var(--color-text);text-align:center} /* logo lỗi tải → tên đơn vị (NL03) */
 .dh-empty{margin:0;padding:24px;border-radius:16px;background:var(--color-surface-alt);font-size:15px;color:var(--color-text-muted);text-align:center}
 .dh-head{align-items:center;margin-bottom:24px}
@@ -3322,14 +3322,14 @@ html.pf-reg-lock{overflow:hidden}
 .dh-founder-logo,.dh-founder-role{position:relative;z-index:3;margin:0;transform:skewY(8deg)} /* logo, chữ đứng thẳng trong khung nghiêng */
 .dh-founder-logo{display:grid;place-items:center;width:100%;height:68px;overflow:hidden}
 .dh-founder-logo img{display:block;width:150px;max-width:100%;height:46px;object-fit:contain;transform:scale(var(--zoom,1))}
-.dh-founder-logo .logo-gtinx{width:140px;height:32px;object-fit:cover}
+.dh-founder-logo .logo-gtinx{width:140px;height:32px;object-fit:contain} /* gtinx.png 445×107 đã cắt sát chữ, nét (webp 6713px thu nhỏ bị răng cưa) */
 .dh-founder-logo .logo-camel{width:112px;height:68px} /* logo Camel gần vuông → cho cao hơn để cân với logo ngang */ /* logo GTINX có lề trong suốt rộng → cắt sát chữ */
 .dh-founder-logo.is-text{font-size:18px;font-weight:700} /* logo lỗi tải → tên đơn vị (NL03) */
-.dh-founder-role{font-size:20px;font-weight:600;line-height:28px;color:#1d2025;white-space:nowrap}
+.dh-founder-role{font-size:16px;font-weight:600;line-height:24px;color:#1d2025;white-space:nowrap}
 .dh-founder-role::before{content:'';display:block;width:40px;height:3px;margin:16px auto;border-radius:2px;background:var(--color-primary)} /* gạch đỏ ngắn giữa logo và chữ */
 .dh-founder-photo{position:relative;z-index:1;display:block;width:calc(100% + 28px);height:220px;margin:auto -14px 0;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 35%);mask-image:linear-gradient(180deg,transparent 0,#000 35%)}
 .dh-founder-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
-@media(max-width:1600px){.dh-founder-role{font-size:18px;line-height:26px}.dh-banner .dh-mini-stats dd span{font-size:22px;line-height:30px}}
+@media(max-width:1600px){.dh-banner .dh-mini-stats dd span{font-size:22px;line-height:30px}}
 
 /* ---------- Thông điệp: thẻ nền đỏ (Banner 1.png) · chân dung trái · trích dẫn phải · dải lụa trái tim chạy dọc đáy (sau chân dung) ---------- */
 .dh-quote{position:relative;z-index:2;background:#b80d14 url('Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/Banner%201.png') center / cover no-repeat;overflow:hidden;color:#fff} /* dải lụa nằm gọn trong khối đỏ */
@@ -3497,7 +3497,7 @@ html.pf-reg-lock{overflow:hidden}
   .dh-founder-logo .logo-camel{width:96px;height:56px}
   .dh-founder-logo img{width:120px;height:36px}
   .dh-founder-logo .logo-gtinx{width:112px;height:26px}
-  .dh-founder-role{font-size:15px;line-height:21px}
+  .dh-founder-role{font-size:14px;line-height:20px}
   .dh-founder-role::before{margin:12px auto}
   .dh-lead{font-size:16px;line-height:26px}
   .dh-builders-card{padding:24px 20px}
