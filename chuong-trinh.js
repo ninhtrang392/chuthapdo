@@ -981,20 +981,26 @@ const maskEmail = (email) => {
 };
 const thanksDialog = $('#pv-thanks');
 let thanksTx = null;
+const thanksTime = (ms) => { const at = new Date(ms); return `${pad2(at.getHours())}:${pad2(at.getMinutes())}, ${pad2(at.getDate())}/${pad2(at.getMonth() + 1)}/${at.getFullYear()}`; };
 const showThanks = (tx) => {
   if (thanked.has(tx.code)) return;
   thanked.add(tx.code);
   thanksTx = tx;
   qrDialog.close();
-  $('#pv-thanks-program').textContent = `"${ctx.p.title}"`;
-  $('#pv-thanks-amount').textContent = `${vnd(tx.amount)} ₫`;
+  // Ảnh thiệp cảm ơn = ảnh banner chính của chương trình (banner riêng nếu có, không thì ảnh chương trình)
+  $('#pv-thanks-photo').src = ctx.p.banner ? `${BANNER_IMG}${ctx.p.banner}` : `${IMG}${ctx.p.img}`;
+  $('#pv-thanks-program').textContent = ctx.p.title;
+  $('#pv-thanks-program').title = ctx.p.title; // tên dài bị cắt "…" trên 1 dòng → rê chuột xem đủ
+  $('#pv-thanks-amount').textContent = `${vnd(tx.amount)}đ`;
   $('#pv-thanks-payer').textContent = tx.payer;
-  const at = new Date(tx.time);
-  $('#pv-thanks-time').textContent = `${pad2(at.getHours())}:${pad2(at.getMinutes())}, ${pad2(at.getDate())}/${pad2(at.getMonth() + 1)}/${at.getFullYear()}`;
   $('#pv-thanks-code').textContent = tx.code;
   $('#pv-thanks-mail').hidden = !tx.email;
   if (tx.email) $('#pv-thanks-email').textContent = maskEmail(tx.email);
   thanksDialog.showModal();
+  // Tên chương trình luôn 1 dòng: tên dài thì thu nhỏ cỡ chữ cho vừa (tối thiểu 10px), vẫn không vừa mới cắt "…"
+  const programEl = $('#pv-thanks-program');
+  programEl.style.fontSize = '';
+  for (let size = parseFloat(getComputedStyle(programEl).fontSize); programEl.scrollWidth > programEl.clientWidth && size > 10; size -= 0.5) programEl.style.fontSize = `${size - 0.5}px`;
 };
 // Tải biên lai (SRS 3.4 #9): minh họa — mở trang biên lai và hộp thoại In để lưu PDF; khi triển khai tải tệp PDF theo SRS Email thông báo hệ thống, mục 3.2
 const downloadReceipt = () => {
@@ -1004,7 +1010,7 @@ const downloadReceipt = () => {
   const row = (label, value) => `<tr><th>${label}</th><td>${escapeHtml(value)}</td></tr>`;
   win.document.write(`<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Biên lai ủng hộ ${escapeHtml(tx.code)}</title>
 <style>body{font-family:Arial,sans-serif;margin:40px;color:#24272c}h1{margin:0 0 4px;font-size:22px;color:#b91c2b}p{margin:0 0 24px;color:#687078}table{width:100%;border-collapse:collapse}th,td{padding:10px 0;border-bottom:1px solid #e6e7e8;font-size:14px;text-align:left}th{width:40%;font-weight:400;color:#687078}td{font-weight:700}</style></head>
-<body><h1>BIÊN LAI ỦNG HỘ</h1><p>Hội Chữ thập đỏ Việt Nam</p><table>${row('Chương trình', ctx.p.title)}${row('Mã chương trình', ctx.p.code)}${row('Mã ủng hộ', tx.code)}${row('Người chuyển khoản', tx.payer)}${row('Số tiền', `${vnd(tx.amount)} ₫`)}${row('Thời gian ghi nhận', $('#pv-thanks-time').textContent)}</table></body></html>`);
+<body><h1>BIÊN LAI ỦNG HỘ</h1><p>Hội Chữ thập đỏ Việt Nam</p><table>${row('Chương trình', ctx.p.title)}${row('Mã chương trình', ctx.p.code)}${row('Mã ủng hộ', tx.code)}${row('Người chuyển khoản', tx.payer)}${row('Số tiền', `${vnd(tx.amount)} ₫`)}${row('Thời gian ghi nhận', thanksTime(tx.time))}</table></body></html>`);
   win.document.close();
   win.focus();
   win.print();
