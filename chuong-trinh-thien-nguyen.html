@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261023-9" />
+    <link rel="stylesheet" href="styles.css?v=20261102-13" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -64,13 +64,13 @@
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
         <a href="chuong-trinh-thien-nguyen.html" aria-current="page">Chương trình</a>
         <a href="ban-do-so.html">Bản đồ số</a>
+        <a href="#" data-panel="Quỹ nhân đạo">Quỹ nhân đạo</a>
         <a href="index.html#cong-khai">Công khai</a>
         <a href="index.html#tin-tuc">Tin tức</a>
         <a href="index.html#don-vi-dong-hanh">Đơn vị đồng hành</a>
         <a class="button button-primary nav-cta" href="chuong-trinh-thien-nguyen.html"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
       </nav>
       <div class="header-actions">
-        <button class="search-button" type="button" aria-label="Tìm kiếm" data-panel="Tìm kiếm"><svg class="icon"><use href="#search"/></svg></button>
         <!-- ---------- Thông báo & tài khoản: menu tài khoản do account-menu.js dựng ---------- -->
         <button class="icon-button notify-button" type="button" aria-label="Thông báo, có thông báo mới" data-panel="Thông báo"><svg class="icon"><use href="#bell"/></svg><span class="notify-dot" aria-hidden="true"></span></button>
         <button class="avatar-button" type="button" aria-label="Tài khoản của bạn"><svg class="icon"><use href="#user"/></svg></button>
@@ -78,45 +78,49 @@
     </header>
 
     <main id="main" class="cp-page">
-      <!-- ==================== SECTION: HERO CHƯƠNG TRÌNH — tiêu đề · mô tả · ô tìm kiếm · nút Tạo chiến dịch ==================== -->
+      <!-- ==================== SECTION: HERO CHƯƠNG TRÌNH — breadcrumb · tiêu đề · ô tìm kiếm · bảng lọc ==================== -->
       <section class="cp-hero" aria-labelledby="cp-title">
+        <!-- ---------- Breadcrumb: Trang chủ › Chương trình thiện nguyện (góc trên trái banner, chữ trắng như trang chi tiết) ---------- -->
+        <div class="container cp-crumbs">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">Trang chủ</a><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg><span class="breadcrumb-current" aria-current="page">Chương trình thiện nguyện</span>
+          </nav>
+        </div>
         <div class="container cp-hero-inner">
           <h1 class="cp-title" id="cp-title">Chương trình thiện nguyện</h1>
-          <p class="cp-lead">Chọn và tham gia quyên góp cho các chương trình đang gây quỹ trên toàn quốc.</p>
-          <!-- ---------- Tìm kiếm: lọc ngay theo tên chương trình, địa bàn, lĩnh vực (chuong-trinh-thien-nguyen.js) ---------- -->
+          <!-- ---------- Tìm kiếm: lọc ngay khi gõ theo tên chương trình, địa bàn, lĩnh vực; nút Tìm kiếm lọc ngay và cuộn tới danh sách (chuong-trinh-thien-nguyen.js) ---------- -->
           <form class="cp-search" role="search" id="cp-search-form">
             <label class="cp-search-box">
               <svg class="icon" aria-hidden="true"><use href="#search"/></svg>
               <span class="visually-hidden">Tìm chương trình</span>
               <input id="cp-search" type="search" placeholder="Tìm chương trình..." autocomplete="off" />
             </label>
-            <a class="button button-primary cp-create" href="index.html#tao-quy">Tạo chiến dịch</a>
+            <button class="button button-primary cp-search-submit" type="submit"><svg class="icon" aria-hidden="true"><use href="#search"/></svg>Tìm kiếm</button>
           </form>
+          <!-- ---------- Bộ lọc (luôn hiện dưới ô tìm kiếm, không nền): 4 ô chọn mức độ ưu tiên · lĩnh vực · địa bàn · sắp xếp — nhãn ẩn cho trình đọc màn hình; đổi giá trị là lọc ngay ---------- -->
+          <div class="cp-filters" id="cp-filters">
+            <label class="cp-field"><span class="visually-hidden">Mức độ ưu tiên</span><span class="pf-input"><select id="cp-priority"><option value="">Tất cả mức độ</option><option value="urgent">Khẩn cấp</option><option value="medium">Trung bình</option><option value="low">Thấp</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
+            <label class="cp-field"><span class="visually-hidden">Lĩnh vực</span><span class="pf-input"><select id="cp-field"><option value="">Tất cả lĩnh vực</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
+            <label class="cp-field"><span class="visually-hidden">Địa bàn</span><span class="pf-input"><select id="cp-place"><option value="">Toàn quốc</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
+            <label class="cp-field"><span class="visually-hidden">Sắp xếp</span><span class="pf-input"><select id="cp-sort"><option value="">Mới nhất</option><option value="ending">Sắp kết thúc</option><option value="progress">Tiến độ cao nhất</option><option value="need">Cần hỗ trợ nhiều nhất</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
+          </div>
         </div>
       </section>
       <!-- ==================== END SECTION: HERO CHƯƠNG TRÌNH ==================== -->
 
-      <!-- ==================== SECTION: DANH SÁCH CHƯƠNG TRÌNH — tiêu đề · nút Bộ lọc · bảng lọc · lưới thẻ 4 cột · phân trang ==================== -->
+      <!-- ==================== SECTION: DANH SÁCH CHƯƠNG TRÌNH — tiêu đề · nút Tạo chiến dịch · lưới thẻ 4 cột · phân trang ==================== -->
       <section class="container cp-list" aria-labelledby="cp-list-title">
-        <!-- ---------- Đầu danh sách: tiêu đề + nút Bộ lọc (hiện số bộ lọc đang áp dụng) ---------- -->
+        <!-- ---------- Đầu danh sách: tiêu đề + nút Tạo chiến dịch ---------- -->
         <div class="cp-list-head">
           <h2 class="cp-list-title" id="cp-list-title">Danh sách chương trình/chiến dịch</h2>
-          <button class="cp-filter-toggle" type="button" id="cp-filter-toggle" aria-expanded="false" aria-controls="cp-filters"><svg class="icon" aria-hidden="true"><use href="#sliders"/></svg>Bộ lọc<span class="cp-filter-count" id="cp-filter-count" hidden></span></button>
-        </div>
-        <!-- ---------- Bảng lọc: mức độ ưu tiên · lĩnh vực · địa bàn · sắp xếp · Xóa bộ lọc ---------- -->
-        <div class="cp-filters" id="cp-filters" hidden>
-          <label class="cp-field"><span>Mức độ ưu tiên</span><span class="pf-input"><select id="cp-priority"><option value="">Tất cả mức độ</option><option value="urgent">Khẩn cấp</option><option value="medium">Trung bình</option><option value="low">Thấp</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
-          <label class="cp-field"><span>Lĩnh vực</span><span class="pf-input"><select id="cp-field"><option value="">Tất cả lĩnh vực</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
-          <label class="cp-field"><span>Địa bàn</span><span class="pf-input"><select id="cp-place"><option value="">Toàn quốc</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
-          <label class="cp-field"><span>Sắp xếp</span><span class="pf-input"><select id="cp-sort"><option value="">Mới nhất</option><option value="ending">Sắp kết thúc</option><option value="progress">Tiến độ cao nhất</option><option value="need">Cần hỗ trợ nhiều nhất</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
-          <button class="cp-clear" type="button" id="cp-clear">Xóa bộ lọc</button>
+          <a class="button button-primary cp-create" href="ho-so.html#chuong-trinh/them-moi">Tạo chiến dịch</a>
         </div>
         <p class="visually-hidden" id="cp-status" role="status" aria-live="polite"></p>
-        <!-- ---------- Lưới thẻ chương trình: 8 thẻ mỗi trang (chuong-trinh-thien-nguyen.js dựng) ---------- -->
+        <!-- ---------- Lưới thẻ chương trình: 8 thẻ đầu, cuộn xuống nạp thêm 8 (chuong-trinh-thien-nguyen.js dựng) ---------- -->
         <div class="cp-grid" id="cp-grid"></div>
         <p class="cp-empty" id="cp-empty" hidden>Không tìm thấy chương trình phù hợp. Hãy thử từ khóa hoặc bộ lọc khác.</p>
-        <!-- ---------- Phân trang ---------- -->
-        <nav class="cp-pager" id="cp-pager" aria-label="Phân trang chương trình"></nav>
+        <!-- ---------- Cuộn tải thêm: điểm mốc cuối lưới, chạm tới thì nạp 8 thẻ tiếp theo ---------- -->
+        <div class="cp-more" id="cp-more" aria-hidden="true"></div>
       </section>
       <!-- ==================== END SECTION: DANH SÁCH CHƯƠNG TRÌNH ==================== -->
     </main>
@@ -154,14 +158,14 @@
         </div>
       </div>
 
-      <!-- ---------- Wordmark: chữ lớn trang trí, cắt đáy ---------- -->
-      <div class="footer-wordmark" aria-hidden="true"><span>Chữ thập đỏ</span></div>
 
-      <!-- ---------- Thanh cuối: bản quyền, ghi chú, lên đầu trang ---------- -->
+      <!-- ---------- Thanh cuối: điều phối (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
       <div class="container footer-bottom">
-        <p>© 2026 Hội Chữ thập đỏ Việt Nam.</p>
-        <p>Bản xem trước giao diện · Dữ liệu trên trang là minh họa.</p>
-        <a class="footer-top" href="#">Lên đầu trang<span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
+        <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
+        <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
+        <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/gtinx.png" alt="GTINX" width="346" height="100" /></p>
+        <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->
+        <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
       </div>
     </footer>
 
@@ -175,8 +179,9 @@
 
     <!-- ==================== SCRIPTS ==================== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
-    <script src="flow.js" defer></script>
+    <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js" defer></script>
-    <script src="chuong-trinh-thien-nguyen.js" defer></script>
+    <script src="chuong-trinh-data.js?v=20261101-9" defer></script>
+    <script src="chuong-trinh-thien-nguyen.js?v=20261101-4" defer></script>
   </body>
 </html>

@@ -61,18 +61,10 @@
       if (smoother) smoother.scrollTo(0, true);
       else window.scrollTo({ top: 0, behavior: allowMotion ? 'smooth' : 'auto' });
     });
-  }
-
-  // ---------- Footer: wordmark trồi lên theo scroll ----------
-  // Next frame: script.js (deferred, runs after this file) creates ScrollSmoother first, as ScrollTrigger expects.
-  if (allowMotion && window.gsap && window.ScrollTrigger && document.querySelector('.footer-wordmark')) {
-    requestAnimationFrame(() => {
-      gsap.registerPlugin(ScrollTrigger);
-      gsap.fromTo('.footer-wordmark span', { yPercent: 70 }, {
-        yPercent: 0, ease: 'none',
-        scrollTrigger: { trigger: '.footer-wordmark', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 },
-      });
-    });
+    // Chỉ hiện khi người dùng đã bắt đầu cuộn (ScrollSmoother vẫn cuộn trang gốc nên scrollY dùng được cho mọi trang)
+    const syncToTop = () => toTop.classList.toggle('is-visible', window.scrollY > 80);
+    window.addEventListener('scroll', syncToTop, { passive: true });
+    syncToTop();
   }
 
   // ---------- Magnetic buttons (fine pointers only; transform-only via quickTo) ----------

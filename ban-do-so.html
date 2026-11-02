@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
     <link rel="stylesheet" href="vendor/leaflet/MarkerCluster.css" />
-    <link rel="stylesheet" href="styles.css?v=20261023-9" />
+    <link rel="stylesheet" href="styles.css?v=20261102-13" />
     <link rel="stylesheet" href="ban-do-so.css" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
@@ -90,13 +90,13 @@
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
         <a href="chuong-trinh-thien-nguyen.html">Chương trình</a>
         <a href="ban-do-so.html" aria-current="page">Bản đồ số</a>
+        <a href="#" data-panel="Quỹ nhân đạo">Quỹ nhân đạo</a>
         <a href="index.html#cong-khai">Công khai</a>
         <a href="index.html#tin-tuc">Tin tức</a>
         <a href="index.html#don-vi-dong-hanh">Đơn vị đồng hành</a>
         <a class="button button-primary nav-cta" href="index.html#chuong-trinh"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
       </nav>
       <div class="header-actions">
-        <button class="search-button" type="button" aria-label="Tìm kiếm" data-panel="Tìm kiếm"><svg class="icon"><use href="#search"/></svg></button>
         <!-- ---------- Thông báo & tài khoản: menu tài khoản do account-menu.js dựng ---------- -->
         <button class="icon-button notify-button" type="button" aria-label="Thông báo, có thông báo mới" data-panel="Thông báo"><svg class="icon"><use href="#bell"/></svg><span class="notify-dot" aria-hidden="true"></span></button>
         <button class="avatar-button" type="button" aria-label="Tài khoản của bạn"><svg class="icon"><use href="#user"/></svg></button>
@@ -298,14 +298,14 @@
         </div>
       </div>
 
-      <!-- ---------- Wordmark: chữ lớn trang trí, cắt đáy ---------- -->
-      <div class="footer-wordmark" aria-hidden="true"><span>Chữ thập đỏ</span></div>
 
-      <!-- ---------- Thanh cuối: bản quyền, ghi chú, lên đầu trang ---------- -->
+      <!-- ---------- Thanh cuối: điều phối (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
       <div class="container footer-bottom">
-        <p>© 2026 Hội Chữ thập đỏ Việt Nam.</p>
-        <p>Bản xem trước giao diện · Dữ liệu trên trang là minh họa.</p>
-        <a class="footer-top" href="#">Lên đầu trang<span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
+        <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
+        <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
+        <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/gtinx.png" alt="GTINX" width="346" height="100" /></p>
+        <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->
+        <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
       </div>
     </footer>
 
@@ -319,7 +319,7 @@
 
     <!-- ==================== SCRIPTS ==================== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
-        <script src="flow.js" defer></script>
+        <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js" defer></script>
     <script src="vendor/leaflet/leaflet.js" defer></script>
     <script src="vendor/leaflet/leaflet.markercluster.js" defer></script>

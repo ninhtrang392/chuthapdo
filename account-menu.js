@@ -2,9 +2,29 @@
 // Dựng menu ngay sau .avatar-button: Tài khoản của tôi · Quản lý hồ sơ (ho-so.html) · Đăng xuất.
 // Dữ liệu người dùng là minh họa — khi có đăng nhập thật, lấy từ phiên đăng nhập.
 // Đăng xuất: gọi window.AccountSession.logout() nếu hệ thống cung cấp (xóa phiên ở máy chủ), rồi về trang chủ.
+// Phiên minh họa: dang-nhap.js ghi khóa 'ctd-demo-session' khi đăng nhập; chưa có khóa → header hiện 2 nút Đăng nhập · Đăng ký.
 (() => {
   const button = document.querySelector('.avatar-button');
   if (!button) return;
+
+  // ---------- Chưa đăng nhập: thay avatar + chuông thông báo bằng 2 nút riêng Đăng nhập / Đăng ký (dang-nhap.html) ----------
+  const SESSION_KEY = 'ctd-demo-session';
+  let signedIn = false;
+  // Phiên ở localStorage (đã chọn Ghi nhớ đăng nhập) hoặc sessionStorage (chỉ trong tab hiện tại)
+  try { signedIn = localStorage.getItem(SESSION_KEY) === '1' || sessionStorage.getItem(SESSION_KEY) === '1'; } catch {}
+  if (!signedIn) {
+    const auth = document.createElement('div');
+    auth.className = 'header-auth';
+    auth.innerHTML = '<a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a>'
+      + '<a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a>';
+    document.querySelector('.notify-button')?.remove();
+    button.replaceWith(auth);
+    // Điện thoại: header chỉ đủ chỗ cho nút Đăng nhập → thêm cặp nút vào cuối menu (CSS chỉ hiện ở ≤600px)
+    const navAuth = auth.cloneNode(true);
+    navAuth.className = 'nav-auth';
+    document.querySelector('.navigation')?.append(navAuth);
+    return;
+  }
 
   // ---------- Dữ liệu & icon (vẽ nét, không phụ thuộc sprite của từng trang) ----------
   const user = { name: 'Nguyễn Ngọc Trâm', email: 'tram.nguyen@gmail.com', initials: 'NT' };
@@ -66,7 +86,10 @@
   // ---------- Đăng xuất: xóa phiên (nếu có tích hợp) rồi về trang chủ ----------
   menu.querySelector('[data-logout]').addEventListener('click', async (event) => {
     event.preventDefault();
-    try { await window.AccountSession?.logout?.(); } finally { window.location.href = 'index.html'; }
+    try { await window.AccountSession?.logout?.(); } finally {
+      try { localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY); } catch {}
+      window.location.href = 'index.html';
+    }
   });
   menu.addEventListener('keydown', (event) => {
     const index = items.indexOf(document.activeElement);

@@ -62,6 +62,8 @@ const metricValues = document.querySelectorAll('.impact-card dd');
 if (metricValues.length && !reduceMotion) {
   const countUp = (element) => {
     const target = Number(element.textContent.replace(/\D/g, ''));
+    // Giữ bề rộng số cuối trong lúc đếm để cụm căn giữa không bị xô lệch
+    element.style.minWidth = `${element.offsetWidth}px`;
     const duration = 1400;
     const start = performance.now();
     const step = (now) => {
@@ -69,6 +71,7 @@ if (metricValues.length && !reduceMotion) {
       const eased = 1 - Math.pow(1 - progress, 4);
       element.textContent = Math.round(target * eased).toLocaleString('vi-VN');
       if (progress < 1) requestAnimationFrame(step);
+      else element.style.minWidth = '';
     };
     requestAnimationFrame(step);
   };
@@ -80,6 +83,63 @@ if (metricValues.length && !reduceMotion) {
     });
   }, { threshold: 0.6 });
   metricValues.forEach((value) => observer.observe(value));
+}
+
+// ==================== SECTION: TIỀN ỦNG HỘ TRỰC TIẾP — giao dịch mới chèn lên đầu, nhãn thời gian, tổng hôm nay ====================
+// DỮ LIỆU MINH HỌA: mỗi 5–9 giây lấy ngẫu nhiên 1 giao dịch mẫu. Khi triển khai thật, thay setTimeout bằng luồng giao dịch từ hệ thống
+// (WebSocket / polling) và gọi addLiveDonation(giao dịch) cho mỗi giao dịch mới.
+const liveList = document.querySelector('.live-list');
+if (liveList) {
+  const LIVE_MAX = 3;
+  // Người ủng hộ: ảnh chân dung trong Emages/avatar/ (cùng người với bảng Top gây quỹ)
+  const LIVE_SAMPLES = [
+    { name: 'Nguyễn Minh Anh', avatar: 'Emages/avatar/nguyen-minh-anh.jpg', campaign: 'Nước sạch cho vùng hạn mặn', amount: 1000000 },
+    { name: 'Hoàng Mai Linh', avatar: 'Emages/avatar/hoang-mai-linh.jpg', campaign: 'Khắc phục hậu quả lũ lụt miền Trung', amount: 500000 },
+    { name: 'Phạm Gia Huy', avatar: 'Emages/avatar/pham-gia-huy.jpg', campaign: 'Tiếp sức đến trường vùng cao', amount: 2000000 },
+    { name: 'Lê Quốc Bảo', avatar: 'Emages/avatar/le-quoc-bao.jpg', campaign: 'Mái ấm nhân ái cho người cao tuổi', amount: 300000 },
+    { name: 'Trần Thu Hà', avatar: 'Emages/avatar/tran-thu-ha.jpg', campaign: 'Khắc phục hậu quả lũ lụt miền Trung', amount: 4500000 },
+    { name: 'Nguyễn Minh Anh', avatar: 'Emages/avatar/nguyen-minh-anh.jpg', campaign: 'Tiếp sức đến trường vùng cao', amount: 150000 },
+    { name: 'Hoàng Mai Linh', avatar: 'Emages/avatar/hoang-mai-linh.jpg', campaign: 'Mái ấm nhân ái cho người cao tuổi', amount: 3000000 },
+  ];
+  const money = (value) => `${value.toLocaleString('vi-VN')} ₫`;
+  const agoLabel = (ms) => {
+    const minutes = Math.floor((Date.now() - ms) / 60000);
+    return minutes < 1 ? 'Vừa xong' : `${minutes} phút trước`;
+  };
+  const totalEl = document.querySelector('[data-live-total]');
+  let total = Number(totalEl?.dataset.liveTotal || 0);
+  // Mốc thời gian của các giao dịch có sẵn trong HTML (data-ago = số phút trước)
+  liveList.querySelectorAll('.feed-item').forEach((item) => { item.dataset.time = Date.now() - Number(item.dataset.ago || 0) * 60000; });
+  const refreshTimes = () => liveList.querySelectorAll('.feed-item').forEach((item) => { item.querySelector('.feed-time span').textContent = agoLabel(Number(item.dataset.time)); });
+
+  const addLiveDonation = ({ name, avatar, campaign, amount }) => {
+    const item = document.createElement('li');
+    item.className = 'feed-item is-new';
+    item.dataset.time = Date.now();
+    item.innerHTML = `<span class="feed-avatar" aria-hidden="true"><img src="${avatar}" alt="" width="160" height="160" decoding="async" /></span>
+      <div class="feed-info"><p class="feed-name"></p><p class="feed-campaign"></p><p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p></div>
+      <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+${money(amount)}</p>`;
+    item.querySelector('.feed-name').textContent = name;
+    item.querySelector('.feed-campaign').textContent = campaign;
+    liveList.prepend(item);
+    while (liveList.children.length > LIVE_MAX) liveList.lastElementChild.remove();
+    total += amount;
+    if (totalEl) totalEl.textContent = money(total);
+    refreshTimes();
+  };
+
+  // Tab ẩn thì không sinh giao dịch mới (tránh dồn hàng loạt khi quay lại)
+  const scheduleNext = () => setTimeout(() => {
+    if (!document.hidden) {
+      // Không lấy người đang hiển thị, tránh 1 người xuất hiện 2 lần cùng lúc
+      const shown = [...liveList.querySelectorAll('.feed-name')].map((el) => el.textContent);
+      const pool = LIVE_SAMPLES.filter((sample) => !shown.includes(sample.name));
+      addLiveDonation(pool[Math.floor(Math.random() * pool.length)]);
+    }
+    scheduleNext();
+  }, 5000 + Math.random() * 4000);
+  scheduleNext();
+  setInterval(refreshTimes, 30000);
 }
 
 // ==================== SECTION 04: TOP GÂY QUỸ — tab Tổ chức / Cá nhân, kỳ xếp hạng, bảng top 10 ====================
@@ -151,24 +211,24 @@ const RANKING_DATA = {
   },
   personal: {
     week: [
-      ['Phạm Gia Huy', 'Hải Phòng', 42500000, 2],
-      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 38200000, 1],
-      ['Hoàng Mai Linh', 'Huế', 31000000, 2],
-      ['Nguyễn Minh Anh', 'Hà Nội', 27400000, 1],
+      ['Phạm Gia Huy', 'Hải Phòng', 42500000, 2, 'Emages/avatar/pham-gia-huy.jpg'],
+      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 38200000, 1, 'Emages/avatar/tran-thu-ha.jpg'],
+      ['Hoàng Mai Linh', 'Huế', 31000000, 2, 'Emages/avatar/hoang-mai-linh.jpg'],
+      ['Nguyễn Minh Anh', 'Hà Nội', 27400000, 1, 'Emages/avatar/nguyen-minh-anh.jpg'],
       ['Đặng Khánh Vy', 'Khánh Hòa', 22750000, 1],
       ['Lý Thảo Nguyên', 'Lâm Đồng', 18300000, 1],
-      ['Lê Quốc Bảo', 'Đà Nẵng', 15000000, 1],
+      ['Lê Quốc Bảo', 'Đà Nẵng', 15000000, 1, 'Emages/avatar/le-quoc-bao.jpg'],
       ['Ngô Hải Nam', 'Bình Dương', 12600000, 1],
       ['Võ Ngọc Trâm', 'Cần Thơ', 9850000, 1],
       ['Trịnh Văn Khoa', 'Thanh Hóa', 7200000, 1],
       ['Bùi Đức Thắng', 'Quảng Ninh', 5500000, 1],
     ],
     month: [
-      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 128400000, 3],
-      ['Nguyễn Minh Anh', 'Hà Nội', 115200000, 2],
-      ['Phạm Gia Huy', 'Hải Phòng', 96750000, 2],
-      ['Lê Quốc Bảo', 'Đà Nẵng', 88000000, 3],
-      ['Hoàng Mai Linh', 'Huế', 72500000, 2],
+      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 128400000, 3, 'Emages/avatar/tran-thu-ha.jpg'],
+      ['Nguyễn Minh Anh', 'Hà Nội', 115200000, 2, 'Emages/avatar/nguyen-minh-anh.jpg'],
+      ['Phạm Gia Huy', 'Hải Phòng', 96750000, 2, 'Emages/avatar/pham-gia-huy.jpg'],
+      ['Lê Quốc Bảo', 'Đà Nẵng', 88000000, 3, 'Emages/avatar/le-quoc-bao.jpg'],
+      ['Hoàng Mai Linh', 'Huế', 72500000, 2, 'Emages/avatar/hoang-mai-linh.jpg'],
       ['Võ Ngọc Trâm', 'Cần Thơ', 64300000, 1],
       ['Đặng Khánh Vy', 'Khánh Hòa', 51000000, 2],
       ['Đỗ Thanh Tùng', 'Nghệ An', 47850000, 1],
@@ -177,12 +237,12 @@ const RANKING_DATA = {
       ['Lý Thảo Nguyên', 'Lâm Đồng', 28900000, 1],
     ],
     quarter: [
-      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 214400000, 4],
-      ['Nguyễn Minh Anh', 'Hà Nội', 198200000, 3],
-      ['Lê Quốc Bảo', 'Đà Nẵng', 162000000, 4],
-      ['Phạm Gia Huy', 'Hải Phòng', 140750000, 3],
+      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 214400000, 4, 'Emages/avatar/tran-thu-ha.jpg'],
+      ['Nguyễn Minh Anh', 'Hà Nội', 198200000, 3, 'Emages/avatar/nguyen-minh-anh.jpg'],
+      ['Lê Quốc Bảo', 'Đà Nẵng', 162000000, 4, 'Emages/avatar/le-quoc-bao.jpg'],
+      ['Phạm Gia Huy', 'Hải Phòng', 140750000, 3, 'Emages/avatar/pham-gia-huy.jpg'],
       ['Võ Ngọc Trâm', 'Cần Thơ', 118300000, 2],
-      ['Hoàng Mai Linh', 'Huế', 102500000, 3],
+      ['Hoàng Mai Linh', 'Huế', 102500000, 3, 'Emages/avatar/hoang-mai-linh.jpg'],
       ['Đỗ Thanh Tùng', 'Nghệ An', 86850000, 2],
       ['Đặng Khánh Vy', 'Khánh Hòa', 71000000, 2],
       ['Bùi Đức Thắng', 'Quảng Ninh', 63600000, 1],
@@ -190,14 +250,14 @@ const RANKING_DATA = {
       ['Trịnh Văn Khoa', 'Thanh Hóa', 45800000, 1],
     ],
     year: [
-      ['Nguyễn Minh Anh', 'Hà Nội', 1285200000, 14],
-      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 1162750000, 11],
-      ['Lê Quốc Bảo', 'Đà Nẵng', 948400000, 12],
+      ['Nguyễn Minh Anh', 'Hà Nội', 1285200000, 14, 'Emages/avatar/nguyen-minh-anh.jpg'],
+      ['Trần Thu Hà', 'TP. Hồ Chí Minh', 1162750000, 11, 'Emages/avatar/tran-thu-ha.jpg'],
+      ['Lê Quốc Bảo', 'Đà Nẵng', 948400000, 12, 'Emages/avatar/le-quoc-bao.jpg'],
       ['Võ Ngọc Trâm', 'Cần Thơ', 702000000, 7],
       ['Đỗ Thanh Tùng', 'Nghệ An', 615500000, 6],
-      ['Phạm Gia Huy', 'Hải Phòng', 540300000, 5],
+      ['Phạm Gia Huy', 'Hải Phòng', 540300000, 5, 'Emages/avatar/pham-gia-huy.jpg'],
       ['Bùi Đức Thắng', 'Quảng Ninh', 486000000, 6],
-      ['Hoàng Mai Linh', 'Huế', 412800000, 8],
+      ['Hoàng Mai Linh', 'Huế', 412800000, 8, 'Emages/avatar/hoang-mai-linh.jpg'],
       ['Trịnh Văn Khoa', 'Thanh Hóa', 356000000, 4],
       ['Lý Thảo Nguyên', 'Lâm Đồng', 298500000, 3],
       ['Đặng Khánh Vy', 'Khánh Hòa', 254000000, 4],
@@ -209,8 +269,10 @@ const RANKING_DATA = {
 const formatVnd = (value) => `${Math.round(value).toLocaleString('vi-VN')} ₫`;
 const initials = (name) => name.split(' ').slice(-2).map((word) => word[0]).join('').toUpperCase();
 // Có logo / ảnh đại diện → hiển thị ảnh; không có (hoặc ảnh lỗi) → icon tòa nhà (tổ chức) / chữ viết tắt (cá nhân).
+// Ảnh chân dung cá nhân (Emages/avatar/) phủ kín khung tròn (is-photo); logo tổ chức giữ lề, không cắt.
 const fillAvatar = (node, type, name, image) => {
   node.classList.toggle('has-logo', Boolean(image));
+  node.classList.toggle('is-photo', Boolean(image) && type !== 'org');
   if (image) {
     const img = document.createElement('img');
     img.alt = '';
@@ -557,6 +619,32 @@ if (!window.gsap) document.documentElement.classList.remove('hero-intro');
   });
 })();
 
+// ==================== SECTION: ĐƠN VỊ ĐỒNG HÀNH & PHÁT TRIỂN HỆ THỐNG — dải slide tự chuyển ====================
+// Mỗi 6 giây sang slide kế (hết thì quay về đầu), dừng khi rê chuột / focus bàn phím; chấm tròn chỉ slide đang xem, bấm để chuyển.
+// Giảm chuyển động: không tự chuyển.
+const foundersTrack = document.querySelector('#founders-track');
+if (foundersTrack) {
+  const slider = foundersTrack.closest('.founders-slider');
+  const dots = [...slider.querySelectorAll('[data-founders-slide]')];
+  const slideWidth = () => foundersTrack.clientWidth + parseFloat(getComputedStyle(foundersTrack).columnGap || 0);
+  const currentSlide = () => Math.round(foundersTrack.scrollLeft / slideWidth());
+  const goToSlide = (index) => {
+    foundersTrack.scrollTo({ left: index * slideWidth(), behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
+  // Chấm đang xem theo vị trí cuộn (cả khi vuốt tay trên điện thoại)
+  foundersTrack.addEventListener('scroll', () => {
+    const index = currentSlide();
+    dots.forEach((dot, i) => (i === index ? dot.setAttribute('aria-current', 'true') : dot.removeAttribute('aria-current')));
+  }, { passive: true });
+  dots.forEach((dot) => dot.addEventListener('click', () => goToSlide(Number(dot.dataset.foundersSlide))));
+  if (!reduceMotion) {
+    setInterval(() => {
+      if (document.hidden || slider.matches(':hover') || slider.querySelector(':focus-visible')) return;
+      goToSlide((currentSlide() + 1) % dots.length);
+    }, 6000);
+  }
+}
+
 // ==================== MOTION: GSAP / ScrollTrigger (tự tắt khi reduced motion) ====================
 // Content stays visible if GSAP fails to load; CTAs are clickable throughout.
 if (window.gsap && window.ScrollTrigger) {
@@ -585,7 +673,7 @@ if (window.gsap && window.ScrollTrigger) {
   }
 
   // ==================== HERO: intro (SplitText) + parallax ====================
-  // Intro: ảnh nền thu từ mờ + phóng to về rõ nét; "Lan tỏa lòng" hiện từng từ (trồi nhẹ lên, từ mờ sang nét);
+  // Intro: ảnh nền thu từ mờ + phóng to về rõ nét; "Vì cộng đồng" hiện từng từ (trồi nhẹ lên, từ mờ sang nét);
   // "nhân ái" (chữ gradient, không tách để giữ background-clip) hiện cả cụm cùng kiểu, nối tiếp; câu dẫn hiện
   // theo dòng; CTA bật nhẹ; khối số liệu mở từ dưới lên.
   // Không dùng mask của SplitText vì mask cắt dấu tiếng Việt (line-height chặt). CTA chỉ đổi opacity/transform
@@ -708,10 +796,10 @@ if (window.gsap && window.ScrollTrigger) {
       onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, overwrite: true }),
     });
 
-    // ==================== SECTION 03: CHƯƠNG TRÌNH — card nổi bật rồi 3 card hiện lần lượt ====================
-    gsap.from('.campaign-card', {
+    // ==================== SECTION 03: CHƯƠNG TRÌNH — khối nổi bật hiện theo data-reveal, 4 thẻ bên dưới hiện lần lượt ====================
+    gsap.from('.campaigns-grid .cp-card', {
       autoAlpha: 0, y: 40, duration: 0.8, ease: 'power3.out', stagger: 0.1, clearProps: 'transform,opacity,visibility',
-      scrollTrigger: { trigger: '.campaign-layout', start: 'top 85%', once: true },
+      scrollTrigger: { trigger: '.campaigns-grid', start: 'top 85%', once: true },
     });
 
     gsap.utils.toArray('.progress-bar span').forEach((bar) => {
@@ -738,10 +826,10 @@ if (window.gsap && window.ScrollTrigger) {
     });
 
     // ==================== SECTION 08: ĐỐI TÁC — 2 hàng logo trượt vào từ hai phía ====================
-    gsap.from('.partner-row', {
+    gsap.from('#don-vi-dong-hanh .partner-row', {
       autoAlpha: 0, xPercent: (index) => (index ? 8 : -8), duration: 1.1, ease: 'power3.out', stagger: 0.12,
       clearProps: 'transform,opacity,visibility',
-      scrollTrigger: { trigger: '.partners-marquee', start: 'top 88%', once: true },
+      scrollTrigger: { trigger: '#don-vi-dong-hanh .partners-marquee', start: 'top 88%', once: true },
     });
   });
 }

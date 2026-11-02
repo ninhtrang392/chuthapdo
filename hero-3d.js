@@ -5,7 +5,8 @@
 (() => {
   const canvas = document.querySelector('.hero-canvas');
   const hero = document.querySelector('.hero');
-  if (!canvas || !hero) return;
+  // canvas có thuộc tính hidden (index.html) = đang tắt cả lớp hiệu ứng → không tải Three.js
+  if (!canvas || !hero || canvas.hidden) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(min-width: 768px)').matches) return;
   const probe = document.createElement('canvas');
   if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return;
@@ -24,6 +25,8 @@
     camera.position.z = 12;
 
     // ---------- Particles ----------
+    // Tỉ lệ hạt vẽ thành trái tim: 0 = đang ẩn tim bay, chỉ còn đốm sáng (đặt lại 0.16 để hiện tim)
+    const HEART_RATIO = 0;
     const count = window.innerWidth > 1400 ? 170 : 120;
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count);
@@ -34,7 +37,7 @@
       positions[i * 3 + 1] = THREE.MathUtils.randFloat(-8, 8);
       positions[i * 3 + 2] = THREE.MathUtils.randFloat(-6, 4);
       seeds[i] = Math.random();
-      shapes[i] = Math.random() < 0.16 ? 1 : 0;
+      shapes[i] = Math.random() < HEART_RATIO ? 1 : 0;
       sizes[i] = shapes[i] ? THREE.MathUtils.randFloat(26, 44) : THREE.MathUtils.randFloat(10, 34);
     }
     const geometry = new THREE.BufferGeometry();
