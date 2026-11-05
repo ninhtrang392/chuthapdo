@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261102-63" />
+    <link rel="stylesheet" href="styles.css?v=20261105-62" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -51,6 +51,7 @@
       <symbol id="chevron-down" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></g></symbol>
       <symbol id="chevron-right" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6.5 5.5 5.5-5.5 5.5"/></g></symbol>
       <symbol id="close" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/></g></symbol>
+      <symbol id="page-arrow" viewBox="0 0 14 14"><path d="M8.82809 4.20651V6.50491H1.66422C1.53209 6.50491 1.40537 6.5574 1.31194 6.65084C1.21851 6.74427 1.16602 6.87099 1.16602 7.00312C1.16602 7.13526 1.21851 7.26198 1.31194 7.35541C1.40537 7.44884 1.53209 7.50133 1.66422 7.50133H8.82809V9.79309C8.82735 9.85577 8.8455 9.91722 8.88017 9.96945C8.91484 10.0217 8.96443 10.0623 9.02248 10.0859C9.08054 10.1096 9.14437 10.1152 9.20566 10.1021C9.26696 10.0889 9.32288 10.0577 9.36616 10.0123L12.7395 7.22233C12.769 7.19328 12.7924 7.15864 12.8084 7.12044C12.8244 7.08223 12.8327 7.04122 12.8327 6.9998C12.8327 6.95838 12.8244 6.91737 12.8084 6.87916C12.7924 6.84096 12.769 6.80632 12.7395 6.77727L9.36616 3.9873C9.32288 3.94195 9.26696 3.91067 9.20566 3.89755C9.14437 3.88442 9.08054 3.89005 9.02248 3.9137C8.96443 3.93735 8.91484 3.97793 8.88017 4.03015C8.8455 4.08238 8.82735 4.14383 8.82809 4.20651Z" fill="currentColor"/></symbol>
     </svg>
 
     <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
@@ -97,12 +98,12 @@
             </label>
             <button class="button button-primary cp-search-submit" type="submit"><svg class="icon" aria-hidden="true"><use href="#search"/></svg>Tìm kiếm</button>
           </form>
-          <!-- ---------- Bộ lọc (luôn hiện dưới ô tìm kiếm, không nền): 4 ô chọn mức độ ưu tiên · lĩnh vực · địa bàn · sắp xếp — nhãn ẩn cho trình đọc màn hình; đổi giá trị là lọc ngay ---------- -->
+          <!-- ---------- Bộ lọc (luôn hiện dưới ô tìm kiếm, không nền), CHỌN NHIỀU: JS thay mỗi select bằng nút + danh sách ô tích (option đầu = nhãn "Tất cả …"). 4 ô: mức độ ưu tiên · lĩnh vực · địa bàn · đối tượng vận động (Cá nhân / Tổ chức / Quỹ nhân đạo) — nhãn ẩn cho trình đọc màn hình; đổi giá trị là lọc ngay ---------- -->
           <div class="cp-filters" id="cp-filters">
             <label class="cp-field"><span class="visually-hidden">Mức độ ưu tiên</span><span class="pf-input"><select id="cp-priority"><option value="">Tất cả mức độ</option><option value="urgent">Khẩn cấp</option><option value="medium">Trung bình</option><option value="low">Thấp</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
             <label class="cp-field"><span class="visually-hidden">Lĩnh vực</span><span class="pf-input"><select id="cp-field"><option value="">Tất cả lĩnh vực</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
             <label class="cp-field"><span class="visually-hidden">Địa bàn</span><span class="pf-input"><select id="cp-place"><option value="">Toàn quốc</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
-            <label class="cp-field"><span class="visually-hidden">Sắp xếp</span><span class="pf-input"><select id="cp-sort"><option value="">Mới nhất</option><option value="ending">Sắp kết thúc</option><option value="progress">Tiến độ cao nhất</option><option value="need">Cần hỗ trợ nhiều nhất</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
+            <label class="cp-field"><span class="visually-hidden">Đối tượng vận động</span><span class="pf-input"><select id="cp-owner"><option value="">Tất cả đối tượng</option><option value="Cá nhân">Cá nhân</option><option value="Tổ chức">Tổ chức</option><option value="Quỹ nhân đạo">Quỹ nhân đạo</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
           </div>
         </div>
       </section>
@@ -110,17 +111,20 @@
 
       <!-- ==================== SECTION: DANH SÁCH CHƯƠNG TRÌNH — tiêu đề · nút Tạo chiến dịch · lưới thẻ 4 cột · phân trang ==================== -->
       <section class="container cp-list" aria-labelledby="cp-list-title">
-        <!-- ---------- Đầu danh sách: tiêu đề + nút Tạo chiến dịch ---------- -->
+        <!-- ---------- Đầu danh sách: tiêu đề (trái) · ô sắp xếp + nút Tạo chiến dịch (phải) ---------- -->
         <div class="cp-list-head">
-          <h2 class="cp-list-title" id="cp-list-title">Danh sách chương trình/chiến dịch</h2>
-          <a class="button button-primary cp-create" href="ho-so.html#chuong-trinh/them-moi">Tạo chiến dịch</a>
+          <h2 class="cp-list-title" id="cp-list-title">Danh sách chương trình</h2>
+          <div class="cp-list-actions">
+            <label class="cp-field cp-sort"><span class="visually-hidden">Sắp xếp</span><span class="pf-input"><select id="cp-sort"><option value="">Mới nhất</option><option value="ending">Sắp kết thúc</option><option value="progress">Tiến độ cao nhất</option><option value="need">Cần hỗ trợ nhiều nhất</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></span></label>
+            <a class="button button-primary cp-create" href="ho-so.html#chuong-trinh/them-moi">Tạo chiến dịch</a>
+          </div>
         </div>
         <p class="visually-hidden" id="cp-status" role="status" aria-live="polite"></p>
-        <!-- ---------- Lưới thẻ chương trình: 8 thẻ đầu, cuộn xuống nạp thêm 8 (chuong-trinh-thien-nguyen.js dựng) ---------- -->
-        <div class="cp-grid" id="cp-grid"></div>
+        <!-- ---------- Lưới thẻ chương trình: 8 thẻ mỗi trang (chuong-trinh-thien-nguyen.js dựng). Góc phải ảnh: avatar người vận động (logo Hội / ảnh cá nhân / logo tổ chức). .cp-grid-cover: thẻ ảnh tràn viền, chữ trắng trên ảnh ---------- -->
+        <div class="cp-grid cp-grid-cover" id="cp-grid"></div>
         <p class="cp-empty" id="cp-empty" hidden>Không tìm thấy chương trình phù hợp. Hãy thử từ khóa hoặc bộ lọc khác.</p>
-        <!-- ---------- Cuộn tải thêm: điểm mốc cuối lưới, chạm tới thì nạp 8 thẻ tiếp theo ---------- -->
-        <div class="cp-more" id="cp-more" aria-hidden="true"></div>
+        <!-- ---------- Phân trang: ‹ 1 2 3 › dưới lưới (chuong-trinh-thien-nguyen.js dựng; 1 trang thì ẩn) ---------- -->
+        <nav class="pf-pager cp-pager" id="cp-pager" aria-label="Phân trang danh sách chương trình"></nav>
       </section>
       <!-- ==================== END SECTION: DANH SÁCH CHƯƠNG TRÌNH ==================== -->
     </main>
@@ -181,7 +185,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js" defer></script>
-    <script src="chuong-trinh-data.js?v=20261101-9" defer></script>
-    <script src="chuong-trinh-thien-nguyen.js?v=20261101-4" defer></script>
+    <script src="chuong-trinh-data.js?v=20261105-18" defer></script>
+    <script src="chuong-trinh-thien-nguyen.js?v=20261105-7" defer></script>
   </body>
 </html>

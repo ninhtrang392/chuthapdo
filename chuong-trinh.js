@@ -147,7 +147,7 @@ const DETAILS = {
   },
 };
 // Ảnh minh họa xoay vòng cho bộ ảnh, bản tin (ảnh đầu bộ ảnh = ảnh của chương trình)
-const PV_PHOTOS = ['3.-028ae9de1f.jpg', 'trao-qua-hoc-sinh.jpg', 'z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg', '1358142_gen-h-235_1777566365.jpg', 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg', '01%201.jpg', 'z765570465791.jpg', 'Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg', '2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg'];
+const PV_PHOTOS = PROGRAM_PHOTOS; // ảnh bộ ảnh trang chi tiết: 9 ảnh trong Emages/Chương trình/ (chuong-trinh-data.js)
 // Đường dây nóng Trung ương Hội (cùng số ở chân trang)
 const HOTLINE = '024 3822 4030';
 
@@ -179,7 +179,7 @@ const programDetail = (p) => {
   const isMoney = !p.unit;
   const ended = p.days <= 0;
   // Lượt ủng hộ: tiền — trung bình ~2,6 triệu/lượt · hiến máu — mỗi lượt 1 đơn vị máu
-  const donors = isMoney ? Math.max(12, Math.round(p.raised / 2.6e6)) : p.raised;
+  const donors = p.startIn > 0 ? 0 : isMoney ? Math.max(12, Math.round(p.raised / 2.6e6)) : p.raised; // sắp diễn ra: chưa có lượt ủng hộ
   const spent = isMoney ? p.raised * (ended ? 0.97 : 0.36) : 0;
   const proven = ended ? spent : spent * 0.78;
   const goal = extra.summary || `Huy động nguồn lực xã hội cho chương trình “${p.title}”, hỗ trợ kịp thời ${info.groups.join(', ').toLowerCase()} tại ${p.place}.`;
@@ -208,6 +208,8 @@ const TOP_DONORS = [['Công ty Cổ phần An Phát', 'org', 'Emages/logo-demo/a
 const TOP_RATIOS = [0.071, 0.052, 0.037, 0.024, 0.016];
 const DONOR_NAMES = ['Lê Hoàng Nam', 'Phạm Thu Hằng', 'Đỗ Quang Huy', 'Vũ Ngọc Lan', 'Hoàng Minh Đức', 'Bùi Thị Thảo', 'Đặng Văn Định', 'Ngô Thanh Tùng', 'Dương Thị Hà', 'Lý Quốc Bảo', 'Phan Thị Ngọc', 'Trịnh Văn Long', 'Mai Anh Thư', 'Tạ Minh Khôi', 'Đinh Thị Yến'];
 const SMALL_AMOUNTS = [20000, 50000, 50000, 100000, 100000, 200000, 200000, 300000, 500000, 500000, 1000000, 2000000, 5000000];
+// Lời nhắn minh họa kèm khoản ủng hộ (khoảng 60% lượt có lời nhắn; còn lại để trống → "—")
+const DONOR_NOTES = ['Chúc bà con sớm vượt qua khó khăn.', 'Một chút tấm lòng gửi tới các em.', 'Chung tay vì cộng đồng.', 'Gửi chút yêu thương, mong mọi người bình an.', 'Chúc chương trình thành công tốt đẹp!', 'Lá lành đùm lá rách.', 'Mong các em có một mùa đông ấm áp.', 'Cảm ơn Hội đã kết nối những tấm lòng.', 'Ủng hộ chương trình, chúc bà con sớm ổn định cuộc sống.', 'Góp một phần nhỏ, mong lan tỏa thật nhiều.'];
 const programDonations = (p, d) => {
   const rand = seededRandom(`${p.id}-donors`);
   const from = new Date(`${d.raiseFrom}T07:00:00`).getTime();
@@ -216,10 +218,11 @@ const programDonations = (p, d) => {
     const time = from + rand() * (to - from);
     if (d.isMoney && i < TOP_DONORS.length) {
       const [name, kind, avatar] = TOP_DONORS[i];
-      return { name, kind, avatar, time, amount: Math.max(Math.round((p.raised * TOP_RATIOS[i]) / 100000) * 100000, (10 - i) * 1e6) };
+      return { name, kind, avatar, time, note: DONOR_NOTES[i * 3 % DONOR_NOTES.length], amount: Math.max(Math.round((p.raised * TOP_RATIOS[i]) / 100000) * 100000, (10 - i) * 1e6) };
     }
     const anonymous = rand() < 0.18;
-    return { name: anonymous ? 'Người ủng hộ ẩn danh' : DONOR_NAMES[Math.floor(rand() * DONOR_NAMES.length)], kind: anonymous ? 'heart' : 'user', time, amount: d.isMoney ? SMALL_AMOUNTS[Math.floor(rand() * SMALL_AMOUNTS.length)] : 1 };
+    const note = rand() < 0.6 ? DONOR_NOTES[Math.floor(rand() * DONOR_NOTES.length)] : '';
+    return { name: anonymous ? 'Người ủng hộ ẩn danh' : DONOR_NAMES[Math.floor(rand() * DONOR_NAMES.length)], kind: anonymous ? 'heart' : 'user', time, note, amount: d.isMoney ? SMALL_AMOUNTS[Math.floor(rand() * SMALL_AMOUNTS.length)] : 1 };
   }).sort((a, b) => b.time - a.time);
 };
 
@@ -249,7 +252,14 @@ const programBulletins = (p, d, photos) => {
       { date: d.raiseFrom, unit: d.org, tag: 'Tin tức', title: `Khởi động chương trình ${p.title}`, text: `Chương trình “${p.title}” đã được Hội phê duyệt và chính thức mở tiếp nhận ủng hộ từ ngày ${viDate(d.raiseFrom)}. Mọi đóng góp được ${d.org} tiếp nhận, sử dụng đúng mục đích và công khai sao kê trên nền tảng.`, media: media(photos.slice(0, 3)) },
     ];
   const thanks = { date: isoDate(new Date(from + (Date.now() - from) * 0.6)), unit: d.org, tag: 'Cảm ơn', title: `Những tấm lòng hướng về ${p.place}`, text: `Chỉ sau một thời gian ngắn mở tiếp nhận, chương trình đã nhận được ${vnd(d.donors)} ${d.isMoney ? 'lượt ủng hộ' : 'lượt đăng ký hiến máu'} từ cá nhân, tập thể và doanh nghiệp trên cả nước. ${d.org} trân trọng cảm ơn những tấm lòng đã đồng hành, mọi đóng góp đều được công khai trên trang chương trình.`, media: media([...photos.slice(2), ...PV_PHOTOS].slice(0, 4)) };
-  return [...own, thanks].sort((a, b) => b.date.localeCompare(a.date));
+  // Minh họa: chương trình thứ tự chẵn có thêm 3 bản tin giữa kỳ → hơn 3 bản tin, tab Hoạt động hiện nút Xem thêm
+  const at = (ratio) => isoDate(new Date(from + (Date.now() - from) * ratio));
+  const extra = p.order % 2 ? [] : [
+    { date: at(0.3), unit: d.org, tag: 'Hoạt động', title: `Khảo sát, lập danh sách đối tượng hưởng lợi tại ${p.place}`, text: `Tình nguyện viên ${d.org} đã đến từng thôn, bản tại ${p.place} để khảo sát thực tế, đối chiếu hoàn cảnh và lập danh sách đối tượng hưởng lợi. Danh sách được niêm yết công khai trước khi triển khai hỗ trợ.`, media: media(photos.slice(1, 3)) },
+    { date: at(0.45), unit: d.org, tag: 'Hoạt động', title: `Trao hỗ trợ đợt 1 — ${p.title}`, text: `Đợt 1 của chương trình đã được trao tận tay bà con tại ${p.place}. Hạng mục “${d.uses[0].toLowerCase()}” được ưu tiên triển khai trước; chứng từ và hình ảnh trao tặng được cập nhật đầy đủ trên trang chương trình.`, media: media([...photos.slice(2), ...PV_PHOTOS].slice(0, 4)) },
+    { date: at(0.8), unit: d.org, tag: 'Tin tức', title: `Kiểm tra, giám sát việc sử dụng nguồn đóng góp`, text: `Đoàn kiểm tra của Hội đã làm việc tại ${p.place}, đối chiếu sổ sách, chứng từ chi và kết quả triển khai thực tế. Toàn bộ khoản chi được công khai trên nền tảng để nhà hảo tâm theo dõi.`, media: media(photos.slice(0, 2)) },
+  ];
+  return [...own, ...extra, thanks].sort((a, b) => b.date.localeCompare(a.date));
 };
 
 // ---------- Bình luận minh họa: 10–14 bình luận của nhiều người, rải trong thời gian tiếp nhận; có trả lời của Ban tổ chức (đơn vị thực hiện) và trả lời qua lại giữa người dùng ----------
@@ -405,6 +415,8 @@ let ctx = null;
 const DONORS_PER_PAGE = 10;
 // Bình luận nằm ở cột phải (hẹp): hiện 3, Xem thêm mở thêm 3 — giữ 2 cột cân đối
 const COMMENT_STEP = 3;
+// Tab Hoạt động: hiện 3 bản tin mới nhất, hơn 3 thì có nút Xem thêm (mỗi lần mở thêm 3)
+const ACT_STEP = 3;
 const COMMENT_MAX = 500;
 // Mục tiêu dạng gọn cho dòng tóm tắt câu chuyện: 7 tỷ đồng · 500 triệu đồng · 2.000 đơn vị máu
 const shortAmount = (p, n) => (p.unit ? `${vnd(n)} ${p.unit}` : n >= 1e9 ? `${nf.format(Math.floor(n / 1e8) / 10)} tỷ đồng` : `${nf.format(Math.floor(n / 1e6))} triệu đồng`);
@@ -421,7 +433,7 @@ const renderProgram = (p) => {
   const donorListBtn = top.length ? `<button class="pf-btn pf-btn-ghost pf-pv-feed-more" type="button" data-pv-donor-list>Xem danh sách${icon('arrow')}</button>` : '';
   // Nội dung CK: mã chương trình + chuỗi ngẫu nhiên, sinh mới mỗi lượt xem trang (không trùng lặp), dùng trong popup QR
   const random = Array.from({ length: 6 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
-  ctx = { p, d, photos, photo: 0, donations, bulletins: programBulletins(p, d, photos), donorPage: 1, comments: programComments(p, d), commentLimit: COMMENT_STEP, sort: 'relevant', replyTo: null, replyDraft: '', memo: `${p.code.replace(/-/g, '')} ${random}` };
+  ctx = { p, d, photos, photo: 0, donations, bulletins: programBulletins(p, d, photos), donorPage: 1, comments: programComments(p, d), commentLimit: COMMENT_STEP, actLimit: ACT_STEP, sort: 'relevant', replyTo: null, replyDraft: '', memo: `${p.code.replace(/-/g, '')} ${random}` };
   document.title = `${p.title} | Hội Chữ thập đỏ Việt Nam`;
   $('meta[name="description"]').content = d.goal;
 
@@ -432,7 +444,7 @@ const renderProgram = (p) => {
   const raiseDays = Math.max(1, Math.round((new Date(d.raiseTo) - new Date(d.raiseFrom)) / DAY));
   const { bulletins } = ctx;
   const heart = icon('heart-solid');
-  // ---------- Các chiến dịch khác (SRS #19): 9 chương trình mới nhất đang hiển thị công khai, trừ chương trình đang xem — thẻ chương trình dùng chung với trang danh sách (programCard, chuong-trinh-data.js) ----------
+  // ---------- Các chiến dịch khác (SRS #19): 9 chương trình mới nhất đang hiển thị công khai, trừ chương trình đang xem — thẻ chương trình dùng chung với trang danh sách (programCard, chuong-trinh-data.js), cùng kiểu ảnh tràn viền (.cp-grid-cover) ----------
   const others = PROGRAMS.filter((x) => x.id !== p.id).slice(0, 9);
   // Danh sách ủng hộ: tìm theo tên · Tìm kiếm nâng cao (số tiền — chỉ chương trình gây quỹ tiền, thời gian) · bảng 10 dòng/trang
   const dateInput = (id, label) => `<div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="${label}" /><input class="pf-date-native" type="date" id="${id}" tabindex="-1" aria-hidden="true" /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — ${label.toLowerCase()}">${icon('calendar')}</button></div>`;
@@ -457,11 +469,16 @@ const renderProgram = (p) => {
   const tab = (id, label, selected = false) => `<button type="button" role="tab" id="pf-pv-tab-${id}" aria-controls="pf-pv-panel-${id}" aria-selected="${selected}" ${selected ? '' : 'tabindex="-1"'}>${label}</button>`;
 
   root.innerHTML = `
-    <!-- ---------- Đầu trang: chỉ tên chương trình · nhãn Khẩn cấp (đứng đầu) + nhóm đối tượng hưởng lợi (SRS #2) — không ảnh banner, không breadcrumb ---------- -->
+    <!-- ---------- Đầu trang: breadcrumb (Trang chủ › Chương trình thiện nguyện › tên) · tên chương trình · nhãn Khẩn cấp (đứng đầu) + nhóm đối tượng hưởng lợi (SRS #2) — không ảnh banner ---------- -->
     <header class="pv-banner">
-      <div class="container pv-banner-content">
-        <h1 class="pv-banner-title" id="pv-title">${escapeHtml(p.title)}</h1>
-        <p class="pv-banner-tags">${p.priority === 'urgent' ? '<span class="pv-banner-tag is-urgent"><span class="pf-dot" aria-hidden="true"></span>Khẩn cấp</span>' : ''}${d.info.groups.map((g) => `<span class="pv-banner-tag">${escapeHtml(g)}</span>`).join('')}</p>
+      <div class="container">
+        <nav class="breadcrumb pv-breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Trang chủ</a>${icon('chevron-right')}<a href="chuong-trinh-thien-nguyen.html">Chương trình thiện nguyện</a>${icon('chevron-right')}<span class="breadcrumb-current" aria-current="page">${escapeHtml(p.title)}</span>
+        </nav>
+        <div class="pv-banner-content">
+          <h1 class="pv-banner-title" id="pv-title">${escapeHtml(p.title)}</h1>
+          <p class="pv-banner-tags">${p.priority === 'urgent' ? '<span class="pv-banner-tag is-urgent"><span class="pf-dot" aria-hidden="true"></span>Khẩn cấp</span>' : ''}${d.info.groups.map((g) => `<span class="pv-banner-tag">${escapeHtml(g)}</span>`).join('')}</p>
+        </div>
       </div>
     </header>
     <div class="container">
@@ -497,7 +514,8 @@ const renderProgram = (p) => {
               <button class="pf-pv-link" type="button" data-pv-more aria-expanded="false" aria-controls="pf-pv-story-text"><span>Xem thêm</span>${icon('chevron-down')}</button>
             </div>
             <div class="pf-pv-panel" id="pf-pv-panel-acts" role="tabpanel" aria-labelledby="pf-pv-tab-acts" tabindex="0" hidden>
-              ${bulletins.length ? `<ol class="pf-pv-timeline">${bulletins.map((b) => `<li class="pf-pv-tl-item"><time class="pf-pv-tl-date" datetime="${b.date}">${viDate(b.date)}</time>${bulletin(b, { dateless: true })}</li>`).join('')}</ol>` : none('Chương trình chưa có bản tin cập nhật.')}
+              ${bulletins.length ? `<ol class="pf-pv-timeline" id="pv-acts">${bulletins.map((b, i) => `<li class="pf-pv-tl-item"${i >= ACT_STEP ? ' hidden' : ''}><time class="pf-pv-tl-date" datetime="${b.date}">${viDate(b.date)}</time>${bulletin(b, { dateless: true })}</li>`).join('')}</ol>
+              <button class="pf-btn pf-btn-ghost pf-pv-feed-more pv-acts-more" type="button" data-act-more aria-controls="pv-acts"${bulletins.length > ACT_STEP ? '' : ' hidden'}>Xem thêm hoạt động (${bulletins.length - ACT_STEP})${icon('arrow')}</button>` : none('Chương trình chưa có bản tin cập nhật.')}
             </div>
             <div class="pf-pv-panel" id="pf-pv-panel-donors" role="tabpanel" aria-labelledby="pf-pv-tab-donors" tabindex="0" hidden>${donorsCard}</div>
           </section>
@@ -540,7 +558,7 @@ const renderProgram = (p) => {
             </div>
             <ul class="pv-fund-facts">
               <li><span><small>Mục tiêu chiến dịch</small><b>${valueText(p.goal)}</b></span></li>
-              <li><span><small>Thời gian còn lại</small><b>${d.ended ? 'Đã kết thúc' : `${p.days} ngày`}</b></span></li>
+              <li><span><small>${upcoming(p) ? 'Trạng thái' : 'Thời gian còn lại'}</small><b${upcoming(p) ? ' class="is-upcoming"' : endingSoon(p) ? ' class="is-warning"' : ''}>${upcoming(p) ? `Sắp diễn ra · mở sau ${p.startIn} ngày` : d.ended ? 'Đã kết thúc' : `${p.days} ngày`}</b></span></li>
             </ul>
             <div class="pv-fund-panel">
               <div class="pv-fund-raised"><p><span class="visually-hidden">${d.isMoney ? 'Đã đạt được' : 'Đã tiếp nhận'}</span><b>${valueText(p.raised)}</b></p><b>${pctText}</b></div>
@@ -573,7 +591,7 @@ const renderProgram = (p) => {
         <div class="pf-pv-others-head"><h2 id="pv-others-title">Các chiến dịch khác</h2>
           <div class="pv-car-nav"><button class="pv-car-btn is-prev" type="button" data-car="pv-others" data-car-step="-1" aria-label="Chiến dịch trước">${icon('chevron-right')}</button><button class="pv-car-btn" type="button" data-car="pv-others" data-car-step="1" aria-label="Chiến dịch sau">${icon('chevron-right')}</button></div>
         </div>
-        <div class="pv-track pv-cards" id="pv-others" role="group" aria-label="Các chiến dịch khác — tự cuộn mỗi 10 giây, dừng khi rê chuột">${others.map((x) => programCard(x)).join('')}</div>
+        <div class="pv-track pv-cards cp-grid-cover" id="pv-others" role="group" aria-label="Các chiến dịch khác — tự cuộn mỗi 10 giây, dừng khi rê chuột">${others.map((x) => programCard(x)).join('')}</div>
       </section>
     </div>`;
 
@@ -724,10 +742,11 @@ const renderDonors = (page = ctx.donorPage) => {
   ctx.donorPage = Math.min(Math.max(1, page), pages);
   const start = (ctx.donorPage - 1) * DONORS_PER_PAGE;
   const slice = rows.slice(start, start + DONORS_PER_PAGE);
-  const heads = d.isMoney ? ['Người ủng hộ', 'Số tiền ủng hộ', 'Thời gian ủng hộ'] : ['Người hiến máu', 'Số lượng', 'Thời gian hiến máu'];
-  $('#pf-pv-donor-list').innerHTML = rows.length ? `<div class="pf-view-table"><table class="pf-reg-table is-view is-v-donors">
+  // Cột: # · người · số tiền / số lượng · lời nhắn (rỗng → —, dài thì cắt 2 dòng, rê chuột xem đủ) · thời gian
+  const heads = d.isMoney ? ['Người ủng hộ', 'Số tiền ủng hộ', 'Lời nhắn', 'Thời gian ủng hộ'] : ['Người hiến máu', 'Số lượng', 'Lời nhắn', 'Thời gian hiến máu'];
+  $('#pf-pv-donor-list').innerHTML = rows.length ? `<div class="pf-view-table"><table class="pf-reg-table is-view is-v-donors is-v-notes">
       <thead><tr><th scope="col" class="pf-col-index">#</th>${heads.map((t) => `<th scope="col">${t}</th>`).join('')}</tr></thead>
-      <tbody>${slice.map((x, i) => `<tr><td class="pf-col-index">${start + i + 1}</td><td><span class="pf-pv-donor">${donorAvatar(x)}<b>${escapeHtml(x.name)}</b></span></td><td><b class="pf-pv-amount">${d.isMoney ? `${vnd(x.amount)}đ` : `${x.amount} đơn vị`}</b></td><td>${viDateTime(x.time)}</td></tr>`).join('')}</tbody>
+      <tbody>${slice.map((x, i) => `<tr><td class="pf-col-index">${start + i + 1}</td><td><span class="pf-pv-donor">${donorAvatar(x)}<b>${escapeHtml(x.name)}</b></span></td><td><b class="pf-pv-amount">${d.isMoney ? `${vnd(x.amount)}đ` : `${x.amount} đơn vị`}</b></td><td>${x.note ? `<span class="pv-donor-note" title="${escapeHtml(x.note)}">${escapeHtml(x.note)}</span>` : '<span class="pv-donor-note is-empty" aria-label="Không có lời nhắn">—</span>'}</td><td>${viDateTime(x.time)}</td></tr>`).join('')}</tbody>
     </table></div>
     <div class="pf-table-foot">
       <p class="pf-muted" aria-live="polite">Hiển thị ${start + 1} – ${start + slice.length}/${vnd(rows.length)}</p>
@@ -1098,6 +1117,16 @@ body.addEventListener('click', (event) => {
   }
   if (event.target.closest('[data-cm-post]')) postComment();
   if (event.target.closest('[data-cm-more]')) { ctx.commentLimit += COMMENT_STEP; renderComments(); }
+  // Tab Hoạt động · Xem thêm: mở thêm ACT_STEP bản tin, hết thì ẩn nút; nút ghi số bản tin còn lại
+  const actMore = event.target.closest('[data-act-more]');
+  if (actMore) {
+    ctx.actLimit += ACT_STEP;
+    const items = [...document.querySelectorAll('#pv-acts > li')];
+    items.forEach((li, i) => { li.hidden = i >= ctx.actLimit; });
+    const left = items.length - ctx.actLimit;
+    actMore.hidden = left <= 0;
+    actMore.firstChild.textContent = `Xem thêm hoạt động (${left})`;
+  }
   const likeBtn = event.target.closest('[data-cm-like]');
   if (likeBtn) {
     const c = findComment(Number(likeBtn.dataset.cmLike));
@@ -1196,6 +1225,20 @@ const program = PROGRAMS.find((p) => p.id === new URLSearchParams(window.locatio
 if (program) {
   root.hidden = false;
   renderProgram(program);
+  // ---------- Cột phải dính khi cuộn (CSS: .pf-pv-split-side sticky, top = --side-top) ----------
+  // top = header + 24px; cột cao hơn khung nhìn → top âm (khung nhìn − cao cột − 24px) để cuộn tới đáy cột rồi mới dính.
+  // Tính lại khi đổi cỡ cửa sổ và khi cột đổi chiều cao (đổi tab Top 5 / Người đồng hành)
+  const side = root.querySelector('.pf-pv-split-side');
+  if (side) {
+    const SIDE_GAP = 24;
+    const setSideTop = () => {
+      const head = document.querySelector('.header')?.offsetHeight || 0;
+      side.style.setProperty('--side-top', `${Math.min(head + SIDE_GAP, window.innerHeight - side.offsetHeight - SIDE_GAP)}px`);
+    };
+    setSideTop();
+    addEventListener('resize', setSideTop);
+    if (window.ResizeObserver) new ResizeObserver(setSideTop).observe(side);
+  }
 } else {
   root.hidden = false;
   root.innerHTML = `<div class="container pv-empty">

@@ -51,7 +51,7 @@ const formatMoney = (n) => {
   return `${formatCount(value)} đồng`;
 };
 // Số liệu (cạnh tiêu đề section Đối tác tài trợ): chỉ thay chữ số trong <span>, kèm hậu tố "+" nếu có; khối MOTION cho đếm lên từ 0 khi cuộn tới
-const miniStats = [...document.querySelectorAll('.dh-mini-stats dd')];
+const miniStats = [...document.querySelectorAll('.dh-mini-stats dd, .dh-showcase-stat-list dd')];
 const miniTarget = (dd) => Number(dd.dataset.money ?? dd.dataset.count) || 0;
 const setMiniStat = (dd, value) => {
   dd.querySelector('span').textContent = dd.dataset.money !== undefined ? formatMoney(value) : formatCount(value) + (dd.dataset.suffix || '');
@@ -109,14 +109,143 @@ if (!SPONSORS_FEATURED.length && !SPONSORS_OTHERS.length) {
 // Logo tĩnh trong banner và khối Xây dựng & phát triển: lỗi tải → ô chữ tên đơn vị (NL03)
 document.querySelectorAll('.dh-founder-logo img, .dh-builders-logos img').forEach((img) => img.addEventListener('error', () => logoFallback(img), { once: true }));
 
+// ==================== THẺ ĐỒNG HÀNH: hơn 4 thẻ → tự chạy ngang vòng lặp + chấm chuyển thẻ ====================
+// Số thẻ hiển thị lấy từ biến CSS --dh-per (4; màn ≤900px: 2). Danh sách hơn FOUNDER_MAX thẻ → bọc khung .dh-founders-carousel + dải chấm
+// (dùng lại .founders-dot trang chủ). Cứ FOUNDER_INTERVAL ms trượt 1 thẻ sang trái (GSAP tween --dh-slide-x trên danh sách): thẻ đầu mờ đi,
+// thẻ kế tiếp ngoài khung hiện dần; xong đưa thẻ đầu xuống cuối, đặt lại 0 → vòng lặp liền mạch, không cắt mép thẻ.
+// Bấm chấm → mờ cả lượt, đổi thứ tự cho thẻ được chọn lên đầu, hiện lại. Dừng khi rê chuột / focus / tab ẩn.
+// Không GSAP hoặc giảm chuyển động → giữ lưới, thẻ dư xuống hàng, không có chấm.
+const FOUNDER_MAX = 4;
+const FOUNDER_INTERVAL = 3500;
+document.querySelectorAll('.dh-founders').forEach((list, listIndex) => {
+  if (list.children.length <= FOUNDER_MAX || !window.gsap) return;
+  const items = [...list.children];
+  items.forEach((li, i) => { li.dataset.slide = String(i); });
+  if (!list.id) list.id = `dh-founders-${listIndex + 1}`;
+  // ---------- Khung bọc + dải chấm ----------
+  const wrap = document.createElement('div');
+  wrap.className = 'dh-founders-carousel';
+  list.before(wrap);
+  wrap.append(list);
+  const dots = document.createElement('div');
+  dots.className = 'founders-dots';
+  dots.innerHTML = items.map((li, i) => {
+    const name = li.querySelector('.dh-founder-logo img')?.alt || `Thẻ ${i + 1}`;
+    return `<button class="founders-dot" type="button" data-slide="${i}" aria-controls="${list.id}" aria-label="Hiện ${escapeHtml(name)} đầu tiên"></button>`;
+  }).join('');
+  wrap.append(dots);
+
+  const card = (li) => li.querySelector('.dh-founder-card');
+  const perView = () => parseInt(getComputedStyle(list).getPropertyValue('--dh-per'), 10) || FOUNDER_MAX;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let timer = null;
+  let paused = false;
+  let busy = false;
+  const syncDots = () => {
+    const current = list.firstElementChild.dataset.slide;
+    dots.querySelectorAll('.founders-dot').forEach((dot) => dot.setAttribute('aria-current', String(dot.dataset.slide === current)));
+  };
+  // So le theo VỊ TRÍ trong khung (cao · thấp · cao · thấp), không theo thẻ → vòng lặp số thẻ lẻ vẫn xen kẽ đều; độ thấp lấy từ biến CSS --dh-low
+  const lowAt = (pos) => (pos % 2 === 1 ? getComputedStyle(list).getPropertyValue('--dh-low').trim() || '0px' : '0px');
+  // Thẻ trong khung hiện, ngoài khung ẩn (mờ trên .dh-founder-card — độ mờ của <li> do hiệu ứng chuyển từ GTINX quản lý)
+  const applyVisibility = () => {
+    const per = perView();
+    [...list.children].forEach((li, i) => {
+      const off = i >= per;
+      li.classList.toggle('is-off', off);
+      li.setAttribute('aria-hidden', String(off));
+      gsap.set(card(li), { opacity: off ? 0 : 1 });
+      gsap.set(li, { marginTop: lowAt(i) });
+    });
+  };
+  const step = () => {
+    if (paused || busy || document.hidden) return;
+    const children = [...list.children];
+    const first = children[0];
+    const incoming = children[perView()];
+    const gap = parseFloat(getComputedStyle(list).columnGap) || 0;
+    busy = true;
+    incoming.classList.remove('is-off');
+    incoming.setAttribute('aria-hidden', 'false');
+    gsap.timeline({
+      onComplete: () => {
+        list.append(first);
+        gsap.set(list, { '--dh-slide-x': '0px' });
+        gsap.set(first, { marginTop: lowAt(list.children.length - 1) }); // thẻ vừa xuống cuối: nhận độ cao của vị trí mới
+        first.classList.add('is-off');
+        first.setAttribute('aria-hidden', 'true');
+        busy = false;
+        syncDots();
+      },
+    })
+      .to(list, { '--dh-slide-x': `${-(first.offsetWidth + gap)}px`, duration: 0.9, ease: 'power3.inOut' }, 0)
+      .to(card(first), { opacity: 0, duration: 0.45, ease: 'power2.in' }, 0)
+      .fromTo(card(incoming), { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
+      // Mỗi thẻ lùi 1 vị trí → vừa trượt ngang vừa lên/xuống đúng nhịp so le của vị trí mới
+      .to(children.slice(1, perView() + 1), { marginTop: (k) => lowAt(k), duration: 0.9, ease: 'power3.inOut' }, 0);
+  };
+  const restart = () => {
+    clearInterval(timer);
+    timer = setInterval(step, FOUNDER_INTERVAL);
+  };
+  const goTo = (target) => {
+    if (busy || list.firstElementChild.dataset.slide === target) return;
+    busy = true;
+    const visible = [...list.children].slice(0, perView()).map(card);
+    gsap.to(visible, {
+      opacity: 0, duration: 0.3, ease: 'power2.in',
+      onComplete: () => {
+        while (list.firstElementChild.dataset.slide !== target) list.append(list.firstElementChild);
+        applyVisibility();
+        const shown = [...list.children].slice(0, perView()).map(card);
+        gsap.fromTo(shown, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out', stagger: 0.08, onComplete: () => { busy = false; } });
+        syncDots();
+      },
+    });
+    restart();
+  };
+  const update = () => {
+    const on = !reduced.matches && list.children.length > perView();
+    list.classList.toggle('is-carousel', on);
+    dots.hidden = !on;
+    clearInterval(timer);
+    timer = null;
+    if (on) {
+      gsap.set(list, { '--dh-slide-x': '0px' });
+      applyVisibility();
+      syncDots();
+      restart();
+    } else {
+      [...list.children].forEach((li) => {
+        li.classList.remove('is-off');
+        li.removeAttribute('aria-hidden');
+        gsap.set(card(li), { clearProps: 'opacity' });
+        gsap.set(li, { clearProps: 'marginTop' }); // trả so le về CSS (.is-low)
+      });
+    }
+  };
+  dots.addEventListener('click', (event) => {
+    const dot = event.target.closest('.founders-dot');
+    if (dot) goTo(dot.dataset.slide);
+  });
+  wrap.addEventListener('mouseenter', () => { paused = true; });
+  wrap.addEventListener('mouseleave', () => { paused = false; });
+  wrap.addEventListener('focusin', () => { paused = true; });
+  wrap.addEventListener('focusout', () => { paused = false; });
+  let resizeTimer;
+  addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(update, 200); });
+  reduced.addEventListener('change', update);
+  update();
+});
+
 // ==================== SECTION: NGƯỜI ĐỒNG HÀNH NỔI BẬT — tối đa 4 thẻ (BR-04, NL02, NL03) ====================
-// Thẻ: ảnh chân dung · khung trắng (tên · danh xưng · nút tròn biểu tượng theo dõi). Trích dẫn giữ trong dữ liệu cho trang chi tiết.
-// pos (tuỳ chọn): object-position riêng để đầu các thẻ ngang nhau. Ảnh chân dung dùng PNG đã tách nền (*-tach-nen.png) đặt trên nền hồng chung của khung ảnh (CSS .dh-person-avatar). Ảnh lỗi → ảnh đại diện mặc định (chữ cái đầu). Không có người → TB03.
+// Thẻ (nền ảnh hồng mờ): ảnh chân dung tròn viền trắng · tên chữ đen · danh xưng · nút UI KIT viền xanh "Theo dõi" · đường kẻ · trích dẫn nghiêng có dấu ngoặc xanh.
+// pos (tuỳ chọn): object-position riêng để đầu các thẻ ngang nhau; zoom (tuỳ chọn): phóng ảnh đứng xa cho khuôn mặt cân với thẻ khác. Ảnh chân dung dùng ảnh gốc có nền (không tách nền), cắt tròn bằng CSS .dh-person-avatar. Ảnh lỗi → ảnh đại diện mặc định (chữ cái đầu). Không có người → TB03.
 const PEOPLE = [
-  { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/tran-thu-ha-tach-nen.png', quote: 'Lan tỏa yêu thương không chỉ là hành động, mà là trách nhiệm của mỗi chúng ta.' },
-  { name: 'Phạm Gia Huy', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/le-quoc-bao-tach-nen.png', pos: '50% 43%', quote: 'Dù là điều nhỏ bé nhất, chúng ta vẫn có thể tạo nên thay đổi lớn lao.' },
-  { name: 'Hoàng Mai Linh', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/hoang-mai-linh-tach-nen.png', quote: 'Sẻ chia là một hành trình dài, và tôi mong được cùng mọi người lan tỏa điều tốt đẹp.' },
-  { name: 'Lê Quốc Bảo', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/le-quoc-bao-tach-nen.png', pos: '50% 43%', quote: 'Hạnh phúc thật sự là khi mình có thể giúp đỡ người khác vượt qua khó khăn.' },
+  { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/b4f3cc87d25f00c95859daf33b3c5e40.jpg', quote: 'Lan tỏa yêu thương không chỉ là hành động, mà là trách nhiệm của mỗi chúng ta.' },
+  { name: 'Phạm Gia Huy', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/0cbea7d214cc6acf1054334e41d9d945.jpg', pos: '50% 6%', zoom: 1.2, quote: 'Dù là điều nhỏ bé nhất, chúng ta vẫn có thể tạo nên thay đổi lớn lao.' },
+  { name: 'Hoàng Mai Linh', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/2b175da1066d5f3ef635d4980e47f6a4.jpg', zoom: 1.4, quote: 'Sẻ chia là một hành trình dài, và tôi mong được cùng mọi người lan tỏa điều tốt đẹp.' },
+  { name: 'Lê Quốc Bảo', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/396c741c3d37ad0199ac220d16169e3e.jpg', pos: '50% 12%', zoom: 1.45, quote: 'Hạnh phúc thật sự là khi mình có thể giúp đỡ người khác vượt qua khó khăn.' },
 ];
 const initials = (name) => { const w = name.trim().split(/\s+/); return (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(); };
 const peopleGrid = $('#dh-people-grid');
@@ -124,11 +253,12 @@ const PEOPLE_MAX = 4;
 const people = PEOPLE.slice(0, PEOPLE_MAX);
 if (!people.length) $('#dh-people-empty').hidden = false;
 peopleGrid.innerHTML = people.map((p) => `<li class="cp-card dh-person">
-    <span class="dh-person-avatar" data-initials="${escapeHtml(initials(p.name))}"><img src="${p.avatar}" alt="" width="400" height="480" loading="lazy"${p.pos ? ` style="object-position:${p.pos}"` : ''} /></span>
+    <span class="dh-person-avatar" data-initials="${escapeHtml(initials(p.name))}"><img src="${p.avatar}" alt="" width="400" height="480" loading="lazy"${p.pos || p.zoom ? ` style="${p.pos ? `object-position:${p.pos};` : ''}${p.zoom ? `--zoom:${p.zoom}` : ''}"` : ''} /></span>
     <div class="dh-person-info">
       <h3 class="dh-person-name">${escapeHtml(p.name)}</h3>
       <p class="dh-person-role">${escapeHtml(p.role)}</p>
-      <a class="dh-person-more" href="#" data-panel="Theo dõi người đồng hành" aria-label="Theo dõi ${escapeHtml(p.name)}"><svg class="icon" aria-hidden="true"><use href="#user-plus"/></svg></a>
+      <a class="button button-outline button-small dh-person-follow" href="#" data-panel="Theo dõi người đồng hành" aria-label="Theo dõi ${escapeHtml(p.name)}"><svg class="icon" aria-hidden="true"><use href="#user-plus"/></svg>Theo dõi</a>
+      <blockquote class="dh-person-quote"><p>${escapeHtml(p.quote)}</p></blockquote>
     </div>
   </li>`).join('');
 peopleGrid.querySelectorAll('.dh-person-avatar img').forEach((img) => img.addEventListener('error', () => {
@@ -163,7 +293,7 @@ if (window.gsap && window.ScrollTrigger) {
   mm.add('(prefers-reduced-motion: no-preference)', () => {
     // ---------- Tiêu đề: hiện theo dòng, trồi lên trong khung (SplitText, cùng kiểu trang chủ) ----------
     if (window.SplitText) {
-      gsap.utils.toArray('.dh-sponsors .dh-section-title, .dh-people .dh-section-title, .dh-coop .dh-section-title').forEach((title) => {
+      gsap.utils.toArray('.dh-showcase .dh-section-title, .dh-sponsors .dh-section-title, .dh-people .dh-section-title, .dh-coop .dh-section-title').forEach((title) => {
         title.classList.add('is-split');
         SplitText.create(title, {
           type: 'lines', mask: 'lines', autoSplit: true, linesClass: 'split-line',
@@ -195,8 +325,18 @@ if (window.gsap && window.ScrollTrigger) {
         onStart: () => setMiniStat(dd, 0),
         onUpdate: () => setMiniStat(dd, counter.value),
         onComplete: () => setMiniStat(dd, miniTarget(dd)),
-        scrollTrigger: { trigger: '.dh-mini-stats', start: 'top 90%', once: true },
+        scrollTrigger: { trigger: dd.closest('dl'), start: 'top 90%', once: true }, // mỗi dải số liệu (banner / Giới thiệu đồng hành) đếm khi chính nó cuộn tới
       });
+    });
+
+    // ---------- Giới thiệu đồng hành: thẻ GTINX nổi lên · dải số liệu trồi lên (mô tả dùng data-dh-reveal) ----------
+    gsap.from('.dh-showcase-stage', {
+      autoAlpha: 0, y: 48, scale: 0.97, duration: 1, ease: 'power3.out', clearProps: 'transform,opacity,visibility',
+      scrollTrigger: { trigger: '.dh-showcase-stage', start: 'top 85%', once: true },
+    });
+    gsap.from('.dh-showcase-stat-list > div', {
+      autoAlpha: 0, y: 24, duration: 0.8, ease: 'power3.out', stagger: 0.1, clearProps: 'transform,opacity,visibility',
+      scrollTrigger: { trigger: '.dh-showcase-stat-list', start: 'top 92%', once: true },
     });
     // Hàng logo trượt vào từ hai phía xen kẽ (cùng kiểu dải đối tác trang chủ)
     gsap.from('.dh-sponsor-marquee .partner-row', {
@@ -205,12 +345,12 @@ if (window.gsap && window.ScrollTrigger) {
       scrollTrigger: { trigger: '#dh-sponsor-tiers', start: 'top 88%', once: true },
     });
 
-    // ---------- Người đồng hành: ảnh mở từ dưới lên + thu từ phóng to về, khung tên trồi lên (xong thì trả transform cho hiệu ứng rê chuột của CSS) ----------
+    // ---------- Người đồng hành: ảnh tròn nở từ tâm + thu từ phóng to về, phần chữ trồi lên (xong thì trả transform cho hiệu ứng rê chuột của CSS) ----------
     gsap.utils.toArray('.dh-person').forEach((card, index) => {
       const avatar = card.querySelector('.dh-person-avatar');
       const img = avatar.querySelector('img');
       gsap.timeline({ delay: index * 0.12, defaults: { ease: 'expo.out' }, scrollTrigger: { trigger: card, start: 'top 88%', once: true } })
-        .fromTo(avatar, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, clearProps: 'clipPath' })
+        .fromTo(avatar, { clipPath: 'circle(0% at 50% 50%)' }, { clipPath: 'circle(75% at 50% 50%)', duration: 1.4, clearProps: 'clipPath' })
         .from(img, { scale: 1.3, duration: 1.6, clearProps: 'transform' }, 0)
         .from(card.querySelector('.dh-person-info'), { autoAlpha: 0, y: 32, duration: 0.9, ease: 'power3.out', clearProps: 'transform,opacity,visibility' }, 0.5);
     });
@@ -226,5 +366,75 @@ if (window.gsap && window.ScrollTrigger) {
       scale: 1, yPercent: 0, ease: 'none',
       scrollTrigger: { trigger: '.dh-cta-card', start: 'top bottom', end: 'top 55%', scrub: true },
     });
+  });
+}
+
+// ==================== MOTION: THẺ GTINX → 4 THẺ ĐỒNG HÀNH khi lăn chuột — dùng chung cho section Giới thiệu đồng hành và Banner (GSAP ScrollTrigger: ghim section, scrub) ====================
+// Cuộn tới section: hiện thẻ GTINX. Lăn chuột tiếp: section đứng yên (pin); đoạn đầu (GTINX_HOLD) GTINX đứng yên — lăn vài nấc vẫn còn GTINX;
+// qua hết đoạn giữ, GTINX thu nhỏ + mờ dần lùi ra, 4 thẻ lần lượt trồi lên vào chỗ. scrub 1 → bám bánh xe nhưng có độ trễ mượt;
+// snap (chỉ trong đoạn chuyển) → thả chuột giữa chừng thì tự chạy hết theo hướng đang cuộn (xuống → 4 thẻ, lên → về GTINX).
+// Chỉ màn ≥1101px (section vừa 1 màn hình) và không bật giảm chuyển động; còn lại 4 thẻ xếp dưới GTINX (CSS mặc định).
+const GTINX_HOLD = 1; // thời lượng giữ GTINX (đơn vị timeline; tăng để giữ lâu hơn, nhớ tăng end tương ứng)
+// copyOut / copyIn (tuỳ chọn): nội dung cột chữ đổi cùng lúc với thẻ (section 2: "GTINX — Đơn vị phát triển" → "Đơn vị đồng hành").
+// introBg (tuỳ chọn): section có lớp nền riêng cho trạng thái GTINX (biến CSS --dh-gx-bg), mờ đi khi chuyển.
+const setupGtinxSwap = ({ section, stage, intro, priority, copyOut, copyIn, introBg }) => {
+  const stageEl = $(stage);
+  const sectionEl = $(section);
+  if (!stageEl || !sectionEl || sectionEl.hidden) return null; // section đang ẩn (thuộc tính hidden) → không ghim
+  const header = $('.header');
+  stageEl.classList.add('is-swap');
+  sectionEl.classList.add('has-swap');
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: () => `top ${header ? header.offsetHeight : 0}px`, // ghim ngay dưới header cố định
+      end: '+=180%',
+      pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
+      refreshPriority: priority, // section ghim ở trên tính trước → các trigger phía dưới cộng đúng khoảng ghim
+      snap: {
+        snapTo: () => {
+          const hold = tl.labels.swap / tl.duration();
+          const progress = tl.scrollTrigger.progress; // vị trí thật (không dùng đích dự đoán theo vận tốc — lăn chuột luôn dự đoán vượt đoạn giữ)
+          if (progress < hold) return progress; // đang trong đoạn giữ GTINX → không kéo trang
+          return tl.scrollTrigger.direction > 0 ? 1 : hold;
+        },
+        duration: { min: 0.3, max: 0.8 }, delay: 0.1, ease: 'power2.inOut',
+        // html{scroll-behavior:smooth} làm snap của GSAP trượt quá đích → tắt tạm trong lúc snap chạy
+        onStart: () => { document.documentElement.style.scrollBehavior = 'auto'; },
+        onComplete: () => { document.documentElement.style.scrollBehavior = ''; },
+        onInterrupt: () => { document.documentElement.style.scrollBehavior = ''; },
+      },
+    },
+  });
+  tl.addLabel('swap', GTINX_HOLD)
+    .to(`${stage} ${intro}`, { autoAlpha: 0, scale: 0.86, yPercent: -10, duration: 1, ease: 'power2.in' }, 'swap')
+    .fromTo(`${stage} .dh-founder`, { autoAlpha: 0, '--dh-in-y': '160px' }, { autoAlpha: 1, '--dh-in-y': '0px', duration: 1, ease: 'power3.out', stagger: 0.15 }, 'swap+=0.45')
+    .to({}, { duration: 0.2 }); // giữ 4 thẻ một nhịp trước khi nhả ghim
+  // Dải chấm chuyển thẻ (chỉ có khi hơn 4 thẻ): ẩn lúc đang hiện GTINX, hiện cùng các thẻ — chỉ thuộc trạng thái "Đơn vị đồng hành"
+  const dots = stageEl.querySelector('.founders-dots');
+  if (dots) tl.fromTo(dots, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, ease: 'power2.out' }, 'swap+=1');
+  if (copyOut && copyIn) {
+    // Cột chữ: nội dung cũ trượt lên mờ đi, nội dung mới trồi lên — cùng nhịp GTINX lùi ra / 4 thẻ trồi vào
+    tl.to(copyOut, { autoAlpha: 0, y: -24, duration: 0.6, ease: 'power2.in' }, 'swap')
+      .fromTo(copyIn, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 'swap+=0.45');
+  }
+  // Nền trạng thái GTINX (section 2: ảnh xanh ngọc gợn sóng ở .dh-showcase::before) mờ dần → lộ nền sóng đỏ trên nền hồng khi sang "Đơn vị đồng hành"
+  if (introBg) tl.fromTo(sectionEl, { '--dh-gx-bg': 1 }, { '--dh-gx-bg': 0, duration: 1, ease: 'power2.inOut' }, 'swap');
+  return () => {
+    stageEl.classList.remove('is-swap');
+    sectionEl.classList.remove('has-swap');
+    sectionEl.style.removeProperty('--dh-gx-bg');
+  };
+};
+if (window.gsap && window.ScrollTrigger) {
+  gsap.matchMedia().add('(min-width: 1101px) and (prefers-reduced-motion: no-preference)', () => {
+    const cleanups = [
+      setupGtinxSwap({ // section 2: thẻ GTINX → 4 thẻ; chữ trái "GTINX — Đơn vị phát triển" → "Đơn vị đồng hành"
+        section: '.dh-showcase', stage: '.dh-showcase-stage', intro: '.dh-gx-card', priority: 2,
+        copyOut: '.dh-showcase-copy.is-gtinx', copyIn: '.dh-showcase-copy.is-partners', introBg: true,
+      }),
+      setupGtinxSwap({ section: '.dh-banner', stage: '.dh-banner-stage', intro: '.dh-gtinx-intro', priority: 1 }), // banner: thẻ GTINX dọc → 4 thẻ
+    ];
+    return () => cleanups.forEach((fn) => fn && fn());
   });
 }

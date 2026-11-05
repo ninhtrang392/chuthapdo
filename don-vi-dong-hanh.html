@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261103-75" />
+    <link rel="stylesheet" href="styles.css?v=20261105-31" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -51,6 +51,7 @@
       <symbol id="handshake" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 10.5 6 7l2.5 1.2"/><path d="M21.5 10.5 18 7l-3.2 1.3-3.6-1.5a1.6 1.6 0 0 0-1.7.4L7.6 9.3a1.3 1.3 0 0 0 1.7 1.9l2-1.3 5.6 4.8a1.3 1.3 0 0 1-1.8 1.9"/><path d="m15.1 16.6-1.6-1.4M13.5 17.9l-1.5-1.3M11.7 18.8l-1.2-1M6 7l-1 7 4.2 3.8a1.2 1.2 0 0 0 1.7-.1"/><path d="m18 7 1 7-2.1 1.6"/></g></symbol>
       <symbol id="coins" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="9" cy="6.5" rx="6" ry="2.5"/><path d="M3 6.5v4c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-4"/><path d="M3 10.5v4c0 1.4 2.7 2.5 6 2.5"/><ellipse cx="15" cy="14.5" rx="6" ry="2.5"/><path d="M9 14.5v3c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-3"/></g></symbol>
       <symbol id="sprout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12C12 8 9 5.5 4.5 5.5 4.5 9.5 7.5 12 12 12Z"/><path d="M12 10c0-3.5 2.6-6 7.5-6 0 4-2.8 6.5-7.5 6Z"/></g></symbol>
+      <symbol id="star" viewBox="0 0 24 24"><path d="M11.1 2.6a1 1 0 0 1 1.8 0l2.4 4.9a1.6 1.6 0 0 0 1.2.9l5.4.8a1 1 0 0 1 .5 1.7l-3.9 3.8a1.6 1.6 0 0 0-.5 1.4l.9 5.4a1 1 0 0 1-1.4 1l-4.8-2.5a1.6 1.6 0 0 0-1.4 0l-4.8 2.5a1 1 0 0 1-1.4-1l.9-5.4a1.6 1.6 0 0 0-.5-1.4L1.6 10.9a1 1 0 0 1 .5-1.7l5.4-.8a1.6 1.6 0 0 0 1.2-.9z"/></symbol>
       <symbol id="user-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="7.5" r="4"/><path d="M2.5 20.5c.6-3.8 3.4-6.2 7-6.2s6.4 2.4 7 6.2"/><path d="M19 8v6M16 11h6"/></g></symbol>
       <symbol id="sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17.5" r="2"/></g></symbol>
       <symbol id="chevron-down" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></g></symbol>
@@ -109,9 +110,75 @@
       </section>
       <!-- ==================== END SECTION: THÔNG ĐIỆP ==================== -->
 
+      <!-- ==================== SECTION: GIỚI THIỆU ĐỒNG HÀNH (sau Thông điệp) — giới thiệu GTINX — đơn vị phát triển nền tảng: tiêu đề · mô tả (trái) · thẻ GTINX (phải) · dải số liệu trên nền lụa đỏ ==================== -->
+      <!-- Ảnh nền section: Emages/Page đơn vị/Nền kem mơ màng với dải lụa đỏ.png (lụa đỏ ở đáy nằm sau dải số liệu) · nền thẻ GTINX: Emages/Page đơn vị/Nền công nghệ xanh ngọc phát sáng.png.
+           Lỗi tải ảnh → nền màu dự phòng (kem / xanh / đỏ), nội dung vẫn đọc được (NL03). Số liệu: DỮ LIỆU MINH HỌA, cùng nguồn với banner, don-vi-dong-hanh.js định dạng BR-05 và đếm lên khi cuộn tới -->
+      <section class="dh-showcase" aria-labelledby="dh-showcase-title">
+        <div class="container">
+          <!-- ---------- Cột chữ: 2 nội dung chồng cùng chỗ, đổi theo thẻ bên phải khi lăn chuột (don-vi-dong-hanh.js). Không JS / màn hẹp → chỉ nội dung GTINX ---------- -->
+          <div class="dh-showcase-head">
+            <!-- ---------- Nội dung 1 — GTINX, đơn vị phát triển (đi cùng thẻ GTINX) ---------- -->
+            <div class="dh-showcase-copy is-gtinx">
+              <h2 class="section-title dh-section-title" id="dh-showcase-title">GTINX — <span>Đơn vị phát triển</span> nền tảng</h2>
+              <p class="sponsor-lead" data-dh-reveal>Tự chủ công nghệ từ thiết kế đến vận hành, GTINX xây dựng nền tảng số kết nối Hội Chữ thập đỏ với nhà hảo tâm, đối tác và cộng đồng — minh bạch, hiệu quả, bền vững.</p>
+            </div>
+            <!-- ---------- Nội dung 2 — Đơn vị đồng hành (hiện khi cuộn sang 4 thẻ) ---------- -->
+            <div class="dh-showcase-copy is-partners">
+              <h2 class="section-title dh-section-title">Đơn vị <span>đồng hành</span></h2>
+              <p class="sponsor-lead">Trân trọng sự đồng hành của các tổ chức, doanh nghiệp và cá nhân trong hành trình hỗ trợ cộng đồng, xây dựng xã hội nhân ái, bền vững.</p>
+            </div>
+          </div>
+
+          <!-- ---------- Khung chuyển (.dh-showcase-stage): thẻ GTINX và 4 thẻ đồng hành chồng cùng chỗ. Cuộn tới → thẻ GTINX; lăn chuột tiếp (GSAP ScrollTrigger: ghim section, scrub — cùng hiệu ứng banner) → GTINX lùi ra, 4 thẻ lần lượt trồi vào. Không JS / giảm chuyển động / màn hẹp → 4 thẻ xếp dưới thẻ GTINX ---------- -->
+          <div class="dh-showcase-stage">
+            <!-- ---------- Thẻ GTINX — đối tác chiến lược: nền công nghệ xanh (địa cầu trái · sóng sáng đáy) · biểu tượng cộng đồng trên địa cầu · logo | khẩu hiệu · mô tả · ô kính biểu tượng bên phải ---------- -->
+            <article class="dh-gx-card" aria-label="GTINX — Đơn vị phát triển">
+              <span class="dh-gx-badge"><svg class="icon" aria-hidden="true"><use href="#star"/></svg>Đơn vị phát triển</span>
+              <span class="dh-gx-community" aria-hidden="true"><svg class="icon"><use href="#people"/></svg></span>
+              <div class="dh-gx-body">
+                <div class="dh-gx-brand">
+                  <img class="dh-gx-logo" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" />
+                  <p class="dh-gx-slogan">Tự tin – Tự chủ – Tự cường</p>
+                </div>
+                <p class="dh-gx-desc">Đơn vị chủ trì xây dựng nền tảng chuyển đổi số nhân đạo,<br class="dh-gx-br" /> kiến tạo hệ sinh thái kết nối cộng đồng bền vững.</p>
+              </div>
+              <!-- ---------- Ô kính biểu tượng bên phải (trang trí, bay lơ lửng) ---------- -->
+              <span class="dh-gx-tiles" aria-hidden="true">
+                <span class="dh-gx-tile"><svg class="icon"><use href="#hand-heart"/></svg></span>
+                <span class="dh-gx-tile"><svg class="icon"><use href="#people"/></svg></span>
+                <span class="dh-gx-tile"><svg class="icon"><use href="#chart"/></svg></span>
+                <span class="dh-gx-tile"><svg class="icon"><use href="#chart"/></svg></span>
+              </span>
+            </article>
+
+            <!-- ---------- Thẻ đồng hành (dùng lại .dh-founders / .dh-founder của banner, .is-compact cho vừa 1 khung hình). Hiện 4 thẻ (màn hẹp 2); nhiều hơn → tự chạy ngang vòng lặp (don-vi-dong-hanh.js). Thẻ 5 Nutifood: DỮ LIỆU MINH HỌA ---------- -->
+            <ul class="dh-founders is-compact" aria-label="Đơn vị đồng hành tiêu biểu">
+              <!-- ---------- TẠM ẨN: chỉ hiện 3 thẻ BIDV · Vietjet · Camel (styles.css căn giữa khi còn 3 thẻ). Bỏ comment 2 thẻ PetroVietnam, Nutifood để hiện lại ---------- -->
+              <!-- <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-petro" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/PETROVIETNAM.png" alt="PetroVietnam" width="400" height="333" /></span><p class="dh-founder-role">Tiếp sức<br /> hoạt động<br /> nhân đạo</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/2.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li> -->
+              <li class="dh-founder is-low"><div class="dh-founder-card"><span class="dh-founder-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/BIDV.jpg" alt="BIDV" width="947" height="366" /></span><p class="dh-founder-role">Đồng hành<br /> phát triển<br /> cộng đồng</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/1.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+              <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Vietjet.png" alt="Vietjet Air" width="3840" height="2160" style="--zoom:2" /></span><p class="dh-founder-role">Kết nối<br /> hành trình<br /> nhân ái</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/3.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+              <li class="dh-founder is-low"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-camel" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="Camel" width="733" height="448" style="--zoom:1.12" /></span><p class="dh-founder-role">Chung tay<br /> hỗ trợ<br /> cộng đồng</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/4.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+              <!-- <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-petro" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/NUTRIFOOD.png" alt="Nutifood" width="400" height="333" style="--zoom:1.3" /></span><p class="dh-founder-role">Nâng bước<br /> tương lai<br /> trẻ em</p><span class="dh-founder-photo"><img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-nhan-qua.jpg" alt="" width="624" height="415" loading="lazy" /></span></div></li> -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- ---------- Dải số liệu trên nền lụa đỏ: biểu tượng tròn viền vàng · số trắng · nhãn · vạch ngăn (SRS mục C, BR-05) ---------- -->
+        <div class="dh-showcase-stats">
+          <dl class="container dh-showcase-stat-list" aria-label="Số liệu đồng hành">
+            <div><dt>Đối tác đồng hành</dt><dd data-count="268"><svg class="icon" aria-hidden="true"><use href="#handshake"/></svg><span>268</span></dd></div>
+            <div><dt>Lượt ủng hộ chương trình</dt><dd data-count="63462"><svg class="icon" aria-hidden="true"><use href="#people"/></svg><span>63.462</span></dd></div>
+            <div><dt>Tổng giá trị đồng hành</dt><dd data-money="128650000000"><svg class="icon" aria-hidden="true"><use href="#coins"/></svg><span>128,6 tỷ đồng</span></dd></div>
+            <div><dt>Chương trình trọng điểm được hỗ trợ</dt><dd data-count="36"><svg class="icon" aria-hidden="true"><use href="#sprout"/></svg><span>36</span></dd></div>
+          </dl>
+        </div>
+      </section>
+      <!-- ==================== END SECTION: GIỚI THIỆU ĐỒNG HÀNH ==================== -->
+
       <!-- ==================== SECTION: BANNER ĐỒNG HÀNH (SRS mục B) — theo mockup: tiêu đề · mô tả · 4 thẻ số liệu (trái) · 4 thẻ kính trắng đơn vị đồng hành xếp so le (phải); số liệu mục C ở section Đối tác tài trợ ==================== -->
       <!-- Ảnh nền: Emages/Page đơn vị/Dải Ruy-băng Đỏ Vì Trái Tim.png; lỗi tải ảnh → nền màu mặc định (NL03), nội dung vẫn hiển thị -->
-      <section class="dh-banner" aria-labelledby="dh-title">
+      <!-- Đang ẩn (thuộc tính hidden): nội dung GTINX + thẻ đồng hành đã có ở section Giới thiệu đồng hành — bỏ hidden để hiện lại (JS tự bỏ qua hiệu ứng ghim khi section ẩn). -->
+      <section class="dh-banner" aria-labelledby="dh-title" hidden>
         <div class="container dh-banner-grid">
           <!-- ---------- Tiêu đề (đỏ) · gạch mảnh · mô tả · 4 thẻ số liệu (SRS mục C) ---------- -->
           <div class="dh-banner-text">
@@ -128,13 +195,29 @@
             <!-- ==================== END SECTION: SỐ LIỆU ĐỒNG HÀNH ==================== -->
           </div>
 
-          <!-- ---------- 4 thẻ kính trắng so le (mép trên chéo): logo đơn vị · gạch đỏ · vai trò · ảnh minh họa theo đơn vị ở đáy mờ dần lên (Emages/Page đơn vị/1–4.png) ---------- -->
-          <ul class="dh-founders" aria-label="Đơn vị đồng hành tiêu biểu">
-            <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></span><p class="dh-founder-role">Ứng dụng<br /> công nghệ<br /> vì nhân đạo</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/2.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
-            <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/BIDV.jpg" alt="BIDV" width="947" height="366" /></span><p class="dh-founder-role">Đồng hành<br /> phát triển<br /> cộng đồng</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/1.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
-            <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Vietjet.png" alt="Vietjet Air" width="3840" height="2160" style="--zoom:2" /></span><p class="dh-founder-role">Kết nối<br /> hành trình<br /> nhân ái</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/3.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
-            <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-camel" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="Camel" width="733" height="448" style="--zoom:1.12" /></span><p class="dh-founder-role">Chung tay<br /> hỗ trợ<br /> cộng đồng</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/4.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
-          </ul>
+          <!-- ---------- Ô phải (.dh-banner-stage): thẻ GTINX và 4 thẻ đồng hành chồng cùng chỗ. Cuộn tới → thẻ GTINX; lăn chuột tiếp (GSAP ScrollTrigger: ghim banner, scrub) → GTINX lùi ra, 4 thẻ lần lượt trồi vào. Không JS / giảm chuyển động / màn hẹp → GTINX xếp trên 4 thẻ ---------- -->
+          <div class="dh-banner-stage">
+            <!-- ---------- Thẻ GTINX — đơn vị chủ trì, theo nhận diện thương hiệu GTINX: nhãn xanh "Đơn vị chủ trì" · logo · khẩu hiệu xanh nghiêng + gạch đỏ · tiêu đề xanh · mô tả · nền sóng xanh phát sáng (Emages/Page đơn vị/Nền trừu tượng sóng xanh phát sáng.png) ---------- -->
+            <div class="dh-gtinx-intro">
+              <div class="dh-gtinx-intro-box">
+                <span class="dh-gtinx-badge"><svg class="icon" aria-hidden="true"><use href="#star"/></svg>Đơn vị chủ trì</span>
+                <div class="dh-gtinx-intro-card">
+                  <img class="dh-gtinx-intro-logo" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" />
+                  <p class="dh-gtinx-slogan">Tự tin - Tự chủ - Tự cường</p>
+                  <p class="dh-gtinx-intro-title">Đơn vị chủ trì xây dựng nền tảng</p>
+                  <p class="dh-gtinx-intro-sub">Kiến tạo nền tảng công nghệ kết nối hệ sinh thái nhân đạo</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- ---------- 4 thẻ kính trắng so le (mép trên chéo): logo đơn vị · gạch đỏ · vai trò · ảnh minh họa theo đơn vị ở đáy mờ dần lên (Emages/Page đơn vị/1–4.png) ---------- -->
+            <ul class="dh-founders" aria-label="Đơn vị đồng hành tiêu biểu">
+              <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-petro" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/PETROVIETNAM.png" alt="PetroVietnam" width="400" height="333" /></span><p class="dh-founder-role">Tiếp sức<br /> hoạt động<br /> nhân đạo</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/2.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+              <li class="dh-founder is-low"><div class="dh-founder-card"><span class="dh-founder-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/BIDV.jpg" alt="BIDV" width="947" height="366" /></span><p class="dh-founder-role">Đồng hành<br /> phát triển<br /> cộng đồng</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/1.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+              <li class="dh-founder"><div class="dh-founder-card"><span class="dh-founder-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Vietjet.png" alt="Vietjet Air" width="3840" height="2160" style="--zoom:2" /></span><p class="dh-founder-role">Kết nối<br /> hành trình<br /> nhân ái</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/3.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+              <li class="dh-founder is-low"><div class="dh-founder-card"><span class="dh-founder-logo"><img class="logo-camel" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="Camel" width="733" height="448" style="--zoom:1.12" /></span><p class="dh-founder-role">Chung tay<br /> hỗ trợ<br /> cộng đồng</p><span class="dh-founder-photo"><img src="Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/4.png" alt="" width="1086" height="1448" loading="lazy" /></span></div></li>
+            </ul>
+          </div>
         </div>
 
       </section>
@@ -172,7 +255,7 @@
             <p class="sponsor-lead" data-dh-reveal>Trân trọng cảm ơn các đối tác, doanh nghiệp đã đồng hành cùng chúng tôi trong các hoạt động nhân đạo, vì cộng đồng.</p>
           </div>
         </div>
-        <!-- ---------- 2 mục logo trong khung container: tiêu biểu (thẻ lớn: logo · tên · vai trò · vạch màu đáy) · khác (ô logo nhỏ viền mảnh); mỗi hàng chạy ngang, dừng khi rê chuột ---------- -->
+        <!-- ---------- 2 mục logo trong khung container: tiêu biểu (thẻ lớn: logo · tên · vai trò · vạch màu đáy) · khác (ô logo nhỏ có bóng, không viền); mỗi hàng chạy ngang, dừng khi rê chuột ---------- -->
         <div class="container dh-tiers" id="dh-sponsor-tiers">
           <!-- ---------- Mục 1: Các đơn vị đồng hành tiêu biểu ---------- -->
           <h3 class="dh-tier-divider is-first"><span>Các đơn vị đồng hành tiêu biểu</span></h3>
@@ -341,6 +424,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js" defer></script>
-    <script src="don-vi-dong-hanh.js?v=20261103-20" defer></script>
+    <script src="don-vi-dong-hanh.js?v=20261105-15" defer></script>
   </body>
 </html>

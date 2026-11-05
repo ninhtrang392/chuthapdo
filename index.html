@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
     <link rel="preload" as="image" href="Emages/hero%202.png" />
-    <link rel="stylesheet" href="styles.css?v=20261102-63" />
+    <link rel="stylesheet" href="styles.css?v=20261105-62" />
     <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
     <script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -200,7 +200,7 @@
                 <!-- ==================== SECTION 03: CHƯƠNG TRÌNH ĐANG CẦN CHUNG TAY ==================== -->
                 <!-- Dữ liệu minh họa: tên, số liệu, tiến độ, thời hạn phải lấy từ CMS/API đã xác minh.
            Bố cục: 1 chương trình nổi bật (trái: ảnh + chữ trên ảnh · phải: câu chuyện, logo Hội, 2 ảnh polaroid)
-           + 4 thẻ bên dưới dùng lại thẻ .cp-card của trang danh sách (số liệu theo chuong-trinh-data.js).
+           + 4 thẻ bên dưới dùng lại thẻ .cp-card ảnh tràn viền của trang danh sách (sinh từ chuong-trinh-data.js).
            Cả card bấm được (link tiêu đề phủ toàn card, .stretched). -->
                 <section class="section campaigns" id="chuong-trinh" aria-labelledby="campaigns-title">
                     <div class="container">
@@ -227,7 +227,11 @@
                                 </div>
                             </div>
                             <div class="spotlight-story">
-                                <img class="spotlight-logo" src="Emages/logo-hctd.svg" alt="Hội Chữ thập đỏ Việt Nam" width="220" height="52" />
+                                <!-- ---------- Người vận động (thay logo Hội): avatar · "Người vận động" · tên + nhãn loại (Cá nhân / Tổ chức / Quỹ nhân đạo) — dùng lại .pf-pv-org của trang chi tiết; dữ liệu theo OWNERS (chuong-trinh-data.js) ---------- -->
+                                <div class="pf-pv-org spotlight-owner">
+                                    <img class="spotlight-owner-avatar is-person" src="Emages/avatar/tran-thu-ha.jpg" alt="" width="48" height="48" loading="lazy" />
+                                    <div class="pf-pv-org-text"><p class="pf-pv-cap">Người vận động</p><p class="pf-pv-org-name">Trần Thu Hà<span class="pf-badge is-blue">Cá nhân</span></p></div>
+                                </div>
                                 <p>Sau trận lũ quét lịch sử do bão Yagi, Làng Nủ (Lào Cai) chịu thiệt hại nặng nề về người và tài sản. Nhiều ngôi nhà bị cuốn trôi, cuộc sống của người dân rơi vào khó khăn. Chương trình kêu gọi hỗ trợ khẩn cấp để giúp bà
                                     con ổn định nơi ở, khôi phục sinh kế và sớm trở lại cuộc sống an toàn hơn.</p>
                                 <p>Có những mái nhà không còn nguyên vẹn. Có những bữa cơm mãi mãi thiếu đi một người thân. Có những đứa trẻ phải lớn lên cùng khoảng trống không gì có thể thay thế. Sau cơn lũ, điều người dân Làng Nủ phải đối mặt không chỉ
@@ -238,62 +242,78 @@
                             </div>
                         </article>
 
-                        <!-- ---------- 4 chương trình bên dưới: thẻ .cp-card (như trang danh sách, không có nút Ủng hộ) + logo Hội góc phải ảnh ---------- -->
-                        <div class="cp-grid campaigns-grid">
+                        <!-- ---------- 4 chương trình bên dưới: thẻ ảnh tràn viền giống trang danh sách (.cp-grid-cover) — HTML sinh từ programCard + PROGRAMS (chuong-trinh-data.js): ảnh Emages/Chương trình/, avatar người vận động góc phải, nút Ủng hộ ngay. Đổi dữ liệu chương trình thì sinh lại 4 thẻ này ---------- -->
+                        <div class="cp-grid campaigns-grid cp-grid-cover">
                             <article class="cp-card">
                                 <div class="cp-card-media">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg" alt="" loading="lazy" />
+                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/photo-3-16722031623611945449954.png" alt="" loading="lazy" />
                                     <span class="cp-priority is-urgent"><span class="cp-dot" aria-hidden="true"></span>Khẩn cấp</span>
-                                    <img class="cp-card-mark" src="Emages/logo-hctd-mark.svg" alt="" width="36" height="36" />
+                                    <img class="cp-card-mark is-person" src="Emages/avatar/tran-thu-ha.jpg" alt="Người vận động: Trần Thu Hà" title="Người vận động: Trần Thu Hà" width="36" height="36" loading="lazy" />
                                 </div>
                                 <div class="cp-card-body">
                                     <p class="cp-place"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Quảng Trị</p>
                                     <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=lu-lut-mien-trung">Khắc phục hậu quả lũ lụt cho người dân miền Trung</a></h3>
-                                    <div class="cp-figures"><strong class="cp-raised" title="1.245.000.000 ₫">1,24 tỷ ₫</strong><span class="cp-goal" title="Mục tiêu 2.000.000.000 ₫">2 tỷ ₫</span></div>
+                                    <div class="cp-figures">
+                                        <strong class="cp-raised" title="1.245.000.000 ₫">1,25 tỷ ₫</strong>
+                                        <span class="cp-goal" title="Mục tiêu 2.000.000.000 ₫">2 tỷ ₫</span>
+                                    </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="Đã đạt 62% mục tiêu"><span style="width:62%"></span></div>
                                     <div class="cp-meta"><span>Đạt 62%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 18 ngày</span></div>
+                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=lu-lut-mien-trung"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                             <article class="cp-card">
                                 <div class="cp-card-media">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/z765570465791.jpg" alt="" loading="lazy" />
+                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/image.png" alt="" loading="lazy" />
                                     <span class="cp-priority is-medium"><span class="cp-dot" aria-hidden="true"></span>Trung bình</span>
-                                    <img class="cp-card-mark" src="Emages/logo-hctd-mark.svg" alt="" width="36" height="36" />
+                                    <img class="cp-card-mark is-person" src="Emages/avatar/le-quoc-bao.jpg" alt="Người vận động: Lê Quốc Bảo" title="Người vận động: Lê Quốc Bảo" width="36" height="36" loading="lazy" />
                                 </div>
                                 <div class="cp-card-body">
                                     <p class="cp-place"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Hà Nội</p>
                                     <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=hien-mau-mua-he">Giọt hồng yêu thương — tiếp sức kho máu mùa hè</a></h3>
-                                    <div class="cp-figures"><strong class="cp-raised">3.120 đơn vị máu</strong><span class="cp-goal" title="Mục tiêu 5.000 đơn vị máu">5.000 đơn vị máu</span></div>
-                                    <div class="cp-bar" role="progressbar" aria-label="Tiến độ tiếp nhận máu" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="Đã tiếp nhận 62% mục tiêu"><span style="width:62%"></span></div>
+                                    <div class="cp-figures">
+                                        <strong class="cp-raised" title="3.120 đơn vị máu">3.120 đơn vị máu</strong>
+                                        <span class="cp-goal" title="Mục tiêu 5.000 đơn vị máu">5.000 đơn vị máu</span>
+                                    </div>
+                                    <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="Đã đạt 62% mục tiêu"><span style="width:62%"></span></div>
                                     <div class="cp-meta"><span>Đạt 62%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 12 ngày</span></div>
+                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=hien-mau-mua-he"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                             <article class="cp-card">
                                 <div class="cp-card-media">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/1-1-3-9134.avif" alt="" loading="lazy" />
+                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/5f7c45a6-e2a9-48f8-8a3f-8d3cbd503375.png" alt="" loading="lazy" />
                                     <span class="cp-priority is-low"><span class="cp-dot" aria-hidden="true"></span>Thấp</span>
-                                    <img class="cp-card-mark" src="Emages/logo-hctd-mark.svg" alt="" width="36" height="36" />
+                                    <img class="cp-card-mark is-org" src="Emages/logo-demo/hy-vong-xanh.svg" alt="Người vận động: Quỹ Hy vọng Xanh" title="Người vận động: Quỹ Hy vọng Xanh" width="36" height="36" loading="lazy" />
                                 </div>
                                 <div class="cp-card-body">
                                     <p class="cp-place"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Tuyên Quang</p>
                                     <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=mai-am-nhan-ai">Mái ấm nhân ái cho hộ nghèo, người cao tuổi neo đơn</a></h3>
-                                    <div class="cp-figures"><strong class="cp-raised" title="860.000.000 ₫">860 triệu ₫</strong><span class="cp-goal" title="Mục tiêu 1.500.000.000 ₫">1,5 tỷ ₫</span></div>
+                                    <div class="cp-figures">
+                                        <strong class="cp-raised" title="860.000.000 ₫">860 triệu ₫</strong>
+                                        <span class="cp-goal" title="Mục tiêu 1.500.000.000 ₫">1,5 tỷ ₫</span>
+                                    </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="57" aria-valuetext="Đã đạt 57% mục tiêu"><span style="width:57%"></span></div>
                                     <div class="cp-meta"><span>Đạt 57%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 40 ngày</span></div>
+                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=mai-am-nhan-ai"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                             <article class="cp-card">
                                 <div class="cp-card-media">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/3.-028ae9de1f.jpg" alt="" loading="lazy" />
+                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/72ad1836-57d6-41e3-aad3-6638cbc4c87e.png" alt="" loading="lazy" />
                                     <span class="cp-priority is-medium"><span class="cp-dot" aria-hidden="true"></span>Trung bình</span>
-                                    <img class="cp-card-mark" src="Emages/logo-hctd-mark.svg" alt="" width="36" height="36" />
+                                    <img class="cp-card-mark is-org" src="Emages/logo-demo/an-phat.svg" alt="Người vận động: Công ty Cổ phần An Phát" title="Người vận động: Công ty Cổ phần An Phát" width="36" height="36" loading="lazy" />
                                 </div>
                                 <div class="cp-card-body">
                                     <p class="cp-place"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Cao Bằng</p>
-                                    <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=tiep-suc-den-truong">Tiếp sức đến trường cho học sinh vùng cao</a></h3>
-                                    <div class="cp-figures"><strong class="cp-raised" title="328.500.000 ₫">329 triệu ₫</strong><span class="cp-goal" title="Mục tiêu 800.000.000 ₫">800 triệu ₫</span></div>
+                                    <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=tiep-suc-den-truong">Tiếp sức đến trường vùng cao</a></h3>
+                                    <div class="cp-figures">
+                                        <strong class="cp-raised" title="328.500.000 ₫">329 triệu ₫</strong>
+                                        <span class="cp-goal" title="Mục tiêu 800.000.000 ₫">800 triệu ₫</span>
+                                    </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="41" aria-valuetext="Đã đạt 41% mục tiêu"><span style="width:41%"></span></div>
                                     <div class="cp-meta"><span>Đạt 41%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 34 ngày</span></div>
+                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=tiep-suc-den-truong"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                         </div>
