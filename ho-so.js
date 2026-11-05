@@ -723,7 +723,7 @@ const vDocs = (docs) => (docs.length ? `<ul class="pf-view-docs">${docs.map((d) 
 // ---------- Trang chiến dịch (bố cục như trang gây quỹ công khai): ảnh · gây quỹ · kê khai chi · tab · cập nhật · top ủng hộ · chiến dịch khác ----------
 // Ảnh minh họa xoay vòng theo mã chương trình (ảnh đầu = ảnh banner của chương trình)
 const PV_PHOTOS = ['3.-028ae9de1f.jpg', 'trao-qua-hoc-sinh.jpg', 'z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg', '1358142_gen-h-235_1777566365.jpg', 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg', '01%201.jpg', 'z765570465791.jpg', 'Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg', '2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg'];
-const pvVnd = (n) => `${vVnd(Math.round(n))} VND`;
+const pvVnd = (n) => `${vVnd(Math.round(n))} VNĐ`;
 const pvMoney = (n) => `${vVnd(Math.round(n))}đ`;
 // pad2, seededRandom (số ngẫu nhiên cố định theo mã): khai báo ở XEM CHI TIẾT HỒ SƠ THÀNH LẬP / GIA NHẬP ĐỘI, CLB — chỉ gọi khi mở modal
 const localIso = (d = new Date()) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
@@ -1085,14 +1085,14 @@ const renderProgramView = (p) => {
       </div>
       <div class="pf-pv-donor-adv" id="pf-pv-donor-adv" role="region" aria-label="Tìm kiếm nâng cao" hidden>
         <div class="pf-adv-grid is-donors">
-          <label class="pf-adv-field"><span>Số tiền ủng hộ</span>
-            <span class="pf-input is-select"><select id="pf-pv-donor-amount"><option value="">Tất cả mức ủng hộ</option><option value="lt100">Dưới 100.000đ</option><option value="100-1m">Từ 100.000đ đến 1.000.000đ</option><option value="gt1m">Trên 1.000.000đ</option></select>${icon('chevron-down', 'icon pf-caret')}</span>
-          </label>
+          <div class="pf-adv-field" role="group" aria-labelledby="pf-pv-donor-money"><span id="pf-pv-donor-money">Số tiền ủng hộ</span>
+            <div class="pf-reg-range">${donorMoney('pf-pv-donor-min', 'Từ')}${donorMoney('pf-pv-donor-max', 'Đến')}</div>
+          </div>
           <div class="pf-adv-field" role="group" aria-labelledby="pf-pv-donor-time"><span id="pf-pv-donor-time">Thời gian ủng hộ</span>
             <div class="pf-reg-range">${donorDate('pf-pv-donor-from', 'Từ ngày')}${donorDate('pf-pv-donor-to', 'Đến ngày')}</div>
           </div>
         </div>
-        <div class="pf-adv-foot"><button class="pf-btn pf-btn-ghost" type="button" data-pv-donor-reset>Xóa bộ lọc</button></div>
+        <div class="pf-adv-foot"><button class="pf-link-btn" type="button" data-pv-donor-reset>${icon('close')}Xóa bộ lọc</button></div>
       </div>
       <div id="pf-pv-donor-list"></div>
     </div>` : '<p class="pf-view-none">Chương trình chưa mở tiếp nhận ủng hộ.</p>';
@@ -1102,7 +1102,7 @@ const renderProgramView = (p) => {
   const profilePanel = PV_SHOW_PROFILE ? `
     <!-- Số liệu chính -->
     <div class="pf-view-stats" id="pf-v-overview">
-      ${vStat('layers', 'Mục tiêu quyên góp (VND)', f.money ? `${vVnd(f.money)} VND` : vText(p.goal))}
+      ${vStat('layers', 'Mục tiêu quyên góp (VNĐ)', f.money ? `${vVnd(f.money)} VNĐ` : vText(p.goal))}
       ${vStat('people', 'Số người/hộ hưởng lợi dự kiến', f.people ? `${vVnd(f.people)} người` : '')}
       ${vStat('user', 'Số lượng TNV dự kiến', f.volunteers ? `${vVnd(f.volunteers)} người` : '')}
     </div>
@@ -1142,7 +1142,7 @@ const renderProgramView = (p) => {
         vKv('Hỗ trợ vận chuyển đến nơi quy định', vText(f.transport)),
         vKv('Nguồn lực kinh phí', vChecked(f.funding)),
         vKv('Hình thức vận động', vChecked(f.campaign)),
-        vKv('Mục tiêu quyên góp (VND)', f.money ? `${vVnd(f.money)} VND` : vText(p.goal)),
+        vKv('Mục tiêu quyên góp (VNĐ)', f.money ? `${vVnd(f.money)} VNĐ` : vText(p.goal)),
         vKv('Địa điểm hàng hóa tập kết', vText(f.depot)),
       ]))}
     </div>
@@ -1203,8 +1203,8 @@ const renderProgramView = (p) => {
               <span class="pf-badge is-green">${icon('check')}Đã xác minh</span>
             </div>
             <ul class="pv-fund-facts">
-              <li><span><small>Mục tiêu chiến dịch</small><b>${goalText}</b></span></li>
-              <li><span><small>Thời gian còn lại</small><b>${daysValue}</b></span></li>
+              <li><span class="pv-fact-icon">${icon('target')}</span><span><small>Mục tiêu chiến dịch</small><b>${goalText}</b></span></li>
+              <li><span class="pv-fact-icon">${icon('clock')}</span><span><small>Thời gian còn lại</small><b>${daysValue}</b></span></li>
             </ul>
             <div class="pv-fund-panel">
               <div class="pv-fund-raised"><p><span class="visually-hidden">Đã đạt được</span><b>${isMoney ? pvVnd(fund.raised) : (fund.open ? vText(p.raised) : '0')}</b></p><b>${pct}%</b></div>
@@ -1277,20 +1277,26 @@ const renderBulletins = () => {
 
 // ---------- Danh sách ủng hộ: lọc theo tên, số tiền, thời gian · 10 dòng/trang · “Hiển thị x – y/N” ----------
 const PV_DONORS_PER_PAGE = 10;
-const DONOR_AMOUNT = { lt100: (a) => a < 1e5, '100-1m': (a) => a >= 1e5 && a <= 1e6, gt1m: (a) => a > 1e6 };
+// Ô số tiền (lọc danh sách ủng hộ): dùng lại .pf-control.has-suffix — chỉ nhận chữ số, tự thêm dấu chấm hàng nghìn, đuôi VNĐ
+const donorMoney = (id, label) => `<div class="pf-control has-suffix"><input type="text" inputmode="numeric" id="${id}" placeholder="${label}" autocomplete="off" aria-label="Số tiền ủng hộ — ${label.toLowerCase()}" /><span class="pf-suffix" aria-hidden="true">VNĐ</span></div>`;
+const moneyValue = (el) => Number((el?.value || '').replace(/\D/g, '')) || 0;
+const formatMoneyInput = (el) => { const n = moneyValue(el); el.value = n ? n.toLocaleString('vi-VN') : ''; };
 let pvDonorPage = 1;
 const renderDonors = (page = pvDonorPage) => {
   const box = document.querySelector('#pf-pv-donor-list');
   if (!box) return;
   const q = fold(document.querySelector('#pf-pv-donor-q').value.trim());
-  const amount = document.querySelector('#pf-pv-donor-amount').value;
+  // Số tiền Từ – Đến (bỏ trống = không giới hạn; nhập ngược thì tự đổi chỗ)
+  let min = moneyValue(document.querySelector('#pf-pv-donor-min'));
+  let max = moneyValue(document.querySelector('#pf-pv-donor-max'));
+  if (min && max && min > max) [min, max] = [max, min];
   const from = document.querySelector('#pf-pv-donor-from').value;
   const to = document.querySelector('#pf-pv-donor-to').value;
   const rows = pvCtx.donations.filter((d) => {
     const day = localIso(new Date(d.time));
-    return (!q || fold(d.name).includes(q)) && (!amount || DONOR_AMOUNT[amount](d.amount)) && (!from || day >= from) && (!to || day <= to);
+    return (!q || fold(d.name).includes(q)) && (!min || d.amount >= min) && (!max || d.amount <= max) && (!from || day >= from) && (!to || day <= to);
   });
-  const active = [amount, from || to].filter(Boolean).length;
+  const active = [min || max, from || to].filter(Boolean).length;
   const count = document.querySelector('[data-pv-adv] .pf-filter-count');
   count.hidden = active === 0;
   count.textContent = active;
@@ -1384,7 +1390,7 @@ const copyProgramUrl = async () => {
 };
 const exportStatement = () => {
   const { p, donations } = pvCtx;
-  downloadCsv(['STT', 'Thời gian ủng hộ', 'Người ủng hộ', 'Số tiền ủng hộ (VND)'],
+  downloadCsv(['STT', 'Thời gian ủng hộ', 'Người ủng hộ', 'Số tiền ủng hộ (VNĐ)'],
     donations.map((d, i) => [i + 1, pvDateTime(d.time), d.name, d.amount]), `sao-ke-${p.code}.csv`);
   showToast(`Đã xuất sao kê ${vVnd(donations.length)} lượt ủng hộ.`);
 };
@@ -1596,6 +1602,7 @@ pfViewBody.addEventListener('click', (event) => {
 });
 pfViewBody.addEventListener('input', (event) => {
   if (event.target.matches('#pf-pv-donor-q')) renderDonors(1);
+  if (event.target.matches('#pf-pv-donor-min, #pf-pv-donor-max')) { formatMoneyInput(event.target); renderDonors(1); }
   // Ô bình luận: tự giãn, hết lỗi khi đã nhập · ô trả lời: giữ bản nháp khi danh sách dựng lại
   if (event.target.matches('[data-cm-input]')) pvGrowBox(event.target);
   if (event.target.matches('#pv-cm-text') && event.target.value.trim()) pfViewBody.querySelector('#pv-cm-field').classList.remove('is-invalid');
@@ -1612,7 +1619,7 @@ pfViewBody.addEventListener('input', (event) => {
   }
 });
 pfViewBody.addEventListener('change', (event) => {
-  if (event.target.matches('#pf-pv-donor-amount, #pf-pv-donor-from, #pf-pv-donor-to')) renderDonors(1);
+  if (event.target.matches('#pf-pv-donor-from, #pf-pv-donor-to')) renderDonors(1);
   if (event.target.matches('[data-pv-add]')) { addPostMedia([...event.target.files]); event.target.value = ''; }
 });
 // Ô soạn thảo bản tin: bấm nút định dạng không làm mất vùng chọn · tối đa 1000 ký tự · dán chỉ lấy chữ thường · nút sáng theo định dạng tại con trỏ

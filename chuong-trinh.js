@@ -59,93 +59,8 @@ const showToast = (message, type = 'success') => {
 toast.querySelector('.pf-toast-close').addEventListener('click', hideToast);
 
 // ==================== DATA: thông tin chi tiết (minh họa) ====================
-// IMG, BANNER_IMG, PRIORITY, PROGRAMS, escapeHtml, fold, icon, programCard: chuong-trinh-data.js
-// ---------- Theo lĩnh vực: loại hình hỗ trợ · nhóm đối tượng hưởng lợi · câu chuyện mặc định · nguồn đóng góp được sử dụng cho ----------
-const FIELD_INFO = {
-  'Cứu trợ thiên tai': {
-    support: 'Cứu trợ khẩn cấp', groups: ['Bị ảnh hưởng thiên tai/bão lũ', 'Hộ nghèo'],
-    story: (place) => `Mưa lũ kéo dài khiến nhiều khu dân cư tại ${place} bị ngập sâu, hàng nghìn hộ gia đình mất nhà cửa, lương thực và tài sản thiết yếu. Chương trình tập trung hỗ trợ khẩn cấp trong giai đoạn đầu và đồng hành cùng người dân khôi phục cuộc sống sau thiên tai.`,
-    uses: ['Gạo, mì, nước uống đóng chai cho các hộ bị cô lập', 'Túi thuốc gia đình, hóa chất khử khuẩn nguồn nước', 'Hỗ trợ sửa chữa nhà ở, khôi phục sinh kế sau thiên tai'],
-  },
-  'Giáo dục & Khuyến học': {
-    support: 'Trợ giúp nhân đạo', groups: ['Trẻ mồ côi', 'Hộ nghèo', 'Người khuyết tật'],
-    story: (place) => `Nhiều học sinh tại ${place} phải vượt quãng đường dài tới trường trong điều kiện thiếu thốn. Một suất học bổng, bộ sách vở hay chiếc áo ấm giúp các em yên tâm học tập, không phải bỏ dở việc học giữa chừng.`,
-    uses: ['Học bổng cho học sinh có hoàn cảnh đặc biệt khó khăn', 'Sách vở, đồ dùng học tập', 'Áo ấm, chăn cho học sinh bán trú'],
-  },
-  'Trẻ em - Biên giới': {
-    support: 'Trợ giúp nhân đạo', groups: ['Trẻ mồ côi', 'Hộ nghèo', 'Hộ cận nghèo'],
-    story: (place) => `Mùa đông ở các xã biên giới tỉnh ${place} nhiệt độ có lúc xuống dưới 5°C, nhiều em nhỏ vẫn đến trường với áo mỏng, chân đi dép. Chương trình mang hơi ấm và dinh dưỡng tới các em trước khi đợt rét đậm bắt đầu.`,
-    uses: ['Áo ấm, chăn bông cho trẻ em vùng biên giới', 'Mũ len, tất, ủng giữ ấm mùa đông', 'Sữa và thực phẩm dinh dưỡng cho trẻ nhỏ'],
-  },
-  'Y tế - Sức khỏe': {
-    support: 'Trợ giúp nhân đạo', groups: ['Người già neo đơn', 'Bệnh hiểm nghèo'],
-    story: (place) => `Nhiều người bệnh có hoàn cảnh khó khăn tại ${place} không đủ chi phí điều trị, đi lại và chăm sóc dài ngày. Chương trình chung tay giảm bớt gánh nặng để người bệnh yên tâm chữa trị.`,
-    uses: ['Khám, tư vấn sức khỏe lưu động', 'Cấp thuốc, hỗ trợ chi phí điều trị', 'Trang thiết bị y tế thiết yếu cho cơ sở y tế tuyến xã'],
-  },
-  'Hiến máu nhân đạo': {
-    support: 'Trợ giúp nhân đạo', groups: ['Bệnh hiểm nghèo'],
-    story: (place) => `Lượng máu dự trữ tại các bệnh viện ở ${place} thường giảm mạnh vào các dịp nghỉ lễ và mùa cao điểm. Mỗi đơn vị máu có thể góp phần cứu sống người bệnh đang cần truyền máu.`,
-    uses: ['Tổ chức các điểm hiến máu lưu động', 'Chăm sóc, bồi dưỡng người hiến máu', 'Truyền thông, vận động cộng đồng'],
-  },
-  'Nước sạch & Vệ sinh': {
-    support: 'Trợ giúp nhân đạo', groups: ['Hộ nghèo', 'Hộ cận nghèo'],
-    story: (place) => `Nguồn nước sinh hoạt tại ${place} khan hiếm vào mùa khô, ảnh hưởng trực tiếp tới sức khỏe người dân, đặc biệt là trẻ em và người cao tuổi. Chương trình mang nước sạch an toàn tới từng hộ gia đình, trường học.`,
-    uses: ['Bồn chứa nước dung tích lớn cho hộ gia đình', 'Máy lọc nước đặt tại trường học, trạm y tế', 'Tập huấn sử dụng và bảo quản nước sạch'],
-  },
-  'Sinh kế & Nhà ở': {
-    support: 'Trợ giúp nhân đạo', groups: ['Hộ nghèo', 'Người già neo đơn'],
-    story: (place) => `Nhiều hộ nghèo, người cao tuổi neo đơn tại ${place} đang sống trong những căn nhà xuống cấp, không an toàn khi mùa mưa bão đến. Chương trình giúp các gia đình có chỗ ở ổn định và sinh kế bền vững.`,
-    uses: ['Xây mới nhà nhân ái', 'Sửa chữa mái, tường nhà xuống cấp', 'Giống cây, con và vốn sinh kế cho hộ nghèo'],
-  },
-  'Trợ giúp nhân đạo': {
-    support: 'Trợ giúp nhân đạo', groups: ['Hộ nghèo', 'Hộ cận nghèo'],
-    story: (place) => `Chương trình hướng tới những hoàn cảnh khó khăn nhất tại ${place}, những người cần một sự hỗ trợ kịp thời để vượt qua giai đoạn khó khăn.`,
-    uses: ['Suất quà nhu yếu phẩm cho hộ có hoàn cảnh khó khăn', 'Hỗ trợ trực tiếp người yếu thế tại địa phương', 'Vận động tình nguyện viên tham gia trao tặng'],
-  },
-};
-// ---------- Chương trình có nội dung riêng (giữ từ trang chi tiết cũ): ngày mở tiếp nhận · đơn vị · địa bàn · đối tượng · câu chuyện · bản tin [ngày, tiêu đề, nội dung] ----------
-const DETAILS = {
-  'xay-truong-ha-giang': {
-    story: [
-      'Ở những bản làng nằm sâu giữa vùng núi đá Hà Giang, con đường đến trường của nhiều em nhỏ bắt đầu từ khi trời còn tờ mờ sáng. Các em đi bộ hàng giờ qua những con dốc đá tai mèo; mùa mưa đường trơn trượt, mùa đông sương muối phủ trắng các triền núi.',
-      'Nhiều điểm trường hiện vẫn là những lớp học dựng tạm bằng gỗ, mái tôn đã thủng, vách hở gió. Có lớp phải ghép hai, ba trình độ trong một phòng chật hẹp; những ngày rét đậm, cô trò đốt lửa sưởi ngay giữa lớp. Thiếu bàn ghế, thiếu sách vở, thiếu cả nước sạch và nhà vệ sinh — những điều tưởng như rất bình thường với học sinh ở thành phố.',
-      'Vậy mà trong ánh mắt các em vẫn luôn sáng lên niềm mong mỏi được đến lớp. Một em học sinh lớp 3 ở điểm trường lẻ kể rằng ước mơ lớn nhất của em là được ngồi học trong một căn phòng không bị dột, để quyển vở không còn ướt mỗi khi trời mưa.',
-      'Chương trình “Chung tay xây trường vùng cao Hà Giang” được phát động nhằm xây mới các phòng học kiên cố, khu bán trú và nhà vệ sinh cho những điểm trường khó khăn nhất; đồng thời trao tặng bàn ghế, sách vở, áo ấm để các em có thêm điều kiện đến trường trước mùa đông.',
-    ],
-  },
-  'lu-lut-mien-trung': {
-    start: '2026-09-28', area: 'Các xã vùng lũ, tỉnh Quảng Trị', people: 'Khoảng 3.000 hộ gia đình',
-    summary: 'Hỗ trợ lương thực, nước sạch, thuốc men và sửa chữa nhà ở cho các hộ gia đình bị ảnh hưởng nặng sau đợt lũ.',
-    story: ['Đợt mưa lũ kéo dài khiến nhiều khu dân cư bị ngập sâu, hàng nghìn hộ gia đình mất nhà cửa, lương thực và tài sản thiết yếu.', 'Chương trình tập trung hỗ trợ khẩn cấp trong giai đoạn đầu và đồng hành cùng người dân khôi phục cuộc sống sau lũ.'],
-    uses: ['Gạo, mì, nước uống đóng chai cho các hộ bị cô lập', 'Túi thuốc gia đình, hóa chất khử khuẩn nguồn nước', 'Hỗ trợ sửa chữa nhà ở bị hư hại nặng'],
-    updates: [['2026-10-05', 'Trao 1.200 suất quà nhu yếu phẩm tại 4 xã bị chia cắt', 'Đoàn công tác đã trao 1.200 suất quà gồm gạo, mì, nước uống và túi thuốc gia đình cho người dân 4 xã bị chia cắt. Hình ảnh, tiến độ triển khai sẽ tiếp tục được cập nhật trong các bản tin tiếp theo.'], ['2026-09-28', 'Khởi động chương trình, tiếp nhận đóng góp từ cộng đồng', 'Chương trình chính thức mở tiếp nhận ủng hộ. Mọi đóng góp được tiếp nhận, sử dụng đúng mục đích và công khai sao kê trên nền tảng.']],
-  },
-  'nuoc-sach-han-man': {
-    start: '2026-10-01', area: 'Các xã ven biển bị xâm nhập mặn, tỉnh Vĩnh Long', people: 'Khoảng 1.500 hộ dân',
-    summary: 'Lắp đặt bồn chứa, máy lọc nước cho các xã thiếu nước sinh hoạt trong mùa khô.',
-    story: ['Xâm nhập mặn khiến nguồn nước sinh hoạt khan hiếm, ảnh hưởng trực tiếp tới sức khỏe người dân, đặc biệt là trẻ em và người cao tuổi.'],
-    updates: [['2026-10-01', 'Khảo sát nhu cầu tại 6 xã, lập danh sách hộ ưu tiên', 'Cán bộ Hội và tình nguyện viên đã khảo sát nhu cầu nước sinh hoạt tại 6 xã ven biển, lập danh sách các hộ được ưu tiên lắp bồn chứa và máy lọc nước.']],
-  },
-  'tiep-suc-den-truong': {
-    start: '2026-09-15', area: 'Các trường vùng cao, tỉnh Cao Bằng', people: 'Khoảng 2.000 học sinh',
-    summary: 'Trao học bổng, sách vở và áo ấm cho học sinh có hoàn cảnh khó khăn.',
-    story: ['Nhiều học sinh vùng cao phải vượt quãng đường dài tới trường trong điều kiện thiếu thốn. Một bộ sách vở, chiếc áo ấm giúp các em yên tâm học tập.'],
-    updates: [['2026-09-22', 'Trao 300 suất học bổng đợt 1', 'Đợt 1 của chương trình đã trao 300 suất học bổng cho học sinh có hoàn cảnh đặc biệt khó khăn tại các trường vùng cao.']],
-  },
-  'hien-mau-mua-he': {
-    start: '2026-09-20', org: 'Ban Chỉ đạo vận động hiến máu', area: 'Các điểm hiến máu cố định và lưu động tại Hà Nội', people: 'Người bệnh tại các bệnh viện',
-    summary: 'Kêu gọi hiến máu tình nguyện, bổ sung lượng máu dự trữ cho các bệnh viện.',
-    story: ['Mùa hè là thời điểm lượng máu dự trữ thường giảm. Mỗi đơn vị máu có thể góp phần cứu sống người bệnh.'],
-    updates: [['2026-10-03', 'Ngày hội hiến máu tiếp nhận 820 đơn vị máu', 'Ngày hội hiến máu tại Hà Nội đã tiếp nhận 820 đơn vị máu từ người hiến tình nguyện, bổ sung kịp thời cho các bệnh viện.']],
-  },
-  'mai-am-nhan-ai': {
-    start: '2026-09-20', area: 'Các xã có tỷ lệ hộ nghèo cao, tỉnh Tuyên Quang', people: '30 hộ nghèo, người cao tuổi neo đơn',
-    summary: 'Xây mới, sửa chữa nhà ở an toàn trước mùa mưa bão.',
-    story: ['Nhiều người cao tuổi neo đơn đang sống trong những căn nhà xuống cấp, không an toàn khi mùa mưa bão đến.'],
-    uses: ['Xây mới nhà nhân ái', 'Sửa chữa mái, tường nhà xuống cấp', 'Hỗ trợ vật dụng sinh hoạt thiết yếu'],
-    updates: [['2026-09-26', 'Khởi công 8 căn nhà nhân ái đầu tiên', 'Lễ khởi công 8 căn nhà nhân ái đầu tiên đã diễn ra với sự tham gia của chính quyền địa phương, tình nguyện viên và các gia đình được hỗ trợ.']],
-  },
-};
+// IMG, BANNER_IMG, PRIORITY, PROGRAMS, escapeHtml, fold, icon, programCard, FIELD_INFO, DETAILS: chuong-trinh-data.js
+// FIELD_INFO (theo lĩnh vực), DETAILS (nội dung riêng từng chương trình), programStory: chuong-trinh-data.js — dùng chung với popup câu chuyện (story-popover.js)
 // Ảnh minh họa xoay vòng cho bộ ảnh, bản tin (ảnh đầu bộ ảnh = ảnh của chương trình)
 const PV_PHOTOS = PROGRAM_PHOTOS; // ảnh bộ ảnh trang chi tiết: 9 ảnh trong Emages/Chương trình/ (chuong-trinh-data.js)
 // Đường dây nóng Trung ương Hội (cùng số ở chân trang)
@@ -353,11 +268,11 @@ const companionList = (list) => `<ol class="pf-pv-top5-list">${list.map((x, i) =
   <b class="pf-pv-top5-amount">${vnd(x.amount)}đ</b>
 </li>`).join('')}</ol>`;
 // Kê khai khoản chi (SRS #14): gauge nửa vòng — cả cung = số tiền đã nhận; đoạn xanh lá (gradient) = đã kê khai có chứng từ, đoạn đỏ = chưa có chứng từ, còn lại xám
-// · nhãn 0% / 100% · giữa: Tổng số tiền chi (số lớn + VND) · chú thích 2 dòng (tiêu đề + dòng phụ · số tiền)
+// · nhãn 0% / 100% · giữa: Tổng số tiền chi (số lớn + VNĐ) · chú thích 2 dòng (tiêu đề + dòng phụ · số tiền)
 // · rê chuột vào đoạn cung / dòng chú thích: hiện tooltip "tên — x% số tiền đã nhận", đoạn tương ứng nổi bật (data-gauge-part)
 const spendGauge = (d) => {
   const share = (n) => (d.spent + d.left > 0 ? Math.round((n / (d.spent + d.left)) * 1000) / 10 : 0);
-  const tip = (label, n) => `${label}|${nf.format(share(n))}% số tiền đã nhận · ${vnd(n)} VND`;
+  const tip = (label, n) => `${label}|${nf.format(share(n))}% số tiền đã nhận · ${vnd(n)} VNĐ`;
   const arc = 'M14 80a66 66 0 0 1 132 0';
   return `<div class="pv-gauge">
     <div class="pv-gauge-chart">
@@ -367,13 +282,13 @@ const spendGauge = (d) => {
         ${d.unproven > 0 ? `<path d="${arc}" pathLength="100" class="pv-gauge-unproven" stroke-dasharray="0 ${share(d.proven)} ${share(d.unproven)} 100" data-gauge-tip="${tip('Đã kê khai chưa có chứng từ', d.unproven)}" data-gauge-part="unproven" />` : ''}
         ${d.proven > 0 ? `<path d="${arc}" pathLength="100" class="pv-gauge-proven" stroke-dasharray="${share(d.proven)} 100" data-gauge-tip="${tip('Đã kê khai có chứng từ', d.proven)}" data-gauge-part="proven" />` : ''}
       </svg>
-      <p class="pv-gauge-center"><span>Tổng số tiền chi</span><b>${vnd(d.spent)}</b><span>VND</span></p>
+      <p class="pv-gauge-center"><span>Tổng số tiền chi</span><b>${vnd(d.spent)}</b><span>VNĐ</span></p>
       <span class="pv-gauge-end" aria-hidden="true">0%</span><span class="pv-gauge-end is-right" aria-hidden="true">100%</span>
       <span class="pv-gauge-tip" role="tooltip" hidden><b></b><span></span></span>
     </div>
     <dl class="pv-gauge-legend">
-      <div class="is-proven" data-gauge-tip="${tip('Đã kê khai có chứng từ', d.proven)}" data-gauge-part="proven"><dt>Số tiền đã kê khai có chứng từ<small>Đã được xác minh đầy đủ · ${nf.format(share(d.proven))}%</small></dt><dd><b>${vnd(d.proven)}</b> VND</dd></div>
-      <div class="is-unproven" data-gauge-tip="${tip('Đã kê khai chưa có chứng từ', d.unproven)}" data-gauge-part="unproven"><dt>Số tiền đã kê khai chưa có chứng từ<small>Đang được cập nhật · ${nf.format(share(d.unproven))}%</small></dt><dd><b>${vnd(d.unproven)}</b> VND</dd></div>
+      <div class="is-proven" data-gauge-tip="${tip('Đã kê khai có chứng từ', d.proven)}" data-gauge-part="proven"><dt>Số tiền đã kê khai có chứng từ<small>Đã được xác minh đầy đủ · ${nf.format(share(d.proven))}%</small></dt><dd><b>${vnd(d.proven)}</b> VNĐ</dd></div>
+      <div class="is-unproven" data-gauge-tip="${tip('Đã kê khai chưa có chứng từ', d.unproven)}" data-gauge-part="unproven"><dt>Số tiền đã kê khai chưa có chứng từ<small>Đang được cập nhật · ${nf.format(share(d.unproven))}%</small></dt><dd><b>${vnd(d.unproven)}</b> VNĐ</dd></div>
     </dl>
   </div>`;
 };
@@ -437,15 +352,15 @@ const renderProgram = (p) => {
   document.title = `${p.title} | Hội Chữ thập đỏ Việt Nam`;
   $('meta[name="description"]').content = d.goal;
 
-  // ---------- Số liệu: số tiền (VND) hoặc số lượng theo đơn vị (hiến máu); tỷ lệ = đã đạt / mục tiêu × 100, làm tròn 2 chữ số thập phân ----------
+  // ---------- Số liệu: số tiền (VNĐ) hoặc số lượng theo đơn vị (hiến máu); tỷ lệ = đã đạt / mục tiêu × 100, làm tròn 2 chữ số thập phân ----------
   const pctExact = Math.round((p.raised / p.goal) * 10000) / 100;
   const pctText = `${nf.format(pctExact)}%`;
-  const valueText = (n) => (d.isMoney ? `${vnd(n)} VND` : fullAmount(p, n));
+  const valueText = (n) => (d.isMoney ? `${vnd(n)} VNĐ` : fullAmount(p, n));
   const raiseDays = Math.max(1, Math.round((new Date(d.raiseTo) - new Date(d.raiseFrom)) / DAY));
   const { bulletins } = ctx;
   const heart = icon('heart-solid');
-  // ---------- Các chiến dịch khác (SRS #19): 9 chương trình mới nhất đang hiển thị công khai, trừ chương trình đang xem — thẻ chương trình dùng chung với trang danh sách (programCard, chuong-trinh-data.js), cùng kiểu ảnh tràn viền (.cp-grid-cover) ----------
-  const others = PROGRAMS.filter((x) => x.id !== p.id).slice(0, 9);
+  // ---------- Các chiến dịch khác (SRS #19): tối đa OTHERS_MAX (8) chương trình mới nhất đang hiển thị công khai, trừ chương trình đang xem — thẻ chương trình dùng chung với trang danh sách (programCard, chuong-trinh-data.js), cùng kiểu ảnh tràn viền (.cp-grid-cover) ----------
+  const others = PROGRAMS.filter((x) => x.id !== p.id).slice(0, OTHERS_MAX);
   // Danh sách ủng hộ: tìm theo tên · Tìm kiếm nâng cao (số tiền — chỉ chương trình gây quỹ tiền, thời gian) · bảng 10 dòng/trang
   const dateInput = (id, label) => `<div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="${label}" /><input class="pf-date-native" type="date" id="${id}" tabindex="-1" aria-hidden="true" /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — ${label.toLowerCase()}">${icon('calendar')}</button></div>`;
   const donorsCard = `<div class="pf-view-card pf-pv-donors">
@@ -455,14 +370,14 @@ const renderProgram = (p) => {
       </div>
       <div class="pf-pv-donor-adv" id="pf-pv-donor-adv" role="region" aria-label="Tìm kiếm nâng cao" hidden>
         <div class="pf-adv-grid${d.isMoney ? ' is-donors' : ''}">
-          ${d.isMoney ? `<label class="pf-adv-field"><span>Số tiền ủng hộ</span>
-            <span class="pf-input is-select"><select id="pf-pv-donor-amount"><option value="">Tất cả mức ủng hộ</option><option value="lt100">Dưới 100.000đ</option><option value="100-1m">Từ 100.000đ đến 1.000.000đ</option><option value="gt1m">Trên 1.000.000đ</option></select>${icon('chevron-down', 'icon pf-caret')}</span>
-          </label>` : ''}
+          ${d.isMoney ? `<div class="pf-adv-field" role="group" aria-labelledby="pf-pv-donor-money"><span id="pf-pv-donor-money">Số tiền ủng hộ</span>
+            <div class="pf-reg-range">${donorMoney('pf-pv-donor-min', 'Từ')}${donorMoney('pf-pv-donor-max', 'Đến')}</div>
+          </div>` : ''}
           <div class="pf-adv-field" role="group" aria-labelledby="pf-pv-donor-time"><span id="pf-pv-donor-time">${d.isMoney ? 'Thời gian ủng hộ' : 'Thời gian hiến máu'}</span>
             <div class="pf-reg-range">${dateInput('pf-pv-donor-from', 'Từ ngày')}${dateInput('pf-pv-donor-to', 'Đến ngày')}</div>
           </div>
         </div>
-        <div class="pf-adv-foot"><button class="pf-btn pf-btn-ghost" type="button" data-pv-donor-reset>Xóa bộ lọc</button></div>
+        <div class="pf-adv-foot"><button class="pf-link-btn" type="button" data-pv-donor-reset>${icon('close')}Xóa bộ lọc</button></div>
       </div>
       <div id="pf-pv-donor-list"></div>
     </div>`;
@@ -485,7 +400,7 @@ const renderProgram = (p) => {
 
       <div class="pf-pv-split">
         <div class="pf-pv-split-main">
-          <!-- ---------- Bộ ảnh (SRS #3): ảnh lớn, nút ‹ › hai bên, dải ảnh nhỏ; tự chuyển ảnh mỗi 10 giây ---------- -->
+          <!-- ---------- Bộ ảnh (SRS #3): ảnh lớn, nút ‹ › hai bên, dải ảnh nhỏ; tự chuyển ảnh mỗi 2 giây (dừng khi rê chuột) ---------- -->
           <section class="pf-pv-card pv-photos" aria-label="Hình ảnh chương trình">
             <div class="pf-pv-gallery">
               <figure class="pf-pv-main">
@@ -556,9 +471,10 @@ const renderProgram = (p) => {
               <div class="pf-pv-org-text"><p class="pf-pv-cap">Người vận động</p><p class="pf-pv-org-name">${escapeHtml(d.org)}</p></div>
               <span class="pf-badge is-green">${icon('check')}Đã xác minh</span>
             </div>
+            <!-- Mục tiêu · thời gian còn lại: ô biểu tượng (mục tiêu / đồng hồ — sắp diễn ra: lịch · đã kết thúc: dấu tích) + nhãn + giá trị -->
             <ul class="pv-fund-facts">
-              <li><span><small>Mục tiêu chiến dịch</small><b>${valueText(p.goal)}</b></span></li>
-              <li><span><small>${upcoming(p) ? 'Trạng thái' : 'Thời gian còn lại'}</small><b${upcoming(p) ? ' class="is-upcoming"' : endingSoon(p) ? ' class="is-warning"' : ''}>${upcoming(p) ? `Sắp diễn ra · mở sau ${p.startIn} ngày` : d.ended ? 'Đã kết thúc' : `${p.days} ngày`}</b></span></li>
+              <li><span class="pv-fact-icon">${icon('target')}</span><span><small>Mục tiêu chiến dịch</small><b>${valueText(p.goal)}</b></span></li>
+              <li class="${upcoming(p) ? 'is-upcoming' : d.ended ? 'is-ended' : endingSoon(p) ? 'is-warning' : ''}"><span class="pv-fact-icon">${icon(upcoming(p) ? 'calendar' : d.ended ? 'check' : 'clock')}</span><span><small>${upcoming(p) ? 'Trạng thái' : 'Thời gian còn lại'}</small><b${upcoming(p) ? ' class="is-upcoming"' : endingSoon(p) ? ' class="is-warning"' : ''}>${upcoming(p) ? `Sắp diễn ra · mở sau ${p.startIn} ngày` : d.ended ? 'Đã kết thúc' : `${p.days} ngày`}</b></span></li>
             </ul>
             <div class="pv-fund-panel">
               <div class="pv-fund-raised"><p><span class="visually-hidden">${d.isMoney ? 'Đã đạt được' : 'Đã tiếp nhận'}</span><b>${valueText(p.raised)}</b></p><b>${pctText}</b></div>
@@ -592,12 +508,15 @@ const renderProgram = (p) => {
           <div class="pv-car-nav"><button class="pv-car-btn is-prev" type="button" data-car="pv-others" data-car-step="-1" aria-label="Chiến dịch trước">${icon('chevron-right')}</button><button class="pv-car-btn" type="button" data-car="pv-others" data-car-step="1" aria-label="Chiến dịch sau">${icon('chevron-right')}</button></div>
         </div>
         <div class="pv-track pv-cards cp-grid-cover" id="pv-others" role="group" aria-label="Các chiến dịch khác — tự cuộn mỗi 10 giây, dừng khi rê chuột">${others.map((x) => programCard(x)).join('')}</div>
+        <!-- Chấm chuyển (dùng lại .founders-dot trang chủ): mỗi chấm = 1 vị trí cuộn (thẻ đầu khung), chấm đang xem kéo dài màu đỏ — renderOthersDots dựng, 1 vị trí thì ẩn -->
+        <div class="founders-dots pv-others-dots" id="pv-others-dots" role="group" aria-label="Chọn vị trí dải Các chiến dịch khác"></div>
       </section>
     </div>`;
 
   renderDonors(1);
   renderComments();
   syncStoryMore();
+  renderOthersDots();
   startAuto();
 };
 
@@ -615,9 +534,11 @@ const selectTab = (button) => {
   if (!list.classList.contains('pv-top5-tabs')) $('.pf-pv-updates').hidden = button.id === 'pf-pv-tab-acts';
 };
 
-// ---------- Tự chuyển mỗi 10 giây: ảnh lớn sang ảnh kế tiếp (#3) · Các chiến dịch khác cuộn 1 thẻ, hết thì về đầu (#19); dừng khi rê chuột / đang focus, tắt khi giảm chuyển động ----------
+// ---------- Tự chuyển: ảnh lớn sang ảnh kế tiếp mỗi 2 giây (PHOTO_MS, #3) · Các chiến dịch khác cuộn 1 thẻ mỗi 10 giây (AUTO_MS), hết thì về đầu (#19); dừng khi rê chuột / đang focus, tắt khi giảm chuyển động ----------
 const AUTO_MS = 10000;
+const PHOTO_MS = 2000;
 let autoTimer;
+let photoTimer;
 // Dải trượt (Hoạt động tiêu biểu, Các chiến dịch khác): dịch 1 thẻ; hết thì quay về đầu / cuối
 const stepTrack = (track, dir) => {
   const step = track.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0);
@@ -626,11 +547,78 @@ const stepTrack = (track, dir) => {
   const left = dir > 0 ? (atEnd ? 0 : track.scrollLeft + step) : (atStart ? track.scrollWidth : track.scrollLeft - step);
   track.scrollTo({ left, behavior: reduced() ? 'auto' : 'smooth' });
 };
+// ---------- Các chiến dịch khác: chấm chuyển — số chấm = số thẻ − số thẻ trong khung + 1 (đổi theo cỡ màn hình); cuộn → tô chấm; bấm chấm → cuộn tới ----------
+const OTHERS_MAX = 8;
+const trackStep = (track) => track.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0);
+const syncOthersDots = () => {
+  const track = $('#pv-others');
+  const dots = $('#pv-others-dots');
+  if (!track || !dots || !track.firstElementChild) return;
+  const i = Math.round(track.scrollLeft / trackStep(track));
+  [...dots.children].forEach((dot, k) => dot.setAttribute('aria-current', String(k === Math.min(i, dots.children.length - 1))));
+};
+const renderOthersDots = () => {
+  const track = $('#pv-others');
+  const dots = $('#pv-others-dots');
+  if (!track || !dots || !track.firstElementChild) return;
+  const perView = Math.max(1, Math.round(track.clientWidth / trackStep(track)));
+  const count = Math.max(1, track.children.length - perView + 1);
+  dots.hidden = count <= 1;
+  if (dots.children.length !== count) {
+    dots.innerHTML = Array.from({ length: count }, (_, k) => `<button class="founders-dot" type="button" data-others-dot="${k}" aria-controls="pv-others" aria-label="Vị trí ${k + 1} / ${count}"></button>`).join('');
+  }
+  syncOthersDots();
+};
+// Dải được dựng lại mỗi lần vẽ trang → bắt sự kiện cuộn ở document (capture); đổi cỡ màn hình → tính lại số chấm
+let othersRaf = 0;
+document.addEventListener('scroll', (event) => {
+  if (event.target.id !== 'pv-others' || othersRaf) return;
+  othersRaf = requestAnimationFrame(() => { othersRaf = 0; syncOthersDots(); });
+}, { capture: true, passive: true });
+addEventListener('resize', () => renderOthersDots());
+// ---------- Kéo chuột qua lại trên dải (máy tính; cảm ứng đã vuốt được sẵn): giữ chuột trái + kéo → cuộn theo; thả → bắt vào thẻ gần nhất.
+// Kéo quá 5px thì không mở thẻ khi thả (chặn click); tắt bắt thẻ (scroll-snap) trong lúc kéo để dải đi theo chuột mượt ----------
+const DRAG_MIN = 5;
+let drag = null;
+document.addEventListener('pointerdown', (event) => {
+  const track = event.target.closest('#pv-others');
+  if (!track || event.pointerType !== 'mouse' || event.button !== 0) return;
+  drag = { track, x: event.clientX, left: track.scrollLeft, moved: false };
+});
+document.addEventListener('pointermove', (event) => {
+  if (!drag) return;
+  const dx = event.clientX - drag.x;
+  if (!drag.moved && Math.abs(dx) < DRAG_MIN) return;
+  if (!drag.moved) { drag.moved = true; drag.track.classList.add('is-dragging'); }
+  drag.track.scrollLeft = drag.left - dx;
+});
+const endDrag = () => {
+  if (!drag) return;
+  const { track, moved } = drag;
+  drag = null;
+  if (!moved) return;
+  track.classList.remove('is-dragging');
+  const step = trackStep(track);
+  track.scrollTo({ left: Math.round(track.scrollLeft / step) * step, behavior: reduced() ? 'auto' : 'smooth' });
+  // Chặn click ngay sau khi kéo (thả chuột trên thẻ không mở trang chi tiết)
+  // (click đến ngay sau pointerup; quá 1 nhịp mà không có click — thả ngoài dải — thì gỡ để click sau vẫn bình thường)
+  const block = (e) => { e.preventDefault(); e.stopPropagation(); };
+  track.addEventListener('click', block, { capture: true, once: true });
+  setTimeout(() => track.removeEventListener('click', block, { capture: true }), 0);
+};
+document.addEventListener('pointerup', endDrag);
+document.addEventListener('pointercancel', endDrag);
+document.addEventListener('dragstart', (event) => { if (event.target.closest('#pv-others')) event.preventDefault(); }); // không kéo ảnh / liên kết kiểu mặc định
 const startAuto = () => {
   clearInterval(autoTimer);
+  clearInterval(photoTimer);
   if (reduced()) return;
+  // Bộ ảnh: 2 giây đổi 1 ảnh, dừng khi rê chuột / focus trong bộ ảnh
+  photoTimer = setInterval(() => {
+    const gallery = body.querySelector('.pf-pv-gallery');
+    if (gallery && !gallery.matches(':hover, :focus-within')) showPhoto(ctx.photo + 1);
+  }, PHOTO_MS);
   autoTimer = setInterval(() => {
-    if (!body.querySelector('.pf-pv-gallery').matches(':hover, :focus-within')) showPhoto(ctx.photo + 1);
     const track = $('#pv-others');
     if (track.firstElementChild && !track.matches(':hover, :focus-within')) stepTrack(track, 1);
   }, AUTO_MS);
@@ -723,18 +711,24 @@ const postReply = (cid) => {
 };
 
 // ---------- Danh sách ủng hộ: lọc theo tên, số tiền, thời gian · 10 dòng/trang · “Hiển thị x – y/N” ----------
-const DONOR_AMOUNT = { lt100: (a) => a < 1e5, '100-1m': (a) => a >= 1e5 && a <= 1e6, gt1m: (a) => a > 1e6 };
+// Ô số tiền (lọc danh sách ủng hộ): dùng lại .pf-control.has-suffix — chỉ nhận chữ số, tự thêm dấu chấm hàng nghìn, đuôi VNĐ
+const donorMoney = (id, label) => `<div class="pf-control has-suffix"><input type="text" inputmode="numeric" id="${id}" placeholder="${label}" autocomplete="off" aria-label="Số tiền ủng hộ — ${label.toLowerCase()}" /><span class="pf-suffix" aria-hidden="true">VNĐ</span></div>`;
+const moneyValue = (el) => Number((el?.value || '').replace(/\D/g, '')) || 0;
+const formatMoneyInput = (el) => { const n = moneyValue(el); el.value = n ? n.toLocaleString('vi-VN') : ''; };
 const renderDonors = (page = ctx.donorPage) => {
   const { d } = ctx;
   const q = fold($('#pf-pv-donor-q').value.trim());
-  const amountFilter = d.isMoney ? $('#pf-pv-donor-amount').value : '';
+  // Số tiền Từ – Đến (bỏ trống = không giới hạn; nhập ngược thì tự đổi chỗ)
+  let min = d.isMoney ? moneyValue($('#pf-pv-donor-min')) : 0;
+  let max = d.isMoney ? moneyValue($('#pf-pv-donor-max')) : 0;
+  if (min && max && min > max) [min, max] = [max, min];
   const from = $('#pf-pv-donor-from').value;
   const to = $('#pf-pv-donor-to').value;
   const rows = ctx.donations.filter((x) => {
     const day = isoDate(new Date(x.time));
-    return (!q || fold(x.name).includes(q)) && (!amountFilter || DONOR_AMOUNT[amountFilter](x.amount)) && (!from || day >= from) && (!to || day <= to);
+    return (!q || fold(x.name).includes(q)) && (!min || x.amount >= min) && (!max || x.amount <= max) && (!from || day >= from) && (!to || day <= to);
   });
-  const active = [amountFilter, from || to].filter(Boolean).length;
+  const active = [min || max, from || to].filter(Boolean).length;
   const count = $('[data-pv-adv] .pf-filter-count');
   count.hidden = active === 0;
   count.textContent = active;
@@ -794,7 +788,7 @@ const copyUrl = async () => {
 const exportStatement = () => {
   const { p, donations } = ctx;
   const cell = (value) => `"${String(value).replace(/"/g, '""')}"`;
-  const lines = [['STT', 'Thời gian ủng hộ', 'Người ủng hộ', 'Số tiền ủng hộ (VND)'], ...donations.map((x, i) => [i + 1, viDateTime(x.time), x.name, x.amount])];
+  const lines = [['STT', 'Thời gian ủng hộ', 'Người ủng hộ', 'Số tiền ủng hộ (VNĐ)'], ...donations.map((x, i) => [i + 1, viDateTime(x.time), x.name, x.amount])];
   const blob = new Blob([`﻿${lines.map((r) => r.map(cell).join(',')).join('\r\n')}`], { type: 'text/csv;charset=utf-8' });
   const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `sao-ke-${p.id}.csv` });
   link.click();
@@ -853,7 +847,7 @@ const renderQr = () => {
   $('#pv-qr-holder').textContent = fold(ctx.d.org).toUpperCase();
   $('#pv-qr-bank-short').textContent = `${bankShort(bank)}`;
   $('#pv-qr-bank-name').textContent = bankShort(bank);
-  $('#pv-qr-amount-view').textContent = ctx.qrAmount ? `${vnd(ctx.qrAmount)} VND` : 'Nhập trên ứng dụng';
+  $('#pv-qr-amount-view').textContent = ctx.qrAmount ? `${vnd(ctx.qrAmount)} VNĐ` : 'Nhập trên ứng dụng';
   $('#pv-qr-memo').textContent = ctx.memo;
   $('#pv-qr-image').innerHTML = qrSvg(`${bank}|${account}|${ctx.qrAmount}|${ctx.memo}`);
 };
@@ -965,7 +959,7 @@ const recordTransfer = (tx) => {
   // Danh sách ủng hộ: ẩn danh → "Người ủng hộ ẩn danh" · có tên hiển thị → tên đó · không thì tên chủ tài khoản chuyển
   ctx.donations.unshift({ name: tx.anonymous ? 'Người ủng hộ ẩn danh' : (tx.display || tx.payer), kind: tx.anonymous ? 'heart' : 'user', time: tx.time, amount: tx.amount });
   const pct = Math.round((p.raised / p.goal) * 10000) / 100;
-  $('.pv-fund-raised p b').textContent = `${vnd(p.raised)} VND`;
+  $('.pv-fund-raised p b').textContent = `${vnd(p.raised)} VNĐ`;
   $('.pv-fund-raised > b').textContent = `${nf.format(pct)}%`;
   const bar = $('.pv-fund .pf-pv-bar');
   bar.setAttribute('aria-valuenow', Math.min(pct, 100));
@@ -1103,6 +1097,9 @@ body.addEventListener('click', (event) => {
   // Dải trượt Các chiến dịch khác: nút ‹ ›
   const carBtn = event.target.closest('[data-car]');
   if (carBtn) stepTrack(document.getElementById(carBtn.dataset.car), Number(carBtn.dataset.carStep));
+  // Chấm dưới dải: cuộn tới vị trí của chấm
+  const othersDot = event.target.closest('[data-others-dot]');
+  if (othersDot) { const track = $('#pv-others'); track.scrollTo({ left: Number(othersDot.dataset.othersDot) * trackStep(track), behavior: reduced() ? 'auto' : 'smooth' }); }
   const moreBtn = event.target.closest('[data-pv-more]');
   if (moreBtn) {
     const open = moreBtn.getAttribute('aria-expanded') !== 'true';
@@ -1198,6 +1195,7 @@ body.addEventListener('keydown', (event) => {
 });
 body.addEventListener('input', (event) => {
   if (event.target.matches('#pf-pv-donor-q')) renderDonors(1);
+  if (event.target.matches('#pf-pv-donor-min, #pf-pv-donor-max')) { formatMoneyInput(event.target); renderDonors(1); }
   // Ô bình luận: tự giãn, hết lỗi khi đã nhập · ô trả lời: giữ bản nháp khi danh sách dựng lại (Thích, Xem thêm)
   if (event.target.matches('[data-cm-input]')) growBox(event.target);
   if (event.target.matches('#pv-cm-text') && event.target.value.trim()) $('#pv-cm-field').classList.remove('is-invalid');
@@ -1217,7 +1215,7 @@ body.addEventListener('change', (event) => {
   if (event.target.matches('.pf-date-native') && event.target.value) {
     event.target.closest('[data-vi-date]').querySelector('input[type="text"]').value = viDate(event.target.value);
   }
-  if (event.target.matches('#pf-pv-donor-amount, .pf-date-native')) renderDonors(1);
+  if (event.target.matches('.pf-date-native')) renderDonors(1);
 });
 
 // ==================== KHỞI TẠO: chương trình theo ?id= · không còn hiển thị công khai / không tồn tại (bước 6a, NL04) thì báo TB06 và dẫn về danh sách ====================

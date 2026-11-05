@@ -58,8 +58,15 @@ const filtered = () => {
   const sorters = { ending: (a, b) => a.days - b.days, progress: (a, b) => b.pct - a.pct, need: (a, b) => a.pct - b.pct };
   // Thứ tự mặc định: chương trình Khẩn cấp lên đầu, sau đó theo thứ tự gốc
   const urgentFirst = (a, b) => (b.priority === 'urgent') - (a.priority === 'urgent') || a.order - b.order;
-  return list.sort(sorters[state.sort] || urgentFirst);
+  // Chương trình đã kết thúc xếp cuối danh sách, trong nhóm vẫn theo cách sắp xếp đang chọn.
+  // MINH HỌA (ENDED_DEMO_AT = 6): chèn thẻ đã kết thúc vào vị trí thứ 7–8 (nửa sau hàng 2, trang 1) để xem kiểu hiển thị — triển khai thật đặt null để về xếp cuối
+  const sorter = sorters[state.sort] || urgentFirst;
+  const open = list.filter((p) => !ended(p)).sort(sorter);
+  const done = list.filter(ended).sort(sorter);
+  if (ENDED_DEMO_AT == null) return [...open, ...done];
+  return [...open.slice(0, ENDED_DEMO_AT), ...done, ...open.slice(ENDED_DEMO_AT)];
 };
+const ENDED_DEMO_AT = 6;
 
 // ---------- Phân trang: chỉ số trang 1 2 3 … (không mũi tên) — 1 trang thì ẩn ----------
 const pagerHtml = (current, pages) => {

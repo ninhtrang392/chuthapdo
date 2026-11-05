@@ -876,7 +876,7 @@ html.has-smoother{scroll-behavior:auto}
 .dev-tag{position:fixed;left:max(16px,calc(var(--gutter) - 8px));bottom:30px;z-index:90;display:inline-flex;align-items:center;margin:0;padding:9px 14px;cursor:default;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(110%);backdrop-filter:blur(30px) saturate(110%);box-shadow:0 12px 32px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.9);font-size:12px;font-weight:500;line-height:16px;color:var(--color-text-muted);white-space:nowrap}
 /* Logo GTINX (Emages/Đối tác/Logo GTINX.webp, 6713×3650) có nhiều lề trong suốt: chữ chỉ chiếm ~97% ngang × 42% dọc (tỉ lệ ~4,2:1)
    → khung 58×14 + object-fit:cover cắt vừa sát chữ */
-.dev-tag img{display:block;width:58px;height:14px;object-fit:cover}
+.dev-tag img{display:block;width:58px;height:14px;object-fit:contain} /* logo Emages/Đối tác/gtinx.png (sát chữ, tỉ lệ ≈ 4:1) — contain để không cắt chữ */
 .dev-tag span{max-width:0;overflow:hidden;opacity:0;transition:max-width .35s ease,margin .35s ease,opacity .25s}
 .dev-tag:hover span,.dev-tag:focus span{max-width:220px;margin-right:8px;opacity:1}
 .dev-tag:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
@@ -966,7 +966,14 @@ html.has-smoother{scroll-behavior:auto}
    cột vừa khung nhìn → dính ngay dưới header (header + 24px); cột cao hơn khung nhìn → giá trị âm, cuộn hết cột rồi dính ở đáy */
 .pv-page:not(.pv-embed) .pf-pv-split-side{position:sticky;top:var(--side-top,calc(var(--header-h) + 24px));align-self:start}
 /* ---------- Bộ ảnh: nút ‹ › tròn ở giữa hai bên ảnh ---------- */
-#pv-root .pf-pv-card.pv-photos{padding:16px} /* bộ ảnh: khối trắng bao quanh + bóng đổ như các khối khác (#pv-root .pf-pv-card), đệm 16px để ảnh vẫn lớn */
+/* Bộ ảnh: bỏ khung trắng lớn bao quanh cả bộ — mỗi ảnh có viền trắng riêng (khoảng trắng quanh ảnh) + bóng đổ nhẹ cho nổi khối */
+#pv-root .pf-pv-card.pv-photos{padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+#pv-root .pv-photos .pf-pv-main{box-shadow:0 2px 6px rgba(20,30,50,.06),0 10px 24px rgba(20,30,50,.08)} /* ảnh lớn: tràn viền (không khoảng trắng), bóng nhẹ */
+#pv-root .pv-photos .pf-pv-thumbs{gap:12px;padding-bottom:4px} /* ảnh nhỏ cách nhau để bóng từng ảnh tách khối, đáy chừa chỗ cho bóng */
+#pv-root .pv-photos .pf-pv-thumb{padding:4px;border:0;background:#fff;box-shadow:0 1px 4px rgba(20,30,50,.06),0 6px 16px rgba(20,30,50,.08);transition:box-shadow .2s,transform .2s} /* ảnh nhỏ: viền trắng 4px, bóng nhẹ */
+#pv-root .pv-photos .pf-pv-thumb img{border-radius:8px}
+#pv-root .pv-photos .pf-pv-thumb[aria-pressed="true"]{outline:2px solid var(--color-primary);outline-offset:0} /* ảnh đang xem: viền đỏ ngoài khoảng trắng */
+#pv-root .pv-photos .pf-pv-thumb:hover{transform:translateY(-2px);box-shadow:0 2px 6px rgba(20,30,50,.08),0 10px 22px rgba(20,30,50,.12)}
 /* Ảnh lớn trang chi tiết: khung thấp hơn một chút (16:9 thay vì 16:10 chung), ảnh vẫn lấp kín */
 #pv-root .pf-pv-main img{aspect-ratio:16 / 9}
 .pv-page .pf-pv-nav{inset:50% 16px auto;justify-content:space-between;transform:translateY(-50%);pointer-events:none}
@@ -1005,13 +1012,22 @@ html.has-smoother{scroll-behavior:auto}
 .pv-fund-facts b{font-size:14px;font-weight:700;line-height:20px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 .pv-fund-facts b.is-warning{color:#d97706} /* còn dưới 1 tuần → chữ vàng cảnh báo (nền trắng: tông đậm hơn để đọc được) */
 .pv-fund-facts b.is-upcoming{color:#2257b8} /* sắp diễn ra → chữ xanh */
+/* ---------- Mục tiêu · thời gian còn lại nổi bật: biểu tượng không nền, màu theo trạng thái (đỏ — mục tiêu, thời gian · vàng — sắp kết thúc · xanh — sắp diễn ra · xám — đã kết thúc), giá trị to hơn ---------- */
+.pv-fund-facts li{align-items:center;gap:12px}
+.pv-fact-icon{display:grid!important;flex:none;place-items:center;color:var(--color-primary)}
+.pv-fact-icon .icon{width:28px;height:28px}
+.pv-fund-facts li.is-warning .pv-fact-icon{color:#d97706}
+.pv-fund-facts li.is-upcoming .pv-fact-icon{color:#2257b8}
+.pv-fund-facts li.is-ended .pv-fact-icon{color:#4b5563}
+.pv-fund-facts small{font-size:13px}
+.pv-fund-facts b{font-size:17px;line-height:24px}
 /* ---------- Số đã đạt · tiến độ · lượt ủng hộ · nút: kẻ ngang phía trên ---------- */
 .pv-fund-panel{display:flex;flex-direction:column;gap:16px;padding:20px 0 0;border-top:1px solid var(--color-border)}
 .pv-fund-raised{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .pv-fund-raised p{margin:0}
-.pv-fund-raised p b{font-size:26px;font-weight:700;line-height:34px;color:var(--color-primary);font-variant-numeric:tabular-nums}
-#pf-view .pv-fund-raised p b{font-size:24px;line-height:32px} /* popup Xem chi tiết (hồ sơ): số đã đạt 24px */
-.pv-fund-raised > b{flex:none;font-size:18px;font-weight:700;line-height:26px;color:var(--color-text)}
+.pv-fund-raised p b{font-size:24px;font-weight:700;line-height:32px;color:var(--color-primary);font-variant-numeric:tabular-nums}
+#pf-view .pv-fund-raised p b{font-size:22px;line-height:30px} /* popup Xem chi tiết (hồ sơ): số đã đạt 22px */
+.pv-fund-raised > b{flex:none;font-size:16px;font-weight:700;line-height:24px;color:var(--color-text)}
 .pv-fund .pf-pv-bar{display:block;flex:none}
 .pv-fund-count{margin:0;font-size:13px;line-height:20px;color:var(--color-text-muted)}
 .pv-fund-count b{font-weight:700;color:var(--color-text)}
@@ -1038,6 +1054,13 @@ html.has-smoother{scroll-behavior:auto}
 /* Không viền, bóng đổ dồn xuống dưới (spread âm → không lan quá 16px sang 2 bên, không bị mép dải cuộn cắt); rê chuột → bóng đậm hơn */
 .pv-track.pv-cards .cp-card{border-color:transparent;box-shadow:0 2px 4px rgba(20,30,50,.08),0 12px 20px -6px rgba(20,30,50,.2)}
 .pv-track.pv-cards .cp-card:hover{box-shadow:0 4px 8px rgba(20,30,50,.1),0 16px 26px -10px rgba(20,30,50,.32)}
+/* ---------- Chấm chuyển dưới dải Các chiến dịch khác (dùng lại .founders-dots / .founders-dot trang chủ): kéo lên sát đáy dải (dải chừa 32px đáy cho bóng thẻ) ---------- */
+/* Kéo chuột qua lại (chuong-trinh.js): con trỏ bàn tay; đang kéo → tắt bắt thẻ, không chọn chữ */
+#pv-others{cursor:grab}
+#pv-others.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+#pv-others.is-dragging a{cursor:grabbing}
+.pv-others-dots{margin-top:-16px}
+.pv-others-dots .founders-dot:not([aria-current="true"]){background:#d9dcdf} /* chấm chưa chọn đậm hơn chút để thấy rõ trên nền trắng */
 
 /* ---------- Responsive: ≤1239 chiến dịch khác 3 thẻ · ≤1023 một cột (gây quỹ lên ngay dưới bộ ảnh), 2 thẻ · ≤767 tên nhỏ hơn, 1 thẻ rưỡi ---------- */
 @media(max-width:1239px){
@@ -1057,7 +1080,7 @@ html.has-smoother{scroll-behavior:auto}
   .pv-banner-tags{margin-top:20px}
   .pv-content .pf-pv-tabs{gap:20px;padding:0 16px}
   .pv-content .pf-pv-panel{padding:16px}
-  .pv-fund-raised p b{font-size:24px;line-height:32px}
+  .pv-fund-raised p b{font-size:22px;line-height:30px}
   .pv-track{grid-auto-columns:85%}
   .breadcrumb-current{max-width:100%}
 }
@@ -1362,6 +1385,10 @@ html.has-smoother{scroll-behavior:auto}
 .cp-donate{position:relative;z-index:2;align-self:flex-end;min-height:32px;margin-top:4px;padding:0 14px;border-radius:8px;font-size:13px}
 .cp-donate:hover{color:#fff}
 .cp-donate:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
+/* ---------- Địa bàn trên thẻ ảnh tràn viền (dòng trên tiêu đề): chữ to, đậm, vàng sáng — cùng màu chữ "Còn N ngày" sắp kết thúc, nổi rõ trên nền tối ---------- */
+.cp-grid-cover .cp-place{font-size:15px;font-weight:600;line-height:22px;text-shadow:0 1px 4px rgba(0,0,0,.45)}
+.cp-grid-cover .cp-place,.cp-grid-cover .cp-place .icon{color:#ffd23f}
+.cp-grid-cover .cp-place .icon{width:16px;height:16px}
 .cp-empty{margin:24px 0 0;padding:40px 16px;border:1px dashed var(--color-border);border-radius:14px;font-size:14px;color:var(--color-text-muted);text-align:center}
 .cp-empty[hidden]{display:none}
 /* ---------- Cuộn tải thêm: điểm mốc vô hình cuối lưới (chạm tới thì nạp thêm 8 thẻ) ---------- */
@@ -1383,8 +1410,6 @@ html.has-smoother{scroll-behavior:auto}
 .cp-grid-cover .cp-card-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 24%,rgba(0,0,0,.55) 50%,rgba(0,0,0,.9) 100%);pointer-events:none} /* lớp tối cho chữ trắng dễ đọc */
 .cp-grid-cover .cp-priority,.cp-grid-cover .cp-card-media .cp-card-mark{z-index:1}
 .cp-grid-cover .cp-card-body{position:relative;z-index:1;flex:none;padding:16px 18px 18px}
-.cp-grid-cover .cp-place{color:rgba(255,255,255,.85)}
-.cp-grid-cover .cp-place .icon{color:#fff}
 .cp-grid-cover .cp-card-title{font-size:17px;font-weight:700;line-height:24px;min-height:48px;text-shadow:0 1px 4px rgba(0,0,0,.35)}
 .cp-grid-cover .cp-card:hover .cp-card-title a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 .cp-grid-cover .cp-raised{color:#fff}
@@ -1406,6 +1431,22 @@ html.has-smoother{scroll-behavior:auto}
 .cp-grid-cover .cp-donate:hover{border-color:#fdecec;background:#fdecec;color:var(--color-primary)}
 .cp-grid-cover .cp-donate:hover .icon{transform:scale(1.15)}
 .cp-grid-cover .cp-donate:focus-visible{outline-color:#fff}
+/* ---------- Trạng thái ĐÃ KẾT THÚC (.cp-card.is-ended — chuong-trinh-data.js): nhãn xám "Đã kết thúc" thay nhãn mức độ · ảnh giữ màu thật · chữ các mục (địa bàn, tên, số tiền, mục tiêu, Đạt %, thời gian) xám · thanh tiến độ xám ·
+   "Đã kết thúc" (dấu tích) ở ô thời gian · nút "Xem kết quả" viền trắng trong suốt thay nút trắng "Ủng hộ ngay" · danh sách xếp xuống cuối ---------- */
+.cp-priority.is-ended{background:#4b5563;color:#fff}
+.cp-card.is-ended .cp-bar span{background:#9aa0a6}
+.cp-grid-cover .cp-card.is-ended .cp-bar span{background:linear-gradient(180deg,rgba(255,255,255,.45) 0,rgba(255,255,255,.08) 50%,rgba(255,255,255,0) 100%),#c7cbd0;box-shadow:none}
+.cp-meta .cp-days.is-ended{font-weight:700;color:var(--color-text)}
+.cp-grid-cover .cp-meta .cp-days.is-ended{color:#c3c7cd}
+/* Thẻ ảnh tràn viền: chữ các mục xám bạc (vẫn đọc được trên lớp tối), bỏ vàng nổi bật ở địa bàn */
+.cp-grid-cover .cp-card.is-ended :is(.cp-place,.cp-place .icon,.cp-card-title a,.cp-raised,.cp-goal,.cp-meta){color:#c3c7cd}
+.cp-grid-cover .cp-card.is-ended:hover .cp-card-title a{color:#e5e7ea} /* rê chuột: tên sáng hơn chút */
+.cp-donate.is-result{border:1px solid var(--color-border);background:#fff;color:var(--color-text)}
+.cp-donate.is-result:hover{border-color:var(--color-text);color:var(--color-text)}
+.cp-donate.is-result .icon{display:block;width:16px;height:16px}
+.cp-grid-cover .cp-donate.is-result{border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.12);box-shadow:none;color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cp-grid-cover .cp-donate.is-result:hover{border-color:#fff;background:rgba(255,255,255,.24);color:#fff}
+.cp-grid-cover .cp-donate.is-result:hover .icon{transform:translateX(3px)}
 
 /* ---------- Responsive: 3 → 2 → 1 cột ---------- */
 @media(max-width:1200px){
@@ -1428,6 +1469,19 @@ html.has-smoother{scroll-behavior:auto}
 }
 @media(prefers-reduced-motion:reduce){.cp-card,.cp-card-media img{transition:none}.cp-card:hover{transform:none}.cp-card:hover .cp-card-media img{transform:none}}
 /* ==================== END PAGE: DANH SÁCH CHƯƠNG TRÌNH THIỆN NGUYỆN ==================== */
+
+/* ==================== SECTION: POPUP CÂU CHUYỆN (story-popover.js) — rê chuột vào nút Ủng hộ ngay trên thẻ: trang chủ · danh sách · Các chiến dịch khác ==================== */
+/* Dùng lại khối câu chuyện chương trình nổi bật trang chủ (.spotlight-story: nền ảnh mờ trắng · người vận động · đoạn văn · Xem thêm);
+   ở đây chỉ đổi thành hộp nổi cố định cạnh thẻ: bo góc, bóng đổ (không ảnh polaroid) */
+/* ---------- Hộp nổi: cố định theo khung nhìn (JS đặt left / top), dưới header, hiện mờ dần + trượt nhẹ từ phía thẻ ---------- */
+.spotlight-story.story-pop{position:fixed;z-index:45;background-color:#fff;justify-content:flex-start;width:min(440px,calc(100vw - 32px));margin:0;padding:24px 28px;border-radius:16px;background-size:260% auto;box-shadow:0 4px 12px rgba(20,30,50,.08),0 24px 56px rgba(20,30,50,.22);opacity:0;transform:translateX(-8px);transition:opacity .18s ease,transform .18s ease}
+.spotlight-story.story-pop[data-side="left"]{transform:translateX(8px)}
+.spotlight-story.story-pop[data-side="over"]{transform:translateY(8px)}
+.spotlight-story.story-pop.is-open{opacity:1;transform:none}
+/* ---------- Đoạn câu chuyện: tối đa 5 dòng mỗi đoạn (đoạn dài cắt bằng "…"), đọc tiếp ở Xem thêm ---------- */
+.story-pop > p{display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5}
+@media(prefers-reduced-motion:reduce){.spotlight-story.story-pop,.spotlight-story.story-pop[data-side]{transform:none;transition:none}}
+/* ==================== END SECTION: POPUP CÂU CHUYỆN ==================== */
 
 /* ==================== PAGE: BẢN ĐỒ SỐ (ban-do-so.html) ==================== */
 .navigation a[aria-current="page"]{color:var(--color-primary)}
@@ -2682,7 +2736,8 @@ html.pf-reg-lock{overflow:hidden}
 .pf-pv-stat-icon.is-blue{color:#2257b8}
 .pf-pv-donate{width:100%;height:48px;justify-content:center;font-size:15px;font-weight:700;text-transform:uppercase}
 .pf-pv-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:12px;margin-top:-4px}
-.pf-pv-actions .pf-btn{justify-content:center}
+.pf-pv-actions .pf-btn{justify-content:center;transition:border-color .2s,background .2s,color .2s}
+.pf-pv-actions .pf-btn-ghost:hover{border-color:var(--color-primary);background:#fdecec;color:var(--color-primary)} /* Xuất sao kê · Chia sẻ: rê chuột → viền, chữ, biểu tượng đỏ trên nền hồng nhạt (cùng kiểu hover .pf-btn-ghost.is-danger) */
 .pf-pv-org{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--color-border)}
 .pf-pv-avatar{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#fde4e5,#f6c6c9);color:var(--color-primary)}
 .pf-pv-avatar.is-org{border-radius:12px;background:linear-gradient(135deg,#f6f7f9,#e7e9ed);color:var(--color-text)}
@@ -2728,9 +2783,9 @@ html.pf-reg-lock{overflow:hidden}
 /* ---------- Tab Danh sách ủng hộ: ô tìm kiếm · Tìm kiếm nâng cao (số tiền, thời gian) · bảng 10 dòng/trang · Hiển thị x – y/N ---------- */
 .pf-pv-donors-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:16px;border-bottom:1px solid var(--color-border)}
 .pf-pv-donors-tools .pf-input.is-search{flex:1;min-width:220px;max-width:360px}
-.pf-pv-donor-adv{padding:16px;border-bottom:1px solid var(--color-border);background:var(--color-surface-alt)}
+.pf-pv-donor-adv{padding:16px;border-bottom:1px solid var(--color-border);background:#fff} /* nền trắng (bỏ nền xám) */
 .pf-pv-donor-adv[hidden]{display:none}
-.pf-adv-grid.is-donors{grid-template-columns:minmax(0,2fr) minmax(0,3fr)}
+.pf-adv-grid.is-donors{grid-template-columns:repeat(2,minmax(0,1fr))} /* Số tiền ủng hộ (Từ – Đến, đuôi VNĐ) · Thời gian (Từ ngày – Đến ngày): 2 cột đều */
 .pf-pv-donors .pf-view-table{border-bottom:0}
 .pf-pv-donors > div > .pf-view-none{padding:24px 16px;text-align:center}
 .pf-pv-donor{display:inline-flex;align-items:center;gap:10px}
@@ -2958,8 +3013,10 @@ html.pf-reg-lock{overflow:hidden}
 :is(#pf-view,.pv-page) .pf-pv-top5-icon{background:#fdecec;color:var(--color-primary)}
 :is(#pf-view,.pv-page) .pf-pv-top5-item.is-rank-1{background:#fdecec}
 :is(#pf-view,.pv-page) .pf-pv-rank{width:28px;height:28px;border:1px solid var(--color-border);border-radius:50%;background:#fff;color:var(--color-text)}
-:is(#pf-view,.pv-page) .is-rank-1 .pf-pv-rank{border-color:var(--color-primary);background:var(--color-primary);color:#fff}
-:is(#pf-view,.pv-page) .is-rank-2 .pf-pv-rank,:is(#pf-view,.pv-page) .is-rank-3 .pf-pv-rank{border-color:#f6c9cb;color:var(--color-primary)}
+/* Hạng 1 · 2 · 3 phân biệt bằng màu huy chương: vàng · bạc · đồng (nền chuyển nhẹ, chữ trắng); hạng 4–5 giữ vòng trắng viền xám */
+:is(#pf-view,.pv-page) .is-rank-1 .pf-pv-rank{border-color:#e09a12;background:linear-gradient(180deg,#fbc54a,#e39b12);color:#fff}
+:is(#pf-view,.pv-page) .is-rank-2 .pf-pv-rank{border-color:#8f99a4;background:linear-gradient(180deg,#c3cad1,#8f99a4);color:#fff}
+:is(#pf-view,.pv-page) .is-rank-3 .pf-pv-rank{border-color:#b0602f;background:linear-gradient(180deg,#e0956a,#b5622f);color:#fff}
 :is(#pf-view,.pv-page) .is-rank-1 .pf-pv-top5-amount{color:var(--color-primary)}
 /* Trang chi tiết: avatar nhà hảo tâm 36px sau số hạng */
 .pf-pv-top5-item .pf-pv-avatar{width:36px;height:36px}
@@ -3785,3 +3842,29 @@ html.pf-reg-lock{overflow:hidden}
   .dh-builders-logos .logo-gtinx{object-fit:contain} /* ô hẹp: khung bị giới hạn theo ngang → contain đã vừa sát chữ, cover sẽ cắt mất chữ G */
 }
 /* ==================== END PAGE: ĐƠN VỊ ĐỒNG HÀNH ==================== */
+
+/* ==================== PAGE: TIN TỨC (tin-tuc.html) ==================== */
+/* Dùng lại: .cp-hero · .cp-search (banner trang Chương trình) · .period-switch (thanh chuyên mục) · .news-grid / .news-feature / .news-row (khối tin tức trang chủ) ·
+   .cp-grid / .cp-card (lưới thẻ trang Chương trình) · .section-title · .link-arrow · .cp-empty. Ở đây chỉ thêm bố cục riêng của trang */
+/* ==================== SECTION: THANH CHUYÊN MỤC ==================== */
+/* ---------- Ghim dưới header khi cuộn, nền trắng, kẻ mảnh dưới; màn hẹp thì thanh cuộn ngang ---------- */
+.nw-tabs-bar{position:sticky;top:var(--header-h);z-index:10;border-bottom:1px solid var(--color-border);background:#fff}
+.nw-tabs-bar .container{display:flex;justify-content:center;padding-block:12px}
+.nw-tabs{position:relative;min-width:0;max-width:100%;margin:0} /* min-width:0 → thanh co lại theo màn hình và cuộn ngang, không đẩy trang rộng ra */
+/* ==================== SECTION: TIN NỔI BẬT & CHUYÊN MỤC ==================== */
+/* ---------- Nhịp section: đệm gọn hơn section trang chủ (các chuyên mục nối tiếp nhau) · tiêu đề trái, Xem tất cả phải ---------- */
+.nw-section{padding-block:clamp(32px,3.5vw,48px)}
+.nw-section + .nw-section{padding-top:0}
+.nw-head{align-items:center;margin-bottom:24px}
+.nw-section .section-title{font-size:28px;line-height:36px}
+.nw-grid{margin-top:0}
+/* ---------- Thẻ bài viết (.cp-card): ngày · tiêu đề 2 dòng · tóm tắt 2 dòng ---------- */
+.nw-card .news-meta{margin:0}
+.nw-card .news-desc{margin:0;font-size:14px;line-height:22px;-webkit-line-clamp:2;line-clamp:2}
+.nw-page .cp-empty{margin:0 0 24px}
+/* ---------- Responsive: tin tức ---------- */
+@media(max-width:600px){
+  .nw-tabs-bar .container{justify-content:flex-start}
+  .nw-section .section-title{font-size:22px;line-height:30px}
+}
+/* ==================== END PAGE: TIN TỨC ==================== */
