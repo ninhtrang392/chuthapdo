@@ -1305,7 +1305,7 @@ const renderDonors = (page = pvDonorPage) => {
   const start = (pvDonorPage - 1) * PV_DONORS_PER_PAGE;
   const slice = rows.slice(start, start + PV_DONORS_PER_PAGE);
   box.innerHTML = rows.length ? `${vTable('is-v-donors', ['Người ủng hộ', 'Số tiền ủng hộ', 'Thời gian ủng hộ'],
-    slice.map((d) => [`<span class="pf-pv-donor">${pvDonorAvatar(d)}<b>${escapeHtml(d.name)}</b></span>`, `<b class="pf-pv-amount">${pvMoney(d.amount)}</b>`, pvDateTime(d.time)]), '', start + 1)}
+    slice.map((d) => [`<span class="pf-pv-donor"><b>${escapeHtml(d.name)}</b></span>`, `<b class="pf-pv-amount">${pvMoney(d.amount)}</b>`, pvDateTime(d.time)]), '', start + 1)}
     <div class="pf-table-foot">
       <p class="pf-muted" aria-live="polite">Hiển thị ${start + 1} – ${start + slice.length}/${vVnd(rows.length)}</p>
       ${pages > 1 ? vPager('data-donor-page', pvDonorPage, pages) : ''}

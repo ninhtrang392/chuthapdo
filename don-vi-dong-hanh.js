@@ -39,6 +39,60 @@ document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
 const $ = (s) => document.querySelector(s);
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
+// ==================== SECTION: THÔNG ĐIỆP — trượt ngang 2 slide (Bà Đỗ Thị Thu Thảo · Đại tướng Trịnh Văn Quyết) ====================
+// Dải .dh-quote-track cuộn ngang bắt theo slide (vuốt trên cảm ứng). Chấm: bấm → cuộn tới slide; cuộn → tô chấm.
+// Tự chuyển QUOTE_INTERVAL ms (hết thì về slide 1), dừng khi rê chuột / focus / tab ẩn; giảm chuyển động → không tự chuyển.
+// Máy tính: giữ chuột trái kéo qua lại, thả → kéo quá 80px thì sang slide kế bên, ít hơn thì bật về. Tải trang luôn ở slide 1.
+const QUOTE_INTERVAL = 8000;
+const quoteTrack = $('#dh-quote-track');
+const quoteDots = [...document.querySelectorAll('#dh-quote-dots [data-quote-slide]')];
+if (quoteTrack && quoteDots.length) {
+  const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const slideW = () => quoteTrack.clientWidth;
+  const current = () => Math.round(quoteTrack.scrollLeft / slideW());
+  const goTo = (i) => quoteTrack.scrollTo({ left: ((i + quoteDots.length) % quoteDots.length) * slideW(), behavior: reduceMotion() ? 'auto' : 'smooth' });
+  const syncDots = () => { const i = current(); quoteDots.forEach((dot, k) => dot.setAttribute('aria-current', String(k === i))); };
+  quoteTrack.scrollLeft = 0; // tải trang luôn ở slide 1
+  syncDots();
+  let raf = 0;
+  quoteTrack.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; syncDots(); }); }, { passive: true });
+  quoteDots.forEach((dot) => dot.addEventListener('click', () => goTo(Number(dot.dataset.quoteSlide))));
+  addEventListener('resize', () => { quoteTrack.scrollLeft = current() * slideW(); });
+  // ---------- Tự chuyển ----------
+  const section = quoteTrack.closest('.dh-quote');
+  setInterval(() => {
+    if (reduceMotion() || document.hidden || section.matches(':hover, :focus-within') || drag) return;
+    goTo(current() + 1);
+  }, QUOTE_INTERVAL);
+  // ---------- Kéo chuột qua lại ----------
+  let drag = null;
+  quoteTrack.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+    drag = { x: event.clientX, left: quoteTrack.scrollLeft, start: current(), dx: 0, moved: false };
+  });
+  addEventListener('pointermove', (event) => {
+    if (!drag) return;
+    const dx = event.clientX - drag.x;
+    drag.dx = dx;
+    if (!drag.moved && Math.abs(dx) < 5) return;
+    if (!drag.moved) { drag.moved = true; quoteTrack.classList.add('is-dragging'); }
+    quoteTrack.scrollLeft = drag.left - dx;
+  });
+  const endDrag = () => {
+    if (!drag) return;
+    const { moved, dx, start } = drag;
+    drag = null;
+    if (!moved) return;
+    quoteTrack.classList.remove('is-dragging');
+    // Kéo quá 80px → sang slide kế bên theo hướng kéo; ít hơn → bật về slide cũ
+    const last = quoteDots.length - 1;
+    goTo(Math.abs(dx) > 80 ? Math.min(last, Math.max(0, start + (dx < 0 ? 1 : -1))) : start);
+  };
+  addEventListener('pointerup', endDrag);
+  addEventListener('pointercancel', endDrag);
+  quoteTrack.addEventListener('dragstart', (event) => event.preventDefault());
+}
+
 // ==================== SECTION: SỐ LIỆU ĐỒNG HÀNH — định dạng BR-05 ====================
 // Số lượng: dấu "." phân cách hàng nghìn · Số tiền: < 1 triệu đầy đủ; 1 triệu – < 1 tỷ chia 10⁶ "triệu"; ≥ 1 tỷ chia 10⁹ "tỷ";
 // tối đa 1 chữ số thập phân, cắt bỏ (không làm tròn), dấu thập phân ","; kèm "đồng". Chưa có dữ liệu → 0 (NL02).
@@ -267,7 +321,7 @@ peopleGrid.querySelectorAll('.dh-person-avatar img').forEach((img) => img.addEve
 }, { once: true }));
 
 // ==================== SECTION: HÌNH THỨC HỢP TÁC & ĐỒNG HÀNH — accordion ====================
-// Rê chuột (thiết bị có chuột), focus bàn phím hoặc bấm vào dòng nào thì dòng đó mở chi tiết, các dòng khác thu lại; luôn giữ 1 dòng mở.
+// Rê chuột (thiết bị có chuột, trễ 180ms), focus bàn phím hoặc bấm vào dòng nào thì dòng đó mở chi tiết, các dòng khác thu lại; luôn giữ 1 dòng mở.
 const coopList = $('#dh-coop-list');
 if (coopList) {
   const coopRows = [...coopList.querySelectorAll('.dh-coop-row')];
@@ -277,8 +331,14 @@ if (coopList) {
     item.querySelector('.dh-coop-toggle').setAttribute('aria-expanded', String(open));
   });
   const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // Rê chuột: chờ HOVER_DELAY ms mới mở (lướt nhanh qua các dòng không mở / đóng liên tục → đỡ giật)
+  const HOVER_DELAY = 180;
+  let hoverTimer = 0;
   coopRows.forEach((row) => {
-    if (canHover) row.addEventListener('mouseenter', () => openCoop(row));
+    if (canHover) {
+      row.addEventListener('mouseenter', () => { clearTimeout(hoverTimer); hoverTimer = setTimeout(() => openCoop(row), HOVER_DELAY); });
+      row.addEventListener('mouseleave', () => clearTimeout(hoverTimer));
+    }
     row.addEventListener('click', () => openCoop(row));
     row.querySelector('.dh-coop-toggle').addEventListener('focus', () => openCoop(row));
   });
@@ -355,9 +415,9 @@ if (window.gsap && window.ScrollTrigger) {
         .from(card.querySelector('.dh-person-info'), { autoAlpha: 0, y: 32, duration: 0.9, ease: 'power3.out', clearProps: 'transform,opacity,visibility' }, 0.5);
     });
 
-    // ---------- Hình thức hợp tác: từng dòng trượt lên, số thứ tự nhảy vào ----------
+    // ---------- Hình thức hợp tác: từng dòng hiện dần, trượt lên nhẹ ----------
     gsap.from('.dh-coop-row', {
-      autoAlpha: 0, y: 48, duration: 0.9, ease: 'power3.out', stagger: 0.08, clearProps: 'transform,opacity,visibility',
+      autoAlpha: 0, y: 20, duration: 0.8, ease: 'power2.out', stagger: 0.06, clearProps: 'transform,opacity,visibility',
       scrollTrigger: { trigger: '.dh-coop-list', start: 'top 85%', once: true },
     });
 

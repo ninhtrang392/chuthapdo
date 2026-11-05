@@ -740,7 +740,7 @@ const renderDonors = (page = ctx.donorPage) => {
   const heads = d.isMoney ? ['Người ủng hộ', 'Số tiền ủng hộ', 'Lời nhắn', 'Thời gian ủng hộ'] : ['Người hiến máu', 'Số lượng', 'Lời nhắn', 'Thời gian hiến máu'];
   $('#pf-pv-donor-list').innerHTML = rows.length ? `<div class="pf-view-table"><table class="pf-reg-table is-view is-v-donors is-v-notes">
       <thead><tr><th scope="col" class="pf-col-index">#</th>${heads.map((t) => `<th scope="col">${t}</th>`).join('')}</tr></thead>
-      <tbody>${slice.map((x, i) => `<tr><td class="pf-col-index">${start + i + 1}</td><td><span class="pf-pv-donor">${donorAvatar(x)}<b>${escapeHtml(x.name)}</b></span></td><td><b class="pf-pv-amount">${d.isMoney ? `${vnd(x.amount)}đ` : `${x.amount} đơn vị`}</b></td><td>${x.note ? `<span class="pv-donor-note" title="${escapeHtml(x.note)}">${escapeHtml(x.note)}</span>` : '<span class="pv-donor-note is-empty" aria-label="Không có lời nhắn">—</span>'}</td><td>${viDateTime(x.time)}</td></tr>`).join('')}</tbody>
+      <tbody>${slice.map((x, i) => `<tr><td class="pf-col-index">${start + i + 1}</td><td><span class="pf-pv-donor"><b>${escapeHtml(x.name)}</b></span></td><td><b class="pf-pv-amount">${d.isMoney ? `${vnd(x.amount)}đ` : `${x.amount} đơn vị`}</b></td><td>${x.note ? `<span class="pv-donor-note" title="${escapeHtml(x.note)}">${escapeHtml(x.note)}</span>` : '<span class="pv-donor-note is-empty" aria-label="Không có lời nhắn">—</span>'}</td><td>${viDateTime(x.time)}</td></tr>`).join('')}</tbody>
     </table></div>
     <div class="pf-table-foot">
       <p class="pf-muted" aria-live="polite">Hiển thị ${start + 1} – ${start + slice.length}/${vnd(rows.length)}</p>
