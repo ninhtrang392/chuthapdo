@@ -12,18 +12,8 @@
     <link rel="stylesheet" href="vendor/leaflet/MarkerCluster.css" />
     <link rel="stylesheet" href="styles.css?v=20261105-163" />
     <link rel="stylesheet" href="ban-do-so.css" />
-    <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
-    <script>
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('pt-enter');
-        setTimeout(() => document.documentElement.classList.remove('pt-enter'), 2500);
-      }
-    </script>
   </head>
   <body class="map-body">
-    <!-- ==================== FLOW: màn chuyển trang ==================== -->
-    <div class="page-transition" aria-hidden="true"><div class="pt-panel"><img class="pt-logo" src="Emages/logo-hctd.svg" alt="" width="220" height="52" /></div></div>
-
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
     <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <symbol id="bd-shield" viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m8 12 3 3 5-6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
@@ -88,12 +78,12 @@
       </a>
       <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
-        <a href="chuong-trinh-thien-nguyen.html">Chương trình</a>
         <a href="ban-do-so.html" aria-current="page">Bản đồ số</a>
+        <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
         <a href="#" data-panel="Quỹ nhân đạo">Quỹ nhân đạo</a>
-        <a href="index.html#cong-khai">Công khai</a>
-        <a href="tin-tuc.html">Tin tức</a>
-        <a href="don-vi-dong-hanh.html">Đơn vị đồng hành</a>
+        <a href="index.html#nguoi-gan-nhat">Người gần nhất</a>
+        <a href="index.html#giai-thuong">Giải thưởng nhân đạo</a>
+        <a href="don-vi-dong-hanh.html">Đồng hành</a>
         <a class="button button-primary nav-cta" href="index.html#chuong-trinh"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
       </nav>
       <div class="header-actions">
@@ -284,7 +274,7 @@
         <nav class="footer-col" aria-label="Hỗ trợ">
           <h2>Hỗ trợ</h2>
           <a href="#" data-panel="Hướng dẫn quyên góp">Hướng dẫn quyên góp</a>
-          <a href="index.html#tao-quy">Tạo quỹ</a>
+          <a href="ho-so.html#chuong-trinh/them-moi">Tạo quỹ</a>
           <a href="#" data-panel="Câu hỏi thường gặp">Câu hỏi thường gặp</a>
         </nav>
         <!-- ---------- Liên hệ: địa chỉ, điện thoại, email ---------- -->

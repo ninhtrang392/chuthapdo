@@ -57,8 +57,8 @@ window.addEventListener('load', () => setTimeout(() => {
   if (target) scrollToElement(target);
 }, 150));
 
-// ==================== HERO: impact widget — đếm số ====================
-const metricValues = document.querySelectorAll('.impact-card dd');
+// ==================== HERO: số liệu nổi bật — đếm số ====================
+const metricValues = document.querySelectorAll('.hero-stat dd');
 if (metricValues.length && !reduceMotion) {
   const countUp = (element) => {
     const target = Number(element.textContent.replace(/\D/g, ''));
@@ -443,7 +443,13 @@ if (reliefFigure && reliefZoom) {
   applyZoom(ZOOM_MIN);
 }
 
-if (!window.gsap) document.documentElement.classList.remove('hero-intro');
+
+
+// Không có GSAP / ScrollTrigger (CDN lỗi): bỏ preloader ngay, trang dùng bình thường
+if (!(window.gsap && window.ScrollTrigger)) {
+  clearTimeout(window.heroIntroFallback);
+  document.documentElement.classList.remove('hero-intro');
+}
 
 // ==================== SECTION 06: TẠO QUỸ — modal biểu mẫu 3 bước (hoạt động cả khi không có GSAP) ====================
 // Chỉ là giao diện: bước "Gửi hồ sơ" hiện màn hình thành công, chưa gửi dữ liệu đi đâu — nối API khi triển khai.
@@ -672,49 +678,298 @@ if (window.gsap && window.ScrollTrigger) {
     });
   }
 
-  // ==================== HERO: intro (SplitText) + parallax ====================
-  // Intro: ảnh nền thu từ mờ + phóng to về rõ nét; "Vì cộng đồng" hiện từng từ (trồi nhẹ lên, từ mờ sang nét);
-  // "nhân ái" (chữ gradient, không tách để giữ background-clip) hiện cả cụm cùng kiểu, nối tiếp; câu dẫn hiện
-  // theo dòng; CTA bật nhẹ; khối số liệu mở từ dưới lên.
-  // Không dùng mask của SplitText vì mask cắt dấu tiếng Việt (line-height chặt). CTA chỉ đổi opacity/transform
-  // nên vẫn bấm được trong lúc intro chạy. Parallax: ảnh nền và nội dung trôi khác tốc độ.
+  // ==================== HERO: preloader → intro · cuộn (chữ trôi, huy hiệu xoay) ====================
+  // Preloader: chữ thập vẽ dần + đếm 0 → 86% trong lúc trang tải, tải xong → 100%, chữ thập xoay thu nhỏ, màn đỏ kéo lên.
+  // Intro (chồng lên lúc màn đỏ đang kéo): các dòng tiêu đề trồi lên từ mặt nạ, 2 viên ảnh nở ngang, header trượt xuống,
+  // huy hiệu bật ra.
+  // Vào bằng link có #neo: không có preloader → intro chạy ngay. Chỉ đổi transform/opacity/clip-path
+  // nên không chặn thao tác trong lúc intro chạy.
   mm.add('(prefers-reduced-motion: no-preference)', () => {
-    const delay = window.flowEnterDelay || 0;
-    // Drop the pre-hide class first so .from() tweens read the real end values (same frame, no flash).
-    document.documentElement.classList.remove('hero-intro');
+    const root = document.documentElement;
+    const preloader = document.querySelector('.preloader');
+    const usePreloader = Boolean(preloader) && root.classList.contains('hero-intro');
+    clearTimeout(window.heroIntroFallback);
+    const heroLines = gsap.utils.toArray('.hero-line-inner');
 
-    // ---------- Tiêu đề & câu dẫn: SplitText ----------
-    // Tách một lần sau khi font tải xong (đúng kerning / ngắt dòng), chạy xong thì revert() về HTML gốc
-    // để đổi kích thước màn hình sau đó không bị lệch dòng. Giữ ẩn trong lúc chờ font để không nháy chữ.
-    if (window.SplitText) {
-      gsap.set('.hero-title, .hero-content p', { autoAlpha: 0 });
-      document.fonts.ready.then(() => {
-        gsap.set('.hero-title, .hero-content p', { autoAlpha: 1 });
-        const title = SplitText.create('.hero-title', { type: 'words', ignore: '.hero-accent' });
-        const lead = SplitText.create('.hero-content p', { type: 'lines' });
-        // "nhân ái" vốn có drop-shadow trong CSS → giữ drop-shadow trong cả hai đầu filter để không bị nháy bóng
-        const accentShadow = 'drop-shadow(0 2px 8px rgba(255,255,255,.5))';
-        gsap.timeline({ delay: delay + 0.25, defaults: { ease: 'power3.out' }, onComplete: () => { title.revert(); lead.revert(); } })
-          .from(title.words, { autoAlpha: 0, y: 34, filter: 'blur(10px)', duration: 1.1, stagger: 0.14, clearProps: 'filter' })
-          .fromTo('.hero-accent', { autoAlpha: 0, y: 34, filter: `blur(10px) ${accentShadow}` }, { autoAlpha: 1, y: 0, filter: `blur(0px) ${accentShadow}`, duration: 1.2, clearProps: 'filter,transform,opacity,visibility' }, '-=0.75')
-          .from(lead.lines, { autoAlpha: 0, y: 18, duration: 0.8, stagger: 0.1 }, '-=0.7');
+    // ---------- Intro: trạng thái đầu ----------
+    gsap.set(heroLines, { yPercent: 115 });
+    gsap.set('.hero-pill', { scaleX: 0 });
+    gsap.set('.hero-badge', { scale: 0 });
+    gsap.set('.header', { yPercent: -100 });
+
+    const heroIntro = () => gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.4 }, onComplete: () => ScrollTrigger.refresh() })
+      .to(heroLines, { yPercent: 0, stagger: 0.1 })
+      .to('.hero-pill', { scaleX: 1, duration: 1.2, stagger: 0.15 }, 0.45)
+      .to('.header', { yPercent: 0, duration: 1.2, clearProps: 'transform' }, 0.3)
+      .to('.hero-badge', { scale: 1, duration: 1.4, ease: 'elastic.out(1, 0.6)' }, 0.6);
+
+    // ---------- Preloader ----------
+    const lockScroll = (on) => {
+      if (smoother) smoother.paused(on);
+      else root.style.overflow = on ? 'hidden' : '';
+    };
+    const runPreloader = () => {
+      lockScroll(true);
+      window.scrollTo(0, 0);
+      const num = preloader.querySelector('.preloader-num');
+      const counter = { value: 0 };
+      const setNum = () => { num.textContent = Math.round(counter.value); };
+      const drawIn = gsap.timeline()
+        .from('.preloader-bar--v', { scaleY: 0, duration: 0.9, ease: 'expo.inOut' })
+        .from('.preloader-bar--h', { scaleX: 0, duration: 0.9, ease: 'expo.inOut' }, 0.2)
+        .from('.preloader-meta span', { yPercent: 120, autoAlpha: 0, stagger: 0.08, duration: 0.8, ease: 'expo.out' }, 0.2)
+        .to(counter, { value: 86, duration: 1.6, ease: 'power2.out', onUpdate: setNum }, 0);
+      const loaded = new Promise((resolve) => {
+        if (document.readyState === 'complete') { resolve(); return; }
+        window.addEventListener('load', resolve, { once: true });
+        setTimeout(resolve, 3500); // mạng chậm: không bắt người xem chờ quá lâu
       });
-    } else {
-      gsap.from('.hero-title, .hero-content p', { autoAlpha: 0, y: 24, duration: 0.9, stagger: 0.2, delay: delay + 0.25, clearProps: 'transform,opacity,visibility' });
+      Promise.all([drawIn.then(), loaded, document.fonts ? document.fonts.ready : null]).then(() => {
+        gsap.timeline({ onComplete: () => { preloader.remove(); root.classList.remove('hero-intro'); lockScroll(false); } })
+          .to(counter, { value: 100, duration: 0.45, ease: 'power1.inOut', onUpdate: setNum })
+          .to('.preloader-cross', { rotation: 90, scale: 0, duration: 0.7, ease: 'power3.in' })
+          .to('.preloader-count, .preloader-meta', { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: 'power3.in' }, '<')
+          .to(preloader, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'expo.inOut' }, '-=0.15')
+          .add(heroIntro, '-=0.75');
+      });
+    };
+
+    if (usePreloader) runPreloader();
+    else {
+      if (preloader) preloader.remove();
+      root.classList.remove('hero-intro');
+      heroIntro();
     }
 
-    // ---------- Nền, header, CTA, khối số liệu ----------
-    gsap.timeline({ defaults: { ease: 'power3.out' }, delay })
-      .addLabel('start')
-      .fromTo('.hero-bg', { scale: 1.16, filter: 'blur(12px) brightness(0.85)' }, { scale: 1, filter: 'blur(0px) brightness(1)', duration: 2.4, ease: 'expo.out', clearProps: 'filter' }, 'start')
-      .from('.header', { yPercent: -100, opacity: 0, duration: 0.7, clearProps: 'transform,opacity' }, 'start+=0.1')
-      .from('.hero-actions .button', { autoAlpha: 0, y: 24, scale: 0.92, duration: 0.7, stagger: 0.12, ease: 'back.out(1.7)', clearProps: 'transform,opacity,visibility' }, 'start+=1.35')
-      .fromTo('.impact-widget', { clipPath: 'inset(100% 0% 0% 0%)', y: 40 }, { clipPath: 'inset(0% 0% 0% 0%)', y: 0, duration: 1.1, ease: 'expo.out', clearProps: 'clipPath,transform' }, 'start+=1.5')
-      .from('.impact-card', { autoAlpha: 0, y: 18, duration: 0.6, stagger: 0.08, clearProps: 'transform,opacity,visibility' }, 'start+=1.75');
+    // ---------- Cuộn: huy hiệu quay liên tục, tăng tốc & đổi chiều theo vận tốc cuộn ----------
+    const spin = gsap.to('.hero-badge-text', { rotation: 360, duration: 16, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
+    ScrollTrigger.create({
+      trigger: '.hero', start: 'top top', end: 'bottom top',
+      onUpdate: (self) => {
+        const boost = gsap.utils.clamp(1, 5, Math.abs(self.getVelocity()) / 250);
+        gsap.to(spin, { timeScale: boost * (self.direction || 1), duration: 0.2, overwrite: true });
+        gsap.to(spin, { timeScale: 1, duration: 1.2, delay: 0.25 });
+      },
+    });
 
-    const parallax = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
-    gsap.to('.hero-bg', { yPercent: 12, ease: 'none', scrollTrigger: parallax });
-    gsap.to('.hero-content', { y: -70, ease: 'none', scrollTrigger: parallax });
+    // ---------- Cuộn: các dòng tiêu đề trôi lệch nhau ----------
+    gsap.utils.toArray('.hero-line').forEach((line, index) => {
+      gsap.to(line, { xPercent: index % 2 ? 6 : -6, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    });
+
+    // Các ô số liệu trồi lên lần lượt khi vào khung nhìn (số đếm lên do khối HERO: số liệu nổi bật — đếm số)
+    gsap.from('.hero-stat', {
+      y: 50, autoAlpha: 0, duration: 1.1, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
+      stagger: 0.1, scrollTrigger: { trigger: '.hero-stats', start: 'top 88%', once: true },
+    });
+  });
+
+  // ==================== SECTION: BĂNG CHỮ CHẠY — chạy vô tận, tăng tốc & đổi chiều theo hướng cuộn ====================
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    const loop = gsap.to('.marquee-track', { xPercent: -50, duration: 24, ease: 'none', repeat: -1 });
+    loop.totalTime(loop.duration() * 200); // lùi xa điểm 0 để chạy ngược chiều được mãi
+    ScrollTrigger.create({
+      trigger: '.marquee', start: 'top bottom', end: 'bottom top',
+      onToggle: (self) => (self.isActive ? loop.play() : loop.pause()),
+      onUpdate: (self) => {
+        const direction = self.direction || 1;
+        const boost = gsap.utils.clamp(1, 7, Math.abs(self.getVelocity()) / 220);
+        gsap.killTweensOf(loop);
+        gsap.timeline()
+          .to(loop, { timeScale: direction * boost, duration: 0.15 })
+          .to(loop, { timeScale: direction, duration: 1.2, ease: 'power2.out' }, '+=0.2');
+      },
+    });
+  });
+
+  // ==================== SECTION: HÀNH TRÌNH NHÂN ÁI — thẻ xếp chồng khi cuộn → tách thành hàng 4 thẻ lớn ====================
+  // Góc nghiêng khi xếp chồng của từng thẻ (thẻ sau đè thẻ trước, lệch nhau như chồng thẻ)
+  const EVENT_TILT = [-7, 5, -4, 6];
+
+  // ---------- Desktop: ghim section · cuộn tới đâu 1 thẻ bay từ dưới lên chồng nghiêng ở giữa · đủ 4 thẻ → tách về hàng 4 cột ----------
+  // Vị trí cuối là lưới CSS thật; lúc xếp chồng chỉ dời x về tâm lưới. refreshPriority 1: tính quãng ghim trước các ScrollTrigger bên dưới.
+  mm.add('(min-width: 1101px) and (prefers-reduced-motion: no-preference)', () => {
+    const section = document.querySelector('.event');
+    const grid = section && section.querySelector('.event-cards');
+    if (!grid) return undefined;
+    const cards = [...grid.children];
+    const photos = cards.map((card) => card.querySelector('.event-card-photo'));
+    const toCenter = (card) => grid.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2);
+    // Giữ section ở giữa vùng nhìn dưới header; section cao hơn vùng trống thì giữ sát ngay dưới header
+    const pinStart = () => {
+      const top = document.querySelector('.header')?.offsetHeight || 0;
+      const free = window.innerHeight - top;
+      return section.offsetHeight >= free ? `top ${top}px` : `center ${top + free / 2}px`;
+    };
+    section.classList.add('is-pinned');
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section, start: pinStart, end: () => `+=${window.innerHeight * 3}`,
+        pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 1,
+      },
+    });
+    cards.forEach((card, i) => {
+      tl.fromTo(card,
+        { x: () => toCenter(card), y: () => window.innerHeight, rotation: EVENT_TILT[i] * 3 },
+        { y: 0, rotation: EVENT_TILT[i], duration: 1, ease: 'power3.out' }, i);
+    });
+    // Tách hàng: thẻ về vị trí lưới → ảnh (có nhóm + tên) mở từ dưới lên che mặt đỏ
+    tl.to(cards, { x: 0, y: 0, rotation: 0, duration: 1.6, ease: 'power3.inOut', stagger: 0.08 }, '+=0.4')
+      .fromTo(photos, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'power2.inOut', stagger: 0.08, immediateRender: true }, '-=0.9')
+      .to({}, { duration: 0.6 }); // dừng một nhịp ở hàng ảnh trước khi thả ghim
+    return () => { section.classList.remove('is-pinned'); gsap.set(photos, { clearProps: 'clipPath' }); };
+  });
+
+  // ---------- Màn ≤1100px: không ghim, mỗi thẻ bay lên + xoay về thẳng khi cuộn tới ----------
+  mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
+    document.querySelectorAll('.event-card').forEach((card, i) => {
+      gsap.from(card, {
+        y: 160, rotation: EVENT_TILT[i % EVENT_TILT.length] * 2, autoAlpha: 0, duration: 1.1, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
+        scrollTrigger: { trigger: card, start: 'top 92%', once: true },
+      });
+    });
+  });
+
+  // ==================== SECTION: CHƯƠNG — Tình nguyện viên (dải ngang) · Giải thưởng (tấm chân dung) ====================
+  // Tách câu dẫn chuyện thành từng chữ (.chapter-word), giữ nguyên thẻ <em> từ khóa; chỉ tách khi có chuyển động
+  const splitStoryWords = (element) => {
+    if (element.dataset.split) return [...element.querySelectorAll('.chapter-word')];
+    const wrap = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === Node.ELEMENT_NODE) { wrap(child); return; }
+        if (child.nodeType !== Node.TEXT_NODE || !child.textContent.trim()) return;
+        const fragment = document.createDocumentFragment();
+        child.textContent.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { fragment.append(part); return; }
+          const word = document.createElement('span');
+          word.className = 'chapter-word';
+          word.textContent = part;
+          fragment.append(word);
+        });
+        child.replaceWith(fragment);
+      });
+    };
+    wrap(element);
+    element.dataset.split = 'true';
+    return [...element.querySelectorAll('.chapter-word')];
+  };
+
+  // Đếm số lên tới data-count-to (chạy 1 lần)
+  const countUp = (stat) => {
+    if (stat.dataset.counted) return;
+    stat.dataset.counted = 'true';
+    const counter = { value: 0 };
+    gsap.to(counter, {
+      value: Number(stat.dataset.countTo), duration: 2, ease: 'power2.out',
+      onUpdate: () => { stat.textContent = Math.round(counter.value).toLocaleString('vi-VN'); },
+    });
+  };
+  // Câu dẫn chương sáng dần từng chữ trong ~1 màn hình cuộn, rồi trôi lên mờ đi. Trả về vị trí (px cuộn) khi câu đã mờ hết.
+  const addStoryRead = (tl, section, vh) => {
+    const story = section.querySelector('.chapter-story');
+    const words = story ? splitStoryWords(story.querySelector('.chapter-story-text')) : [];
+    if (!words.length) return 0;
+    tl.fromTo(words, { opacity: 0.12 }, { opacity: 1, duration: vh / words.length, stagger: vh / words.length, immediateRender: true }, 0)
+      .to(story, { autoAlpha: 0, y: -vh * 0.12, duration: vh * 0.3, ease: 'power2.in' }, vh);
+    return vh * 1.3;
+  };
+  // Mỗi chương: timeline tính theo px cuộn, ghim section suốt timeline (end = tổng thời lượng).
+  // Tạo theo đúng thứ tự trên trang (I → II → III) + refreshPriority 1 để quãng ghim chương trên được tính trước chương dưới.
+  mm.add('(min-width: 1101px) and (prefers-reduced-motion: no-preference)', () => {
+    const vh = window.innerHeight;
+    const chapters = gsap.utils.toArray('.chapter');
+    chapters.forEach((section) => section.classList.add('is-pinned'));
+    const panelHandlers = [];
+
+    // ---------- I · Dải trượt ngang: câu dẫn → dải trượt vào từ phải → chạy ngang hết ----------
+    const setupGallery = (section) => {
+      const viewport = section.querySelector('.chapter-viewport');
+      const track = section.querySelector('.chapter-track');
+      viewport.scrollLeft = 0;
+      const distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
+      const after = addStoryRead(tl, section, vh);
+      tl.fromTo(track, { x: viewport.clientWidth * 0.6, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: vh * 0.5, ease: 'power2.out', immediateRender: true }, Math.max(0, after - vh * 0.1))
+        .to(track, { x: -distance, duration: Math.max(distance, 1) }, after + vh * 0.5);
+      const stat = section.querySelector('.chapter-stat [data-count-to]');
+      if (stat) { stat.textContent = '0'; tl.call(() => countUp(stat), null, after + vh * 0.3); }
+      ScrollTrigger.create({ trigger: section, start: 'top top', end: `+=${tl.duration()}`, pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, animation: tl });
+    };
+
+    // ---------- III · Tấm chân dung: câu dẫn → đầu section + các tấm hiện → cuộn tới đâu tấm đó mở rộng (rê chuột cũng mở) ----------
+    const setupPanels = (section) => {
+      const wrap = section.querySelector('.panels-wrap');
+      const panels = [...section.querySelectorAll('.panel')];
+      const setActive = (index) => panels.forEach((panel, k) => panel.classList.toggle('is-active', k === index));
+      const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
+      const after = addStoryRead(tl, section, vh);
+      const start = Math.max(0, after - vh * 0.1);
+      tl.fromTo(wrap, { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: vh * 0.4, stagger: vh * 0.1, ease: 'power2.out', immediateRender: true }, start);
+      const stepsAt = start + vh * 0.4;
+      const step = vh * 0.45;
+      tl.to({}, { duration: step * panels.length }, stepsAt);
+      let current = -1;
+      ScrollTrigger.create({
+        trigger: section, start: 'top top', end: `+=${tl.duration()}`, pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, animation: tl,
+        onUpdate: (self) => {
+          const px = self.progress * tl.duration();
+          const index = gsap.utils.clamp(0, panels.length - 1, Math.floor((px - stepsAt) / step));
+          if (index !== current) { current = index; setActive(index); }
+        },
+      });
+      panels.forEach((panel, k) => {
+        const onEnter = () => setActive(k);
+        panel.addEventListener('pointerenter', onEnter);
+        panel.addEventListener('focusin', onEnter);
+        panelHandlers.push(() => { panel.removeEventListener('pointerenter', onEnter); panel.removeEventListener('focusin', onEnter); });
+      });
+    };
+
+    chapters.forEach((section) => {
+      if (section.classList.contains('chapter-panels')) setupPanels(section);
+      else if (section.querySelector('.chapter-track')) setupGallery(section);
+    });
+
+    return () => {
+      chapters.forEach((section) => section.classList.remove('is-pinned'));
+      panelHandlers.forEach((off) => off());
+      document.querySelectorAll('.panel').forEach((panel, k) => panel.classList.toggle('is-active', k === 0));
+    };
+  });
+
+  // ---------- Màn ≤1100px: câu dẫn sáng dần từng chữ khi cuộn qua; các tấm chân dung trồi lên (không ghim) ----------
+  mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
+    gsap.utils.toArray('.chapter .chapter-story-text').forEach((text) => {
+      gsap.fromTo(splitStoryWords(text), { opacity: 0.12 }, {
+        opacity: 1, ease: 'none', stagger: 0.1,
+        scrollTrigger: { trigger: text, start: 'top 85%', end: 'bottom 45%', scrub: true },
+      });
+    });
+    gsap.utils.toArray('.panel').forEach((element) => {
+      gsap.from(element, {
+        y: 60, autoAlpha: 0, duration: 1, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
+        scrollTrigger: { trigger: element, start: 'top 90%', once: true },
+      });
+    });
+  });
+
+  // ==================== SECTION: CÂU CHUYỂN CẢNH — chữ sáng dần từng chữ khi cuộn qua (mọi màn hình, không ghim) ====================
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
+    const text = document.querySelector('.bridge-text');
+    if (!text) return;
+    gsap.fromTo(splitStoryWords(text), { opacity: 0.12 }, {
+      opacity: 1, ease: 'none', stagger: 0.1,
+      scrollTrigger: { trigger: text, start: 'top 80%', end: 'bottom 40%', scrub: true },
+    });
+  });
+
+  // ---------- Màn ≤1100px: số tình nguyện viên đếm lên khi hiện ra (desktop: timeline chương gọi countUp) ----------
+  mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
+    const stat = document.querySelector('.chapter-stat [data-count-to]');
+    if (!stat) return;
+    stat.textContent = '0';
+    ScrollTrigger.create({ trigger: stat, start: 'top 85%', once: true, onEnter: () => countUp(stat) });
   });
 
   // Section 04 podium entrance: one timeline, one ScrollTrigger (on the timeline, not child tweens).

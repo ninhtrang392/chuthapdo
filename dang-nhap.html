@@ -9,18 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20261102-63" />
-    <!-- Flow: màn chuyển trang che sẵn khi tải (gỡ bởi flow.js; tự gỡ sau 2.5s nếu GSAP lỗi) -->
-    <script>
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('pt-enter');
-        setTimeout(() => document.documentElement.classList.remove('pt-enter'), 2500);
-      }
-    </script>
   </head>
   <body class="auth-body">
-    <!-- ==================== FLOW: màn chuyển trang ==================== -->
-    <div class="page-transition" aria-hidden="true"><div class="pt-panel"><img class="pt-logo" src="Emages/logo-hctd.svg" alt="" width="220" height="52" /></div></div>
-
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
     <!-- Icon lấy từ Figma "Design Systems" › page icon (bộ Outline; heart-solid từ bộ Solid) -->
     <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
