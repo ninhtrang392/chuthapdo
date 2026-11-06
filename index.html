@@ -25,12 +25,20 @@
 
 <body>
     <!-- ==================== SECTION: PRELOADER (chỉ trang chủ) ==================== -->
-    <!-- Nền đỏ: dấu chữ thập vẽ dần · 3 nguyên tắc trên cùng · đếm % góc trái dưới.
+    <!-- Nền đỏ: dấu chữ thập vẽ dần · câu trích dẫn dưới chữ thập · 3 nguyên tắc trên cùng · đếm % góc trái dưới.
          Tải xong → chữ thập xoay thu nhỏ, màn đỏ kéo lên để lộ hero (script.js › HERO: preloader → intro). -->
     <div class="preloader" aria-hidden="true">
-        <div class="preloader-cross">
-            <span class="preloader-bar preloader-bar--v"></span>
-            <span class="preloader-bar preloader-bar--h"></span>
+        <!-- ---------- Khối giữa: dấu chữ thập + câu trích dẫn, căn giữa màn hình cả cụm ---------- -->
+        <div class="preloader-center">
+            <div class="preloader-cross">
+                <span class="preloader-bar preloader-bar--v"></span>
+                <span class="preloader-bar preloader-bar--h"></span>
+            </div>
+            <!-- ---------- Câu trích dẫn (theo bộ giới thiệu Đề án Người Gần Nhất) ---------- -->
+            <figure class="preloader-quote">
+                <blockquote>“Một Việt Nam hùng cường phải đồng thời là một Việt Nam nhân ái.”</blockquote>
+                <figcaption>Tổng Bí thư, Chủ tịch nước Tô Lâm — Chủ tịch danh dự Hội Chữ thập đỏ Việt Nam</figcaption>
+            </figure>
         </div>
         <div class="preloader-meta">
             <span>Nhân đạo</span><span>Hòa bình</span><span>Hữu nghị</span>
@@ -85,7 +93,7 @@
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
             <a href="#" data-panel="Quỹ nhân đạo">Quỹ nhân đạo</a>
             <a href="#nguoi-gan-nhat">Người gần nhất</a>
-            <a href="#giai-thuong">Giải thưởng nhân đạo</a>
+            <a href="giai-thuong.html">Giải thưởng nhân đạo</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
             <a class="button button-primary nav-cta" href="#chuong-trinh"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
         </nav>
@@ -221,9 +229,8 @@
                 <!-- ==================== END SECTION: TIỀN ỦNG HỘ TRỰC TIẾP ==================== -->
 
                 <!-- ==================== SECTION: HÀNH TRÌNH NHÂN ÁI — giới thiệu chung 4 thành phần Hệ sinh thái Nhân đạo ==================== -->
-                <!-- Trên (giữa): tiêu đề · mô tả. Dưới: 4 thẻ (mặt đỏ kiểu thẻ đánh giá → ảnh có nhóm + tên).
-           Desktop (script.js): ghim section — cuộn tới đâu 1 thẻ bay lên xếp chồng nghiêng ở giữa tới đó; đủ 4 thẻ thì tách ra thành hàng 4 thẻ lớn.
-           Màn ≤1100px: không ghim, thẻ bay lên khi cuộn tới. Giảm chuyển động / không có GSAP: hiện lưới tĩnh. -->
+                <!-- Trên (giữa): tiêu đề · mô tả. Dưới: 4 thẻ ảnh (nhóm + tên; rê chuột → phủ đỏ + mô tả giới thiệu).
+           Hàng 4 thẻ hiện sẵn; cuộn qua → thẻ lệch tầng gợn sóng (parallax: thẻ 1, 3 trôi lên, 2, 4 trôi xuống — script.js › SECTION: HÀNH TRÌNH NHÂN ÁI). -->
                 <section class="section event" id="hanh-trinh" aria-labelledby="event-title">
                     <div class="event-inner">
                         <!-- ---------- Tiêu đề: tiêu đề · mô tả (style chung .section-title / .section-lead) ---------- -->
@@ -232,36 +239,20 @@
                             <p class="section-lead">Giới thiệu hệ sinh thái kết nối nguồn lực, tôn vinh hành động nhân ái và lan tỏa giá trị nhân đạo trên toàn quốc.</p>
                         </div>
 
-                        <!-- ---------- 4 thẻ thành phần: mặt thẻ đỏ kiểu thẻ đánh giá (lúc xếp chồng) → ảnh phủ có nhóm + tên (hàng ảnh cuối).
-                             Rê chuột ảnh → phủ cam + mô tả + nút Xem thêm; màn cảm ứng hiện sẵn mô tả + nút. ---------- -->
+                        <!-- ---------- 4 thẻ thành phần: ảnh phủ kín có nhóm + tên.
+                             Rê chuột ảnh → phủ đỏ + mô tả giới thiệu (+ nút Xem thêm ở thẻ 02–04); màn cảm ứng hiện sẵn. Cả thẻ bấm được (link trên tên). ---------- -->
                         <ul class="event-cards" aria-label="Các thành phần của Hệ sinh thái Nhân đạo">
                             <li class="event-card">
                                 <div class="event-card-box">
-                                    <!-- ---------- Mặt thẻ màu (chỉ thấy lúc xếp chồng): số · Xem thêm · icon tròn · tên · nhóm · mô tả ---------- -->
-                                    <div class="event-card-face" aria-hidden="true">
-                                        <div class="event-card-top">
-                                            <span class="event-card-num">01</span>
-                                            <a class="event-card-more" href="ban-do-so.html" tabindex="-1">Xem thêm<svg class="icon"><use href="#arrow"/></svg></a>
-                                        </div>
-                                        <div class="event-card-who">
-                                            <span class="event-card-icon"><svg class="icon"><use href="#people"/></svg></span>
-                                            <div>
-                                                <p class="event-card-title">Nền tảng Nhân đạo Quốc gia</p>
-                                                <p class="event-card-tag">Kết nối</p>
-                                            </div>
-                                        </div>
-                                        <p class="event-card-text">Kết nối cộng đồng. Hỗ trợ Hội chỉ đạo, điều hành và điều phối nguồn lực.</p>
-                                    </div>
-                                    <!-- ---------- Ảnh (hàng ảnh cuối, kiểu thẻ chương trình ảnh tràn viền): nhóm (vàng) · tên trên ảnh; rê chuột → phủ cam + mô tả + nút Xem thêm; cả ảnh bấm được ---------- -->
+                                    <!-- ---------- Ảnh (kiểu thẻ chương trình ảnh tràn viền): nhóm (vàng) · tên trên ảnh; rê chuột → phủ đỏ + mô tả giới thiệu; cả ảnh bấm được (link trên tên) ---------- -->
                                     <div class="event-card-photo">
-                                        <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/Kho%E1%BA%A3nh%20Kh%E1%BA%AFc%20Trao%20G%E1%BB%ADi%20Y%C3%AAu%20Th%C6%B0%C6%A1ng.png" alt="Tình nguyện viên trò chuyện cùng cụ bà vùng cao" loading="lazy" decoding="async" />
+                                        <img src="Emages/Trao%20g%E1%BB%ADi%20y%C3%AAu%20th%C6%B0%C6%A1ng%20v%C3%B9ng%20cao-1.png" alt="Tình nguyện viên Chữ thập đỏ trao quà cho cụ bà vùng cao" loading="lazy" decoding="async" />
                                         <div class="event-card-cover">
                                             <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Kết nối</p>
-                                            <h3 class="event-card-name">Nền tảng Nhân đạo Quốc gia</h3>
+                                            <h3 class="event-card-name"><a class="stretched" href="ban-do-so.html">Nền tảng Nhân đạo Quốc gia</a></h3>
                                             <div class="event-card-reveal">
                                                 <div>
-                                                    <p class="event-card-desc">Kết nối cộng đồng. Hỗ trợ Hội chỉ đạo, điều hành và điều phối nguồn lực.</p>
-                                                    <a class="button event-card-btn" href="ban-do-so.html" aria-label="Xem thêm: Nền tảng Nhân đạo Quốc gia">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                                    <p class="event-card-desc">Kết nối cộng đồng với Hội Chữ thập đỏ trên một nền tảng số thống nhất. Hỗ trợ Hội chỉ đạo, điều hành và điều phối nguồn lực cứu trợ kịp thời, minh bạch, đến đúng người đang cần.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,31 +261,16 @@
                             </li>
                             <li class="event-card">
                                 <div class="event-card-box">
-                                    <!-- ---------- Mặt thẻ màu (chỉ thấy lúc xếp chồng): số · Xem thêm · icon tròn · tên · nhóm · mô tả ---------- -->
-                                    <div class="event-card-face" aria-hidden="true">
-                                        <div class="event-card-top">
-                                            <span class="event-card-num">02</span>
-                                            <a class="event-card-more" href="chuong-trinh.html" tabindex="-1">Xem thêm<svg class="icon"><use href="#arrow"/></svg></a>
-                                        </div>
-                                        <div class="event-card-who">
-                                            <span class="event-card-icon"><svg class="icon"><use href="#heart"/></svg></span>
-                                            <div>
-                                                <p class="event-card-title">Quỹ Nhân đạo Việt Nam</p>
-                                                <p class="event-card-tag">Nguồn lực</p>
-                                            </div>
-                                        </div>
-                                        <p class="event-card-text">Chung sức vun đắp nguồn lực cho những hành động nhân đạo.</p>
-                                    </div>
                                     <!-- ---------- Ảnh (hàng ảnh cuối): rê chuột → mô tả + nút Xem thêm trượt lên; cả ảnh bấm được ---------- -->
                                     <div class="event-card-photo">
-                                        <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/01%201.jpg" alt="Cán bộ Chữ thập đỏ trao quà hỗ trợ người dân" loading="lazy" decoding="async" />
+                                        <img src="Emages/Trao%20y%C3%AAu%20th%C6%B0%C6%A1ng%20gi%E1%BB%AFa%20n%C3%BAi%20r%E1%BB%ABng_VEVENT-2.png" alt="Bàn tay bỏ phong bì hình trái tim vào hòm quyên góp" loading="lazy" decoding="async" />
                                         <div class="event-card-cover">
                                             <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#heart"/></svg>Nguồn lực</p>
-                                            <h3 class="event-card-name">Quỹ Nhân đạo Việt Nam</h3>
+                                            <h3 class="event-card-name"><a class="stretched" href="chuong-trinh.html">Quỹ Nhân đạo Việt Nam</a></h3>
                                             <div class="event-card-reveal">
                                                 <div>
-                                                    <p class="event-card-desc">Chung sức vun đắp nguồn lực cho những hành động nhân đạo.</p>
-                                                    <a class="button event-card-btn" href="chuong-trinh.html" aria-label="Xem thêm: Quỹ Nhân đạo Việt Nam">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                                    <p class="event-card-desc">Chung sức vun đắp nguồn lực cho những hành động nhân đạo. Mọi đóng góp được tiếp nhận, phân bổ và công khai minh bạch tới từng chương trình, từng hoàn cảnh.</p>
+                                                <a class="button event-card-btn" href="chuong-trinh.html" tabindex="-1" aria-hidden="true">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -303,31 +279,16 @@
                             </li>
                             <li class="event-card">
                                 <div class="event-card-box">
-                                    <!-- ---------- Mặt thẻ màu (chỉ thấy lúc xếp chồng): số · Xem thêm · icon tròn · tên · nhóm · mô tả ---------- -->
-                                    <div class="event-card-face" aria-hidden="true">
-                                        <div class="event-card-top">
-                                            <span class="event-card-num">03</span>
-                                            <a class="event-card-more" href="tin-tuc.html" tabindex="-1">Xem thêm<svg class="icon"><use href="#arrow"/></svg></a>
-                                        </div>
-                                        <div class="event-card-who">
-                                            <span class="event-card-icon"><svg class="icon"><use href="#crown"/></svg></span>
-                                            <div>
-                                                <p class="event-card-title">Giải thưởng “Ngọn đèn Nhân Ái”</p>
-                                                <p class="event-card-tag">Tôn vinh</p>
-                                            </div>
-                                        </div>
-                                        <p class="event-card-text">Lan tỏa những tấm gương và hành động đẹp vì cộng đồng.</p>
-                                    </div>
                                     <!-- ---------- Ảnh (hàng ảnh cuối): rê chuột → mô tả + nút Xem thêm trượt lên; cả ảnh bấm được ---------- -->
                                     <div class="event-card-photo">
-                                        <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg" alt="Tình nguyện viên được ghi nhận tại ngày hội hiến máu" loading="lazy" decoding="async" />
+                                        <img src="Emages/ng%E1%BB%8Dn%20%C4%91%C3%A8n.png" alt="Biểu tượng Giải thưởng Ngọn đèn Nhân Ái: ngọn lửa trên trái tim ôm huy hiệu Chữ thập đỏ Việt Nam" loading="lazy" decoding="async" />
                                         <div class="event-card-cover">
                                             <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Tôn vinh</p>
-                                            <h3 class="event-card-name">Giải thưởng “Ngọn đèn Nhân Ái”</h3>
+                                            <h3 class="event-card-name"><a class="stretched" href="giai-thuong.html">Giải thưởng “Ngọn đèn Nhân Ái”</a></h3>
                                             <div class="event-card-reveal">
                                                 <div>
-                                                    <p class="event-card-desc">Lan tỏa những tấm gương và hành động đẹp vì cộng đồng.</p>
-                                                    <a class="button event-card-btn" href="tin-tuc.html" aria-label="Xem thêm: Giải thưởng Ngọn đèn Nhân Ái">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                                    <p class="event-card-desc">Lan tỏa những tấm gương và hành động đẹp vì cộng đồng. Giải thưởng do chính cộng đồng đề cử, tôn vinh cá nhân, tập thể có đóng góp nổi bật cho công tác nhân đạo.</p>
+                                                <a class="button event-card-btn" href="giai-thuong.html" tabindex="-1" aria-hidden="true">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -336,31 +297,16 @@
                             </li>
                             <li class="event-card">
                                 <div class="event-card-box">
-                                    <!-- ---------- Mặt thẻ màu (chỉ thấy lúc xếp chồng): số · Xem thêm · icon tròn · tên · nhóm · mô tả ---------- -->
-                                    <div class="event-card-face" aria-hidden="true">
-                                        <div class="event-card-top">
-                                            <span class="event-card-num">04</span>
-                                            <a class="event-card-more" href="#nguoi-gan-nhat" tabindex="-1">Xem thêm<svg class="icon"><use href="#arrow"/></svg></a>
-                                        </div>
-                                        <div class="event-card-who">
-                                            <span class="event-card-icon"><svg class="icon"><use href="#pulse"/></svg></span>
-                                            <div>
-                                                <p class="event-card-title">Dự án Người Gần Nhất</p>
-                                                <p class="event-card-tag">Năng lực</p>
-                                            </div>
-                                        </div>
-                                        <p class="event-card-text">Có kiến thức, có kỹ năng. Sẵn sàng giúp đúng lúc, đúng cách.</p>
-                                    </div>
                                     <!-- ---------- Ảnh (hàng ảnh cuối): rê chuột → mô tả + nút Xem thêm trượt lên; cả ảnh bấm được ---------- -->
                                     <div class="event-card-photo">
-                                        <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/z765570465791.jpg" alt="Tình nguyện viên Chữ thập đỏ hỗ trợ người dân tại điểm hiến máu" loading="lazy" decoding="async" />
+                                        <img class="is-key-visual" src="Emages/ng%20g%E1%BA%A7n%20nh%E1%BA%A5t.png" alt="Key visual Đề án Người Gần Nhất: hình bóng một người cúi xuống giúp người đang ngã" loading="lazy" decoding="async" />
                                         <div class="event-card-cover">
                                             <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#pulse"/></svg>Năng lực</p>
-                                            <h3 class="event-card-name">Dự án Người Gần Nhất</h3>
+                                            <h3 class="event-card-name"><a class="stretched" href="#nguoi-gan-nhat">Dự án Người Gần Nhất</a></h3>
                                             <div class="event-card-reveal">
                                                 <div>
-                                                    <p class="event-card-desc">Có kiến thức, có kỹ năng. Sẵn sàng giúp đúng lúc, đúng cách.</p>
-                                                    <a class="button event-card-btn" href="#nguoi-gan-nhat" aria-label="Xem thêm: Dự án Người Gần Nhất">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                                    <p class="event-card-desc">Có kiến thức, có kỹ năng — sẵn sàng giúp đúng lúc, đúng cách. Giai đoạn đầu phổ cập kỹ năng sơ cấp cứu cho người trẻ, để ai cũng có thể là Người Gần Nhất.</p>
+                                                <a class="button event-card-btn" href="#nguoi-gan-nhat" tabindex="-1" aria-hidden="true">Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -382,9 +328,9 @@
 
                 <!-- ==================== SECTION: TÌNH NGUYỆN VIÊN — CHƯƠNG I (dải thẻ chạy ngang) ==================== -->
                 <!-- Chương I của mạch "hành trình" (câu chuyển cảnh → I → II → III → Chương trình). Bố cục dải trượt ngang (tham khảo philos.site, giữ style web):
-           câu dẫn sáng dần → dải gồm khối giới thiệu + 3 lợi ích (ảnh dọc so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
+           câu dẫn sáng dần → dải gồm khối giới thiệu (ảnh 01 + chữ) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
            Desktop (script.js › SECTION: CHƯƠNG): ghim section, cuộn dọc → dải trượt ngang. Màn ≤1100px / giảm chuyển động: vuốt ngang (scroll-snap).
-           Đăng ký → form gia nhập đội, CLB ở hồ sơ (ho-so.html#gia-nhap-doi). DỮ LIỆU MINH HỌA: số tình nguyện viên lấy từ hệ thống khi triển khai; ảnh trong Emages/ảnh minh họa. -->
+           Đăng ký → form gia nhập đội, CLB ở hồ sơ (ho-so.html#gia-nhap-doi). DỮ LIỆU MINH HỌA: số tình nguyện viên lấy từ hệ thống khi triển khai; ảnh: Emages/01_trao_di_thoi_gian … 04_ghi_nhan_dong_gop.png. -->
                 <section class="section chapter chapter-gallery volunteer" id="tinh-nguyen-vien" aria-labelledby="tinh-nguyen-vien-title">
                     <div class="chapter-stage">
                         <!-- ---------- Câu dẫn chuyện: chữ sáng dần từng chữ theo nhịp cuộn (script.js › SECTION: CHƯƠNG) ---------- -->
@@ -395,18 +341,21 @@
                         <!-- ---------- Dải trượt ngang: giới thiệu + 3 lợi ích ---------- -->
                         <div class="chapter-viewport">
                             <ul class="chapter-track" aria-label="Lợi ích khi trở thành tình nguyện viên">
-                            <li class="chapter-intro">
-                                <p class="eyebrow">Tình nguyện viên</p>
-                                <h2 class="section-title" id="tinh-nguyen-vien-title">Trao đi thời gian, lan tỏa yêu thương</h2>
-                                <p class="section-lead">Tham gia đội, câu lạc bộ tình nguyện viên Chữ thập đỏ tại địa phương — cùng hỗ trợ người yếu thế, ứng phó thiên tai và chăm sóc sức khỏe cộng đồng.</p>
-                                <p class="chapter-stat"><strong data-count-to="65000">65.000</strong><span>tình nguyện viên trên cả nước</span></p>
-                                <div class="chapter-actions">
-                                    <a class="button button-primary" href="ho-so.html#gia-nhap-doi" data-magnetic>Đăng ký tình nguyện viên<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-                                    <a class="link-arrow" href="ban-do-so.html">Tìm đội, CLB gần bạn<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                            <li class="chapter-intro has-figure">
+                                <div class="chapter-figure"><img src="Emages/01_trao_di_thoi_gian.png" alt="Tình nguyện viên trao túi quà tận tay cụ bà trước hiên nhà" width="763" height="507" loading="lazy" decoding="async" /></div>
+                                <div class="chapter-intro-text">
+                                    <p class="eyebrow">Tình nguyện viên</p>
+                                    <h2 class="section-title" id="tinh-nguyen-vien-title">Trao đi thời gian, lan tỏa yêu thương</h2>
+                                    <p class="section-lead">Tham gia đội, câu lạc bộ tình nguyện viên Chữ thập đỏ tại địa phương — cùng hỗ trợ người yếu thế, ứng phó thiên tai và chăm sóc sức khỏe cộng đồng.</p>
+                                    <p class="chapter-stat"><strong data-count-to="65000">65.000</strong><span>tình nguyện viên trên cả nước</span></p>
+                                    <div class="chapter-actions">
+                                        <a class="button button-primary" href="ho-so.html#gia-nhap-doi" data-magnetic>Đăng ký tình nguyện viên<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                        <a class="link-arrow" href="ban-do-so.html">Tìm đội, CLB gần bạn<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                    </div>
                                 </div>
                             </li>
                             <li class="chapter-item">
-                                <div class="chapter-figure"><img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg" alt="Cán bộ Chữ thập đỏ chăm sóc em bé cùng gia đình" loading="lazy" decoding="async" /></div>
+                                <div class="chapter-figure"><img src="Emages/02_dao_tao_ky_nang.png" alt="Tình nguyện viên hướng dẫn lớp đào tạo kỹ năng tình nguyện viên" width="763" height="507" loading="lazy" decoding="async" /></div>
                                 <div class="chapter-text">
                                     <h3 class="chapter-name"><a class="stretched" href="#nguoi-gan-nhat">Được đào tạo kỹ năng</a></h3>
                                     <p class="chapter-meta">Lợi ích 01</p>
@@ -414,7 +363,7 @@
                                 </div>
                             </li>
                             <li class="chapter-item">
-                                <div class="chapter-figure"><img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-nhan-qua.jpg" alt="Trẻ em vùng cao nhận quà từ tình nguyện viên" loading="lazy" decoding="async" /></div>
+                                <div class="chapter-figure"><img src="Emages/03_hoat_dong_gan_ban.png" alt="Tình nguyện viên dọn rác trên vỉa hè gần nơi sinh sống" width="763" height="507" loading="lazy" decoding="async" /></div>
                                 <div class="chapter-text">
                                     <h3 class="chapter-name"><a class="stretched" href="ban-do-so.html">Hoạt động gần nơi bạn sống</a></h3>
                                     <p class="chapter-meta">Lợi ích 02</p>
@@ -422,7 +371,7 @@
                                 </div>
                             </li>
                             <li class="chapter-item">
-                                <div class="chapter-figure"><img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-den-truong.jpg" alt="Các em nhỏ vùng cao trên đường đến trường" loading="lazy" decoding="async" /></div>
+                                <div class="chapter-figure"><img src="Emages/04_ghi_nhan_dong_gop.png" alt="Tình nguyện viên nhận giấy ghi nhận đóng góp tình nguyện" width="763" height="507" loading="lazy" decoding="async" /></div>
                                 <div class="chapter-text">
                                     <h3 class="chapter-name"><a class="stretched" href="ho-so.html#gia-nhap-doi">Được ghi nhận đóng góp</a></h3>
                                     <p class="chapter-meta">Lợi ích 03</p>
@@ -479,16 +428,18 @@
                         </div>
 
                         <div class="panels-wrap">
-                            <!-- ---------- Đầu section: nhãn · tiêu đề · mô tả | nút đề cử, tìm hiểu ---------- -->
+                            <!-- ---------- Đầu section: biểu trưng Trái Tim Lửa · nhãn · tiêu đề · mô tả | link tìm hiểu giải thưởng ---------- -->
                             <div class="section-head">
-                                <div>
-                                    <p class="eyebrow">Giải thưởng</p>
-                                    <h2 class="section-title" id="giai-thuong-title">Ngọn đèn Nhân Ái</h2>
-                                    <p class="section-lead">Tôn vinh những tấm gương và hành động đẹp vì cộng đồng — do chính cộng đồng đề cử mỗi năm.</p>
+                                <div class="awards-brand">
+                                    <img class="awards-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="Biểu trưng Trái Tim Lửa — Giải thưởng Ngọn đèn Nhân Ái, Hội Chữ thập đỏ Việt Nam" width="1086" height="1448" loading="lazy" decoding="async" />
+                                    <div>
+                                        <p class="eyebrow">Giải thưởng</p>
+                                        <h2 class="section-title" id="giai-thuong-title">Ngọn đèn Nhân Ái</h2>
+                                        <p class="section-lead">Tôn vinh những tấm gương và hành động đẹp vì cộng đồng — do chính cộng đồng đề cử mỗi năm.</p>
+                                    </div>
                                 </div>
                                 <div class="section-head-aside">
-                                    <a class="button button-primary" href="#" data-panel="Đề cử Giải thưởng Ngọn đèn Nhân Ái" data-magnetic>Đề cử gương mặt<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-                                    <a class="link-arrow" href="#" data-panel="Giải thưởng Ngọn đèn Nhân Ái">Tìm hiểu giải thưởng<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                    <a class="link-arrow" href="giai-thuong.html">Tìm hiểu giải thưởng<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                                 </div>
                             </div>
 
@@ -1004,7 +955,7 @@
                             <!-- ---------- Bài nổi bật: ảnh phủ kín thẻ, ngày + tiêu đề + tóm tắt đè lên đáy ảnh ---------- -->
                             <article class="news-item news-feature" data-category="hoat-dong" data-reveal>
                                 <div class="media media-photo" style="--focus:50% 40%">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg" alt="Tình nguyện viên Chữ thập đỏ trao quà cho hai em nhỏ" width="1156" height="758"
+                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/5f7c45a6-e2a9-48f8-8a3f-8d3cbd503375.png" alt="Tình nguyện viên Chữ thập đỏ trao quà cho các em nhỏ vùng cao" width="1672" height="941"
                                         loading="lazy" />
                                 </div>
                                 <div class="news-body">
@@ -1018,7 +969,7 @@
                             <div class="news-list">
                                 <article class="news-item news-row" data-category="hien-mau" data-reveal>
                                     <div class="media media-photo" style="--focus:50% 35%">
-                                        <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg" alt="Người dân tham gia ngày hội hiến máu Giọt hồng sẻ chia" width="2560" height="1920" loading="lazy" />
+                                        <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/image.png" alt="Tình nguyện viên trẻ dìu cụ bà trong ngày hội cộng đồng" width="1672" height="941" loading="lazy" />
                                     </div>
                                     <div class="news-body">
                                         <p class="news-meta"><span class="news-cat">Hiến máu</span><time datetime="2026-09-28">28/09/2026</time></p>
@@ -1029,7 +980,7 @@
 
                                 <article class="news-item news-row" data-category="minh-bach" data-reveal>
                                     <div class="media media-photo" style="--focus:60% 50%">
-                                        <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg" alt="Lực lượng cứu hộ phát áo phao, nhu yếu phẩm cho người dân vùng ngập lũ" width="2560" height="1727" loading="lazy" />
+                                        <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/photo-3-16722031623611945449954.png" alt="Các em nhỏ nhận thùng quà hỗ trợ từ chương trình" width="624" height="415" loading="lazy" />
                                     </div>
                                     <div class="news-body">
                                         <p class="news-meta"><span class="news-cat">Minh bạch</span><time datetime="2026-09-24">24/09/2026</time></p>
@@ -1040,7 +991,7 @@
 
                                 <article class="news-item news-row" data-category="cong-dong" data-reveal>
                                     <div class="media media-photo" style="--focus:50% 40%">
-                                        <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg" alt="Cán bộ Chữ thập đỏ thăm hỏi bà và cháu nhỏ tại nhà" width="960" height="683" loading="lazy" />
+                                        <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/Kho%E1%BA%A3nh%20Kh%E1%BA%AFc%20Trao%20G%E1%BB%ADi%20Y%C3%AAu%20Th%C6%B0%C6%A1ng.png" alt="Tình nguyện viên trao quà tận tay cụ bà và cháu nhỏ tại nhà" width="1448" height="1086" loading="lazy" />
                                     </div>
                                     <div class="news-body">
                                         <p class="news-meta"><span class="news-cat">Cộng đồng</span><time datetime="2026-09-18">18/09/2026</time></p>

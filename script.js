@@ -718,7 +718,9 @@ if (window.gsap && window.ScrollTrigger) {
         .from('.preloader-bar--v', { scaleY: 0, duration: 0.9, ease: 'expo.inOut' })
         .from('.preloader-bar--h', { scaleX: 0, duration: 0.9, ease: 'expo.inOut' }, 0.2)
         .from('.preloader-meta span', { yPercent: 120, autoAlpha: 0, stagger: 0.08, duration: 0.8, ease: 'expo.out' }, 0.2)
-        .to(counter, { value: 86, duration: 1.6, ease: 'power2.out', onUpdate: setNum }, 0);
+        .from('.preloader-quote blockquote, .preloader-quote figcaption', { y: 24, autoAlpha: 0, stagger: 0.15, duration: 0.9, ease: 'expo.out' }, 0.6)
+        .to(counter, { value: 86, duration: 1.6, ease: 'power2.out', onUpdate: setNum }, 0)
+        .to({}, { duration: 0.9 }); // giữ thêm 1 nhịp để kịp đọc câu trích dẫn
       const loaded = new Promise((resolve) => {
         if (document.readyState === 'complete') { resolve(); return; }
         window.addEventListener('load', resolve, { once: true });
@@ -728,7 +730,7 @@ if (window.gsap && window.ScrollTrigger) {
         gsap.timeline({ onComplete: () => { preloader.remove(); root.classList.remove('hero-intro'); lockScroll(false); } })
           .to(counter, { value: 100, duration: 0.45, ease: 'power1.inOut', onUpdate: setNum })
           .to('.preloader-cross', { rotation: 90, scale: 0, duration: 0.7, ease: 'power3.in' })
-          .to('.preloader-count, .preloader-meta', { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: 'power3.in' }, '<')
+          .to('.preloader-count, .preloader-meta, .preloader-quote', { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: 'power3.in' }, '<')
           .to(preloader, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'expo.inOut' }, '-=0.15')
           .add(heroIntro, '-=0.75');
       });
@@ -782,50 +784,18 @@ if (window.gsap && window.ScrollTrigger) {
     });
   });
 
-  // ==================== SECTION: HÀNH TRÌNH NHÂN ÁI — thẻ xếp chồng khi cuộn → tách thành hàng 4 thẻ lớn ====================
-  // Góc nghiêng khi xếp chồng của từng thẻ (thẻ sau đè thẻ trước, lệch nhau như chồng thẻ)
-  const EVENT_TILT = [-7, 5, -4, 6];
-
-  // ---------- Desktop: ghim section · cuộn tới đâu 1 thẻ bay từ dưới lên chồng nghiêng ở giữa · đủ 4 thẻ → tách về hàng 4 cột ----------
-  // Vị trí cuối là lưới CSS thật; lúc xếp chồng chỉ dời x về tâm lưới. refreshPriority 1: tính quãng ghim trước các ScrollTrigger bên dưới.
-  mm.add('(min-width: 1101px) and (prefers-reduced-motion: no-preference)', () => {
-    const section = document.querySelector('.event');
-    const grid = section && section.querySelector('.event-cards');
-    if (!grid) return undefined;
-    const cards = [...grid.children];
-    const photos = cards.map((card) => card.querySelector('.event-card-photo'));
-    const toCenter = (card) => grid.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2);
-    // Giữ section ở giữa vùng nhìn dưới header; section cao hơn vùng trống thì giữ sát ngay dưới header
-    const pinStart = () => {
-      const top = document.querySelector('.header')?.offsetHeight || 0;
-      const free = window.innerHeight - top;
-      return section.offsetHeight >= free ? `top ${top}px` : `center ${top + free / 2}px`;
-    };
-    section.classList.add('is-pinned');
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section, start: pinStart, end: () => `+=${window.innerHeight * 3}`,
-        pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 1,
-      },
-    });
-    cards.forEach((card, i) => {
-      tl.fromTo(card,
-        { x: () => toCenter(card), y: () => window.innerHeight, rotation: EVENT_TILT[i] * 3 },
-        { y: 0, rotation: EVENT_TILT[i], duration: 1, ease: 'power3.out' }, i);
-    });
-    // Tách hàng: thẻ về vị trí lưới → ảnh (có nhóm + tên) mở từ dưới lên che mặt đỏ
-    tl.to(cards, { x: 0, y: 0, rotation: 0, duration: 1.6, ease: 'power3.inOut', stagger: 0.08 }, '+=0.4')
-      .fromTo(photos, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'power2.inOut', stagger: 0.08, immediateRender: true }, '-=0.9')
-      .to({}, { duration: 0.6 }); // dừng một nhịp ở hàng ảnh trước khi thả ghim
-    return () => { section.classList.remove('is-pinned'); gsap.set(photos, { clearProps: 'clipPath' }); };
-  });
-
-  // ---------- Màn ≤1100px: không ghim, mỗi thẻ bay lên + xoay về thẳng khi cuộn tới ----------
-  mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
-    document.querySelectorAll('.event-card').forEach((card, i) => {
-      gsap.from(card, {
-        y: 160, rotation: EVENT_TILT[i % EVENT_TILT.length] * 2, autoAlpha: 0, duration: 1.1, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
-        scrollTrigger: { trigger: card, start: 'top 92%', once: true },
+  // ==================== SECTION: HÀNH TRÌNH NHÂN ÁI — 4 thẻ lệch tầng khi cuộn (parallax gợn sóng) ====================
+  // Thẻ luôn hiện sẵn; cuộn qua section → thẻ 1, 3 trôi lên, thẻ 2, 4 trôi xuống (scrub theo cuộn, cuộn ngược chạy ngược).
+  // Chỉ khi lưới ≥ 2 cột (màn > 600px); màn 1 cột / giảm chuyển động: đứng yên.
+  mm.add('(min-width: 601px) and (prefers-reduced-motion: no-preference)', () => {
+    const grid = document.querySelector('.event-cards');
+    if (!grid) return;
+    const amount = () => Math.min(64, window.innerHeight * 0.07);
+    [...grid.children].forEach((card, i) => {
+      const dir = i % 2 === 0 ? 1 : -1;
+      gsap.fromTo(card, { y: () => amount() * dir }, {
+        y: () => -amount() * dir, ease: 'none',
+        scrollTrigger: { trigger: grid, start: 'top bottom', end: 'bottom top', scrub: 0.6, invalidateOnRefresh: true },
       });
     });
   });
