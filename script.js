@@ -45,7 +45,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // ==================== FLOW: cuộn mượt (ScrollSmoother nếu có, ngược lại cuộn gốc) ====================
 let smoother = null; // created in the MOTION block, before any other ScrollTrigger
-const headerOffset = () => document.querySelector('.header').offsetHeight;
+const headerOffset = () => { const h = document.querySelector('.header'); return h.offsetTop + h.offsetHeight; }; // header nổi cách đỉnh → lấy mép dưới
 const scrollToElement = (element) => {
   if (smoother) smoother.scrollTo(element, true, `top ${headerOffset()}px`);
   else element.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
@@ -679,7 +679,7 @@ if (window.gsap && window.ScrollTrigger) {
   }
 
   // ==================== HERO: preloader → intro · cuộn (chữ trôi, huy hiệu xoay) ====================
-  // Preloader: chữ thập vẽ dần + đếm 0 → 86% trong lúc trang tải, tải xong → 100%, chữ thập xoay thu nhỏ, màn đỏ kéo lên.
+  // Preloader: logo trái tim hiện dần + đếm 0 → 86% trong lúc trang tải, tải xong → 100%, logo thu nhỏ, màn đỏ kéo lên.
   // Intro (chồng lên lúc màn đỏ đang kéo): các dòng tiêu đề trồi lên từ mặt nạ, 2 viên ảnh nở ngang, header trượt xuống,
   // huy hiệu bật ra.
   // Vào bằng link có #neo: không có preloader → intro chạy ngay. Chỉ đổi transform/opacity/clip-path
@@ -695,7 +695,7 @@ if (window.gsap && window.ScrollTrigger) {
     gsap.set(heroLines, { yPercent: 115 });
     gsap.set('.hero-pill', { scaleX: 0 });
     gsap.set('.hero-badge', { scale: 0 });
-    gsap.set('.header', { yPercent: -100 });
+    gsap.set('.header', { yPercent: -160 }); // header nổi cách đỉnh → đẩy hẳn lên khỏi màn
 
     const heroIntro = () => gsap.timeline({ defaults: { ease: 'expo.out', duration: 1.4 }, onComplete: () => ScrollTrigger.refresh() })
       .to(heroLines, { yPercent: 0, stagger: 0.1 })
@@ -715,8 +715,7 @@ if (window.gsap && window.ScrollTrigger) {
       const counter = { value: 0 };
       const setNum = () => { num.textContent = Math.round(counter.value); };
       const drawIn = gsap.timeline()
-        .from('.preloader-bar--v', { scaleY: 0, duration: 0.9, ease: 'expo.inOut' })
-        .from('.preloader-bar--h', { scaleX: 0, duration: 0.9, ease: 'expo.inOut' }, 0.2)
+        .from('.preloader-logo', { scale: 0.6, autoAlpha: 0, duration: 1.1, ease: 'expo.out' })
         .from('.preloader-meta span', { yPercent: 120, autoAlpha: 0, stagger: 0.08, duration: 0.8, ease: 'expo.out' }, 0.2)
         .from('.preloader-quote blockquote, .preloader-quote figcaption', { y: 24, autoAlpha: 0, stagger: 0.15, duration: 0.9, ease: 'expo.out' }, 0.6)
         .to(counter, { value: 86, duration: 1.6, ease: 'power2.out', onUpdate: setNum }, 0)
@@ -729,7 +728,7 @@ if (window.gsap && window.ScrollTrigger) {
       Promise.all([drawIn.then(), loaded, document.fonts ? document.fonts.ready : null]).then(() => {
         gsap.timeline({ onComplete: () => { preloader.remove(); root.classList.remove('hero-intro'); lockScroll(false); } })
           .to(counter, { value: 100, duration: 0.45, ease: 'power1.inOut', onUpdate: setNum })
-          .to('.preloader-cross', { rotation: 90, scale: 0, duration: 0.7, ease: 'power3.in' })
+          .to('.preloader-logo', { scale: 0, autoAlpha: 0, duration: 0.7, ease: 'power3.in' })
           .to('.preloader-count, .preloader-meta, .preloader-quote', { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: 'power3.in' }, '<')
           .to(preloader, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'expo.inOut' }, '-=0.15')
           .add(heroIntro, '-=0.75');
@@ -768,7 +767,7 @@ if (window.gsap && window.ScrollTrigger) {
 
   // ==================== SECTION: BĂNG CHỮ CHẠY — chạy vô tận, tăng tốc & đổi chiều theo hướng cuộn ====================
   mm.add('(prefers-reduced-motion: no-preference)', () => {
-    const loop = gsap.to('.marquee-track', { xPercent: -50, duration: 24, ease: 'none', repeat: -1 });
+    const loop = gsap.to('.marquee-track', { xPercent: -50, duration: 80, ease: 'none', repeat: -1 }); // nửa track = 14 chữ Việt xen Anh (chữ Anh dài hơn) → giữ tốc độ chạy cũ
     loop.totalTime(loop.duration() * 200); // lùi xa điểm 0 để chạy ngược chiều được mãi
     ScrollTrigger.create({
       trigger: '.marquee', start: 'top bottom', end: 'bottom top',
@@ -800,7 +799,7 @@ if (window.gsap && window.ScrollTrigger) {
     });
   });
 
-  // ==================== SECTION: CHƯƠNG — Tình nguyện viên (dải ngang) · Giải thưởng (tấm chân dung) ====================
+  // ==================== SECTION: CHƯƠNG — Tình nguyện viên (dải ngang) · Giải thưởng (4 hạng mục) ====================
   // Tách câu dẫn chuyện thành từng chữ (.chapter-word), giữ nguyên thẻ <em> từ khóa; chỉ tách khi có chuyển động
   const splitStoryWords = (element) => {
     if (element.dataset.split) return [...element.querySelectorAll('.chapter-word')];
@@ -835,11 +834,27 @@ if (window.gsap && window.ScrollTrigger) {
       onUpdate: () => { stat.textContent = Math.round(counter.value).toLocaleString('vi-VN'); },
     });
   };
+  // Tách hết các câu dẫn trong 1 khối .chapter-story thành từng chữ
+  const storyWords = (story) => (story ? [...story.querySelectorAll('.chapter-story-text')].flatMap(splitStoryWords) : []);
+  // Câu dẫn hiện hết 1 lần: cuộn tới là các chữ mờ → sáng lần lượt từng chữ trong ~1.8s (chạy theo thời gian, không theo nhịp cuộn)
+  const revealStoryOnce = (story, words) => {
+    gsap.set(words, { opacity: 0.12 });
+    ScrollTrigger.create({
+      trigger: story, start: 'top 80%', once: true,
+      onEnter: () => gsap.to(words, { opacity: 1, duration: 0.6, ease: 'power1.out', stagger: { amount: 1.2 } }),
+    });
+  };
   // Câu dẫn chương sáng dần từng chữ trong ~1 màn hình cuộn, rồi trôi lên mờ đi. Trả về vị trí (px cuộn) khi câu đã mờ hết.
+  // Khối .chapter-story--instant: chữ hiện hết ngay khi cuộn tới, giữ ~nửa màn cuộn để đọc rồi trôi lên mờ đi.
   const addStoryRead = (tl, section, vh) => {
     const story = section.querySelector('.chapter-story');
-    const words = story ? splitStoryWords(story.querySelector('.chapter-story-text')) : [];
+    const words = storyWords(story);
     if (!words.length) return 0;
+    if (story.classList.contains('chapter-story--instant')) {
+      revealStoryOnce(story, words);
+      tl.to(story, { autoAlpha: 0, y: -vh * 0.12, duration: vh * 0.3, ease: 'power2.in' }, vh * 0.5);
+      return vh * 0.8;
+    }
     tl.fromTo(words, { opacity: 0.12 }, { opacity: 1, duration: vh / words.length, stagger: vh / words.length, immediateRender: true }, 0)
       .to(story, { autoAlpha: 0, y: -vh * 0.12, duration: vh * 0.3, ease: 'power2.in' }, vh);
     return vh * 1.3;
@@ -852,7 +867,7 @@ if (window.gsap && window.ScrollTrigger) {
     chapters.forEach((section) => section.classList.add('is-pinned'));
     const panelHandlers = [];
 
-    // ---------- I · Dải trượt ngang: câu dẫn → dải trượt vào từ phải → chạy ngang hết ----------
+    // ---------- I · Dải trượt ngang: câu dẫn → đầu section hiện + dải trượt vào từ phải → chạy ngang hết ----------
     const setupGallery = (section) => {
       const viewport = section.querySelector('.chapter-viewport');
       const track = section.querySelector('.chapter-track');
@@ -860,6 +875,8 @@ if (window.gsap && window.ScrollTrigger) {
       const distance = Math.max(0, track.scrollWidth - viewport.clientWidth);
       const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
       const after = addStoryRead(tl, section, vh);
+      const head = section.querySelector('.chapter-head');
+      if (head) tl.fromTo(head, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: vh * 0.4, ease: 'power2.out', immediateRender: true }, Math.max(0, after - vh * 0.1));
       tl.fromTo(track, { x: viewport.clientWidth * 0.6, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: vh * 0.5, ease: 'power2.out', immediateRender: true }, Math.max(0, after - vh * 0.1))
         .to(track, { x: -distance, duration: Math.max(distance, 1) }, after + vh * 0.5);
       const stat = section.querySelector('.chapter-stat [data-count-to]');
@@ -867,70 +884,71 @@ if (window.gsap && window.ScrollTrigger) {
       ScrollTrigger.create({ trigger: section, start: 'top top', end: `+=${tl.duration()}`, pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, animation: tl });
     };
 
-    // ---------- III · Tấm chân dung: câu dẫn → đầu section + các tấm hiện → cuộn tới đâu tấm đó mở rộng (rê chuột cũng mở) ----------
-    const setupPanels = (section) => {
-      const wrap = section.querySelector('.panels-wrap');
-      const panels = [...section.querySelectorAll('.panel')];
-      const setActive = (index) => panels.forEach((panel, k) => panel.classList.toggle('is-active', k === index));
+    // ---------- III · Giải thưởng — thẻ xếp chồng: đầu section cuộn qua bình thường (data-reveal) → chồng thẻ trồi lên khi đi vào màn →
+    // ghim .award-pin; mỗi nhịp cuộn: thẻ sau trượt từ dưới lên đè thẻ trước, các thẻ trước thu nhỏ · lùi lên · phủ đỏ nhạt dần (thẻ càng sâu càng nhỏ/đậm) ----------
+    const setupAwards = (section) => {
+      const pin = section.querySelector('.award-pin');
+      const cards = gsap.utils.toArray(section.querySelectorAll('.award-card'));
+      if (!pin || cards.length < 2) return;
+      section.classList.add('is-pinned');
+      // Tween khối con (không tween chính .award-pin — phần tử đang ghim bị dịch transform sẽ lệch vị trí khi hết ghim)
+      gsap.fromTo(pin.children, { autoAlpha: 0, y: 80 }, {
+        autoAlpha: 1, y: 0, ease: 'power2.out',
+        scrollTrigger: { trigger: pin, start: 'top 90%', end: 'top 30%', scrub: true },
+      });
+      const lead = vh * 0.15; // nghỉ ở thẻ 01 ngay khi vừa ghim
+      const step = vh * 0.8;  // mỗi thẻ ~0.8 màn cuộn
+      const tail = vh * 0.3;  // nghỉ ở thẻ cuối trước khi nhả ghim
       const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
-      const after = addStoryRead(tl, section, vh);
-      const start = Math.max(0, after - vh * 0.1);
-      tl.fromTo(wrap, { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: vh * 0.4, stagger: vh * 0.1, ease: 'power2.out', immediateRender: true }, start);
-      const stepsAt = start + vh * 0.4;
-      const step = vh * 0.45;
-      tl.to({}, { duration: step * panels.length }, stepsAt);
-      let current = -1;
+      cards.forEach((card, i) => gsap.set(card, { zIndex: i + 1 }));
+      gsap.set(cards.slice(1), { y: vh }); // thẻ chờ nằm hẳn dưới mép màn (thẻ thấp nên không dùng yPercent)
+      cards.slice(1).forEach((card, n) => {
+        const i = n + 1;
+        const at = lead + step * n;
+        tl.to(card, { y: 0, duration: step, ease: 'power2.out' }, at);
+        for (let k = 0; k < i; k++) {
+          const depth = i - k; // thẻ càng nằm sâu càng nhỏ, càng lùi lên, càng tối
+          tl.to(cards[k], { scale: 1 - depth * 0.05, y: -depth * 18, duration: step, ease: 'power2.out' }, at);
+          tl.to(cards[k].querySelector('.award-card-shade'), { opacity: Math.min(0.05 * depth, 0.15), duration: step }, at); // đỏ rất nhạt, thẻ càng sâu càng đậm hơn chút
+        }
+      });
+      tl.to({}, { duration: tail });
+      // Ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header (header nổi phía trên) → cả cụm đầu section + chồng thẻ căn giữa màn
+      const headerBottom = () => { const h = document.querySelector('.header'); return h ? h.offsetTop + h.offsetHeight : 0; };
       ScrollTrigger.create({
-        trigger: section, start: 'top top', end: `+=${tl.duration()}`, pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, animation: tl,
-        onUpdate: (self) => {
-          const px = self.progress * tl.duration();
-          const index = gsap.utils.clamp(0, panels.length - 1, Math.floor((px - stepsAt) / step));
-          if (index !== current) { current = index; setActive(index); }
-        },
+        trigger: pin, start: () => `center ${Math.round((window.innerHeight + headerBottom()) / 2)}px`, end: `+=${tl.duration()}`,
+        pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, invalidateOnRefresh: true, animation: tl,
       });
-      panels.forEach((panel, k) => {
-        const onEnter = () => setActive(k);
-        panel.addEventListener('pointerenter', onEnter);
-        panel.addEventListener('focusin', onEnter);
-        panelHandlers.push(() => { panel.removeEventListener('pointerenter', onEnter); panel.removeEventListener('focusin', onEnter); });
-      });
+      panelHandlers.push(() => section.classList.remove('is-pinned'));
     };
 
-    chapters.forEach((section) => {
-      if (section.classList.contains('chapter-panels')) setupPanels(section);
-      else if (section.querySelector('.chapter-track')) setupGallery(section);
-    });
+    // Tạo theo thứ tự trên trang: I (Tình nguyện viên) → III (Giải thưởng — không phải .chapter, ghim riêng .award-pin)
+    chapters.forEach((section) => { if (section.querySelector('.chapter-track')) setupGallery(section); });
+    const awardsSection = document.querySelector('.chapter-awards');
+    if (awardsSection) setupAwards(awardsSection);
 
     return () => {
       chapters.forEach((section) => section.classList.remove('is-pinned'));
       panelHandlers.forEach((off) => off());
-      document.querySelectorAll('.panel').forEach((panel, k) => panel.classList.toggle('is-active', k === 0));
     };
   });
 
-  // ---------- Màn ≤1100px: câu dẫn sáng dần từng chữ khi cuộn qua; các tấm chân dung trồi lên (không ghim) ----------
+  // ---------- Màn ≤1100px: câu dẫn sáng dần từng chữ khi cuộn qua (khối --instant: hiện hết 1 lần); các panel trồi lên (không ghim) ----------
   mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
-    gsap.utils.toArray('.chapter .chapter-story-text').forEach((text) => {
-      gsap.fromTo(splitStoryWords(text), { opacity: 0.12 }, {
-        opacity: 1, ease: 'none', stagger: 0.1,
-        scrollTrigger: { trigger: text, start: 'top 85%', end: 'bottom 45%', scrub: true },
+    gsap.utils.toArray('.chapter .chapter-story').forEach((story) => {
+      if (story.classList.contains('chapter-story--instant')) { revealStoryOnce(story, storyWords(story)); return; }
+      story.querySelectorAll('.chapter-story-text').forEach((text) => {
+        gsap.fromTo(splitStoryWords(text), { opacity: 0.12 }, {
+          opacity: 1, ease: 'none', stagger: 0.1,
+          scrollTrigger: { trigger: text, start: 'top 85%', end: 'bottom 45%', scrub: true },
+        });
       });
     });
-    gsap.utils.toArray('.panel').forEach((element) => {
+    gsap.utils.toArray('.award-card, .panel').forEach((element) => {
       gsap.from(element, {
         y: 60, autoAlpha: 0, duration: 1, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
         scrollTrigger: { trigger: element, start: 'top 90%', once: true },
       });
-    });
-  });
-
-  // ==================== SECTION: CÂU CHUYỂN CẢNH — chữ sáng dần từng chữ khi cuộn qua (mọi màn hình, không ghim) ====================
-  mm.add('(prefers-reduced-motion: no-preference)', () => {
-    const text = document.querySelector('.bridge-text');
-    if (!text) return;
-    gsap.fromTo(splitStoryWords(text), { opacity: 0.12 }, {
-      opacity: 1, ease: 'none', stagger: 0.1,
-      scrollTrigger: { trigger: text, start: 'top 80%', end: 'bottom 40%', scrub: true },
     });
   });
 

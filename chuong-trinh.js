@@ -1230,7 +1230,8 @@ if (program) {
   if (side) {
     const SIDE_GAP = 24;
     const setSideTop = () => {
-      const head = document.querySelector('.header')?.offsetHeight || 0;
+      const headEl = document.querySelector('.header');
+      const head = headEl ? headEl.offsetTop + headEl.offsetHeight : 0; // header nổi cách đỉnh → lấy mép dưới
       side.style.setProperty('--side-top', `${Math.min(head + SIDE_GAP, window.innerHeight - side.offsetHeight - SIDE_GAP)}px`);
     };
     setSideTop();

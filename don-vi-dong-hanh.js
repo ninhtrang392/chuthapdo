@@ -447,7 +447,7 @@ const setupGtinxSwap = ({ section, stage, intro, priority, copyOut, copyIn, intr
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
-      start: () => `top ${header ? header.offsetHeight : 0}px`, // ghim ngay dưới header cố định
+      start: () => `top ${header ? header.offsetTop + header.offsetHeight : 0}px`, // ghim ngay dưới header cố định (header nổi cách đỉnh → lấy mép dưới)
       end: '+=180%',
       pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true,
       refreshPriority: priority, // section ghim ở trên tính trước → các trigger phía dưới cộng đúng khoảng ghim

@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261106-4" />
+    <link rel="stylesheet" href="styles.css?v=20261109-79" />
     <!-- Màn vào trang:
-         · Mở trang chủ bình thường → PRELOADER (dấu chữ thập + đếm %) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
+         · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
     <script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches && location.hash.length <= 1) {
@@ -25,15 +25,13 @@
 
 <body>
     <!-- ==================== SECTION: PRELOADER (chỉ trang chủ) ==================== -->
-    <!-- Nền đỏ: dấu chữ thập vẽ dần · câu trích dẫn dưới chữ thập · 3 nguyên tắc trên cùng · đếm % góc trái dưới.
-         Tải xong → chữ thập xoay thu nhỏ, màn đỏ kéo lên để lộ hero (script.js › HERO: preloader → intro). -->
+    <!-- Nền đỏ: logo trái tim hiện dần · câu trích dẫn dưới logo · 3 nguyên tắc trên cùng · đếm % góc trái dưới.
+         Tải xong → logo thu nhỏ, màn đỏ kéo lên để lộ hero (script.js › HERO: preloader → intro). -->
     <div class="preloader" aria-hidden="true">
-        <!-- ---------- Khối giữa: dấu chữ thập + câu trích dẫn, căn giữa màn hình cả cụm ---------- -->
+        <!-- ---------- Khối giữa: logo + câu trích dẫn, căn giữa màn hình cả cụm ---------- -->
         <div class="preloader-center">
-            <div class="preloader-cross">
-                <span class="preloader-bar preloader-bar--v"></span>
-                <span class="preloader-bar preloader-bar--h"></span>
-            </div>
+            <!-- ---------- Logo: trái tim ôm người (Emages/logo-demo/Embracing Hearts Logo.png, trắng nền trong suốt) ---------- -->
+            <img class="preloader-logo" src="Emages/logo-demo/Embracing Hearts Logo.png" alt="" width="1288" height="1221" decoding="async" />
             <!-- ---------- Câu trích dẫn (theo bộ giới thiệu Đề án Người Gần Nhất) ---------- -->
             <figure class="preloader-quote">
                 <blockquote>“Một Việt Nam hùng cường phải đồng thời là một Việt Nam nhân ái.”</blockquote>
@@ -68,6 +66,8 @@
       <symbol id="people" viewBox="0 0 24 24"><path d="M12.1909 15.5579C11.4348 15.5579 10.6956 15.3337 10.0669 14.9136C9.43826 14.4935 8.94825 13.8964 8.6589 13.1979C8.36955 12.4993 8.29384 11.7306 8.44135 10.989C8.58886 10.2474 8.95297 9.56625 9.48762 9.0316C10.0223 8.49694 10.7035 8.13283 11.4451 7.98532C12.1867 7.83781 12.9553 7.91352 13.6539 8.20287C14.3525 8.49223 14.9495 8.98223 15.3696 9.61092C15.7897 10.2396 16.0139 10.9788 16.0139 11.7349C16.0139 12.2369 15.915 12.734 15.7229 13.1979C15.5308 13.6617 15.2492 14.0831 14.8942 14.4381C14.5392 14.7931 14.1177 15.0747 13.6539 15.2669C13.1901 15.459 12.6929 15.5579 12.1909 15.5579ZM12.1909 9.30853C11.711 9.30853 11.2419 9.45084 10.8429 9.71745C10.4439 9.98406 10.1329 10.363 9.94926 10.8064C9.76561 11.2497 9.71756 11.7376 9.81118 12.2082C9.9048 12.6789 10.1359 13.1112 10.4752 13.4505C10.8145 13.7899 11.2469 14.021 11.7175 14.1146C12.1882 14.2082 12.6761 14.1602 13.1194 13.9765C13.5628 13.7929 13.9417 13.4819 14.2083 13.0829C14.4749 12.6839 14.6172 12.2148 14.6172 11.7349C14.6172 11.0914 14.3616 10.4742 13.9066 10.0192C13.4515 9.56417 12.8344 9.30853 12.1909 9.30853ZM12.1909 23C9.53009 23 7.44017 21.5625 7.44017 19.7275C7.44017 17.8925 9.53009 16.455 12.1909 16.455C14.8517 16.455 16.9416 17.8925 16.9416 19.7275C16.9416 21.5625 14.8517 23 12.1909 23ZM12.1909 17.9027C10.2437 17.9027 8.88782 18.861 8.88782 19.7275C8.88782 20.5941 10.2437 21.5524 12.1909 21.5524C14.1381 21.5524 15.494 20.5839 15.494 19.7275C15.494 18.8712 14.1381 17.9027 12.1909 17.9027ZM17.2882 7.91186C16.606 7.90583 15.9409 7.69801 15.3766 7.31461C14.8123 6.93121 14.3741 6.38937 14.1172 5.75736C13.8603 5.12535 13.7962 4.43145 13.933 3.76308C14.0698 3.09471 14.4013 2.48177 14.8859 2.0015C15.3704 1.52122 15.9862 1.1951 16.6558 1.0642C17.3253 0.933315 18.0186 1.00352 18.6483 1.26597C19.2781 1.52842 19.816 1.97138 20.1944 2.53903C20.5729 3.10669 20.7748 3.77364 20.7748 4.45586C20.7762 4.91057 20.6878 5.36107 20.5147 5.78155C20.3416 6.20203 20.0872 6.58422 19.7662 6.90622C19.4451 7.22822 19.0637 7.4837 18.6437 7.65801C18.2238 7.83233 17.7735 7.92206 17.3188 7.92206L17.2882 7.91186ZM17.2882 2.44751C16.885 2.44751 16.4908 2.56709 16.1555 2.79113C15.8202 3.01518 15.5588 3.33361 15.4045 3.70618C15.2502 4.07875 15.2098 4.48871 15.2885 4.88423C15.3672 5.27974 15.5613 5.64304 15.8465 5.92819C16.1316 6.21335 16.4949 6.40754 16.8905 6.48621C17.286 6.56488 17.6959 6.5245 18.0685 6.37018C18.4411 6.21586 18.7595 5.95452 18.9836 5.61922C19.2076 5.28392 19.3272 4.88971 19.3272 4.48645C19.3272 3.95095 19.1166 3.43692 18.7408 3.05541C18.3651 2.6739 17.8543 2.45554 17.3188 2.44751H17.2882ZM7.03239 7.92206C6.34929 7.92205 5.68151 7.71962 5.1134 7.34032C4.54529 6.96102 4.10232 6.42186 3.84045 5.79096C3.57857 5.16005 3.50954 4.46569 3.64207 3.79557C3.77459 3.12545 4.10273 2.50963 4.58504 2.0259C5.06736 1.54217 5.6822 1.21221 6.35193 1.07771C7.02165 0.943215 7.71621 1.0102 8.34789 1.27022C8.97957 1.53023 9.52002 1.97161 9.901 2.5386C10.282 3.10559 10.4864 3.77277 10.4884 4.45586C10.4897 4.91057 10.4013 5.36107 10.2282 5.78155C10.0552 6.20203 9.80081 6.58422 9.47976 6.90622C9.15871 7.22822 8.77727 7.4837 8.3573 7.65801C7.93733 7.83233 7.48709 7.92206 7.03239 7.92206ZM7.03239 2.45771C6.62912 2.45771 6.23492 2.57729 5.89961 2.80133C5.56431 3.02537 5.30298 3.34381 5.14865 3.71638C4.99433 4.08894 4.95395 4.4989 5.03263 4.89442C5.1113 5.28994 5.30549 5.65324 5.59064 5.93839C5.87579 6.22354 6.23909 6.41773 6.63461 6.4964C7.03012 6.57508 7.44009 6.5347 7.81265 6.38038C8.18522 6.22605 8.50366 5.96472 8.7277 5.62942C8.95174 5.29411 9.07132 4.89991 9.07132 4.49664C9.07267 4.22803 9.02092 3.9618 8.91905 3.71324C8.81719 3.46469 8.66722 3.23872 8.47775 3.0483C8.28828 2.85789 8.06306 2.70679 7.81502 2.60369C7.56697 2.50058 7.301 2.44751 7.03239 2.44751V2.45771ZM22.3244 11.9388C22.3244 10.0527 20.051 8.57452 17.1557 8.57452C17.0527 8.56232 16.9484 8.57207 16.8495 8.60313C16.7505 8.6342 16.6593 8.68586 16.5818 8.75473C16.5043 8.82359 16.4423 8.9081 16.3998 9.00267C16.3573 9.09725 16.3353 9.19976 16.3353 9.30344C16.3353 9.40712 16.3573 9.50962 16.3998 9.6042C16.4423 9.69878 16.5043 9.78328 16.5818 9.85215C16.6593 9.92101 16.7505 9.97268 16.8495 10.0037C16.9484 10.0348 17.0527 10.0446 17.1557 10.0324C19.3374 10.0324 20.8666 11.0518 20.8666 11.9388C20.8666 12.8257 19.3374 13.8554 17.1557 13.8554C16.9637 13.8554 16.7796 13.9316 16.6439 14.0674C16.5081 14.2031 16.4319 14.3872 16.4319 14.5792C16.4319 14.7712 16.5081 14.9553 16.6439 15.091C16.7796 15.2268 16.9637 15.303 17.1557 15.303C20.0612 15.2928 22.3346 13.8248 22.3346 11.9286L22.3244 11.9388ZM7.5829 14.4161C7.58291 14.3202 7.56385 14.2252 7.52684 14.1367C7.48983 14.0482 7.4356 13.968 7.36731 13.9006C7.29901 13.8333 7.21801 13.7802 7.12901 13.7444C7.04001 13.7086 6.94479 13.6909 6.84888 13.6923C4.66722 13.6923 3.13802 12.6728 3.13802 11.7756C3.13802 10.8785 4.66722 9.86924 6.84888 9.86924C6.95184 9.88144 7.05622 9.87169 7.15514 9.84063C7.25406 9.80956 7.34527 9.7579 7.42278 9.68903C7.50029 9.62017 7.56232 9.53566 7.60481 9.44109C7.64729 9.34651 7.66925 9.244 7.66925 9.14032C7.66925 9.03664 7.64729 8.93414 7.60481 8.83956C7.56232 8.74498 7.50029 8.66048 7.42278 8.59161C7.34527 8.52275 7.25406 8.47108 7.15514 8.44002C7.05622 8.40896 6.95184 8.3992 6.84888 8.4114C3.95359 8.4114 1.68018 9.88963 1.68018 11.7756C1.68018 13.6617 3.95359 15.1399 6.84888 15.1399C6.94479 15.1412 7.04001 15.1235 7.12901 15.0878C7.21801 15.052 7.29901 14.9989 7.36731 14.9315C7.4356 14.8642 7.48983 14.7839 7.52684 14.6954C7.56385 14.607 7.58291 14.512 7.5829 14.4161Z" fill="currentColor"/></symbol>
       <symbol id="tree" viewBox="0 0 24 24"><path d="M19.9771 16.0627L16.519 11.2469H16.6569C17.0038 11.2484 17.3444 11.1538 17.6408 10.9735C17.9372 10.7932 18.1779 10.5344 18.3361 10.2256C18.4943 9.9169 18.5639 9.57036 18.5371 9.22448C18.5103 8.87859 18.3882 8.54689 18.1844 8.26618L13.5171 1.78499C13.3445 1.5408 13.1155 1.34192 12.8496 1.20525C12.5836 1.06858 12.2886 0.998182 11.9896 1.00004C11.6918 0.998732 11.398 1.06827 11.1324 1.20291C10.8669 1.33755 10.6371 1.53343 10.4621 1.77438L5.79483 8.26618C5.59099 8.54689 5.46891 8.87859 5.44214 9.22448C5.41536 9.57036 5.48495 9.9169 5.64316 10.2256C5.80138 10.5344 6.04204 10.7932 6.33844 10.9735C6.63485 11.1538 6.9754 11.2484 7.32231 11.2469H7.46021L4.00217 16.0627C3.76194 16.3951 3.61815 16.7874 3.58666 17.1964C3.55516 17.6053 3.63717 18.015 3.82366 18.3803C4.01015 18.7456 4.29387 19.0523 4.64355 19.2666C4.99323 19.481 5.3953 19.5946 5.80544 19.595H11.1941V22.2044C11.1941 22.4154 11.2779 22.6178 11.4271 22.767C11.5763 22.9162 11.7786 23 11.9896 23C12.2006 23 12.403 22.9162 12.5522 22.767C12.7014 22.6178 12.7852 22.4154 12.7852 22.2044V19.595H18.1738C18.5839 19.5946 18.986 19.481 19.3357 19.2666C19.6854 19.0523 19.9691 18.7456 20.1556 18.3803C20.3421 18.015 20.4241 17.6053 20.3926 17.1964C20.3611 16.7874 20.2173 16.3951 19.9771 16.0627ZM7.05713 9.49665C7.02997 9.45187 7.01562 9.40051 7.01562 9.34814C7.01562 9.29578 7.02997 9.24441 7.05713 9.19964L11.7244 2.70784C11.7535 2.66571 11.7936 2.63248 11.8405 2.61188C11.8873 2.59127 11.9389 2.5841 11.9896 2.59116C12.0351 2.58984 12.0803 2.5998 12.121 2.62016C12.1617 2.64052 12.1967 2.67064 12.223 2.70784L16.8903 9.19964C16.9174 9.24441 16.9318 9.29578 16.9318 9.34814C16.9318 9.40051 16.9174 9.45187 16.8903 9.49665C16.867 9.54663 16.8294 9.58851 16.7821 9.61687C16.7348 9.64523 16.6801 9.65878 16.6251 9.65576H7.32231C7.26727 9.65878 7.21259 9.64523 7.16532 9.61687C7.11805 9.58851 7.08037 9.54663 7.05713 9.49665ZM18.7254 17.6538C18.6748 17.7597 18.595 17.8489 18.4954 17.9109C18.3958 17.973 18.2805 18.0052 18.1632 18.0039H5.80544C5.68811 18.0052 5.57284 17.973 5.47322 17.9109C5.37361 17.8489 5.29382 17.7597 5.24324 17.6538C5.18129 17.5534 5.14848 17.4377 5.14848 17.3197C5.14848 17.2017 5.18129 17.086 5.24324 16.9855L9.38017 11.2469H14.5142L18.6511 16.9855C18.7264 17.0778 18.7742 17.1894 18.7892 17.3075C18.8042 17.4257 18.7858 17.5456 18.736 17.6538H18.7254Z" fill="currentColor"/></symbol>
       <symbol id="crown" viewBox="0 0 24 24"><path d="M20.9486 4.80454L16.5248 8.09365C16.4063 8.18308 16.2685 8.24358 16.1224 8.27032C15.9764 8.29707 15.8261 8.28932 15.6835 8.2477C15.541 8.20607 15.4102 8.13172 15.3015 8.03058C15.1927 7.92943 15.1091 7.80428 15.0573 7.6651L12.9793 2.0404C12.9176 1.81344 12.783 1.61308 12.5962 1.47024C12.4094 1.32739 12.1808 1.25 11.9457 1.25C11.7105 1.25 11.4819 1.32739 11.2951 1.47024C11.1083 1.61308 10.9737 1.81344 10.912 2.0404L8.79114 7.62225C8.73845 7.75802 8.65536 7.87991 8.54825 7.97858C8.44115 8.07724 8.31287 8.15006 8.17326 8.19143C8.03364 8.23281 7.88641 8.24164 7.74285 8.21727C7.5993 8.19289 7.46323 8.13594 7.3451 8.05079L3.06052 4.96525C2.87886 4.7919 2.64209 4.68789 2.39156 4.67138C2.14103 4.65487 1.89266 4.72691 1.68983 4.87492C1.487 5.02293 1.3426 5.2375 1.28184 5.48116C1.22108 5.72482 1.24783 5.98209 1.35741 6.20804L5.64198 18.6574C5.72103 18.8787 5.86618 19.0704 6.05778 19.2064C6.24937 19.3425 6.47815 19.4164 6.71312 19.418H17.1032C17.3409 19.4282 17.5751 19.359 17.7691 19.2212C17.963 19.0835 18.1056 18.8851 18.1744 18.6574L22.6517 6.03662C22.7556 5.81118 22.7779 5.55667 22.715 5.31658C22.652 5.07649 22.5077 4.86571 22.3066 4.72024C22.1055 4.57478 21.8602 4.50366 21.6125 4.51904C21.3648 4.53441 21.1302 4.63533 20.9486 4.80454ZM14.6824 14.8861H9.32671C9.11365 14.8861 8.90931 14.8015 8.75865 14.6508C8.60799 14.5001 8.52335 14.2957 8.52335 14.0826C8.52335 13.8695 8.60799 13.6651 8.75865 13.5144C8.90931 13.3637 9.11365 13.2791 9.32671 13.2791H14.6824C14.8955 13.2791 15.0998 13.3637 15.2505 13.5144C15.4011 13.6651 15.4858 13.8695 15.4858 14.0826C15.4858 14.2957 15.4011 14.5001 15.2505 14.6508C15.0998 14.8015 14.8955 14.8861 14.6824 14.8861ZM17.4888 22.75H6.53103C6.31796 22.75 6.11363 22.6653 5.96297 22.5147C5.81231 22.364 5.72767 22.1596 5.72767 21.9465C5.72767 21.7334 5.81231 21.529 5.96297 21.3783C6.11363 21.2276 6.31796 21.1429 6.53103 21.1429H17.4888C17.7019 21.1429 17.9062 21.2276 18.0569 21.3783C18.2075 21.529 18.2922 21.7334 18.2922 21.9465C18.2922 22.1596 18.2075 22.364 18.0569 22.5147C17.9062 22.6653 17.7019 22.75 17.4888 22.75Z" fill="currentColor"/></symbol>
+      <symbol id="bulb" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z"/></g></symbol>
+      <symbol id="award" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M8.6 13.4 7 21l5-2.6 5 2.6-1.6-7.6"/></g></symbol>
       <symbol id="laurel" viewBox="0 0 40 100"><path d="M32 97C16 83 9 63 11 42 12 28 17 16 25 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><g fill="currentColor"><ellipse cx="21" cy="88" rx="4.2" ry="8.5" transform="rotate(-55 21 88)"/><ellipse cx="31" cy="84" rx="3.2" ry="7" transform="rotate(-5 31 84)"/><ellipse cx="13" cy="77" rx="4.2" ry="8.5" transform="rotate(-40 13 77)"/><ellipse cx="23" cy="73" rx="3.2" ry="7" transform="rotate(10 23 73)"/><ellipse cx="7" cy="64" rx="4.2" ry="8.5" transform="rotate(-25 7 64)"/><ellipse cx="17" cy="60" rx="3.2" ry="7" transform="rotate(25 17 60)"/><ellipse cx="4" cy="50" rx="4.2" ry="8.5" transform="rotate(-8 4 50)"/><ellipse cx="14" cy="46" rx="3.2" ry="7" transform="rotate(42 14 46)"/><ellipse cx="5" cy="36" rx="4.2" ry="8.5" transform="rotate(8 5 36)"/><ellipse cx="15" cy="32" rx="3.2" ry="7" transform="rotate(58 15 32)"/><ellipse cx="9" cy="23" rx="4.2" ry="8.5" transform="rotate(25 9 23)"/><ellipse cx="19" cy="19" rx="3.2" ry="7" transform="rotate(75 19 19)"/><ellipse cx="15" cy="12" rx="4.2" ry="8.5" transform="rotate(42 15 12)"/><ellipse cx="25" cy="8" rx="3.2" ry="7" transform="rotate(92 25 8)"/></g></symbol>
       <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
       <symbol id="minus" viewBox="0 0 24 24"><path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
@@ -75,6 +75,9 @@
       <symbol id="hand-heart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 11.6s-4-2.4-4-5.1a2.1 2.1 0 0 1 4-1 2.1 2.1 0 0 1 4 1c0 2.7-4 5.1-4 5.1z"/><path d="M2.5 14.2h2.8l3.9 1.5a1.45 1.45 0 0 1-.55 2.8H6.8"/><path d="M9.6 18.5h4.6l5.3-2.7a1.5 1.5 0 0 1 1.75 2.35l-3.7 3.1H8.4l-3.1-1.4H2.5"/></g></symbol>
       <symbol id="phone" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z" fill="currentColor"/></symbol>
       <symbol id="mail" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/></symbol>
+      <symbol id="chevron-down" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></g></symbol>
+      <symbol id="globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/></g></symbol>
+      <symbol id="facebook" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3.1h-3V8.5c0-.9.3-1.5 1.6-1.5h1.6V4.2c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H7.9v3.1h2.6V21h3Z"/></symbol>
       <symbol id="chart" viewBox="0 0 24 24"><path fill="currentColor" d="M4 13.5A1.5 1.5 0 0 1 5.5 12h1A1.5 1.5 0 0 1 8 13.5v5A1.5 1.5 0 0 1 6.5 20h-1A1.5 1.5 0 0 1 4 18.5zM10 8.5A1.5 1.5 0 0 1 11.5 7h1A1.5 1.5 0 0 1 14 8.5v10a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zM16 4.5A1.5 1.5 0 0 1 17.5 3h1A1.5 1.5 0 0 1 20 4.5v14a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5z"/></symbol>
       <symbol id="document" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
       <symbol id="gift" viewBox="0 0 24 24"><path d="M19.84 4.99997H18.71C18.7901 4.79616 18.8309 4.57898 18.83 4.35997C18.8326 4.14034 18.7905 3.92248 18.7062 3.71962C18.622 3.51677 18.4974 3.33317 18.34 3.17997L16.91 1.73997C16.5969 1.42732 16.1725 1.25171 15.73 1.25171C15.2875 1.25171 14.8631 1.42732 14.55 1.73997L12 4.28997L9.45 1.73997C9.13197 1.43675 8.70942 1.26759 8.27 1.26759C7.83058 1.26759 7.40803 1.43675 7.09 1.73997L5.66 3.17997C5.5026 3.33317 5.37799 3.51677 5.29375 3.71962C5.20952 3.92248 5.16741 4.14034 5.17 4.35997C5.16913 4.57898 5.20985 4.79616 5.29 4.99997H4.16C3.71974 4.99997 3.29751 5.17487 2.9862 5.48618C2.67489 5.79749 2.5 6.21971 2.5 6.65997V8.32997C2.50062 8.60556 2.56943 8.87671 2.70029 9.11924C2.83115 9.36177 3.02 9.56815 3.25 9.71997V19.12C3.25 20.081 3.63107 21.0028 4.30966 21.6832C4.98826 22.3637 5.909 22.7473 6.87 22.75H17.13C18.091 22.7473 19.0117 22.3637 19.6903 21.6832C20.3689 21.0028 20.75 20.081 20.75 19.12V9.71997C20.98 9.56815 21.1688 9.36177 21.2997 9.11924C21.4306 8.87671 21.4994 8.60556 21.5 8.32997V6.65997C21.5 6.21971 21.3251 5.79749 21.0138 5.48618C20.7025 5.17487 20.2803 4.99997 19.84 4.99997ZM15.61 2.79997C15.643 2.77046 15.6857 2.75414 15.73 2.75414C15.7743 2.75414 15.817 2.77046 15.85 2.79997L17.28 4.23997C17.3095 4.27297 17.3258 4.3157 17.3258 4.35997C17.3258 4.40425 17.3095 4.44697 17.28 4.47997L16.77 4.99997H13.42L15.61 2.79997ZM6.72 4.47997C6.69048 4.44697 6.67416 4.40425 6.67416 4.35997C6.67416 4.3157 6.69048 4.27297 6.72 4.23997L8.15 2.79997C8.18521 2.77545 8.22709 2.76231 8.27 2.76231C8.31291 2.76231 8.35479 2.77545 8.39 2.79997L10.58 4.99997H7.23L6.72 4.47997ZM4 6.65997C4 6.61754 4.01686 6.57684 4.04686 6.54684C4.07687 6.51683 4.11757 6.49997 4.16 6.49997H19.84C19.8824 6.49997 19.9231 6.51683 19.9531 6.54684C19.9831 6.57684 20 6.61754 20 6.65997V8.32997C20.0001 8.37338 19.9835 8.41517 19.9538 8.44678C19.924 8.47839 19.8833 8.49742 19.84 8.49997H4.16C4.11667 8.49742 4.07595 8.47839 4.04621 8.44678C4.01646 8.41517 3.99992 8.37338 4 8.32997V6.65997ZM9.74 9.99997H14.26V15.09C14.2613 15.1352 14.2497 15.1798 14.2267 15.2187C14.2037 15.2576 14.1702 15.2893 14.13 15.31C14.0933 15.3353 14.0497 15.3489 14.005 15.3489C13.9603 15.3489 13.9167 15.3353 13.88 15.31L13.12 14.8C12.7903 14.5786 12.4021 14.4603 12.005 14.4603C11.6079 14.4603 11.2197 14.5786 10.89 14.8L10.12 15.31C10.0833 15.3353 10.0397 15.3489 9.995 15.3489C9.95034 15.3489 9.90675 15.3353 9.87 15.31C9.82981 15.2893 9.79629 15.2576 9.77329 15.2187C9.75029 15.1798 9.73875 15.1352 9.74 15.09V9.99997ZM17.13 21.25H6.87C6.30682 21.2473 5.76761 21.0218 5.37032 20.6226C4.97303 20.2234 4.74999 19.6832 4.75 19.12V9.99997H8.24V15.09C8.24 15.3206 8.28559 15.549 8.37416 15.762C8.46273 15.975 8.59253 16.1683 8.75609 16.331C8.91966 16.4936 9.11376 16.6223 9.32723 16.7096C9.54071 16.797 9.76935 16.8413 10 16.84C10.3548 16.8451 10.703 16.7441 11 16.55L11.76 16.04C11.8471 15.9859 11.9475 15.9573 12.05 15.9573C12.1525 15.9573 12.2529 15.9859 12.34 16.04L13.1 16.55C13.3637 16.723 13.6692 16.8215 13.9843 16.8352C14.2994 16.8488 14.6124 16.777 14.89 16.6274C15.1677 16.4778 15.3997 16.256 15.5617 15.9854C15.7236 15.7147 15.8094 15.4054 15.81 15.09V9.99997H19.3V19.12C19.3 19.4031 19.2437 19.6834 19.1341 19.9444C19.0246 20.2055 18.8641 20.4421 18.6621 20.6404C18.46 20.8388 18.2205 20.9948 17.9574 21.0995C17.6943 21.2041 17.4131 21.2553 17.13 21.25Z" fill="currentColor"/></symbol>
@@ -95,6 +98,17 @@
             <a href="#nguoi-gan-nhat">Người gần nhất</a>
             <a href="giai-thuong.html">Giải thưởng nhân đạo</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
+            <!-- ---------- Khác: nút có mũi tên xổ danh mục trang con (account-menu.js › HEADER: menu Khác) ---------- -->
+            <div class="nav-more">
+                <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-more-menu">Khác<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+                <div class="nav-more-menu" id="nav-more-menu" hidden>
+                    <a href="tin-tuc.html">Tin tức</a>
+                    <a href="#cong-khai">Công khai – Minh bạch</a>
+                    <a href="#" data-panel="Hướng dẫn quyên góp">Hướng dẫn quyên góp</a>
+                    <a href="#" data-panel="Câu hỏi thường gặp">Câu hỏi thường gặp</a>
+                    <a href="#lien-he">Liên hệ</a>
+                </div>
+            </div>
             <a class="button button-primary nav-cta" href="#chuong-trinh"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
         </nav>
         <div class="header-actions">
@@ -134,13 +148,13 @@
                             </span>
                         </h1>
 
-                        <!-- ---------- Huy hiệu: chữ chạy vòng tròn quanh dấu chữ thập ---------- -->
+                        <!-- ---------- Huy hiệu: chữ chạy vòng tròn quanh logo trái tim đỏ ---------- -->
                         <div class="hero-badge" aria-hidden="true">
                             <svg class="hero-badge-text" viewBox="0 0 200 200">
                                 <defs><path id="hero-badge-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
                                 <text><textPath href="#hero-badge-circle" textLength="484" lengthAdjust="spacing">Quyên góp • Minh bạch • Kịp thời • Nhân ái • </textPath></text>
                             </svg>
-                            <span class="hero-badge-cross"></span>
+                            <img class="hero-badge-logo" src="Emages/logo-demo/Red Embracing Heart Logo.png" alt="" width="1254" height="1254" decoding="async" />
                         </div>
                     </div>
 
@@ -161,12 +175,14 @@
                 <!-- ==================== END SECTION: HERO ==================== -->
 
                 <!-- ==================== SECTION: BĂNG CHỮ CHẠY ==================== -->
-                <!-- Dải đỏ nghiêng chạy ngang vô tận (nội dung lặp 2 lần để nối liền); tăng tốc & đổi chiều theo hướng cuộn (script.js) -->
+                <!-- Dải đỏ nghiêng chạy ngang vô tận: 7 nguyên tắc cơ bản, Việt xen Anh (nội dung lặp 2 nửa giống hệt nhau để nối liền); tăng tốc & đổi chiều theo hướng cuộn (script.js) -->
                 <div class="marquee" aria-hidden="true">
                     <div class="marquee-band">
                         <div class="marquee-track">
-                            <span>Nhân đạo</span><i></i><span>Hòa bình</span><i></i><span>Hữu nghị</span><i></i><span>Minh bạch</span><i></i><span>Kịp thời</span><i></i>
-                            <span>Nhân đạo</span><i></i><span>Hòa bình</span><i></i><span>Hữu nghị</span><i></i><span>Minh bạch</span><i></i><span>Kịp thời</span><i></i>
+                            <!-- 7 nguyên tắc cơ bản của Phong trào Chữ thập đỏ – Trăng lưỡi liềm đỏ quốc tế: tiếng Việt (chữ đậm) xen nghĩa tiếng Anh (chữ nghiêng).
+                                 Mỗi nửa track = 14 chữ (số chẵn → kiểu đậm/nghiêng không lệch ở chỗ nối vòng lặp); 2 nửa giống hệt nhau. -->
+                            <span>Nhân đạo</span><i></i><span lang="en">Humanity</span><i></i><span>Vô tư</span><i></i><span lang="en">Impartiality</span><i></i><span>Trung lập</span><i></i><span lang="en">Neutrality</span><i></i><span>Độc lập</span><i></i><span lang="en">Independence</span><i></i><span>Tự nguyện</span><i></i><span lang="en">Voluntary Service</span><i></i><span>Thống nhất</span><i></i><span lang="en">Unity</span><i></i><span>Toàn cầu</span><i></i><span lang="en">Universality</span><i></i>
+                            <span>Nhân đạo</span><i></i><span lang="en">Humanity</span><i></i><span>Vô tư</span><i></i><span lang="en">Impartiality</span><i></i><span>Trung lập</span><i></i><span lang="en">Neutrality</span><i></i><span>Độc lập</span><i></i><span lang="en">Independence</span><i></i><span>Tự nguyện</span><i></i><span lang="en">Voluntary Service</span><i></i><span>Thống nhất</span><i></i><span lang="en">Unity</span><i></i><span>Toàn cầu</span><i></i><span lang="en">Universality</span><i></i>
                         </div>
                     </div>
                 </div>
@@ -318,39 +334,39 @@
                 </section>
                 <!-- ==================== END SECTION: HÀNH TRÌNH NHÂN ÁI ==================== -->
 
-                <!-- ==================== SECTION: CÂU CHUYỂN CẢNH — Hành trình nhân ái → Chương I ==================== -->
-                <!-- Nối 4 thành phần hệ sinh thái với 3 chương bên dưới: 1 câu dẫn lớn, chữ sáng dần từng chữ khi cuộn qua (script.js › SECTION: CÂU CHUYỂN CẢNH).
-           Dùng chung kiểu chữ câu dẫn của chương (.chapter-story-text). Không ghim. -->
-                <section class="section bridge" aria-label="Chuyển tiếp sang hành trình của bạn">
-                    <p class="chapter-story-text bridge-text">Hành trình ấy bắt đầu từ một người — và người đó có thể là <em>bạn</em>.</p>
-                </section>
-                <!-- ==================== END SECTION: CÂU CHUYỂN CẢNH ==================== -->
-
                 <!-- ==================== SECTION: TÌNH NGUYỆN VIÊN — CHƯƠNG I (dải thẻ chạy ngang) ==================== -->
-                <!-- Chương I của mạch "hành trình" (câu chuyển cảnh → I → II → III → Chương trình). Bố cục dải trượt ngang (tham khảo philos.site, giữ style web):
-           câu dẫn sáng dần → dải gồm khối giới thiệu (ảnh 01 + chữ) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
+                <!-- Chương I của mạch "hành trình" (I → II → III → Chương trình). Bố cục dải trượt ngang (tham khảo philos.site, giữ style web):
+           2 câu dẫn chung một màn (câu chuyển cảnh từ Hành trình nhân ái + câu dẫn chương), hiện hết 1 lần khi cuộn tới → đầu section (tiêu đề · mô tả) + dải gồm khối giới thiệu (ảnh 01 + tiêu đề · mô tả + chữ) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
            Desktop (script.js › SECTION: CHƯƠNG): ghim section, cuộn dọc → dải trượt ngang. Màn ≤1100px / giảm chuyển động: vuốt ngang (scroll-snap).
            Đăng ký → form gia nhập đội, CLB ở hồ sơ (ho-so.html#gia-nhap-doi). DỮ LIỆU MINH HỌA: số tình nguyện viên lấy từ hệ thống khi triển khai; ảnh: Emages/01_trao_di_thoi_gian … 04_ghi_nhan_dong_gop.png. -->
                 <section class="section chapter chapter-gallery volunteer" id="tinh-nguyen-vien" aria-labelledby="tinh-nguyen-vien-title">
                     <div class="chapter-stage">
-                        <!-- ---------- Câu dẫn chuyện: chữ sáng dần từng chữ theo nhịp cuộn (script.js › SECTION: CHƯƠNG) ---------- -->
-                        <div class="chapter-story">
+                        <!-- ---------- Câu dẫn chuyện: 2 câu chung một màn, cuộn tới là hiện hết cả 2 (script.js › SECTION: CHƯƠNG) ---------- -->
+                        <div class="chapter-story chapter-story--instant">
+                            <p class="chapter-story-text">Hành trình ấy bắt đầu từ một người — và người đó có thể là <em>bạn</em>.</p>
                             <p class="chapter-story-text">Bắt đầu bằng một chút thời gian trao đi — để những ngày bình thường bỗng trở nên <em>ý nghĩa</em>.</p>
                         </div>
 
-                        <!-- ---------- Dải trượt ngang: giới thiệu + 3 lợi ích ---------- -->
+                        <!-- ---------- Đầu section: tiêu đề · mô tả (như chương Giải thưởng); desktop hiện cùng dải trượt sau khi câu dẫn trôi đi ---------- -->
+                        <div class="section-head chapter-head">
+                            <div>
+                                <h2 class="section-title" id="tinh-nguyen-vien-title">Tình nguyện viên Chữ thập đỏ</h2>
+                                <p class="section-lead">Mạng lưới tình nguyện viên tại các đội, câu lạc bộ trên cả nước — luôn có mặt khi cộng đồng cần.</p>
+                            </div>
+                        </div>
+
+                        <!-- ---------- Dải trượt ngang: giới thiệu (ảnh 01 · tiêu đề · mô tả · số tình nguyện viên · nút) + 3 lợi ích ---------- -->
                         <div class="chapter-viewport">
                             <ul class="chapter-track" aria-label="Lợi ích khi trở thành tình nguyện viên">
                             <li class="chapter-intro has-figure">
                                 <div class="chapter-figure"><img src="Emages/01_trao_di_thoi_gian.png" alt="Tình nguyện viên trao túi quà tận tay cụ bà trước hiên nhà" width="763" height="507" loading="lazy" decoding="async" /></div>
                                 <div class="chapter-intro-text">
-                                    <p class="eyebrow">Tình nguyện viên</p>
-                                    <h2 class="section-title" id="tinh-nguyen-vien-title">Trao đi thời gian, lan tỏa yêu thương</h2>
+                                    <h3 class="section-title">Trao đi thời gian, lan tỏa yêu thương</h3>
                                     <p class="section-lead">Tham gia đội, câu lạc bộ tình nguyện viên Chữ thập đỏ tại địa phương — cùng hỗ trợ người yếu thế, ứng phó thiên tai và chăm sóc sức khỏe cộng đồng.</p>
                                     <p class="chapter-stat"><strong data-count-to="65000">65.000</strong><span>tình nguyện viên trên cả nước</span></p>
                                     <div class="chapter-actions">
-                                        <a class="button button-primary" href="ho-so.html#gia-nhap-doi" data-magnetic>Đăng ký tình nguyện viên<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-                                        <a class="link-arrow" href="ban-do-so.html">Tìm đội, CLB gần bạn<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                        <a class="button button-primary" href="ho-so.html#gia-nhap-doi" data-magnetic>Đăng ký tình nguyện viên</a>
+                                        <a class="button button-outline" href="ban-do-so.html">Tìm đội, CLB gần bạn</a>
                                     </div>
                                 </div>
                             </li>
@@ -385,7 +401,7 @@
                 <!-- ==================== END SECTION: TÌNH NGUYỆN VIÊN ==================== -->
 
                 <!-- ==================== SECTION: DỰ ÁN NGƯỜI GẦN NHẤT — GIỚI THIỆU DỰ ÁN ==================== -->
-                <!-- Section gọn, hiện nội dung ngay (không ghim): trái — key visual đề án (Emages/ng gần nhất.png) bo góc; phải — nhãn · tiêu đề · giới thiệu · nút Xem thêm ·
+                <!-- Section gọn, hiện nội dung ngay (không ghim): trái — key visual chương trình (Emages/Chương trình Người Gần Nhất.png) bo góc; phải — nhãn · tiêu đề · giới thiệu · nút Xem thêm ·
            3 vế khẩu hiệu "Gần để thấu hiểu · Gọi để kết nối · Giúp để cứu người".
            Nội dung theo bộ giới thiệu Đề án Người Gần Nhất (Google Slides do khách hàng gửi). Chỉ giới thiệu — danh sách khóa học nằm ở trang riêng của dự án (nút Xem thêm).
            Trang riêng dự án chưa có → nút Xem thêm tạm mở hộp thoại xem trước (data-panel); khi có trang, đổi href và bỏ data-panel. -->
@@ -393,110 +409,96 @@
                     <div class="container">
                         <div class="ngn-card" data-reveal>
                             <!-- ---------- Key visual đề án (đã có chữ "Đề án Người Gần Nhất") ---------- -->
-                            <figure class="ngn-media"><img src="Emages/ng%20g%E1%BA%A7n%20nh%E1%BA%A5t.png" alt="Key visual Đề án Người Gần Nhất: hình bóng một người cúi xuống giúp người đang ngã" loading="lazy" decoding="async" /></figure>
+                            <figure class="ngn-media"><img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh%20Ng%C6%B0%E1%BB%9Di%20G%E1%BA%A7n%20Nh%E1%BA%A5t.png" alt="Key visual Chương trình Người Gần Nhất: logo chương trình, khẩu hiệu Gần để thấu hiểu – Gọi để kết nối – Giúp để cứu người, cơ quan chủ trì Hội Chữ thập đỏ Việt Nam, đơn vị đồng lập VEcoim và báo Tuổi Trẻ" loading="lazy" decoding="async" /></figure>
                             <div class="ngn-content">
-                                <!-- ---------- Giới thiệu đề án: tiêu đề · mô tả · giai đoạn đầu ---------- -->
+                                <!-- ---------- Giới thiệu đề án: nhãn "Đề án trọng tâm quốc gia" · tiêu đề · mô tả · giai đoạn đầu ---------- -->
                                 <div class="ngn-intro">
+                                    <p class="eyebrow">Đề án trọng tâm quốc gia</p>
                                     <h2 class="section-title" id="nguoi-gan-nhat-title">Đề án Người Gần Nhất</h2>
                                     <p class="section-lead">Khi ai đó cần giúp, người có mặt đầu tiên thường là người thân, đồng nghiệp, bạn học, hàng xóm — và điều họ cần là kiến thức, kỹ năng để giúp đúng lúc, đúng cách. <strong>Ai cũng có thể là Người Gần Nhất.</strong></p>
                                     <p class="ngn-phase">Giai đoạn đầu: phổ cập kỹ năng sơ cấp cứu cho người trẻ Việt Nam.</p>
                                 </div>
                                 <!-- ---------- 3 vế khẩu hiệu: Gần để thấu hiểu · Gọi để kết nối · Giúp để cứu người ---------- -->
                                 <ol class="ngn-list" aria-label="Người Gần Nhất: Gần để thấu hiểu, Gọi để kết nối, Giúp để cứu người">
-                                    <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Gần để thấu hiểu</h3><p class="ngn-desc">Người có mặt đầu tiên thường là người thân, bạn học, hàng xóm — ở gần nên hiểu và đến kịp.</p></div></li>
-                                    <li class="ngn-item"><span class="ngn-num">02</span><div><h3 class="ngn-name">Gọi để kết nối</h3><p class="ngn-desc">Mỗi người là một điểm tựa nhân ái, kết nối cộng đồng cùng chung tay khi có người cần.</p></div></li>
-                                    <li class="ngn-item"><span class="ngn-num">03</span><div><h3 class="ngn-name">Giúp để cứu người</h3><p class="ngn-desc">Đủ kiến thức, kỹ năng và trách nhiệm để biến lòng tốt thành hành động đúng lúc, đúng cách.</p></div></li>
+                                    <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Gần để thấu hiểu</h3><p class="ngn-desc">Ở gần nên hiểu hoàn cảnh và có mặt kịp thời trong những phút giây sinh tử đầu tiên.</p></div></li>
+                                    <li class="ngn-item"><span class="ngn-num">02</span><div><h3 class="ngn-name">Gọi để kết nối</h3><p class="ngn-desc">Mỗi người là một mắt xích nhân ái, kết nối hỗ trợ y tế và cứu trợ nhanh chóng.</p></div></li>
+                                    <li class="ngn-item"><span class="ngn-num">03</span><div><h3 class="ngn-name">Giúp để cứu người</h3><p class="ngn-desc">Trang bị kiến thức và kỹ năng chuẩn để biến lòng tốt thành hành động hiệu quả, đúng cách.</p></div></li>
                                 </ol>
-                                <!-- ---------- Nút Xem thêm → trang riêng đề án (tạm: hộp thoại xem trước) ---------- -->
-                                <a class="button button-primary" href="#" data-panel="Đề án Người Gần Nhất" data-magnetic>Xem thêm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                <!-- ---------- Nút → trang riêng đề án & khóa học sơ cấp cứu (tạm: hộp thoại xem trước) ---------- -->
+                                <a class="button button-primary" href="#" data-panel="Đề án Người Gần Nhất" data-magnetic>Tìm hiểu Đề án &amp; Khóa học sơ cấp cứu<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                             </div>
                         </div>
                     </div>
                 </section>
                 <!-- ==================== END SECTION: DỰ ÁN NGƯỜI GẦN NHẤT ==================== -->
 
-                <!-- ==================== SECTION: GIẢI THƯỞNG NGỌN ĐÈN NHÂN ÁI — CHƯƠNG III (tấm chân dung mở rộng) ==================== -->
-                <!-- Chương III của mạch "hành trình". Bố cục kiểu GSAP showcase "expanding panels": câu dẫn sáng dần → đầu section → 5 tấm chân dung xếp cạnh nhau;
-           cuộn tới đâu (hoặc rê chuột) tấm đó mở rộng: tên · nơi chốn, hạng mục · câu nói · thành tích. Tấm thu gọn hiện tên dọc.
-           Desktop (script.js › SECTION: CHƯƠNG): ghim + cuộn. Màn ≤1100px / giảm chuyển động: các tấm xếp dọc, hiện đủ nội dung.
-           DỮ LIỆU MINH HỌA: gương mặt, câu nói, thành tích là nội dung mẫu — thay bằng danh sách được vinh danh thật; trang chi tiết chưa có → data-panel. -->
-                <section class="section chapter chapter-panels awards" id="giai-thuong" aria-labelledby="giai-thuong-title">
-                    <div class="chapter-stage">
-                        <!-- ---------- Câu dẫn chuyện: chữ sáng dần từng chữ theo nhịp cuộn ---------- -->
-                        <div class="chapter-story">
-                            <p class="chapter-story-text">Và khi điều tốt được lan tỏa, ta gọi tên những người đã <em>thắp sáng</em> cả một cộng đồng.</p>
-                        </div>
-
-                        <div class="panels-wrap">
-                            <!-- ---------- Đầu section: biểu trưng Trái Tim Lửa · nhãn · tiêu đề · mô tả | link tìm hiểu giải thưởng ---------- -->
+                <!-- ==================== SECTION: GIẢI THƯỞNG NGỌN ĐÈN NHÂN ÁI — CHƯƠNG III (giới thiệu 4 hạng mục) ==================== -->
+                <!-- Chương III của mạch "hành trình": giới thiệu giải thưởng (không hiện gương mặt người được vinh danh).
+           Bố cục thẻ xếp chồng (kiểu GSAP showcase "stacking cards"): màn ghim gồm đầu section + 4 thẻ hạng mục;
+           cuộn tới đâu thẻ sau trượt lên đè thẻ trước tới đó (script.js › SECTION: CHƯƠNG). Màn ≤1100px / giảm chuyển động: 4 thẻ xếp dọc.
+           DỮ LIỆU MINH HỌA: mô tả hạng mục là nội dung tạm; ảnh thẻ: Emages/thẻ 1.png … thẻ 4.png — thay bằng nội dung chính thức của giải thưởng. -->
+                <section class="section awards chapter-awards" id="giai-thuong" aria-labelledby="giai-thuong-title">
+                    <!-- ---------- Màn ghim (desktop): đầu section + 4 thẻ xếp chồng trong cùng 1 màn — thẻ sau trượt lên đè thẻ trước, thẻ trước thu nhỏ, lùi lên, tối đi
+                         (script.js › SECTION: CHƯƠNG). Màn ≤1100px / giảm chuyển động: 4 thẻ xếp dọc. Mỗi thẻ: số khổng lồ mờ · biểu trưng Trái Tim Lửa · tên · mô tả | ảnh minh họa ---------- -->
+                    <div class="award-pin">
+                        <!-- ---------- Đầu section: nằm chung màn ghim với chồng thẻ ---------- -->
+                        <div class="awards-head">
+                            <!-- ---------- Đầu section: tiêu đề · mô tả (tên giải thưởng) | link tìm hiểu giải thưởng (biểu trưng Trái Tim Lửa nằm trong từng thẻ) ---------- -->
                             <div class="section-head">
                                 <div class="awards-brand">
-                                    <img class="awards-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="Biểu trưng Trái Tim Lửa — Giải thưởng Ngọn đèn Nhân Ái, Hội Chữ thập đỏ Việt Nam" width="1086" height="1448" loading="lazy" decoding="async" />
                                     <div>
-                                        <p class="eyebrow">Giải thưởng</p>
-                                        <h2 class="section-title" id="giai-thuong-title">Ngọn đèn Nhân Ái</h2>
-                                        <p class="section-lead">Tôn vinh những tấm gương và hành động đẹp vì cộng đồng — do chính cộng đồng đề cử mỗi năm.</p>
+                                        <h2 class="section-title" id="giai-thuong-title">Những đóng góp xứng đáng được thắp sáng</h2>
+                                        <p class="section-lead">Giải thưởng Ngọn đèn Nhân Ái — tôn vinh những tấm gương và hành động đẹp vì cộng đồng, do chính cộng đồng đề cử mỗi năm.</p>
                                     </div>
                                 </div>
                                 <div class="section-head-aside">
                                     <a class="link-arrow" href="giai-thuong.html">Tìm hiểu giải thưởng<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                                 </div>
                             </div>
-
-                            <!-- ---------- 5 tấm chân dung: ảnh · tên dọc (khi thu gọn) · nội dung (khi mở rộng); cả tấm bấm được ---------- -->
-                            <ul class="panels" aria-label="Gương mặt được vinh danh">
-                                <li class="panel is-active">
-                                    <img src="Emages/avatar/tran-thu-ha.jpg" alt="Chân dung Trần Thu Hà" loading="lazy" decoding="async" />
-                                    <span class="panel-tab" aria-hidden="true">Trần Thu Hà</span>
-                                    <div class="panel-body">
-                                        <h3 class="panel-name"><a class="stretched" href="#" data-panel="Gương mặt: Trần Thu Hà">Trần Thu Hà</a></h3>
-                                        <p class="panel-meta">Quảng Trị · Cá nhân tiêu biểu 2025</p>
-                                        <p class="panel-quote">“Chỉ cần còn người cần, mình còn đi.”</p>
-                                        <p class="panel-desc">12 năm đưa hàng cứu trợ đến các xã vùng lũ miền Trung.</p>
-                                    </div>
-                                </li>
-                                <li class="panel">
-                                    <img src="Emages/avatar/le-quoc-bao.jpg" alt="Chân dung Lê Quốc Bảo" loading="lazy" decoding="async" />
-                                    <span class="panel-tab" aria-hidden="true">Lê Quốc Bảo</span>
-                                    <div class="panel-body">
-                                        <h3 class="panel-name"><a class="stretched" href="#" data-panel="Gương mặt: Lê Quốc Bảo">Lê Quốc Bảo</a></h3>
-                                        <p class="panel-meta">Hà Nội · Tình nguyện viên trẻ 2025</p>
-                                        <p class="panel-quote">“Một giờ sơ cứu có thể giữ lại cả một cuộc đời.”</p>
-                                        <p class="panel-desc">Hướng dẫn sơ cấp cứu miễn phí cho hơn 3.000 học sinh.</p>
-                                    </div>
-                                </li>
-                                <li class="panel">
-                                    <img src="Emages/avatar/hoang-mai-linh.jpg" alt="Chân dung Hoàng Mai Linh" loading="lazy" decoding="async" />
-                                    <span class="panel-tab" aria-hidden="true">Hoàng Mai Linh</span>
-                                    <div class="panel-body">
-                                        <h3 class="panel-name"><a class="stretched" href="#" data-panel="Gương mặt: Hoàng Mai Linh">Hoàng Mai Linh</a></h3>
-                                        <p class="panel-meta">Lào Cai · Cá nhân tiêu biểu 2025</p>
-                                        <p class="panel-quote">“Con chữ là món quà bền lâu nhất.”</p>
-                                        <p class="panel-desc">Vận động xây 4 điểm trường cho trẻ em vùng cao.</p>
-                                    </div>
-                                </li>
-                                <li class="panel">
-                                    <img src="Emages/avatar/pham-gia-huy.jpg" alt="Chân dung Phạm Gia Huy" loading="lazy" decoding="async" />
-                                    <span class="panel-tab" aria-hidden="true">Phạm Gia Huy</span>
-                                    <div class="panel-body">
-                                        <h3 class="panel-name"><a class="stretched" href="#" data-panel="Gương mặt: Phạm Gia Huy">Phạm Gia Huy</a></h3>
-                                        <p class="panel-meta">TP. Hồ Chí Minh · Hiến máu tiêu biểu 2025</p>
-                                        <p class="panel-quote">“Giọt máu cho đi, cuộc đời ở lại.”</p>
-                                        <p class="panel-desc">68 lần hiến máu tình nguyện trong 17 năm.</p>
-                                    </div>
-                                </li>
-                                <li class="panel">
-                                    <img src="Emages/avatar/nguyen-minh-anh.jpg" alt="Chân dung Nguyễn Minh Anh" loading="lazy" decoding="async" />
-                                    <span class="panel-tab" aria-hidden="true">Nguyễn Minh Anh</span>
-                                    <div class="panel-body">
-                                        <h3 class="panel-name"><a class="stretched" href="#" data-panel="Gương mặt: Nguyễn Minh Anh">Nguyễn Minh Anh</a></h3>
-                                        <p class="panel-meta">Đà Nẵng · Gương mặt trẻ 2025</p>
-                                        <p class="panel-quote">“Lòng tốt cần được lan tỏa đúng cách.”</p>
-                                        <p class="panel-desc">Sáng lập nhóm kết nối người khuyết tật với việc làm.</p>
-                                    </div>
-                                </li>
-                            </ul>
                         </div>
+
+                        <ol class="award-cards" aria-label="4 hạng mục giải thưởng Ngọn đèn Nhân Ái">
+                            <li class="award-card">
+                                <div class="award-card-text">
+                                    <span class="award-num" aria-hidden="true">01</span>
+                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
+                                    <h3 class="award-title">Cá nhân tiêu biểu</h3>
+                                    <p class="award-desc">Tôn vinh những cá nhân bền bỉ trao đi thời gian, sức lực và tấm lòng — từ tình nguyện viên cơ sở đến những người dân bình thường làm nên điều phi thường.</p>
+                                </div>
+                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%201.png" alt="Tình nguyện viên Chữ thập đỏ nắm tay trò chuyện cùng cụ bà trước hiên nhà vùng cao" loading="lazy" decoding="async" /></div>
+                                <span class="award-card-shade" aria-hidden="true"></span>
+                            </li>
+                            <li class="award-card">
+                                <div class="award-card-text">
+                                    <span class="award-num" aria-hidden="true">02</span>
+                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
+                                    <h3 class="award-title">Tổ chức đồng hành</h3>
+                                    <p class="award-desc">Ghi nhận doanh nghiệp, cơ quan, đơn vị đã đồng hành cùng Hội Chữ thập đỏ trong cứu trợ khẩn cấp, an sinh xã hội và các chương trình nhân đạo dài hạn.</p>
+                                </div>
+                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%202.png" alt="Tình nguyện viên Chữ thập đỏ trao thùng hàng cứu trợ cho cụ bà dân tộc vùng cao" loading="lazy" decoding="async" /></div>
+                                <span class="award-card-shade" aria-hidden="true"></span>
+                            </li>
+                            <li class="award-card">
+                                <div class="award-card-text">
+                                    <span class="award-num" aria-hidden="true">03</span>
+                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
+                                    <h3 class="award-title">Sáng kiến và mô hình nhân đạo</h3>
+                                    <p class="award-desc">Vinh danh những cách làm sáng tạo, có thể nhân rộng — phiên chợ nhân đạo, bếp ăn 0 đồng, ngân hàng bò — mang lại thay đổi bền vững cho cộng đồng.</p>
+                                </div>
+                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%203.png" alt="Điểm khám sức khỏe lưu động của Hội Chữ thập đỏ: tình nguyện viên hướng dẫn cụ bà, bác sĩ đo huyết áp" loading="lazy" decoding="async" /></div>
+                                <span class="award-card-shade" aria-hidden="true"></span>
+                            </li>
+                            <li class="award-card">
+                                <div class="award-card-text">
+                                    <span class="award-num" aria-hidden="true">04</span>
+                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
+                                    <h3 class="award-title">Cống hiến bền bỉ</h3>
+                                    <p class="award-desc">Dành cho những người đã gắn bó nhiều năm với hoạt động nhân đạo — hiến máu hàng chục lần, tình nguyện suốt nhiều năm — lặng lẽ mà bền bỉ.</p>
+                                </div>
+                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%204.png" alt="Tình nguyện viên Chữ thập đỏ vác bao gạo, dìu cụ bà trên đường làng; đoàn tình nguyện viên mang quà phía sau" loading="lazy" decoding="async" /></div>
+                                <span class="award-card-shade" aria-hidden="true"></span>
+                            </li>
+                        </ol>
                     </div>
                 </section>
                 <!-- ==================== END SECTION: GIẢI THƯỞNG NGỌN ĐÈN NHÂN ÁI ==================== -->
@@ -1271,28 +1273,32 @@
                 <div class="container footer-grid">
                     <div class="footer-brand">
                         <img src="Emages/logo-hctd.svg" alt="Hội Chữ thập đỏ Việt Nam" width="220" height="52" loading="lazy" />
+                        <!-- ---------- Lượt truy cập: đang trực tuyến (phiên hoạt động trong 15 phút) · tổng lượt tích lũy — visit-counter.js ---------- -->
+                        <p class="footer-stats"><span class="footer-stat"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></span><span class="footer-stat">Tổng số lượt: <b data-stat="total">—</b></span></p>
                     </div>
                     <nav class="footer-col" aria-label="Giới thiệu">
                         <h2>Giới thiệu</h2>
-                        <a href="chuong-trinh-thien-nguyen.html">Chương trình</a>
                         <a href="ban-do-so.html">Bản đồ số</a>
-                        <a href="#cong-khai">Công khai</a>
-                        <a href="tin-tuc.html">Tin tức</a>
-                        <a href="don-vi-dong-hanh.html">Đơn vị đồng hành</a>
+                        <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
+                        <a href="#" data-panel="Quỹ nhân đạo">Quỹ nhân đạo</a>
+                        <a href="#nguoi-gan-nhat">Người gần nhất</a>
+                        <a href="giai-thuong.html">Giải thưởng nhân đạo</a>
+                        <a href="don-vi-dong-hanh.html">Đồng hành</a>
                     </nav>
                     <nav class="footer-col" aria-label="Hỗ trợ">
                         <h2>Hỗ trợ</h2>
                         <a href="#" data-panel="Hướng dẫn quyên góp">Hướng dẫn quyên góp</a>
-                        <a href="ho-so.html#chuong-trinh/them-moi">Tạo quỹ</a>
                         <a href="#" data-panel="Câu hỏi thường gặp">Câu hỏi thường gặp</a>
                     </nav>
-                    <!-- ---------- Liên hệ: địa chỉ, điện thoại, email ---------- -->
+                    <!-- ---------- Liên hệ: địa chỉ, điện thoại, email, website, Facebook ---------- -->
                     <div class="footer-col footer-contact">
                         <h2>Liên hệ</h2>
                         <address class="footer-contact-list">
             <p><svg class="icon" aria-hidden="true"><use href="#pin"/></svg><span>Số 82, Nguyễn Du, phường Cửa Nam, Thành phố Hà Nội</span></p>
             <p><svg class="icon" aria-hidden="true"><use href="#phone"/></svg><a href="tel:+842438224030">024-3 8224030</a></p>
             <p><svg class="icon" aria-hidden="true"><use href="#mail"/></svg><span><a href="mailto:vanphongctd@gmail.com">vanphongctd@gmail.com</a> - <a href="mailto:international@redcross.org.vn">international@redcross.org.vn</a></span></p>
+            <p><svg class="icon" aria-hidden="true"><use href="#globe"/></svg><a href="https://redcross.org.vn/" target="_blank" rel="noopener">redcross.org.vn</a></p>
+            <p><svg class="icon" aria-hidden="true"><use href="#facebook"/></svg><a href="https://www.facebook.com/redcross.org.vn/" target="_blank" rel="noopener">Facebook Hội Chữ thập đỏ Việt Nam</a></p>
           </address>
                     </div>
                 </div>
@@ -1452,8 +1458,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
     <script src="flow.js?v=20261106-1" defer></script>
-    <script src="account-menu.js" defer></script>
-    <script src="script.js?v=20261106-3" defer></script>
+    <script src="account-menu.js?v=20261109-5" defer></script>
+    <script src="visit-counter.js?v=20261109-1" defer></script>
+    <script src="script.js?v=20261109-15" defer></script>
     <script src="chuong-trinh-data.js?v=20261105-22" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
     <script src="hero-3d.js?v=20261031-2" defer></script>

@@ -102,3 +102,19 @@
     if (event.key === 'Escape' && isOpen()) setOpen(false, { focus: 'button' });
   });
 })();
+
+// ==================== HEADER: menu "Khác" (danh mục trang con, dùng chung mọi trang) ====================
+// Bấm nút → xổ / thu danh mục; bấm ra ngoài, nhấn Esc hoặc chọn 1 mục → đóng. Màn ≤1120px: danh mục mở ngay trong menu mobile (CSS).
+(() => {
+  const toggle = document.querySelector('.nav-more-toggle');
+  const menu = document.getElementById('nav-more-menu');
+  if (!toggle || !menu) return;
+  const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+  const setOpen = (open) => { toggle.setAttribute('aria-expanded', String(open)); menu.hidden = !open; };
+  toggle.addEventListener('click', (event) => { event.stopPropagation(); setOpen(!isOpen()); });
+  menu.addEventListener('click', (event) => { if (event.target.closest('a')) setOpen(false); });
+  document.addEventListener('click', (event) => { if (isOpen() && !event.target.closest('.nav-more')) setOpen(false); });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isOpen()) { setOpen(false); toggle.focus(); }
+  });
+})();
