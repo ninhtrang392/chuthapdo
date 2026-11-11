@@ -248,20 +248,133 @@ if (window.gsap && window.ScrollTrigger) {
     return () => cleanups.forEach((fn) => fn());
   });
 
-  // ==================== SECTION 3 · Ý NGHĨA BIỂU TƯỢNG (desktop): khung biểu trưng mở dần, biểu trưng trôi nhẹ theo cuộn (4 ý luôn hiển thị rõ) ====================
+  // Lấy từ bản Giải thưởng khách hàng gửi: desktop ghim section, quầng sáng tỏa rộng + biểu trưng bừng sáng theo cuộn, ý đang xem sáng lên; mobile cuộn tự nhiên
+  const MOTION = { fast: 0.2, base: 0.45, slow: 0.8, ease: 'power3.out' };
+  // ==================== Ý NGHĨA BIỂU TƯỢNG (desktop): Khoảnh khắc đặc trưng "Thắp đèn" (E-1 phương án A) ====================
   mm.add('(min-width: 1101px) and (prefers-reduced-motion: no-preference)', () => {
     const section = document.querySelector('.gt-meaning');
-    const list = section && section.querySelector('.gt-meaning-list');
-    if (!list) return undefined;
-    gsap.fromTo(section.querySelector('.gt-meaning-mark img'), { yPercent: 8, scale: 0.92, rotate: -3 }, {
-      yPercent: -8, scale: 1.04, rotate: 3, ease: 'none',
-      scrollTrigger: { trigger: section.querySelector('.gt-meaning-layout'), start: 'top bottom', end: 'bottom top', scrub: true },
+    if (!section) return undefined;
+    const items = [...section.querySelectorAll('.gt-meaning-item')];
+    const railBar = section.querySelector('.gt-meaning-rail-bar');
+    const halo = section.querySelector('.gt-meaning-halo');
+    section.classList.add('is-live');
+
+    let currentStep = -1;
+
+    const activateStep = (idx, smooth = true) => {
+      if (idx === currentStep) return;
+      currentStep = idx;
+
+      items.forEach((it, i) => {
+        const isActive = i === idx;
+        it.classList.toggle('is-active', isActive);
+        const btn = it.querySelector('.gt-meaning-btn');
+        if (btn) {
+          if (isActive) btn.setAttribute('aria-current', 'step');
+          else btn.removeAttribute('aria-current');
+        }
+      });
+
+      if (railBar) {
+        const pct = items.length > 1 ? idx / (items.length - 1) : 0;
+        gsap.to(railBar, { scaleY: pct, transformOrigin: 'top', duration: smooth ? MOTION.base : 0, ease: 'power2.out' });
+      }
+    };
+
+    // Khởi tạo bước đầu tiên
+    activateStep(0, false);
+
+    // Chiều dài ghim 1.2x viewport
+    const pinDistance = () => window.innerHeight * 1.2;
+
+    // E-1 Phương án A: Timeline scrub đổi nền ấm #f3e3dc khi ghim, vầng sáng mở rộng và lớp sáng is-lit bừng sáng
+    const lightTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${pinDistance()}`,
+        pin: true,
+        scrub: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const step = gsap.utils.clamp(0, items.length - 1, Math.floor(self.progress * items.length));
+          activateStep(step);
+        },
+      },
     });
-    gsap.from(section.querySelector('.gt-meaning-mark'), {
-      clipPath: 'inset(0% 100% 0% 0% round 24px)', duration: 1.4, ease: 'expo.inOut', clearProps: 'clipPath',
-      scrollTrigger: { trigger: section.querySelector('.gt-meaning-layout'), start: 'top 80%', once: true },
+
+    lightTl
+      .fromTo(halo, { scale: 0.55, autoAlpha: 0.35 }, { scale: 1, autoAlpha: 1, duration: 0.7, ease: 'none' }) // tỏa tới vừa khít thẻ, không bị cắt
+      .to('.gt-meaning-mark img.is-lit', { autoAlpha: 1, duration: 0.7, ease: 'none' }, '<');
+
+    const st = lightTl.scrollTrigger;
+
+    // Cho phép click và hover (chỉ hover khi không đang cuộn ghim - N-4)
+    items.forEach((item, index) => {
+      item.addEventListener('click', (e) => {
+        if (st) {
+          const targetProgress = (index + 0.15) / items.length;
+          const targetScroll = st.start + targetProgress * pinDistance();
+          window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        }
+        activateStep(index);
+      });
+
+      item.addEventListener('mouseenter', () => {
+        if (!st || !st.isActive) {
+          activateStep(index);
+        }
+      });
     });
-    return undefined;
+
+    return () => {
+      section.classList.remove('is-live');
+      if (st) st.kill();
+      items.forEach((item) => {
+        item.classList.remove('is-active');
+        const btn = item.querySelector('.gt-meaning-btn');
+        if (btn) btn.removeAttribute('aria-current');
+      });
+    };
+  });
+
+  // ==================== Ý NGHĨA BIỂU TƯỢNG (mobile / tablet): cuộn tự nhiên ====================
+  mm.add('(max-width: 1100px)', () => {
+    const section = document.querySelector('.gt-meaning');
+    if (!section) return undefined;
+    const items = [...section.querySelectorAll('.gt-meaning-item')];
+    const railBar = section.querySelector('.gt-meaning-rail-bar');
+    section.classList.add('is-live');
+
+    const activateMobileStep = (idx) => {
+      items.forEach((it, i) => {
+        const isActive = i === idx;
+        it.classList.toggle('is-active', isActive);
+        const btn = it.querySelector('.gt-meaning-btn');
+        if (btn) {
+          if (isActive) btn.setAttribute('aria-current', 'step');
+          else btn.removeAttribute('aria-current');
+        }
+      });
+      if (railBar && items.length > 1) {
+        railBar.style.transform = `scaleY(${idx / (items.length - 1)})`;
+      }
+    };
+
+    items.forEach((item, index) => {
+      item.addEventListener('click', () => activateMobileStep(index));
+      ScrollTrigger.create({
+        trigger: item,
+        start: 'top 75%',
+        end: 'bottom 45%',
+        onEnter: () => activateMobileStep(index),
+        onEnterBack: () => activateMobileStep(index),
+      });
+    });
+
+    activateMobileStep(0);
+    return () => section.classList.remove('is-live');
   });
 
   // ==================== SECTION 7 · XÉT CHỌN: rê chuột vào mục nào → mục đó tự mở (không cần bấm), chỉ mở 1 mục một lúc; màn cảm ứng / bàn phím vẫn bấm để mở ====================

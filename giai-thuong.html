@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261111-45" />
+    <link rel="stylesheet" href="styles.css?v=20261111-50" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -130,7 +130,7 @@
       </section>
       <!-- ==================== END SECTION: GIỚI THIỆU & MỘT NGỌN ĐÈN – TRIỆU NIỀM TIN ==================== -->
 
-      <!-- ==================== SECTION: Ý NGHĨA BIỂU TƯỢNG — đầu section (tiêu đề · mô tả) ở trên cùng, căn giữa · dưới: trái biểu trưng, phải 4 ý nghĩa trải đều theo chiều cao ảnh ==================== -->
+      <!-- ==================== SECTION: Ý NGHĨA BIỂU TƯỢNG — tiêu đề · mô tả căn giữa · 2 thẻ: biểu trưng tỏa sáng (trái) | 4 thông điệp sáng lần lượt theo cuộn (phải) ==================== -->
       <section class="section gt-meaning" aria-labelledby="gt-meaning-title">
         <div class="container">
           <!-- ---------- Đầu section: tiêu đề · mô tả, căn giữa ---------- -->
@@ -138,20 +138,63 @@
             <h2 class="section-title" id="gt-meaning-title">Mỗi ngọn lửa nhỏ góp phần thắp sáng cộng đồng</h2>
             <p class="section-lead gt-meaning-lead">“Ngọn đèn Nhân ái” biểu tượng cho lòng nhân ái được lan tỏa qua những hành động sẻ chia, nâng đỡ và trao gửi hy vọng, tiếp thêm sức mạnh cho con người vượt qua khó khăn.</p>
           </div>
-          <!-- ---------- Thân: trái biểu trưng · phải 4 ý nghĩa (đầu/cuối danh sách thẳng mép trên/dưới ảnh) ---------- -->
+          <!-- ---------- Thân (lấy từ bản Giải thưởng khách hàng gửi): 2 thẻ cao bằng nhau — trái quầng sáng + biểu trưng · phải 4 thông điệp; desktop ghim section, cuộn tới đâu ý đó sáng + quầng sáng tỏa rộng (giai-thuong.js) ---------- -->
           <div class="gt-meaning-layout">
-            <div class="gt-meaning-visual">
-              <figure class="gt-meaning-mark"><img src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="Biểu trưng Trái Tim Lửa Chữ thập đỏ Việt Nam" width="1086" height="1448" loading="lazy" />
-                <figcaption class="gt-meaning-caption"><span class="gt-org-label">Biểu trưng chính thức</span><span class="gt-org-name">Trái Tim Lửa Chữ thập đỏ Việt Nam</span></figcaption>
-              </figure>
+            <!-- ---------- Thẻ trái: quầng sáng tỏa (.gt-meaning-halo) + biểu trưng Trái Tim Lửa (lớp .is-lit bừng sáng khi cuộn) ---------- -->
+            <div class="gt-meaning-card gt-meaning-card--visual">
+              <div class="gt-meaning-halo" aria-hidden="true"></div>
+              <div class="gt-meaning-mark">
+                <img src="Emages/bieu-trung-trai-tim-lua.webp" alt="Biểu trưng Trái Tim Lửa" width="600" height="800" loading="lazy" />
+                <img class="is-lit" src="Emages/bieu-trung-trai-tim-lua.webp" alt="" aria-hidden="true" width="600" height="800" loading="lazy" />
+              </div>
+              <div class="gt-meaning-caption">
+                <span class="gt-meaning-badge">Biểu trưng chính thức</span>
+                <p class="gt-meaning-logo-name">Trái Tim Lửa Chữ thập đỏ Việt Nam</p>
+              </div>
             </div>
-            <div class="gt-meaning-content">
-              <ol class="gt-meaning-list">
-                <li class="gt-meaning-item"><span class="gt-meaning-num">01</span><div><p class="gt-org-label">Biểu tượng</p><h3 class="gt-meaning-name">Ngọn đèn</h3><p class="gt-meaning-desc">Ánh sáng xua tan bóng tối và giá lạnh, là kim chỉ nam dẫn lối, thắp lên niềm tin và hy vọng cho những mảnh đời gian khó.</p></div></li>
-                <li class="gt-meaning-item"><span class="gt-meaning-num">02</span><div><p class="gt-org-label">Cốt lõi</p><h3 class="gt-meaning-name">Nhân ái</h3><p class="gt-meaning-desc">Tình thương yêu đồng loại, lòng trắc ẩn thuần khiết và tinh thần phụng sự vô điều kiện từ nơi sâu thẳm nhất của trái tim con người.</p></div></li>
-                <li class="gt-meaning-item"><span class="gt-meaning-num">03</span><div><p class="gt-org-label">Sứ mệnh</p><h3 class="gt-meaning-name">Thắp sáng cộng đồng</h3><p class="gt-meaning-desc">Mỗi việc làm thiện nguyện, mỗi giọt máu hiến tặng, mỗi bàn tay chìa ra là một đốm lửa ấm áp hợp thành vầng sáng che chở cả xã hội.</p></div></li>
-                <li class="gt-meaning-item"><span class="gt-meaning-num">04</span><div><p class="gt-org-label">Tương lai</p><h3 class="gt-meaning-name">Lan tỏa & Bền vững</h3><p class="gt-meaning-desc">Không dừng lại ở sự trợ giúp tức thời, ngọn lửa nhân ái truyền cảm hứng để hàng triệu trái tim cùng chung nhịp đập, kiến tạo tương lai phát triển bền vững.</p></div></li>
-              </ol>
+
+            <!-- ---------- Thẻ phải: đường dọc + 4 thông điệp; ý đang xem nổi thành thẻ, tên đỏ, chấm đỏ ✦ ---------- -->
+            <div class="gt-meaning-card gt-meaning-card--content">
+              <div class="gt-meaning-track-wrap">
+                <div class="gt-meaning-rail" aria-hidden="true"><div class="gt-meaning-rail-bar"></div></div>
+                <ol class="gt-meaning-list">
+                  <li class="gt-meaning-item is-active" data-step="1">
+                    <div class="gt-meaning-bullet" aria-hidden="true"><span class="gt-bullet-flame">✦</span></div>
+                    <div class="gt-meaning-body">
+                      <span class="gt-meaning-tag">Biểu tượng</span>
+                      <h3 class="gt-meaning-name"><button type="button" class="gt-meaning-btn" aria-current="step">Ngọn đèn</button></h3>
+                      <p class="gt-meaning-desc">Ánh sáng của ngọn đèn xua tan bóng tối và giá lạnh, là kim chỉ nam dẫn lối, thắp lên niềm tin và hy vọng cho những mảnh đời gian khó.</p>
+                    </div>
+                  </li>
+
+                  <li class="gt-meaning-item" data-step="2">
+                    <div class="gt-meaning-bullet" aria-hidden="true"><span class="gt-bullet-flame">✦</span></div>
+                    <div class="gt-meaning-body">
+                      <span class="gt-meaning-tag">Cốt lõi</span>
+                      <h3 class="gt-meaning-name"><button type="button" class="gt-meaning-btn">Nhân ái</button></h3>
+                      <p class="gt-meaning-desc">Tình thương yêu đồng loại, lòng trắc ẩn thuần khiết và tinh thần phụng sự vô điều kiện bắt nguồn từ nơi sâu thẳm nhất của trái tim con người.</p>
+                    </div>
+                  </li>
+
+                  <li class="gt-meaning-item" data-step="3">
+                    <div class="gt-meaning-bullet" aria-hidden="true"><span class="gt-bullet-flame">✦</span></div>
+                    <div class="gt-meaning-body">
+                      <span class="gt-meaning-tag">Sứ mệnh</span>
+                      <h3 class="gt-meaning-name"><button type="button" class="gt-meaning-btn">Thắp sáng cộng đồng</button></h3>
+                      <p class="gt-meaning-desc">Mỗi việc làm thiện nguyện, mỗi giọt máu hiến tặng, mỗi bàn tay chìa ra là một đốm lửa ấm áp hợp thành vầng sáng che chở cả xã hội.</p>
+                    </div>
+                  </li>
+
+                  <li class="gt-meaning-item" data-step="4">
+                    <div class="gt-meaning-bullet" aria-hidden="true"><span class="gt-bullet-flame">✦</span></div>
+                    <div class="gt-meaning-body">
+                      <span class="gt-meaning-tag">Tương lai</span>
+                      <h3 class="gt-meaning-name"><button type="button" class="gt-meaning-btn">Lan tỏa &amp; Bền vững</button></h3>
+                      <p class="gt-meaning-desc">Không dừng lại ở sự trợ giúp tức thời, ngọn lửa nhân ái truyền cảm hứng để hàng triệu trái tim cùng chung nhịp đập, cùng kiến tạo tương lai phát triển bền vững.</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
@@ -428,6 +471,6 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261109-5" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="giai-thuong.js?v=20261111-6" defer></script>
+    <script src="giai-thuong.js?v=20261111-8" defer></script>
   </body>
 </html>

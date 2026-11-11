@@ -1086,6 +1086,30 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
   html body main#main .hero{padding-bottom:16px!important}
   html body main#main .hero-bottom{padding-top:16px!important}
 }
+/* ===== FONT WEIGHT: toàn bộ chữ đậm ≤500 (trừ h1 hero) ===== */
+html body main#main :is(h2,h3,h4,strong,b,summary,button,.btn,.eyebrow,.accent,.news-cat,.roadmap-card-badge,.closing-badge,.dh-founder-role,a.stretched,.faq-contact a,.principle-title span,.link-more-news span,.overview-mission-title,.closing-title),
+html body main#main :is(h2,h3,summary,strong) *{font-weight:500!important}
+/* Khung ảnh mới 16:9 – căn tiêu điểm từng ảnh */
+html body main#main img.skill-photo[src*="so-cap-cuu-2"]{object-position:63% 50%!important}
+html body main#main .journey-photo[src*="huy-hieu-1"]{object-position:72% 50%!important}
+html body main#main .journey-photo[src*="huy-hieu-2"]{object-position:55% 50%!important}
+html body main#main .journey-photo[src*="huy-hieu-3"]{object-position:50% 50%!important}
+html body main#main .journey-photo[src*="huy-hieu-4"]{object-position:68% 50%!important}
+html body main#main .rm-panel h3.roadmap-card-title,html body main#main .closing-title em.accent{font-weight:500!important}
+/* CTA ảnh 3:1 – nhóm người nằm 40–100% bên phải */
+html body main#main .closing-bg img{object-position:50% 38%!important}
+@media(min-width:761px) and (max-width:1050px){
+  html body main#main .closing{padding-top:400px!important;background:#0e1013!important}
+  html body main#main .closing-bg{left:0!important}
+  html body main#main .closing-bg img{height:460px!important;object-position:85% 40%!important}
+  html body main#main .closing-bg-overlay{height:460px;background:linear-gradient(180deg,rgba(14,16,19,0) 0%,rgba(14,16,19,0) 50%,rgba(14,16,19,.75) 80%,#0e1013 100%)!important}
+}
+@media(max-width:760px){html body main#main .closing-bg img{object-position:88% 40%!important}}
+</style>
+<style id="ngn-overrides">
+/* ==================== SECTION: CHỈNH THÊM (sau khi lấy bản gốc) ==================== */
+/* ---------- Tiêu đề các section (vd. "Biến lòng tốt thành năng lực hành động"): độ đậm 600 (bản gốc ép 500) ---------- */
+html body main#main h2.section-heading,html body main#main h2.section-heading *{font-weight:600!important}
 </style>
 </head>
 <body>
@@ -1230,14 +1254,14 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
 </article>
 </div></div></section>
 <section class="section first-step" id="buoc-dau"><div class="wrap skill-grid"><div class="skill-copy"><h2 class="section-heading">Bắt đầu từ kỹ năng sơ cấp cứu</h2><p>Phổ cập kỹ năng sơ cấp cứu cho người trẻ Việt Nam — kết hợp ứng dụng công nghệ với thực hành trực tiếp cùng huấn luyện viên của Hội và các buổi trải nghiệm tại trường học.</p><div class="skill-topics"><div class="skill-topic"><svg class="arrow"><use href="#book"/></svg><div><h3>Giáo trình chuẩn hóa</h3><p>Nội dung được xây dựng trên giáo trình của Hội Chữ thập đỏ Việt Nam và các đối tác chuyên môn y tế.</p></div></div><div class="skill-topic"><svg class="arrow"><use href="#people"/></svg><div><h3>Thực hành cùng huấn luyện viên</h3><p>Định hướng đào tạo kết hợp công nghệ tương tác, thực hành trực tiếp cùng huấn luyện viên chuyên trách của Hội.</p></div></div><div class="skill-topic"><svg class="arrow"><use href="#shield"/></svg><div><h3>Tìm kiếm, tôn vinh &amp; lan tỏa</h3><p>Chương trình cùng Hội tìm kiếm, biểu dương những câu chuyện cứu người đời thường đúng cách và lan tỏa hướng dẫn xử lý tình huống tương tự.</p></div></div></div></div>
-<div><figure class="skill-photo" style="margin:0"><img class="skill-photo" src="Emages/nguoi-gan-nhat/so-cap-cuu.webp" alt="Tình nguyện viên hỗ trợ người dân" loading="lazy" width="763" height="507"></figure></div></div></section>
+<div><figure class="skill-photo" style="margin:0"><img class="skill-photo" src="Emages/nguoi-gan-nhat/so-cap-cuu-2.webp" alt="Tình nguyện viên hướng dẫn kỹ năng hồi sinh tim phổi ngoài trời" loading="lazy" width="1600" height="900"></figure></div></div></section>
 <!-- ==================== SECTION: HUY HIỆU NGƯỜI GẦN NHẤT (4 CẤP ĐỘ GHI NHẬN) ==================== -->
 <section class="section journey" id="huy-hieu">
   <div class="wrap">
     <div class="journey-layout">
       <div>
         <figure class="journey-visual">
-          <img class="journey-photo" src="Emages/01_trao_di_thoi_gian.png" alt="Tình nguyện viên trao quà và thăm hỏi người cao tuổi" loading="lazy" width="763" height="507" style="transition: opacity 0.22s ease;">
+          <img class="journey-photo" src="Emages/nguoi-gan-nhat/huy-hieu-1.webp" alt="Tình nguyện viên trao quà và thăm hỏi người cao tuổi" loading="lazy" width="1600" height="902" style="transition: opacity 0.22s ease;">
         </figure>
 
       </div>
@@ -1246,7 +1270,7 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
         <h2 class="section-heading journey-heading">Huy hiệu Người Gần Nhất</h2>
         <p class="journey-lead">Huy hiệu được cấp trên Cổng Nhân đạo số quốc gia, kèm bản vật lý dạng pin cài áo. Mỗi cấp độ được xét duyệt theo tiêu chí chuyên môn của Hội Chữ thập đỏ Việt Nam.</p>
         <details name="journey" open
-          data-img="Emages/01_trao_di_thoi_gian.png"
+          data-img="Emages/nguoi-gan-nhat/huy-hieu-1.webp"
           data-alt="Tình nguyện viên trao quà và thăm hỏi người cao tuổi"
           data-tag="Cấp độ 01 · Nhận thức"
           data-caption="Hiểu và tôn trọng<br>phẩm giá con người.">
@@ -1269,7 +1293,7 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
         </details>
 
         <details name="journey"
-          data-img="Emages/02_dao_tao_ky_nang.png"
+          data-img="Emages/nguoi-gan-nhat/huy-hieu-2.webp"
           data-alt="Huấn luyện viên hướng dẫn thực hành kỹ năng sơ cấp cứu"
           data-tag="Cấp độ 02 · Kỹ năng"
           data-caption="Vững kỹ năng chuẩn,<br>tự tin ứng phó.">
@@ -1292,7 +1316,7 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
         </details>
 
         <details name="journey"
-          data-img="Emages/nguoi-gan-nhat/hanh-trinh.webp"
+          data-img="Emages/nguoi-gan-nhat/huy-hieu-3.webp"
           data-alt="Thanh niên trực tiếp hỗ trợ và hành động vì cộng đồng"
           data-tag="Cấp độ 03 · Hành động"
           data-caption="Có mặt kịp thời,<br>hỗ trợ đúng cách.">
@@ -1315,7 +1339,7 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
         </details>
 
         <details name="journey"
-          data-img="Emages/04_ghi_nhan_dong_gop.png"
+          data-img="Emages/nguoi-gan-nhat/huy-hieu-4.webp"
           data-alt="Ghi nhận và tôn vinh đại sứ lan tỏa mạng lưới Người Gần Nhất"
           data-tag="Cấp độ 04 · Lan tỏa"
           data-caption="Lan tỏa tinh thần,<br>kết nối triệu điểm tựa.">
@@ -1467,7 +1491,7 @@ html body main#main .overview-mission-title{font-size:16px!important;font-weight
 
 <section class="closing">
   <div class="closing-bg" aria-hidden="true">
-    <img src="Emages/nguoi-gan-nhat/cta-embrace.webp" alt="" width="1672" height="941" loading="lazy">
+    <img src="Emages/nguoi-gan-nhat/cta-relief.webp" alt="" width="1920" height="640" loading="lazy">
     <div class="closing-bg-overlay"></div>
   </div>
   <div class="wrap closing-center">
