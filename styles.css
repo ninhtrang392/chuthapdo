@@ -123,7 +123,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 /* ---------- Header: 2 nút riêng Đăng nhập / Đăng ký khi chưa có phiên (account-menu.js thay cho avatar) ---------- */
 /* Nút viên thuốc: Đăng nhập viền than (màu chữ header) nền trong suốt · Đăng ký nền gradient đỏ (primary → red) chữ trắng; bo viên thuốc */
 .header-auth{display:flex;align-items:center;gap:8px;margin-left:6px}
-.header-auth .button{border-radius:999px}
+.header-auth .button{border-radius:8px} /* nút vuông (bo góc nhẹ), không còn viên thuốc */
 .header-auth .button-outline{border:1px solid var(--header-text);background:transparent;color:var(--header-text)}
 .header-auth .button-outline:hover{background:var(--header-text);color:#fff}
 .header-auth .header-auth-register{border-color:transparent;background:linear-gradient(90deg,var(--color-primary),var(--red));color:#fff}
@@ -751,11 +751,14 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .ngn-media img{display:block;width:100%;height:auto;aspect-ratio:16 / 9;object-fit:cover}
 .ngn-intro .eyebrow{letter-spacing:0}
 .ngn-intro .section-lead strong{font-weight:600;color:var(--color-text)}
+.ngn-intro .section-lead{max-width:none;text-align:justify;text-wrap:pretty} /* mô tả chương trình dàn hết bề ngang cột (thẳng mép phải danh sách), căn đều 2 bên */
 .ngn-phase{margin:12px 0 0;font-size:14px;font-style:italic;line-height:22px;color:var(--color-text-muted)}
 .ngn-list{display:grid;margin:24px 0 28px;padding:0;list-style:none}
 .ngn-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-top:1px solid var(--color-border)}
 .ngn-num{flex:none;width:32px;font-size:15px;font-weight:600;line-height:26px;color:var(--red);font-variant-numeric:tabular-nums}
 .ngn-name{margin:0;font-size:18px;font-weight:600;line-height:26px;color:var(--color-text)}
+.ngn-name{transition:color .25s}
+.ngn-item:hover .ngn-name{color:var(--red)} /* rê chuột vào mục → tên mục chuyển đỏ */
 .ngn-desc{margin:2px 0 0;font-size:14px;line-height:22px;color:var(--color-text-muted)}
 .ngn-content > .button{min-height:50px;padding:0 26px}
 
@@ -1642,7 +1645,7 @@ html.has-smoother{scroll-behavior:auto}
 .cp-card:hover .cp-card-title a{color:var(--color-primary)}
 .cp-card-title a:focus-visible{outline:none}
 .cp-figures{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:auto;padding-top:4px}
-.cp-raised{font-size:20px;font-weight:700;line-height:28px;color:var(--color-text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cp-raised{font-size:18px;font-weight:600;line-height:26px;color:var(--color-text);font-variant-numeric:tabular-nums;white-space:nowrap}
 .cp-goal{font-size:12px;line-height:16px;color:var(--color-text-muted);white-space:nowrap}
 .cp-bar{height:6px;border-radius:999px;background:#fdecec;overflow:hidden}
 .cp-bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ec3a42,var(--color-primary))}
@@ -1685,7 +1688,7 @@ html.has-smoother{scroll-behavior:auto}
 .cp-grid-cover .cp-card-body{gap:6px;padding:14px 16px 16px}
 .cp-grid-cover .cp-card-title{font-size:17px;font-weight:700;line-height:24px;min-height:48px;color:var(--color-text)}
 .cp-grid-cover .cp-card:hover .cp-card-title a{color:var(--color-primary)}
-.cp-grid-cover .cp-raised{font-size:24px;line-height:32px}
+.cp-grid-cover .cp-raised{font-size:20px;line-height:28px} /* số đã quyên góp: nhỏ lại, đậm vừa (600) */
 .cp-grid-cover .cp-goal{font-size:15px;font-weight:500;line-height:20px;color:var(--color-text-muted)} /* số mục tiêu (góc phải, vd "500 triệu đ") */
 /* ---------- Thanh tiến trình trên ảnh: khối nổi bật trang chủ (.spotlight-bar) + thẻ ảnh tràn viền (.cp-grid-cover .cp-bar)
    Kiểu thường như .cp-bar: cao 6px, phần đã đạt đỏ phẳng; rãnh trắng mờ cho dễ thấy trên nền ảnh tối ---------- */
@@ -3797,6 +3800,7 @@ html.pf-reg-lock{overflow:hidden}
 .dh-showcase .dh-gx-brand{flex-direction:column;gap:0}
 /* Huy hiệu BCA rõ nét ở cột chữ bên trái, trên tiêu đề "Đơn vị phát triển nền tảng" */
 .dh-showcase-copy > .dh-gx-bca{display:block;height:96px;margin:0 0 40px} /* tách hẳn khỏi tiêu đề */
+.dh-showcase-copy .sponsor-lead{text-align:justify} /* mô tả cột trái căn đều 2 bên, mép phải thẳng */
 @media(min-width:1101px) and (max-height:820px){.dh-showcase-copy > .dh-gx-bca{height:76px;margin-bottom:12px}}
 @media(max-width:1100px){.dh-showcase-copy > .dh-gx-bca{height:72px;margin-inline:auto}}
 .dh-showcase .dh-gx-brand + .dh-gx-desc{margin-top:4px} /* ảnh logo đã có lề trong phía dưới → mô tả nhích sát lên khẩu hiệu */
@@ -3851,7 +3855,7 @@ html.pf-reg-lock{overflow:hidden}
 /* ---------- Desktop (≥1101px): cả section vừa đúng 1 khung hình dưới header — cao = màn hình − header; 2 cột: chữ (tiêu đề · gạch mảnh · mô tả) trái · thẻ GTINX / 4 thẻ phải (như banner); dải số liệu sát đáy ---------- */
 @media(min-width:1101px){
   .dh-showcase{display:flex;flex-direction:column;min-height:calc(100vh - var(--header-h));min-height:calc(100svh - var(--header-h));padding-top:clamp(16px,3vh,40px)}
-  .dh-showcase > .container{display:grid;flex:1;grid-template-columns:minmax(0,420px) minmax(0,1fr);align-content:center;align-items:center;column-gap:56px;padding-bottom:clamp(40px,12vh,120px)} /* đệm dưới → cả cụm nội dung nhích lên một chút */ /* chữ trái · thẻ phải */
+  .dh-showcase > .container{display:grid;flex:1;grid-template-columns:minmax(0,420px) minmax(0,1fr);align-content:center;align-items:center;column-gap:56px;padding-bottom:clamp(80px,22vh,220px)} /* đệm dưới → cả cụm nội dung (huy hiệu, chữ, logo GTINX) nhích lên, xa dải sóng xanh */ /* chữ trái · thẻ phải */
   .dh-showcase-head{max-width:none;margin:0;text-align:left}
   .dh-showcase .dh-section-title::after{content:'';display:block;width:220px;height:1px;margin-top:24px;background:rgba(184,13,20,.45)} /* gạch mảnh dưới tiêu đề, cùng kiểu banner */
   .dh-showcase-head .sponsor-lead{max-width:none;margin:20px 0 0}
@@ -4256,10 +4260,6 @@ html.pf-reg-lock{overflow:hidden}
 /* ---------- Hero: nền trắng (không ảnh) · "NGỌN ĐÈN" Playfair Display in hoa (chữ cách điệu) gradient đỏ · cúp pha lê giữa · "Nhân ái" Playfair nghiêng đỏ (như "vì một" trang chủ) · mô tả + nút góc trái ---------- */
 .gt-hero{--t:clamp(72px,min(15.8vw,32vh,calc(min(var(--container),100vw - 2 * var(--gutter)) / 5.45)),320px);position:relative;isolation:isolate;display:flex;flex-direction:column;height:100vh;height:100svh;min-height:640px;overflow:visible;overflow-x:clip;padding:calc(var(--header-h) + 12px) 0 clamp(24px,4vh,48px);background:#fff;text-align:center} /* vừa đúng 1 màn hình: chữ + cúp co giãn theo cả chiều ngang lẫn chiều cao; chỉ cắt chiều ngang → quầng sáng + bóng đổ dưới cúp mờ dần tự nhiên, không bị cắt thành vệt thẳng */
 .gt-hero-inner{position:relative;display:flex;flex:1;flex-direction:column;align-items:center;min-height:0}
-/* Dải lụa đỏ + trái tim dưới chân banner (như banner Thông điệp trang Đồng hành): rộng full trang, kê sát đáy banner, phần thừa cắt trong khung */
-.gt-hero-ribbon{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.gt-hero-ribbon img{position:absolute;bottom:0;left:50%;width:104vw;max-width:none;height:auto;transform:translate(-50%,32%)}
-.gt-hero-inner{z-index:1}
 /* Tên giải: chữ cách điệu (Playfair Display in hoa), tô gradient đỏ; ngay dưới header */
 .gt-hero-title{position:relative;width:100%;margin:.26em 0 0;font-size:var(--t);font-weight:600;line-height:.98;letter-spacing:0;white-space:nowrap;color:var(--red);text-shadow:none}
 .gt-hero-name{display:block;margin:-.2em 0 -.12em;padding:.2em 0 .12em;font-family:'Playfair Display',Georgia,serif;font-weight:500;text-transform:uppercase;opacity:.2;scale:1 1.15;transform-origin:50% 100%;background:linear-gradient(180deg,#ff5459 0%,#ed2429 45%,#b91c2b 100%);-webkit-background-clip:text;background-clip:text;color:transparent} /* mờ 20% → làm nền cho cúp; kéo cao chữ 15% (scale dọc, giữ nguyên bề ngang bằng 2 mép; dùng thuộc tính scale riêng để không đụng transform của GSAP) — dài lên phía trên; cỡ chữ do giai-thuong.js (HERO: tên giải giãn bằng 2 mép) đặt qua --t; gradient đỏ (Primary → Primary-Accent); đệm trên/dưới để dấu (È, Ọ) nằm trong vùng tô */
