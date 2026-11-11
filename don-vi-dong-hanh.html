@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261109-79" />
+    <link rel="stylesheet" href="styles.css?v=20261111-15" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -133,7 +133,7 @@
       </section>
       <!-- ==================== END SECTION: THÔNG ĐIỆP ==================== -->
 
-      <!-- ==================== SECTION: GIỚI THIỆU ĐỒNG HÀNH (sau Thông điệp) — giới thiệu GTINX — đơn vị phát triển nền tảng: tiêu đề · mô tả (trái) · thẻ GTINX (phải) · dải số liệu trên nền lụa đỏ ==================== -->
+      <!-- ==================== SECTION: GIỚI THIỆU ĐỒNG HÀNH (sau Thông điệp) — giới thiệu GTINX — đơn vị phát triển nền tảng: tiêu đề · mô tả (trái) · thẻ GTINX (phải); dải số liệu đã tách ra section riêng ngay sau ==================== -->
       <!-- Ảnh nền section: Emages/Page đơn vị/Nền kem mơ màng với dải lụa đỏ.png (lụa đỏ ở đáy nằm sau dải số liệu) · thẻ GTINX nền trắng (đã bỏ ảnh nền công nghệ xanh).
            Lỗi tải ảnh → nền màu dự phòng (kem / xanh / đỏ), nội dung vẫn đọc được (NL03). Số liệu: DỮ LIỆU MINH HỌA, cùng nguồn với banner, don-vi-dong-hanh.js định dạng BR-05 và đếm lên khi cuộn tới -->
       <section class="dh-showcase" aria-labelledby="dh-showcase-title">
@@ -142,6 +142,8 @@
           <div class="dh-showcase-head">
             <!-- ---------- Nội dung 1 — GTINX, đơn vị phát triển (đi cùng thẻ GTINX) ---------- -->
             <div class="dh-showcase-copy is-gtinx">
+              <!-- ---------- Huy hiệu Bộ Công an (Emages/BCA.png): rõ nét, đặt trên tiêu đề cột chữ (đổi cùng nội dung GTINX) ---------- -->
+              <img class="dh-gx-bca" src="Emages/BCA.png" alt="Bộ Công an" width="164" height="147" />
               <h2 class="section-title dh-section-title" id="dh-showcase-title"><span>Đơn vị phát triển</span> nền tảng</h2>
               <p class="sponsor-lead" data-dh-reveal>Tự chủ công nghệ từ thiết kế đến vận hành, GTINX xây dựng nền tảng số kết nối Hội Chữ thập đỏ với nhà hảo tâm, đối tác và cộng đồng — minh bạch, hiệu quả, bền vững.</p>
             </div>
@@ -154,17 +156,14 @@
 
           <!-- ---------- Khung chuyển (.dh-showcase-stage): thẻ GTINX và 4 thẻ đồng hành chồng cùng chỗ. Cuộn tới → thẻ GTINX; lăn chuột tiếp (GSAP ScrollTrigger: ghim section, scrub — cùng hiệu ứng banner) → GTINX lùi ra, 4 thẻ lần lượt trồi vào. Không JS / giảm chuyển động / màn hẹp → 4 thẻ xếp dưới thẻ GTINX ---------- -->
           <div class="dh-showcase-stage">
-            <!-- ---------- Khối GTINX — đơn vị phát triển: không khung thẻ, chỉ logo GTINX · khẩu hiệu · mô tả, căn giữa (huy hiệu Bộ Công an mờ nhạt nằm sau logo GTINX) (đã bỏ nhãn "Đơn vị phát triển", biểu tượng cộng đồng, ô kính, nền thẻ) ---------- -->
+            <!-- ---------- Khối GTINX — đơn vị phát triển: không khung thẻ, chỉ logo GTINX (kèm khẩu hiệu) · mô tả, căn giữa (huy hiệu Bộ Công an đặt ở cột chữ bên trái, trên tiêu đề) (đã bỏ nhãn "Đơn vị phát triển", biểu tượng cộng đồng, ô kính, nền thẻ) ---------- -->
             <article class="dh-gx-card" aria-label="GTINX — Đơn vị phát triển">
               <div class="dh-gx-body">
                 <div class="dh-gx-brand">
-                  <!-- ---------- Huy hiệu Bộ Công an (Emages/BCA.png): hình chìm mờ nhạt, căn giữa cả cụm logo GTINX + khẩu hiệu ---------- -->
-                  <img class="dh-gx-bca is-mark" src="Emages/BCA.png" alt="Bộ Công an" width="164" height="147" />
-                  <!-- ---------- Logo GTINX ---------- -->
+                  <!-- ---------- Logo GTINX kèm khẩu hiệu "Tự tin – Tự chủ – Tự cường" (Emages/logo-gtinx-02-1200.webp, thu nhỏ từ logo gtinx-02.webp) — khẩu hiệu đã nằm trong logo nên bỏ dòng chữ riêng ---------- -->
                   <div class="dh-gx-logos">
-                    <img class="dh-gx-logo" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" />
+                    <img class="dh-gx-logo is-slogan" src="Emages/logo-gtinx-02-1200.webp" alt="GTINX — Tự tin, Tự chủ, Tự cường" width="1200" height="523" />
                   </div>
-                  <p class="dh-gx-slogan">Tự tin – Tự chủ – Tự cường</p>
                 </div>
                 <p class="dh-gx-desc">Đơn vị chủ trì xây dựng nền tảng chuyển đổi số nhân đạo,<br class="dh-gx-br" /> kiến tạo hệ sinh thái kết nối cộng đồng bền vững.</p>
               </div>
@@ -181,8 +180,11 @@
             </ul>
           </div>
         </div>
+      </section>
+      <!-- ==================== END SECTION: GIỚI THIỆU ĐỒNG HÀNH ==================== -->
 
-        <!-- ---------- Dải số liệu trên nền lụa đỏ: biểu tượng tròn viền vàng · số trắng · nhãn · vạch ngăn (SRS mục C, BR-05) ---------- -->
+      <!-- ==================== SECTION: SỐ LIỆU ĐỒNG HÀNH — dải riêng ngay sau Giới thiệu đồng hành (tách khỏi section trên): nền đỏ lụa · biểu tượng tròn viền vàng · số trắng · nhãn · vạch ngăn (SRS mục C, BR-05). DỮ LIỆU MINH HỌA, don-vi-dong-hanh.js định dạng BR-05 và đếm lên khi cuộn tới ==================== -->
+      <section class="dh-stats-band" aria-label="Số liệu đồng hành">
         <div class="dh-showcase-stats">
           <dl class="container dh-showcase-stat-list" aria-label="Số liệu đồng hành">
             <div><dt>Đối tác đồng hành</dt><dd data-count="268"><svg class="icon" aria-hidden="true"><use href="#handshake"/></svg><span>268</span></dd></div>
@@ -192,7 +194,7 @@
           </dl>
         </div>
       </section>
-      <!-- ==================== END SECTION: GIỚI THIỆU ĐỒNG HÀNH ==================== -->
+      <!-- ==================== END SECTION: SỐ LIỆU ĐỒNG HÀNH (dải riêng) ==================== -->
 
       <!-- ==================== SECTION: BANNER ĐỒNG HÀNH (SRS mục B) — theo mockup: tiêu đề · mô tả · 4 thẻ số liệu (trái) · 4 thẻ kính trắng đơn vị đồng hành xếp so le (phải); số liệu mục C ở section Đối tác tài trợ ==================== -->
       <!-- Ảnh nền: Emages/Page đơn vị/Dải Ruy-băng Đỏ Vì Trái Tim.png; lỗi tải ảnh → nền màu mặc định (NL03), nội dung vẫn hiển thị -->
@@ -387,8 +389,6 @@
       <div class="container footer-grid">
         <div class="footer-brand">
           <img src="Emages/logo-hctd.svg" alt="Hội Chữ thập đỏ Việt Nam" width="220" height="52" loading="lazy" />
-          <!-- ---------- Lượt truy cập: đang trực tuyến (phiên hoạt động trong 15 phút) · tổng lượt tích lũy — visit-counter.js ---------- -->
-          <p class="footer-stats"><span class="footer-stat"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></span><span class="footer-stat">Tổng số lượt: <b data-stat="total">—</b></span></p>
         </div>
         <nav class="footer-col" aria-label="Giới thiệu">
           <h2>Giới thiệu</h2>
@@ -418,9 +418,12 @@
       </div>
 
 
-      <!-- ---------- Thanh cuối: điều phối (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
+      <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
       <div class="container footer-bottom">
+        <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái · tổng lượt tích lũy góc phải — visit-counter.js ---------- -->
+        <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
         <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
+        <p class="footer-stat footer-stat-total">Tổng số lượt: <b data-stat="total">—</b></p>
         <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
         <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
         <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->

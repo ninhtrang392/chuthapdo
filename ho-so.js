@@ -84,6 +84,7 @@ const PROGRAM_STATUS = {
   done: { label: 'Hoàn thành', tone: 'blue', slug: 'hoan-thanh' },
 };
 const PROGRAMS = [
+  { code: 'NHAP-2', img: 'z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg', name: 'Hỗ trợ người yếu thế sau bão tại Hà Tĩnh', desc: 'Trao quà, lương thực và hỗ trợ sửa nhà cho 5 người, hộ yếu thế bị ảnh hưởng sau bão.', field: 'Sinh kế & Nhà ở', tone: 'green', unit: 'Hội CTĐ Tỉnh Hà Tĩnh', owner: 'Nguyễn Ngọc Trâm', area: 'Hà Tĩnh', goal: '150 triệu ₫', raised: '0 ₫', pct: null, period: 'Chưa xác định', note: 'Bản nháp, chưa gửi duyệt', status: 'draft', created: '2026-11-08', updated: '2026-11-10' },
   { code: 'CT-2026-040', img: '3.-028ae9de1f.jpg', name: 'Tiếp sức đến trường vùng cao', desc: 'Học bổng, sách vở và áo ấm cho 1.200 học sinh các điểm trường vùng cao huyện Đồng Văn trước mùa đông.', field: 'Giáo dục & Khuyến học', tone: 'blue', unit: 'Hội CTĐ Huyện Đồng Văn', owner: 'Vàng Seo Sùng', area: 'Hà Giang', goal: '800 triệu ₫', raised: '680 triệu ₫', pct: 85, period: '28/09/2026 – 20/11/2026', note: 'Đạt 85% mục tiêu', status: 'active', created: '2026-09-28', updated: '2026-10-12', detail: 'tiep-suc-den-truong' },
   { code: 'CT-2026-039', img: 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg', name: 'Bữa cơm yêu thương bệnh viện', desc: 'Cung cấp 30.000 suất ăn miễn phí cho bệnh nhân nghèo và người nhà tại 3 bệnh viện tuyến tỉnh.', field: 'Y tế - Sức khỏe', tone: 'orange', unit: 'Hội CTĐ TP. Hồ Chí Minh', owner: 'Trần Mỹ Linh', area: 'TP. Hồ Chí Minh', goal: '500 triệu ₫', raised: '0 ₫', pct: 0, period: '01/11/2026 – 01/05/2027', note: 'Chờ duyệt hồ sơ, chưa mở vận động', status: 'pending', created: '2026-09-25', updated: '2026-10-08' },
   { code: 'CT-2026-038', img: '1358142_gen-h-235_1777566365.jpg', name: 'Tết ấm cho người vô gia cư 2027', desc: 'Tặng 2.000 suất quà Tết và chăn ấm cho người vô gia cư, lao động nghèo tại TP. Hồ Chí Minh.', field: 'Trợ giúp nhân đạo', tone: 'red', unit: 'Hội CTĐ TP. Hồ Chí Minh', owner: 'Trần Mỹ Linh', area: 'TP. Hồ Chí Minh', goal: '600 triệu ₫', raised: '0 ₫', pct: 0, period: '15/11/2026 – 15/02/2027', note: 'Đã được Hội phê duyệt, chưa đến thời gian tiếp nhận đóng góp', status: 'upcoming', created: '2026-09-22', updated: '2026-10-20' },
@@ -106,7 +107,7 @@ const PROGRAM_EXTRA = {
   'CT-2026-035': ['Tổ chức', 200, ['2026-09-20', '2026-11-10']], 'CT-2026-031': ['Tổ chức', 2000, ['2026-09-10', '2026-11-05']],
   'CT-2026-028': ['Tổ chức', 500, ['2026-11-01', '2026-12-20']], 'CT-2026-019': ['Cá nhân', 300, ['2026-06-01', '2026-07-30']],
   'CT-2026-012': ['Cá nhân', null, ['2026-06-01', '2026-07-15']], 'CT-2026-008': ['Tổ chức', 300, ['2026-03-10', '2026-05-08']],
-  'CT-2026-005': ['Cá nhân', 150, ['2026-10-05', '2026-11-30']], 'NHAP-1': ['Cá nhân', 250, null],
+  'CT-2026-005': ['Cá nhân', 150, ['2026-10-05', '2026-11-30']], 'NHAP-1': ['Cá nhân', 250, null], 'NHAP-2': ['Tổ chức', 150, null],
   'CT-2026-001': ['Tổ chức', 400, ['2026-01-05', '2026-02-15']],
 };
 PROGRAMS.forEach((p) => { [p.creator, p.goalValue, p.raise] = PROGRAM_EXTRA[p.code]; });
@@ -566,7 +567,6 @@ const FORM_EXTRA = {
     groups: ['Hộ nghèo', 'Hộ cận nghèo', 'Trẻ mồ côi', 'Bị ảnh hưởng thiên tai/bão lũ'],
     people: 2000,
     resources: ['Tiền mặt/chuyển khoản', 'Hàng hóa', 'Vật tư'],
-    funding: ['Ngân sách hội', 'Vận động'],
     goods: [
       ['Gạo tẻ ST25', 'Gạo sạch hữu cơ', '10.000 kg', '10 tấn', '25.000 đ/kg', '31/12/2027', 'Nạn nhân thiên tai', 'Văn bản kiểm định VSATTP số 24/KĐ'],
       ['Áo phao cứu sinh loại 1', 'Tiêu chuẩn SOLAS', '2.000 chiếc', '800 kg', '180.000 đ/chiếc', 'Không thời hạn', 'Lực lượng cứu hộ', 'Chứng nhận CO/CQ số 188/HQ'],
@@ -600,7 +600,7 @@ const addDays = (iso, days) => {
   return d.toISOString().slice(0, 10);
 };
 const programForm = (p) => {
-  const [support, groups] = FIELD_PRESET[p.field] || ['Cứu trợ nhân đạo', ['Hộ nghèo, cận nghèo']];
+  const [, groups] = FIELD_PRESET[p.field] || ['Cứu trợ nhân đạo', ['Hộ nghèo, cận nghèo']];
   const [runFrom, runTo] = p.period.includes('–') ? p.period.split('–').map((s) => s.trim()) : ['', ''];
   const firstNumber = (p.desc.match(/\d[\d.]*/) || [''])[0].replace(/\./g, '');
   return {
@@ -610,14 +610,12 @@ const programForm = (p) => {
     email: 'lienhe@hoichuthapdo.vn',
     goal: `Huy động nguồn lực xã hội cho chương trình “${p.name}”, hỗ trợ kịp thời ${groups.join(', ').toLowerCase()} tại ${p.area}.`,
     target: `- ${p.desc}\n- Tiếp nhận, phân phối nguồn lực đúng đối tượng và công khai kết quả, sao kê trên nền tảng.`,
-    support,
     groups,
     runFrom,
     runTo,
     people: Number(firstNumber) || null,
     resources: ['Tiền mặt/chuyển khoản', 'Hàng hóa'],
     transport: 'Yêu cầu hỗ trợ vận chuyển',
-    funding: ['Vận động'],
     campaign: ['Nền tảng số', 'Trực tiếp'],
     money: p.goalValue ? p.goalValue * 1000000 : null,
     raiseFrom: viDate(p.raise ? p.raise[0] : p.created),
@@ -643,11 +641,11 @@ const regViewData = (d) => {
   const byList = d.mode === 'Theo nhóm người yếu thế cụ thể';
   return {
     priority: d.priority, creatorName: d.creatorName, phone: d.phone, email: d.email,
-    goal: d.goal, target: d.target, support: d.support,
+    goal: d.goal, target: d.target,
     groups: byList ? [...new Set(d.people.map((r) => r.need).filter(Boolean))] : d.groups,
     people: byList ? d.people.length : null,
     runFrom: d.runFrom, runTo: d.runTo,
-    resources: d.resources, transport: d.transport, funding: d.funding, campaign: d.campaign,
+    resources: d.resources, transport: d.transport, campaign: d.campaign,
     money: hasMoney ? d.money : null, raiseFrom: d.raiseFrom, raiseTo: d.raiseTo, depot: d.depot,
     goods: d.goods.map((g) => [g.name, g.group, `${g.qty} ${g.qtyUnit}`, `${g.spec} ${g.specUnit}`, `${g.price} đ`, g.exp, g.to, g.docs.join(', ')]),
     assign: d.assign.map((a) => [a.unit, a.person, a.task, a.date]),
@@ -1038,7 +1036,7 @@ const renderProgramView = (p) => {
   // Câu chuyện (#9, như trang công khai): tên in hoa · dòng tóm tắt (thời gian tiếp nhận – mục tiêu – loại hình – đối tượng) · Mục tiêu tổng quát · Mục tiêu cụ thể/chỉ tiêu; thu gọn, Xem thêm
   const heart = icon('heart-solid');
   const raiseDays = f.raiseFrom && f.raiseTo ? Math.max(1, Math.round((new Date(toIso(f.raiseTo)) - new Date(toIso(f.raiseFrom))) / 86400000) + 1) : 0;
-  const lead = [raiseDays ? `${raiseDays} ngày` : '', goalText, vText(f.support), f.people ? `Khoảng ${vVnd(f.people)} người` : ''].filter(Boolean).join(' – ');
+  const lead = [raiseDays ? `${raiseDays} ngày` : '', goalText, f.people ? `Khoảng ${vVnd(f.people)} người` : ''].filter(Boolean).join(' – ');
   const story = `<div class="pf-pv-story-text pv-story is-collapsed" id="pf-pv-story-text">
       <h3 class="pv-story-title">${heart}${escapeHtml(p.name.toUpperCase())}${heart}</h3>
       ${lead ? `<p class="pv-story-lead">${lead}</p>` : ''}
@@ -1112,7 +1110,7 @@ const renderProgramView = (p) => {
       <div class="pf-view-overview-side">
         <figure class="pf-view-banner"><img src="${imgSrc(p.img)}" alt="Ảnh banner chương trình ${escapeHtml(p.name)}" loading="lazy" /></figure>
         ${vKvs([
-          vKv('Lĩnh vực thiện nguyện trọng tâm', vText(p.field)),
+          vKv('Lĩnh vực', vText(p.field)),
           vKv('Mức độ ưu tiên', `<span class="pf-view-priority"><span class="pf-reg-dot ${priorityCls}" aria-hidden="true"></span>${priorityLabel}</span>`),
         ])}
       </div>
@@ -1120,7 +1118,6 @@ const renderProgramView = (p) => {
         vKv('Mục tiêu tổng quát', vText(f.goal)),
         vKv('Mục tiêu cụ thể/chỉ tiêu', `<span class="pf-pv-pre">${vText(f.target)}</span>`),
         vKv('Địa bàn triển khai', vText(p.area)),
-        vKv('Loại hình hỗ trợ', vText(f.support)),
         vKv('Nhóm đối tượng hưởng lợi', vTags(f.groups)),
         vKv('Thời gian triển khai thực hiện', vRange(f.runFrom, f.runTo)),
         vKv('Thời gian tiếp nhận vận động đóng góp', vRange(f.raiseFrom, f.raiseTo)),
@@ -1140,7 +1137,6 @@ const renderProgramView = (p) => {
       ${vCard('pf-v-resources', 'Nguồn lực &amp; Kế hoạch tài chính', vKvs([
         vKv('Loại nguồn lực cần huy động', vTags(f.resources)),
         vKv('Hỗ trợ vận chuyển đến nơi quy định', vText(f.transport)),
-        vKv('Nguồn lực kinh phí', vChecked(f.funding)),
         vKv('Hình thức vận động', vChecked(f.campaign)),
         vKv('Mục tiêu quyên góp (VNĐ)', f.money ? `${vVnd(f.money)} VNĐ` : vText(p.goal)),
         vKv('Địa điểm hàng hóa tập kết', vText(f.depot)),
@@ -4148,6 +4144,16 @@ const VULNERABLE_REGISTRY = [
   { id: '046180007712', name: 'Nguyễn Văn Sáu', phone: '0905667123', kind: 'Cá nhân', need: 'Người khuyết tật', province: 'Thành phố Huế' },
   { id: '044176002233', name: 'Võ Thị Tám', phone: '0389554210', kind: 'Cá nhân', need: 'Người già neo đơn', province: 'Tỉnh Quảng Trị' },
 ];
+// Bản nháp minh họa chọn người hưởng lợi Theo nhóm người yếu thế cụ thể (mã nháp → danh sách #19 đã thêm): 3 dòng Đã có · 1 dòng Lệch (số điện thoại) · 1 dòng Chưa có trên hệ thống
+const DRAFT_PEOPLE = {
+  'NHAP-2': [
+    { id: '042196012345', name: 'Trần Văn Bình', phone: '0912004521', kind: 'Cá nhân', need: 'Người già neo đơn', province: 'Tỉnh Hà Tĩnh' },
+    { id: '045215006789', name: 'Lê Thị Hoa', phone: '0935118206', kind: 'Cá nhân', need: 'Trẻ mồ côi', province: 'Tỉnh Quảng Trị' },
+    { id: '040181003456', name: 'Phạm Thị Mai', phone: '0978223415', kind: 'Hộ gia đình', need: 'Hộ nghèo', province: 'Tỉnh Nghệ An' },
+    { id: '046180007712', name: 'Nguyễn Văn Sáu', phone: '0905667999', kind: 'Cá nhân', need: 'Người khuyết tật', province: 'Thành phố Huế' },
+    { id: '042190008811', name: 'Đặng Thị Lan', phone: '0388123456', kind: 'Hộ gia đình', need: 'Bị ảnh hưởng thiên tai/bão lũ', province: 'Tỉnh Hà Tĩnh' },
+  ],
+};
 const PEOPLE_COLS = [['id', 'Số CCCD/QĐ thành lập'], ['name', 'Người yếu thế'], ['phone', 'Số điện thoại'], ['kind', 'Loại hồ sơ'], ['need', 'Nhu cầu cần trợ giúp'], ['province', 'Tỉnh/thành phố']];
 const PEOPLE_RESULT = { ok: ['Đã có trên hệ thống', 'green'], none: ['Chưa có trên hệ thống', 'orange'], diff: ['Thông tin lệch với hệ thống', 'red'] };
 const normText = (value) => String(value || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase('vi');
@@ -4189,7 +4195,6 @@ const peoplePages = () => Math.max(1, Math.ceil(regPeople.length / peoplePerPage
 const pageOfPerson = (index) => Math.floor(index / peoplePerPage) + 1;
 const peopleOnPage = () => regPeople.slice((peoplePage - 1) * peoplePerPage, peoplePage * peoplePerPage);
 const blankPerson = () => ({ id: '', name: '', phone: '', kind: '', need: '', province: '' });
-const peopleSelect = (key, label, values, value, errors) => `<span class="pf-cell-select"><select class="pf-cell-input${value ? '' : ' is-empty'}${errors[key] ? ' is-invalid' : ''}" data-key="${key}" aria-label="${label}"${errors[key] ? ` title="${escapeHtml(errors[key])}"` : ''}><option value="">Chọn</option>${values.map((v) => `<option${v === value ? ' selected' : ''}>${escapeHtml(v)}</option>`).join('')}</select>${icon('chevron-down')}</span>`;
 // Kết quả hệ thống (#19.11): chữ thường (không phải ô nhập), hiện đủ, tự xuống dòng, màu theo kết quả; lệch thì ghi thêm trường không khớp
 const peopleResult = (r) => {
   if (!r.id.trim()) return '<span class="pf-cell-result is-empty">—</span>';
@@ -4197,23 +4202,23 @@ const peopleResult = (r) => {
   const [label, tone] = PEOPLE_RESULT[state];
   return `<span class="pf-cell-result is-${tone}">${label}${diff.length ? `<small>Không khớp: ${escapeHtml(diff.join(', '))}</small>` : ''}</span>`;
 };
-// i: vị trí trong toàn danh sách (số thứ tự liên tục qua các trang)
+// i: vị trí trong toàn danh sách (số thứ tự liên tục qua các trang) · dòng chỉ xem (nhập / sửa qua popup); ô lỗi sau lần kiểm tra gần nhất tô đỏ, rê chuột xem lý do
 const peopleRow = (r, i) => {
   const n = i + 1;
   const checked = peopleChecked.has(r);
   const errors = peopleRowErrors.get(r) || {};
-  const text = (key, attrs, label) => `<input class="pf-cell-input${errors[key] ? ' is-invalid' : ''}" type="text" ${attrs} value="${escapeHtml(r[key])}" data-key="${key}" aria-label="${label} dòng ${n}"${errors[key] ? ` title="${escapeHtml(errors[key])}"` : ''} />`;
+  const isNew = Boolean(r.id.trim()) && peopleLookup(r).state === 'none'; // Chưa có trên hệ thống → nút + Thêm hồ sơ người yếu thế
+  const text = (key) => {
+    const value = r[key] ? escapeHtml(r[key]) : '—';
+    if (errors[key]) return `<span class="pf-cell-result is-red" title="${escapeHtml(errors[key])}">${value}</span>`;
+    return r[key] ? value : '<span class="pf-muted">—</span>';
+  };
   return `<tr data-index="${i}"${checked ? ' class="is-selected"' : ''}>
     <td class="pf-col-check"><input class="pf-check" type="checkbox" data-people-check aria-label="Chọn dòng ${n}"${checked ? ' checked' : ''} /></td>
     <td class="pf-col-index">${n}</td>
-    <td>${text('id', 'maxlength="20" placeholder="12 chữ số"', 'Số CCCD/QĐ thành lập')}</td>
-    <td>${text('name', 'maxlength="255" placeholder="Họ tên / tên cộng đồng"', 'Người yếu thế')}</td>
-    <td>${text('phone', 'inputmode="numeric" maxlength="10" placeholder="0xxxxxxxxx"', 'Số điện thoại')}</td>
-    <td>${peopleSelect('kind', `Loại hồ sơ dòng ${n}`, REG_KINDS, r.kind, errors)}</td>
-    <td>${peopleSelect('need', `Nhu cầu cần trợ giúp dòng ${n}`, REG_GROUPS, r.need, errors)}</td>
-    <td>${peopleSelect('province', `Tỉnh/thành phố dòng ${n}`, REG_PROVINCES, r.province, errors)}</td>
-    <td class="pf-col-result">${peopleResult(r, n)}</td>
-    <td class="pf-col-del is-actions"><div class="pf-cell-actions"><button class="pf-icon-btn" type="button" data-people-remove aria-label="Xóa dòng ${n}">${icon('trash')}</button><button class="pf-icon-btn" type="button" data-people-insert aria-label="Thêm dòng sau dòng ${n}">${icon('plus-square')}</button></div></td>
+    ${PEOPLE_COLS.map(([key]) => `<td>${text(key)}</td>`).join('')}
+    <td class="pf-col-result">${peopleResult(r)}</td>
+    <td class="pf-col-del is-actions"><div class="pf-cell-actions"><button class="pf-icon-btn" type="button" data-people-edit aria-label="Chỉnh sửa dòng ${n}" aria-haspopup="dialog">${icon('pencil')}</button><button class="pf-icon-btn" type="button" data-people-remove aria-label="Xóa dòng ${n}">${icon('trash')}</button>${isNew ? `<button class="pf-icon-btn" type="button" data-people-profile data-panel="Thêm hồ sơ người yếu thế" aria-label="Thêm hồ sơ người yếu thế ${escapeHtml(r.name || `dòng ${n}`)}" title="Thêm hồ sơ người yếu thế">${icon('plus-square')}</button>` : ''}</div></td>
   </tr>`;
 };
 // Ô chọn tất cả: theo các dòng của trang đang xem · nút Xóa đã chọn (n): đếm các dòng đã tích ở mọi trang
@@ -4247,18 +4252,12 @@ const renderPeople = () => {
   syncPeopleChecks();
   syncGoodsTargets();
 };
-// Thêm mới: dòng trống cuối bảng · nút + ở dòng: chèn dòng trống ngay bên dưới — chuyển tới trang có dòng mới, đặt con trỏ vào ô đầu
-const addPerson = (index) => {
-  regPeople.splice(index, 0, blankPerson());
-  peoplePage = pageOfPerson(index);
-  renderPeople();
-  peopleBody.querySelector(`tr[data-index="${index}"] [data-key="id"]`).focus();
-  regChanged();
-};
-peopleAdd.addEventListener('click', () => addPerson(regPeople.length));
+// Thêm mới: popup, lưu thì thêm cuối bảng · nút bút chì: popup sửa dòng (ho-so.js: THÊM / SỬA NGƯỜI YẾU THẾ)
+// Nút + (chỉ dòng Chưa có trên hệ thống): Thêm hồ sơ người yếu thế — bản xem trước (data-panel), chờ nối chức năng Quản lý người yếu thế
+peopleAdd.addEventListener('click', () => openPerson({ insertAt: regPeople.length, trigger: peopleAdd }));
 peopleBody.addEventListener('click', (event) => {
-  const insert = event.target.closest('[data-people-insert]');
-  if (insert) { addPerson(Number(insert.closest('tr').dataset.index) + 1); return; }
+  const edit = event.target.closest('[data-people-edit]');
+  if (edit) { openPerson({ person: regPeople[Number(edit.closest('tr').dataset.index)], trigger: edit }); return; }
   const button = event.target.closest('[data-people-remove]');
   if (!button) return;
   regPeople.splice(Number(button.closest('tr').dataset.index), 1);
@@ -4298,20 +4297,6 @@ peopleRemoveChecked.addEventListener('click', () => {
   peopleAdd.focus();
   regChanged();
   showToast(`Đã xóa ${count} dòng.`);
-});
-peopleBody.addEventListener('input', (event) => {
-  const el = event.target;
-  if (!el.dataset.key) return; // ô tích chọn dòng: xử lý ở change
-  const row = el.closest('tr');
-  const r = regPeople[Number(row.dataset.index)];
-  if (el.dataset.key === 'phone') el.value = el.value.replace(/\D/g, '');
-  r[el.dataset.key] = el.value;
-  el.classList.remove('is-invalid');
-  el.removeAttribute('title');
-  delete (peopleRowErrors.get(r) || {})[el.dataset.key];
-  if (el.tagName === 'SELECT') el.classList.toggle('is-empty', !el.value);
-  row.querySelector('.pf-col-result').innerHTML = peopleResult(r, Number(row.dataset.index) + 1);
-  if (el.dataset.key === 'need') syncGoodsTargets();
 });
 // Tải file Excel mẫu (#19.1): sheet dữ liệu (tiêu đề + 1 dòng ví dụ) và sheet hướng dẫn kèm danh mục giá trị
 const requireXlsx = () => {
@@ -4458,6 +4443,11 @@ reg.querySelectorAll('.pf-reg-section.is-collapsible').forEach((section) => {
 });
 
 // ---------- Đọc / nạp dữ liệu biểu mẫu ----------
+// Mã chương trình: chỉ hiện khi đã có mã — đăng ký mới / bản nháp ẩn trường, Mức độ ưu tiên lên cùng hàng Lĩnh vực
+const setRegCode = (code) => {
+  document.querySelector('#rg-code').value = code;
+  document.querySelector('#rg-code-field').hidden = !code;
+};
 const regValue = (id) => document.querySelector(`#${id}`).value.trim();
 const regDateText = (id) => document.querySelector(`#${id}`).closest('[data-vi-date]').querySelector('input[type="text"]').value.trim();
 const regChecked = (name) => [...regForm.querySelectorAll(`input[name="${name}"]:checked`)].map((c) => c.value);
@@ -4465,10 +4455,10 @@ const regFormData = () => ({
   name: regValue('rg-name'), field: regValue('rg-field'), priority: regValue('rg-priority'),
   creator: regValue('rg-creator'), creatorName: regValue('rg-creator-name'), phone: regValue('rg-phone'), email: regValue('rg-email'),
   unit: regValue('rg-unit'), owner: regValue('rg-owner'), banner: listFiles(regBannerList)[0] || null, photos: listFiles(regPhotoList),
-  goal: regValue('rg-goal'), target: regValue('rg-target'), area: regValue('rg-area'), support: regValue('rg-support'),
+  goal: regValue('rg-goal'), target: regValue('rg-target'), area: regValue('rg-area'),
   runFrom: regDateText('rg-run-from'), runTo: regDateText('rg-run-to'),
   mode: regMode.value, groups: multiValues(regGroups), people: regPeople.map((r) => ({ ...r })),
-  resources: multiValues(regResources), transport: regValue('rg-transport'), funding: regChecked('rg-funding'), campaign: regChecked('rg-campaign'),
+  resources: multiValues(regResources), transport: regValue('rg-transport'), campaign: regChecked('rg-campaign'),
   money: Number(regMoney.value.replace(/\D/g, '')) || null, raiseFrom: regDateText('rg-raise-from'), raiseTo: regDateText('rg-raise-to'),
   goods: [...goodsBody.rows].map(goodsRowData).filter((g) => !isBlankGoods(g)), depot: regValue('rg-depot'),
   assign: assignRows(), volunteers: regValue('rg-volunteers'), docs: listFiles(regDocs),
@@ -4478,8 +4468,8 @@ const regDirty = () => JSON.stringify(regFormData()) !== regSaved;
 // Thêm mới: Đối tượng tạo, Tên đối tượng tạo (chỉ đọc), Số điện thoại, Email (cho sửa) lấy theo tài khoản
 const regBlank = () => ({
   name: '', field: '', priority: '', creator: REG_ACCOUNT.type, creatorName: REG_ACCOUNT.name, phone: REG_ACCOUNT.phone, email: REG_ACCOUNT.email,
-  unit: '', owner: '', banner: null, photos: [], goal: '', target: '', area: '', support: '', runFrom: '', runTo: '',
-  mode: '', groups: [], people: [], resources: [], transport: '', funding: [], campaign: [], money: null, raiseFrom: '', raiseTo: '',
+  unit: '', owner: '', banner: null, photos: [], goal: '', target: '', area: '', runFrom: '', runTo: '',
+  mode: '', groups: [], people: [], resources: [], transport: '', campaign: [], money: null, raiseFrom: '', raiseTo: '',
   goods: [], depot: '', assign: [], volunteers: '', docs: [],
 });
 const loadRegister = (d) => {
@@ -4494,7 +4484,7 @@ const loadRegister = (d) => {
   set('rg-unit', d.unit); set('rg-owner', d.owner);
   renderFiles(regBannerList, d.banner ? [d.banner] : []);
   renderFiles(regPhotoList, d.photos);
-  set('rg-goal', d.goal); set('rg-target', d.target); set('rg-area', d.area); set('rg-support', d.support);
+  set('rg-goal', d.goal); set('rg-target', d.target); set('rg-area', d.area);
   setDate('rg-run-from', d.runFrom); setDate('rg-run-to', d.runTo);
   // Hình thức, nhóm đối tượng, danh sách người yếu thế nạp trước bảng hàng hóa (danh sách Đối tượng sử dụng phụ thuộc)
   regMode.value = d.mode;
@@ -4503,7 +4493,7 @@ const loadRegister = (d) => {
   renderPeople();
   regResources.setValues(d.resources);
   set('rg-transport', d.transport);
-  regForm.querySelectorAll('input[name="rg-funding"], input[name="rg-campaign"]').forEach((c) => { c.checked = (c.name === 'rg-funding' ? d.funding : d.campaign).includes(c.value); });
+  regForm.querySelectorAll('input[name="rg-campaign"]').forEach((c) => { c.checked = d.campaign.includes(c.value); });
   setRegMoney(d.money);
   setDate('rg-raise-from', d.raiseFrom); setDate('rg-raise-to', d.raiseTo);
   syncRegVisibility();
@@ -4520,11 +4510,12 @@ const regDataFromProgram = (p) => {
   const f = programForm(p);
   return {
     ...regBlank(), name: p.name, field: p.field, priority: PRIORITY[f.priority] ? f.priority : '', unit: p.unit, owner: p.owner,
-    goal: f.goal, target: f.target, area: REG_PROVINCES.find((name) => name.endsWith(p.area)) || '', support: f.support,
+    goal: f.goal, target: f.target, area: REG_PROVINCES.find((name) => name.endsWith(p.area)) || '',
     runFrom: f.runFrom, runTo: f.runTo, mode: MODE_GROUP, groups: f.groups.filter((g) => REG_GROUPS.includes(g)),
     resources: f.resources.filter((r) => [RES_MONEY, 'Hàng hóa', 'Vật tư'].includes(r)), transport: f.transport,
-    funding: f.funding, campaign: f.campaign, money: f.money, depot: f.depot,
+    campaign: f.campaign, money: f.money, depot: f.depot,
     assign: f.assign.map(([unit, person, task, date]) => ({ unit, person, task, date })), volunteers: String(f.volunteers ?? ''),
+    ...(DRAFT_PEOPLE[p.code] ? { mode: MODE_LIST, groups: [], people: DRAFT_PEOPLE[p.code].map((r) => ({ ...r })) } : {}),
   };
 };
 
@@ -4579,7 +4570,7 @@ const saveProgram = (status) => {
     p.code = issueCode();
   }
   regEditCode = p.code;
-  document.querySelector('#rg-code').value = status === 'draft' ? '' : p.code;
+  setRegCode(status === 'draft' ? '' : p.code);
   Object.assign(p, programFromForm(d, status));
   programRegCache.set(p.code, d);
   regSaved = JSON.stringify(d);
@@ -4652,7 +4643,7 @@ const validateRegister = (full) => {
       });
       if (first) peoplePage = pageOfPerson(first - 1);
       renderPeople();
-      if (first) bad(peopleField, `Thông tin người yếu thế chưa hợp lệ (dòng ${first}). Rê chuột vào ô tô đỏ để xem lý do.`);
+      if (first) bad(peopleField, `Thông tin người yếu thế chưa hợp lệ (dòng ${first}). Bấm nút chỉnh sửa ở dòng đó để cập nhật.`);
     }
     // Danh sách hàng hóa nhận: ít nhất 1 dòng có dữ liệu, dòng đã nhập phải đủ tất cả cột (dòng trống bỏ qua)
     const goodsField = document.querySelector('#rg-goods-field');
@@ -4727,7 +4718,7 @@ const startRegister = (trigger) => {
   if (!REG_ACCOUNT.verified) { showToast(REG_MSG.unverified, 'warning'); return; }
   loadRegister(regBlank());
   regEditCode = null;
-  document.querySelector('#rg-code').value = '';
+  setRegCode('');
   document.querySelector('#pf-reg-title').textContent = 'Đăng ký chương trình';
   regStatus.textContent = '';
   openRegister(trigger);
@@ -4737,7 +4728,7 @@ const editProgram = (code, trigger) => {
   if (!p || p.status !== 'draft') { showToast(REG_MSG.changed, 'warning'); return; }
   loadRegister(programRegCache.get(code) || regDataFromProgram(p));
   regEditCode = code;
-  document.querySelector('#rg-code').value = ''; // bản nháp chưa có mã
+  setRegCode(''); // bản nháp chưa có mã
   document.querySelector('#pf-reg-title').textContent = 'Chỉnh sửa bản nháp chương trình';
   regStatus.textContent = `Lưu nháp gần nhất: ${viDate(p.updated)}`;
   openRegister(trigger);
@@ -4872,6 +4863,80 @@ regImport.querySelectorAll('[data-import-close]').forEach((button) => button.add
 regImport.addEventListener('click', (event) => { if (event.target === regImport) regImport.close(); });
 regImport.addEventListener('close', () => document.querySelector('[data-people-import]').focus());
 // ==================== END SECTION: NHẬP DANH SÁCH NGƯỜI YẾU THẾ TỪ EXCEL ====================
+
+// ==================== SECTION: THÊM / SỬA NGƯỜI YẾU THẾ — popup cùng khung "Tải tệp đính kèm" ====================
+// Thêm mới / nút bút chì (sửa dòng) → popup 6 trường; Lưu: kiểm tra như khi gửi biểu mẫu (bắt buộc, định dạng, trùng số CCCD/QĐ)
+// → ghi vào bảng #19 (dòng chỉ xem). Hủy / × / Esc / bấm nền: đóng, không đổi bảng.
+const personDialog = document.querySelector('#pf-person');
+const personForm = document.querySelector('#pf-person-form');
+const personInputs = [...personForm.querySelectorAll('[data-key]')];
+const personResult = document.querySelector('#ps-result');
+let personState = { person: null, insertAt: 0, trigger: null };
+// ---------- Danh mục chọn: Loại hồ sơ · Nhu cầu cần trợ giúp · Tỉnh/thành phố ----------
+[['#ps-kind', REG_KINDS], ['#ps-need', REG_GROUPS], ['#ps-province', REG_PROVINCES]].forEach(([sel, values]) => {
+  document.querySelector(sel).insertAdjacentHTML('beforeend', values.map((v) => `<option>${escapeHtml(v)}</option>`).join(''));
+});
+const personData = () => Object.fromEntries(personInputs.map((el) => [el.dataset.key, el.value.trim()]));
+const personFieldOf = (el) => el.closest('.pf-field');
+const clearPersonError = (el) => personFieldOf(el).classList.remove('is-invalid');
+const syncPersonResult = () => { personResult.innerHTML = peopleResult(personData()); };
+// ---------- Mở popup: person = dòng đang sửa; không có thì thêm mới tại vị trí insertAt ----------
+const openPerson = ({ person = null, insertAt = regPeople.length, trigger = null }) => {
+  personState = { person, insertAt, trigger };
+  const data = person || blankPerson();
+  personInputs.forEach((el) => { el.value = data[el.dataset.key] || ''; clearPersonError(el); });
+  document.querySelector('#pf-person-title').textContent = person ? 'Chỉnh sửa người yếu thế' : 'Thêm người yếu thế';
+  syncPersonResult();
+  personDialog.showModal();
+  personInputs[0].focus();
+};
+// ---------- Nhập: điện thoại chỉ giữ chữ số · gõ lại thì bỏ báo lỗi ô đó · cập nhật Kết quả hệ thống ----------
+personForm.addEventListener('input', (event) => {
+  const el = event.target;
+  if (!el.dataset.key) return;
+  if (el.dataset.key === 'phone') el.value = el.value.replace(/\D/g, '');
+  clearPersonError(el);
+  syncPersonResult();
+});
+// ---------- Lưu: lỗi hiện dưới từng ô, focus ô lỗi đầu tiên; hợp lệ thì ghi vào bảng, chuyển tới trang có dòng ----------
+personForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const { person, insertAt } = personState;
+  const data = personData();
+  const others = regPeople.filter((r) => r !== person);
+  const errors = peopleErrors(data, [...others, data]);
+  personInputs.forEach((el) => {
+    const msg = errors[el.dataset.key];
+    const field = personFieldOf(el);
+    field.classList.toggle('is-invalid', Boolean(msg));
+    if (msg) field.querySelector('.pf-field-error').innerHTML = `${icon('alert')}<span>${escapeHtml(msg)}</span>`;
+  });
+  const firstBad = personInputs.find((el) => errors[el.dataset.key]);
+  if (firstBad) { firstBad.focus(); return; }
+  let index;
+  if (person) {
+    Object.assign(person, data);
+    peopleRowErrors.delete(person);
+    index = regPeople.indexOf(person);
+  } else {
+    index = Math.min(insertAt, regPeople.length);
+    regPeople.splice(index, 0, data);
+  }
+  peoplePage = pageOfPerson(index);
+  renderPeople();
+  if (![...peopleRowErrors.values()].some((e) => Object.keys(e).length)) document.querySelector('#rg-people-field').classList.remove('is-invalid');
+  regChanged();
+  personDialog.close();
+  showToast(person ? 'Đã cập nhật người yếu thế.' : 'Đã thêm người yếu thế.');
+});
+// ---------- Đóng: Hủy / × / Esc / bấm nền — trả focus về nút đã mở ----------
+personDialog.querySelectorAll('[data-person-close]').forEach((button) => button.addEventListener('click', () => personDialog.close()));
+personDialog.addEventListener('click', (event) => { if (event.target === personDialog) personDialog.close(); });
+personDialog.addEventListener('close', () => {
+  const { trigger } = personState;
+  (trigger && trigger.isConnected ? trigger : peopleAdd).focus();
+});
+// ==================== END SECTION: THÊM / SỬA NGƯỜI YẾU THẾ ====================
 
 // ==================== SECTION: ĐĂNG KÝ THÀNH LẬP ĐỘI, CLB — drawer cùng khung Đăng ký chương trình ====================
 // Mở từ nút Thêm mới của danh sách #thanh-lap-doi. Trường theo màn CD-00b (đặc tả 04 mục 5) đổi sang đội, CLB; Cam kết theo CD-04.

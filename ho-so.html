@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261109-79" />
+    <link rel="stylesheet" href="styles.css?v=20261109-82" />
 </head>
 
 <body class="pf-page">
@@ -575,8 +575,6 @@
         <div class="container footer-grid">
             <div class="footer-brand">
                 <img src="Emages/logo-hctd.svg" alt="Hội Chữ thập đỏ Việt Nam" width="220" height="52" loading="lazy" />
-                <!-- ---------- Lượt truy cập: đang trực tuyến (phiên hoạt động trong 15 phút) · tổng lượt tích lũy — visit-counter.js ---------- -->
-                <p class="footer-stats"><span class="footer-stat"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></span><span class="footer-stat">Tổng số lượt: <b data-stat="total">—</b></span></p>
             </div>
             <nav class="footer-col" aria-label="Giới thiệu">
                 <h2>Giới thiệu</h2>
@@ -606,9 +604,12 @@
         </div>
 
 
-        <!-- ---------- Thanh cuối: điều phối (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
+        <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
         <div class="container footer-bottom">
+          <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái · tổng lượt tích lũy góc phải — visit-counter.js ---------- -->
+          <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
           <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
+          <p class="footer-stat footer-stat-total">Tổng số lượt: <b data-stat="total">—</b></p>
           <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
           <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
           <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->
@@ -643,12 +644,13 @@
                         </div>
                         <div class="pf-reg-section-body" id="pf-reg-s1-body">
                             <div class="pf-fields">
-                                <div class="pf-field">
+                                <!-- Mã chương trình: ẩn khi đăng ký mới / sửa bản nháp (chưa có mã) — ho-so.js: setRegCode -->
+                                <div class="pf-field" id="rg-code-field" hidden>
                                     <label for="rg-code">Mã chương trình<span class="pf-req" aria-hidden="true">*</span> <span class="pf-label-note">(Hệ thống tự sinh mã duy nhất khi gửi phê duyệt)</span></label>
                                     <div class="pf-control is-locked is-code"><input id="rg-code" type="text" value="" placeholder="Chưa có mã" readonly /></div>
                                 </div>
                                 <div class="pf-field">
-                                    <label for="rg-field">Lĩnh vực thiện nguyện trọng tâm<span class="pf-req" aria-hidden="true">*</span></label>
+                                    <label for="rg-field">Lĩnh vực<span class="pf-req" aria-hidden="true">*</span></label>
                                     <div class="pf-control is-select"><select id="rg-field" required><option value="" selected>Chọn lĩnh vực thiện nguyện</option><option>Cứu trợ thảm họa &amp; Tình huống khẩn cấp</option><option>Giáo dục &amp; Khuyến học</option><option>Y tế - Sức khỏe</option><option>Trẻ em - Biên giới</option><option>Nước sạch &amp; Vệ sinh</option><option>Hiến máu nhân đạo</option><option>Sinh kế &amp; Nhà ở</option></select>
                                         <svg
                                             class="icon pf-caret" aria-hidden="true">
@@ -656,7 +658,7 @@
                                             </svg>
                                     </div>
                                 </div>
-                                <div class="pf-field is-wide">
+                                <div class="pf-field">
                                     <label for="rg-priority">Mức độ ưu tiên<span class="pf-req" aria-hidden="true">*</span> <span class="pf-label-note">(Quy định mức độ phản ứng cứu trợ khẩn cấp)</span></label>
                                     <div class="pf-control is-select has-dot"><span class="pf-reg-dot" aria-hidden="true"></span><select id="rg-priority" required><option value="" selected>Chọn mức độ ưu tiên</option><option value="urgent">Khẩn cấp</option><option value="medium">Trung bình</option><option value="low">Thấp</option></select>
                                         <svg
@@ -734,33 +736,32 @@
                             <div class="pf-fields">
                                 <div class="pf-field is-wide">
                                     <label for="rg-goal">Mục tiêu tổng quát<span class="pf-req" aria-hidden="true">*</span></label>
-                                    <div class="pf-control"><textarea id="rg-goal" rows="2" maxlength="1000" placeholder="Mô tả mục tiêu tổng quát của chương trình" required></textarea></div>
+                                    <div class="pf-control"><textarea id="rg-goal" rows="2" maxlength="1000" placeholder="Mô tả câu chuyện của chương trình" required></textarea></div>
                                 </div>
                                 <div class="pf-field is-wide">
                                     <label for="rg-target">Mục tiêu cụ thể/chỉ tiêu<span class="pf-req" aria-hidden="true">*</span></label>
                                     <div class="pf-control"><textarea id="rg-target" rows="2" maxlength="1000" placeholder="Liệt kê chỉ tiêu cụ thể, ví dụ: cấp phát 1.500 túi cứu trợ; sửa chữa 25 căn nhà…" required></textarea></div>
                                 </div>
-                                <div class="pf-field">
-                                    <label for="rg-area">Địa bàn triển khai<span class="pf-req" aria-hidden="true">*</span></label>
-                                    <div class="pf-control is-select"><select id="rg-area" required><option value="" selected>Chọn tỉnh/thành phố</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
-                                </div>
-                                <div class="pf-field">
-                                    <label for="rg-support">Loại hình hỗ trợ<span class="pf-req" aria-hidden="true">*</span></label>
-                                    <div class="pf-control is-select"><select id="rg-support" required><option value="" selected>Chọn loại hình hỗ trợ</option><option>Cứu trợ khẩn cấp</option><option>Trợ giúp nhân đạo</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
-                                </div>
-                                <div class="pf-field">
-                                    <span class="pf-label" id="rg-run-label">Thời gian triển khai thực hiện<span class="pf-req" aria-hidden="true">*</span></span>
-                                    <div class="pf-reg-range" role="group" aria-labelledby="rg-run-label">
-                                        <div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="Từ ngày" /><input class="pf-date-native" type="date" id="rg-run-from" tabindex="-1" aria-hidden="true"
-                                                required /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — từ ngày"><svg class="icon" aria-hidden="true"><use href="#calendar"/></svg></button></div>
-                                        <div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="Đến ngày" /><input class="pf-date-native" type="date" id="rg-run-to" tabindex="-1" aria-hidden="true"
-                                                required /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — đến ngày"><svg class="icon" aria-hidden="true"><use href="#calendar"/></svg></button></div>
+                                <!-- ---------- Hàng 4 cột: Địa bàn · Thời gian triển khai (2 cột) · Hình thức chọn người hưởng lợi ---------- -->
+                                <div class="pf-team-row4 is-wide">
+                                    <div class="pf-field">
+                                        <label for="rg-area">Địa bàn triển khai<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-select"><select id="rg-area" required><option value="" selected>Chọn tỉnh/thành phố</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
                                     </div>
-                                </div>
-                                <!-- ---------- Hình thức chọn người hưởng lợi (#17): theo nhóm → hiện #18 · cụ thể → hiện #19 ---------- -->
-                                <div class="pf-field">
-                                    <label for="rg-mode">Hình thức chọn người hưởng lợi<span class="pf-req" aria-hidden="true">*</span></label>
-                                    <div class="pf-control is-select"><select id="rg-mode" required><option value="" selected>Chọn hình thức</option><option>Theo nhóm đối tượng người yếu thế</option><option>Theo nhóm người yếu thế cụ thể</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                    <div class="pf-field is-span-2">
+                                        <span class="pf-label" id="rg-run-label">Thời gian triển khai thực hiện<span class="pf-req" aria-hidden="true">*</span></span>
+                                        <div class="pf-reg-range" role="group" aria-labelledby="rg-run-label">
+                                            <div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="Từ ngày" /><input class="pf-date-native" type="date" id="rg-run-from" tabindex="-1" aria-hidden="true"
+                                                    required /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — từ ngày"><svg class="icon" aria-hidden="true"><use href="#calendar"/></svg></button></div>
+                                            <div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="Đến ngày" /><input class="pf-date-native" type="date" id="rg-run-to" tabindex="-1" aria-hidden="true"
+                                                    required /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — đến ngày"><svg class="icon" aria-hidden="true"><use href="#calendar"/></svg></button></div>
+                                        </div>
+                                    </div>
+                                    <!-- ---------- Hình thức chọn người hưởng lợi (#17): theo nhóm → hiện #18 · cụ thể → hiện #19 ---------- -->
+                                    <div class="pf-field">
+                                        <label for="rg-mode">Hình thức chọn người hưởng lợi<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-select"><select id="rg-mode" required><option value="" selected>Chọn hình thức</option><option>Theo nhóm đối tượng người yếu thế</option><option>Theo nhóm người yếu thế cụ thể</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                    </div>
                                 </div>
                                 <div class="pf-field is-wide" id="rg-groups-field" hidden>
                                     <span class="pf-label" id="rg-groups-label">Nhóm đối tượng người yếu thế<span class="pf-req" aria-hidden="true">*</span></span>
@@ -845,23 +846,14 @@
                                     <label for="rg-transport">Hỗ trợ vận chuyển đến nơi quy định<span class="pf-req" aria-hidden="true">*</span></label>
                                     <div class="pf-control is-select"><select id="rg-transport" required><option value="" selected>Chọn hình thức vận chuyển</option><option>Yêu cầu hỗ trợ vận chuyển</option><option>Không yêu cầu vận chuyển</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
                                 </div>
-                                <!-- ---------- Gộp 2 nhóm ô đánh dấu vào 1 ô lưới, cùng hàng với Hỗ trợ vận chuyển ---------- -->
-                                <div class="pf-reg-check-pair">
-                                    <fieldset class="pf-field pf-reg-checks" data-required-checks="rg-funding">
-                                        <legend class="pf-label">Nguồn lực kinh phí<span class="pf-req" aria-hidden="true">*</span></legend>
-                                        <div class="pf-reg-check-row">
-                                            <label class="pf-reg-check"><input class="pf-check" type="checkbox" name="rg-funding" value="Ngân sách hội" />Ngân sách hội</label>
-                                            <label class="pf-reg-check"><input class="pf-check" type="checkbox" name="rg-funding" value="Vận động" />Vận động</label>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset class="pf-field pf-reg-checks" data-required-checks="rg-campaign">
-                                        <legend class="pf-label">Hình thức vận động<span class="pf-req" aria-hidden="true">*</span></legend>
-                                        <div class="pf-reg-check-row">
-                                            <label class="pf-reg-check"><input class="pf-check" type="checkbox" name="rg-campaign" value="Nền tảng số" />Nền tảng số</label>
-                                            <label class="pf-reg-check"><input class="pf-check" type="checkbox" name="rg-campaign" value="Trực tiếp" />Trực tiếp</label>
-                                        </div>
-                                    </fieldset>
-                                </div>
+                                <!-- ---------- Hình thức vận động: cùng hàng với Hỗ trợ vận chuyển ---------- -->
+                                <fieldset class="pf-field pf-reg-checks" data-required-checks="rg-campaign">
+                                    <legend class="pf-label">Hình thức vận động<span class="pf-req" aria-hidden="true">*</span></legend>
+                                    <div class="pf-reg-check-row">
+                                        <label class="pf-reg-check"><input class="pf-check" type="checkbox" name="rg-campaign" value="Nền tảng số" />Nền tảng số</label>
+                                        <label class="pf-reg-check"><input class="pf-check" type="checkbox" name="rg-campaign" value="Trực tiếp" />Trực tiếp</label>
+                                    </div>
+                                </fieldset>
                                 <div class="pf-field">
                                     <span class="pf-label" id="rg-raise-label">Thời gian tiếp nhận vận động đóng góp<span class="pf-req" aria-hidden="true">*</span></span>
                                     <div class="pf-reg-range" role="group" aria-labelledby="rg-raise-label" aria-describedby="rg-raise-hint">
@@ -1022,6 +1014,61 @@
         </footer>
     </dialog>
     <!-- ==================== END SECTION: NHẬP DANH SÁCH NGƯỜI YẾU THẾ TỪ EXCEL ==================== -->
+
+    <!-- ==================== SECTION: THÊM / SỬA NGƯỜI YẾU THẾ — popup cùng khung "Tải tệp đính kèm" (ho-so.js: THÊM / SỬA NGƯỜI YẾU THẾ) ==================== -->
+    <!-- Mở khi bấm "Thêm mới", hoặc nút bút chì ở bảng Danh sách người yếu thế; Lưu xong dòng trong bảng chỉ xem -->
+    <dialog class="pf-import pf-person" id="pf-person" aria-labelledby="pf-person-title">
+        <!-- ---------- Đầu popup: tiêu đề (Thêm / Chỉnh sửa), nút × ---------- -->
+        <header class="pf-import-head">
+            <h2 class="pf-import-title" id="pf-person-title">Thêm người yếu thế</h2>
+            <button class="pf-icon-btn" type="button" data-person-close aria-label="Đóng"><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button>
+        </header>
+        <!-- ---------- Thân: 6 trường như cột bảng · Kết quả hệ thống (tra theo số CCCD/QĐ) ---------- -->
+        <form class="pf-import-body" id="pf-person-form" novalidate>
+            <div class="pf-fields">
+                <div class="pf-field">
+                    <label for="ps-id">Số CCCD/QĐ thành lập<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control"><input id="ps-id" type="text" maxlength="20" placeholder="12 chữ số" data-key="id" /></div>
+                    <p class="pf-field-error"></p>
+                </div>
+                <div class="pf-field">
+                    <label for="ps-name">Người yếu thế<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control"><input id="ps-name" type="text" maxlength="255" placeholder="Họ tên / tên cộng đồng" data-key="name" /></div>
+                    <p class="pf-field-error"></p>
+                </div>
+                <div class="pf-field">
+                    <label for="ps-phone">Số điện thoại<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control"><input id="ps-phone" type="text" inputmode="numeric" maxlength="10" placeholder="0xxxxxxxxx" data-key="phone" /></div>
+                    <p class="pf-field-error"></p>
+                </div>
+                <div class="pf-field">
+                    <label for="ps-kind">Loại hồ sơ<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control is-select"><select id="ps-kind" data-key="kind"><option value="">Chọn loại hồ sơ</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                    <p class="pf-field-error"></p>
+                </div>
+                <div class="pf-field">
+                    <label for="ps-need">Nhu cầu cần trợ giúp<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control is-select"><select id="ps-need" data-key="need"><option value="">Chọn nhu cầu cần trợ giúp</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                    <p class="pf-field-error"></p>
+                </div>
+                <div class="pf-field">
+                    <label for="ps-province">Tỉnh/thành phố<span class="pf-req" aria-hidden="true">*</span></label>
+                    <div class="pf-control is-select"><select id="ps-province" data-key="province"><option value="">Chọn tỉnh/thành phố</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                    <p class="pf-field-error"></p>
+                </div>
+                <div class="pf-field is-wide">
+                    <span class="pf-label">Kết quả hệ thống</span>
+                    <div id="ps-result"></div>
+                </div>
+            </div>
+        </form>
+        <!-- ---------- Chân popup: Lưu · Hủy ---------- -->
+        <footer class="pf-import-foot">
+            <button class="pf-btn pf-btn-primary" type="submit" form="pf-person-form">Lưu</button>
+            <button class="pf-btn pf-btn-ghost" type="button" data-person-close>Hủy</button>
+        </footer>
+    </dialog>
+    <!-- ==================== END SECTION: THÊM / SỬA NGƯỜI YẾU THẾ ==================== -->
 
     <!-- ==================== SECTION: ĐĂNG KÝ THÀNH LẬP ĐỘI, CLB — drawer phải cùng khung Đăng ký chương trình (ho-so.js: ĐĂNG KÝ THÀNH LẬP ĐỘI, CLB) ==================== -->
     <!-- Trường lấy theo màn Chi tiết hồ sơ đăng ký thành lập (CD-00b, đặc tả 04 mục 5) đổi sang đội, CLB; phần Cam kết theo form CD-04. Dữ liệu điền sẵn là MINH HỌA (tài khoản đang đăng nhập). -->

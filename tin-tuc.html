@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261109-79" />
+    <link rel="stylesheet" href="styles.css?v=20261109-82" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -206,8 +206,6 @@
       <div class="container footer-grid">
         <div class="footer-brand">
           <img src="Emages/logo-hctd.svg" alt="Hội Chữ thập đỏ Việt Nam" width="220" height="52" loading="lazy" />
-          <!-- ---------- Lượt truy cập: đang trực tuyến (phiên hoạt động trong 15 phút) · tổng lượt tích lũy — visit-counter.js ---------- -->
-          <p class="footer-stats"><span class="footer-stat"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></span><span class="footer-stat">Tổng số lượt: <b data-stat="total">—</b></span></p>
         </div>
         <nav class="footer-col" aria-label="Giới thiệu">
           <h2>Giới thiệu</h2>
@@ -237,9 +235,12 @@
       </div>
 
 
-      <!-- ---------- Thanh cuối: điều phối (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
+      <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
       <div class="container footer-bottom">
+        <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái · tổng lượt tích lũy góc phải — visit-counter.js ---------- -->
+        <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
         <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
+        <p class="footer-stat footer-stat-total">Tổng số lượt: <b data-stat="total">—</b></p>
         <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
         <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
         <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->

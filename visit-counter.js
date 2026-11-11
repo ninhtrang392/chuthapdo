@@ -7,10 +7,10 @@
 // Khi có API: đặt window.VISIT_STATS_URL = '/api/visit-stats' trước file này; API trả về JSON { online: number, total: number }.
 // Script gọi API khi tải trang và mỗi 60 giây (để số trực tuyến cập nhật). Chưa có API → hiện SỐ LIỆU MINH HỌA bên dưới.
 (() => {
-  const box = document.querySelector('.footer-stats');
-  if (!box) return;
-  const onlineEl = box.querySelector('[data-stat="online"]');
-  const totalEl = box.querySelector('[data-stat="total"]');
+  // Thanh cuối footer: "Lượt truy cập" góc trái, "Tổng số lượt" góc phải
+  const onlineEl = document.querySelector('.footer-bottom [data-stat="online"]');
+  const totalEl = document.querySelector('.footer-bottom [data-stat="total"]');
+  if (!onlineEl && !totalEl) return;
   const format = (value) => Number(value).toLocaleString('vi-VN');
   const render = ({ online, total }) => {
     if (onlineEl && Number.isFinite(online)) onlineEl.textContent = format(online);
