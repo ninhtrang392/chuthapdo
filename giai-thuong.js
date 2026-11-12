@@ -100,6 +100,12 @@ document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
   const mm = gsap.matchMedia();
+  // html{scroll-behavior:smooth} làm lệch phép đo của ScrollTrigger: khi refresh (tải lại giữa trang, đổi cỡ cửa sổ, font tải xong)
+  // nó cuộn tạm về đầu trang để đo, cuộn mượt khiến lệch đúng bằng vị trí đang cuộn → section 3 bị ghim sớm, đè lên section 2.
+  // → Trang có ScrollTrigger: tắt hẳn cuộn mượt của CSS (giống html.has-smoother); nút lên đầu trang vẫn cuộn mượt bằng JS.
+  document.documentElement.style.scrollBehavior = 'auto';
+  // Font web tải xong làm đổi chiều cao chữ (section 2…) → tính lại vị trí ghim/trigger, tránh ghim lệch gây đè
+  if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
 
   mm.add('(prefers-reduced-motion: no-preference)', () => {
     // ==================== HERO: vào trang — cúp nở ra, "NGỌN ĐÈN" trồi lên, chữ viết tay "Nhân ái" hiện dần từ trái sang ====================
@@ -118,10 +124,23 @@ if (window.gsap && window.ScrollTrigger) {
       const grid = document.querySelector(selector);
       if (!grid) return;
       gsap.from(grid.children, {
-        y: 60, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.1, clearProps: 'transform,opacity,visibility',
+        y: 40, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.1, clearProps: 'transform,opacity,visibility', // ≤ 40px: không chạm section kế tiếp khi máy giật
         scrollTrigger: { trigger: grid, start: 'top 85%', once: true },
       });
     });
+
+    // ==================== TIÊU ĐỀ & KHỐI CÒN TĨNH: trồi lên khi cuộn tới (section 3 · 4 · 5 · 6 · 7) ====================
+    // y ≤ 24/40px (< khoảng cách section 64px) → không đè section kế bên khi máy giật
+    const reveal = (targets, trigger, extra = {}) => gsap.from(targets, {
+      y: 24, autoAlpha: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, clearProps: 'transform,opacity,visibility', ...extra,
+      scrollTrigger: { trigger, start: 'top 85%', once: true },
+    });
+    document.querySelectorAll('.gt-meaning-head, .gt-audience-copy, .gt-categories .section-head, .gt-process .section-head, .gt-info .section-head')
+      .forEach((head) => reveal(head.children, head));
+    const meaningLayout = document.querySelector('.gt-meaning-layout');
+    if (meaningLayout) reveal(meaningLayout.children, meaningLayout, { y: 40, duration: 1.1, stagger: 0.15 });
+    const steps = document.querySelector('.gt-steps');
+    if (steps) reveal(steps.children, steps, { stagger: 0.1 });
   });
 
   // ==================== QUY TRÌNH TỔ CHỨC (desktop): đường nối vẽ theo cuộn, bước tới đâu sáng tới đó ====================
@@ -189,7 +208,7 @@ if (window.gsap && window.ScrollTrigger) {
         scrollTrigger: { trigger: '.gt-pillars', start: 'top 85%', once: true },
       });
       gsap.from('.gt-pillar', {
-        y: 80, rotateX: -12, autoAlpha: 0, transformOrigin: '50% 100%', duration: 1.2, ease: 'expo.out', stagger: 0.12,
+        y: 40, rotateX: -12, autoAlpha: 0, transformOrigin: '50% 100%', duration: 1.2, ease: 'expo.out', stagger: 0.12, // trồi ≤ 40px (< khoảng cách 64px tới section 3) → không đè tiêu đề section 3 khi máy giật
         clearProps: 'transform,opacity,visibility',
         scrollTrigger: { trigger: '.gt-pillar-grid', start: 'top 88%', once: true },
       });
@@ -218,7 +237,7 @@ if (window.gsap && window.ScrollTrigger) {
       });
     }
 
-    // ---------- Section 8 · Đề cử: dải đỏ nở ra khi cuộn tới, chữ trồi lên, cúp trồi lên từ mép dưới + quầng sáng theo chuột ----------
+    // ---------- Section 8 · Đề cử: dải đỏ nở ra khi cuộn tới, chữ trồi lên + quầng sáng theo chuột (nền ảnh bàn tay nâng trái tim) ----------
     const contact = document.querySelector('.gt-contact-card');
     if (contact) {
       gsap.fromTo(contact, { scale: 0.92, borderRadius: 48 }, {
@@ -229,13 +248,6 @@ if (window.gsap && window.ScrollTrigger) {
         y: 40, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.08, clearProps: 'transform,opacity,visibility',
         scrollTrigger: { trigger: contact, start: 'top 70%', once: true },
       });
-      const cup = contact.querySelector('.gt-contact-media img');
-      if (cup) {
-        gsap.from(cup, {
-          yPercent: 60, autoAlpha: 0, duration: 1.6, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
-          scrollTrigger: { trigger: contact, start: 'top 70%', once: true },
-        });
-      }
       const onMove = (event) => {
         const box = contact.getBoundingClientRect();
         contact.style.setProperty('--mx', `${Math.round(event.clientX - box.left)}px`);
@@ -286,16 +298,21 @@ if (window.gsap && window.ScrollTrigger) {
 
     // Chiều dài ghim 1.2x viewport
     const pinDistance = () => window.innerHeight * 1.2;
+    // Ghim ngay dưới header cố định (section chỉ đệm --space-section, không chừa chỗ cho header nữa)
+    const pinTop = () => (document.querySelector('.header')?.offsetHeight || 0);
 
     // E-1 Phương án A: Timeline scrub đổi nền ấm #f3e3dc khi ghim, vầng sáng mở rộng và lớp sáng is-lit bừng sáng
     const lightTl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top top',
+        start: () => `top ${pinTop()}px`,
         end: () => `+=${pinDistance()}`,
         pin: true,
         scrub: true,
-        anticipatePin: 1,
+        // Tính vị trí ghim TRƯỚC các trigger khác: các hiệu ứng phía dưới được tạo trước pin, nếu không ưu tiên
+        // thì chúng không cộng khoảng ghim (1.2 màn hình) → kích hoạt sớm khi còn bị section 3 che → nhìn như không có animation
+        refreshPriority: 1,
+        // Không dùng anticipatePin: khi máy giật, tốc độ cuộn đo được vọt lên → ghim sớm, section 3 nhảy lên đè section 2
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const step = gsap.utils.clamp(0, items.length - 1, Math.floor(self.progress * items.length));

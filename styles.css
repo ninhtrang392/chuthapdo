@@ -124,8 +124,8 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 /* Nút viên thuốc: Đăng nhập viền than (màu chữ header) nền trong suốt · Đăng ký nền gradient đỏ (primary → red) chữ trắng; bo viên thuốc */
 .header-auth{display:flex;align-items:center;gap:8px;margin-left:6px}
 .header-auth .button{border-radius:8px} /* nút vuông (bo góc nhẹ), không còn viên thuốc */
-.header-auth .button-outline{border:1px solid var(--header-text);background:transparent;color:var(--header-text)}
-.header-auth .button-outline:hover{background:var(--header-text);color:#fff}
+.header-auth .button-outline{border:1px solid var(--red);background:transparent;color:var(--red)} /* viền + chữ đỏ (giống trang Người gần nhất) */
+.header-auth .button-outline:hover{background:var(--red);color:#fff}
 .header-auth .header-auth-register{border-color:transparent;background:linear-gradient(90deg,var(--color-primary),var(--red));color:#fff}
 .header-auth .header-auth-register:hover{background:linear-gradient(90deg,var(--color-primary),var(--color-primary))}
 @media(max-width:1120px){.header-auth{gap:6px;margin-left:4px}.header-auth .button{min-height:40px;padding:0 16px}}
@@ -768,9 +768,7 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
    Giải thưởng đang ghim (đệm trên đã chừa chỗ cho header) → đệm dưới gọn lại */
 .pin-spacer + .ngn{padding-top:0}
 .ngn:has(+ .awards.is-pinned){padding-bottom:32px}
-@media(min-width:1101px){.ngn-card{align-items:stretch}.ngn-media{position:relative;isolation:isolate;display:flex}.ngn-media img{height:100%;aspect-ratio:auto;object-fit:contain;-webkit-mask-image:linear-gradient(180deg,transparent 14%,#000 22%,#000 78%,transparent 86%);mask-image:linear-gradient(180deg,transparent 14%,#000 22%,#000 78%,transparent 86%)} /* mép trên/dưới ảnh mờ dần vào nền */
-  /* Phần dư trên/dưới: chính ảnh key visual phóng phủ kín + làm mờ → khung liền một khối, không lộ mép ảnh */
-  .ngn-media::before{content:'';position:absolute;inset:-40px;z-index:-1;background:url('Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh%20Ng%C6%B0%E1%BB%9Di%20G%E1%BA%A7n%20Nh%E1%BA%A5t.png') center / cover no-repeat;filter:blur(28px)}}
+@media(min-width:1101px){.ngn-card{align-items:stretch}.ngn-media{position:relative;display:flex}.ngn-media img{height:100%;aspect-ratio:auto;object-fit:cover;object-position:center}} /* ảnh banner phủ kín khung (cắt bớt 2 mép trái/phải, nội dung banner nằm giữa nên không mất chữ) */
 @media(max-width:1100px){.ngn-card{grid-template-columns:1fr}}
 @media(max-width:600px){.ngn-media{border-radius:20px}.ngn-content > .button{width:100%}}
 /* ==================== END SECTION: DỰ ÁN NGƯỜI GẦN NHẤT ==================== */
@@ -4294,20 +4292,19 @@ html.pf-reg-lock{overflow:hidden}
 .gt-hero-cup{position:relative;z-index:2;display:flex;flex:1 1 0;justify-content:center;min-height:0;max-height:840px;margin-top:calc(var(--t) * -.75)} /* đè sâu lên tên giải (chữ mờ) để cúp to hơn; cúp lấp phần còn trống của banner → hiện trọn cả đế, KHÔNG bị cắt mép dưới; không trôi khi cuộn */
 /* Ánh sáng tỏa ra từ ngọn lửa: quầng tròn cam ấm → đỏ nhạt → trong suốt (như biểu trưng ở bản hero đầu tiên) */
 .gt-hero-cup::before{content:"";position:absolute;top:-8%;left:50%;z-index:-1;width:130%;aspect-ratio:1;border-radius:50%;background:radial-gradient(closest-side,rgba(255,180,120,.55),rgba(237,36,41,.12) 60%,rgba(237,36,41,0) 100%);translate:-50% 0}
-.gt-hero-cup img{display:block;width:auto;height:100%;max-width:min(56vw,760px);object-fit:contain;filter:drop-shadow(0 24px 36px rgba(120,10,20,.22))}
+.gt-hero-cup img{display:block;width:auto;height:100%;max-width:min(56vw,760px);object-fit:contain;filter:drop-shadow(0 12px 24px rgba(120,10,20,.2))}
 /* Mô tả + nút: góc trái, ngay dưới chân tên giải */
 .gt-hero-side{position:absolute;bottom:22%;left:0;z-index:3;display:flex;flex-direction:column;align-items:flex-start;width:max-content;max-width:min(560px,40vw);text-align:left}
-.gt-hero-lead{max-width:400px;margin:0;font-size:clamp(15px,1.25vw,19px);line-height:1.6;color:var(--color-text)}
+.gt-hero-lead{align-self:stretch;width:0;min-width:100%;margin:12px 0 0;text-align:left;letter-spacing:0;word-spacing:normal;font-size:16px;line-height:26px;color:var(--color-text)} /* width:0 + min-width:100%: không nới khung, rộng bằng dòng trạng thái; căn trái, không giãn chữ */
 /* Trạng thái kỳ giải: nhãn xanh + dòng thời hạn (không khung) */
-.gt-hero-status{display:inline-flex;align-items:center;gap:12px;margin:20px 0 0;font-size:15px;font-weight:600;line-height:22px;white-space:nowrap;color:var(--color-text)}
+.gt-hero-status{display:inline-flex;align-items:center;gap:12px;margin:0;font-size:16px;font-weight:600;line-height:22px;white-space:nowrap;color:var(--color-text)}
 .gt-hero-status .pf-badge{padding:4px 10px;font-size:13px}
 /* Số liệu: dùng lại .hero-stat (trang chủ); kẻ mảnh phía trên, căn trái */
-.gt-hero-facts{display:inline-grid;grid-template-columns:repeat(3,max-content);justify-content:start;margin-top:20px;padding-top:16px;border-top:1px solid rgba(237,36,41,.16)} /* inline-grid: đường kẻ chỉ dài bằng dải số liệu */
+.gt-hero-facts{display:inline-grid;grid-template-columns:repeat(3,max-content);justify-content:start;margin-top:16px;padding-top:0} /* không kẻ đường phía trên dải số liệu */
 .gt-hero-facts .hero-stat{padding:0 20px 0 0}
 .gt-hero-facts .hero-stat + .hero-stat{padding-left:20px;border-left:1px solid rgba(237,36,41,.16)}
-.gt-hero-facts .hero-stat dd{font-size:clamp(15px,1.25vw,19px);font-weight:600;letter-spacing:0}
-.gt-hero-facts .hero-stat dt{margin-top:10px;font-size:12px;line-height:18px}
-.gt-contact .button{min-height:46px;padding:0 22px}
+.gt-hero-facts .hero-stat dd{font-size:16px;font-weight:600;letter-spacing:0} /* trạng thái · mô tả · số liệu hero cùng cỡ 16px */
+.gt-hero-facts .hero-stat dt{margin-top:6px;font-size:12px;line-height:18px}
 @media(max-width:900px){
   .gt-hero{--t:clamp(60px,15vw,150px);height:auto;min-height:100svh}
   .gt-hero-inner{flex:none}
@@ -4325,8 +4322,8 @@ html.pf-reg-lock{overflow:hidden}
 }
 
 /* ---------- Giới thiệu & Một ngọn đèn – triệu niềm tin: gói gọn trong 1 màn hình (trừ header), nội dung căn giữa theo chiều dọc ---------- */
-.gt-story{padding-block:0;background:#fff}
-.gt-story-screen{display:flex;flex-direction:column;justify-content:center;gap:clamp(32px,6vh,64px);min-height:calc(100svh - var(--header-h));padding-block:clamp(24px,4vh,48px)}
+.gt-story{position:relative;z-index:1;padding-block:0;background:#fff} /* nằm trên section 3: bóng đổ 4 thẻ trụ cột tràn xuống không bị nền trắng section 3 che */
+.gt-story-screen{display:flex;flex-direction:column;justify-content:center;gap:clamp(32px,6vh,64px);padding-block:var(--space-section) 0} /* không ép cao 1 màn hình: cách hero và section 3 đúng --space-section như các section khác */
 
 /* ---------- Giới thiệu: câu dẫn đậm (tên giải thưởng tô đỏ) · gạch đỏ ngắn · mô tả ---------- */
 .gt-story-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -4407,23 +4404,18 @@ html.pf-reg-lock{overflow:hidden}
 .gt-org-name{margin:4px 0 0;font-size:14px;line-height:22px;color:var(--color-text)}
 
 /* ---------- Thông tin chi tiết: dải CTA nền đỏ đậm bo góc · chữ trắng · nút trắng · liên hệ · ảnh cúp bên phải ---------- */
-.gt-contact-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center;gap:32px;padding:clamp(32px,4vw,56px);overflow:hidden;border-radius:24px;background:radial-gradient(circle at 80% 40%,#d92f37 0%,var(--color-primary) 45%,#7a1219 100%);color:#fff}
+.gt-contact-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center;gap:32px;padding:clamp(32px,4vw,56px);overflow:hidden;border-radius:24px;min-height:460px;background:linear-gradient(90deg,rgba(122,18,25,.3) 0%,rgba(122,18,25,.12) 45%,rgba(122,18,25,0) 70%),#c8141f url('Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.png') 70% 45% / cover no-repeat;color:#fff} /* nền ảnh: bàn tay nâng trái tim (bên phải); lớp phủ đỏ sẫm bên trái để chữ trắng dễ đọc */
 .gt-contact-copy .eyebrow{color:#ffd0d3}
 .gt-contact-copy .section-title{color:#fff}
 .gt-contact-copy .section-lead{max-width:620px;color:rgba(255,255,255,.85)}
 .gt-contact-notes{margin:20px 0 28px;color:#fff}
 .gt-contact-notes .icon{color:#fff}
 .gt-contact-actions{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px}
-.gt-contact .button{min-height:46px;padding:0 22px}
-.gt-contact-btn{background:#fff;color:var(--color-primary)}
-.gt-contact-btn:hover{background:#fdecec;color:var(--color-primary)}
 .gt-contact-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
 .gt-contact-list li{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;line-height:24px}
 .gt-contact-list .icon{width:18px;height:18px;color:#ffd0d3}
 .gt-contact-list a{color:#fff}
 .gt-contact-list a:hover{color:#ffd0d3}
-.gt-contact-media{align-self:stretch;display:flex;align-items:flex-end;justify-content:center;margin:0 0 calc(-1 * clamp(32px,4vw,56px))} /* ảnh cúp cắt sẵn ở chân đế → đặt sát mép dưới dải đỏ */
-.gt-contact-media img{width:auto;max-width:100%;height:auto;max-height:360px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.3))}
 
 
 
@@ -4449,11 +4441,10 @@ html.pf-reg-lock{overflow:hidden}
 
 /* Section 8 · Đề cử: quầng sáng chạy theo chuột trên dải đỏ, cúp trồi lên từ mép dưới */
 .gt-contact-card::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(480px circle at var(--mx,80%) var(--my,40%),rgba(255,255,255,.18),transparent 60%);pointer-events:none;transition:opacity .3s}
-.gt-contact-media img{will-change:transform}
 
 
 /* ---------- Ý nghĩa biểu tượng (lấy từ bản Giải thưởng khách hàng gửi): 2 thẻ — quầng sáng tỏa + biểu trưng bừng sáng (trái) · đường dọc + 4 thông điệp, ý đang xem nổi thành thẻ (phải); desktop ghim section (giai-thuong.js) ---------- */
-.gt-meaning{--meaning-bg: #ffffff; --meaning-text: var(--color-text); --meaning-card-bg: #ffffff; --meaning-card-border: #e5e7eb; --meaning-card-shadow: none; --meaning-sub: #555d68; --meaning-item-active-bg: #ffffff; position: relative; box-sizing: border-box; padding: calc(var(--header-h, 86px) + clamp(28px, 3.5vh, 48px)) 0 clamp(48px, 6vh, 72px); scroll-margin-top: var(--header-h, 86px); background: var(--meaning-bg); color: var(--color-text); overflow: hidden; display: flex; flex-direction: column; justify-content: center; transition: none;}
+.gt-meaning{--meaning-bg: #ffffff; --meaning-text: var(--color-text); --meaning-card-bg: #ffffff; --meaning-card-border: #e5e7eb; --meaning-card-shadow: none; --meaning-sub: #555d68; --meaning-item-active-bg: #ffffff; position: relative; box-sizing: border-box; padding: var(--space-section) 0 clamp(48px, 6vh, 72px); scroll-margin-top: var(--header-h, 86px); background: var(--meaning-bg); color: var(--color-text); overflow: hidden; display: flex; flex-direction: column; justify-content: center; transition: none;}
 .gt-meaning .container{display: flex; flex-direction: column; justify-content: center; width: min(var(--container), calc(100% - 2 * var(--gutter))); margin-inline: auto}
 .gt-meaning .section-head{margin-bottom: clamp(36px, 4.5vh, 52px); text-align: center}
 .gt-meaning .section-title{color: var(--color-text); font-size: 32px; line-height: 1.25}
@@ -4534,8 +4525,7 @@ html.pf-reg-lock{overflow:hidden}
   .gt-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 16px}
   .gt-info-layout{grid-template-columns:1fr}
   .gt-info-media{min-height:0;aspect-ratio:16 / 9}
-  .gt-contact-card{grid-template-columns:1fr}
-  .gt-contact-media img{max-height:280px}
+  .gt-contact-card{grid-template-columns:1fr;min-height:0;background:linear-gradient(180deg,rgba(122,18,25,.78) 0%,rgba(122,18,25,.5) 100%),#c8141f url('Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.png') 80% 50% / cover no-repeat} /* màn hẹp: chữ phủ lên ảnh → lớp phủ đậm đều để chữ trắng dễ đọc */
 }
 @media(max-width:600px){
   .gt-story-text{font-size:24px;line-height:34px}
@@ -4543,13 +4533,12 @@ html.pf-reg-lock{overflow:hidden}
   .gt-steps{grid-template-columns:1fr}
   .gt-info-card summary{padding:18px 20px}
   .gt-info-card > :not(summary){margin:0 20px 20px}
-  .gt-contact .button{width:100%}
-  .gt-hero-status{flex-wrap:wrap;justify-content:center;font-size:14px;white-space:normal}
-  .gt-hero-lead{max-width:none}
+  .gt-hero-status{flex-wrap:wrap;justify-content:center;font-size:16px;white-space:normal}
+  .gt-hero-lead{text-align:center}
   .gt-hero-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:100%;padding:16px 8px;border:0;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(36,39,44,.08)} /* thẻ trắng: đọc rõ trên dải sóng đỏ */
   .gt-hero-facts .hero-stat{padding:0 8px}
   .gt-hero-facts .hero-stat + .hero-stat{padding-left:8px}
-  .gt-hero-facts .hero-stat dd{font-size:17px;white-space:normal}
+  .gt-hero-facts .hero-stat dd{font-size:16px;white-space:normal}
 }
 /* ==================== END SECTION: TRANG GIẢI THƯỞNG NGỌN ĐÈN NHÂN ÁI ==================== */
 
