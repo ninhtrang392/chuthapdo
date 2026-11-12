@@ -2,29 +2,49 @@
 // Dựng menu ngay sau .avatar-button: Tài khoản của tôi · Quản lý hồ sơ (ho-so.html) · Đăng xuất.
 // Dữ liệu người dùng là minh họa — khi có đăng nhập thật, lấy từ phiên đăng nhập.
 // Đăng xuất: gọi window.AccountSession.logout() nếu hệ thống cung cấp (xóa phiên ở máy chủ), rồi về trang chủ.
-// Phiên minh họa: dang-nhap.js ghi khóa 'ctd-demo-session' khi đăng nhập; chưa có khóa → header hiện 2 nút Đăng nhập · Đăng ký.
+// Phiên minh họa: dang-nhap.js ghi khóa 'ctd-demo-session' khi đăng nhập. HTML mọi trang mặc định có 2 nút Đăng nhập · Đăng ký; có khóa → đổi sang chuông + avatar.
 (() => {
-  const button = document.querySelector('.avatar-button');
-  if (!button) return;
+  const actions = document.querySelector('.header-actions');
+  if (!actions) return;
 
-  // ---------- Chưa đăng nhập: thay avatar + chuông thông báo bằng 2 nút riêng Đăng nhập / Đăng ký (dang-nhap.html) ----------
   const SESSION_KEY = 'ctd-demo-session';
   let signedIn = false;
   // Phiên ở localStorage (đã chọn Ghi nhớ đăng nhập) hoặc sessionStorage (chỉ trong tab hiện tại)
   try { signedIn = localStorage.getItem(SESSION_KEY) === '1' || sessionStorage.getItem(SESSION_KEY) === '1'; } catch {}
+  const AUTH_HTML = '<a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a>'
+    + '<a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a>';
+
+  // ---------- Chưa đăng nhập (mặc định): HTML mọi trang ĐÃ có sẵn 2 nút Đăng nhập / Đăng ký (.header-auth + .nav-auth)
+  // → giữ nguyên, không thay gì sau khi tải → header không nháy khi chuyển trang ----------
   if (!signedIn) {
-    const auth = document.createElement('div');
-    auth.className = 'header-auth';
-    auth.innerHTML = '<a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a>'
-      + '<a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a>';
-    document.querySelector('.notify-button')?.remove();
-    button.replaceWith(auth);
-    // Điện thoại: header chỉ đủ chỗ cho nút Đăng nhập → thêm cặp nút vào cuối menu (CSS chỉ hiện ở ≤600px)
-    const navAuth = auth.cloneNode(true);
-    navAuth.className = 'nav-auth';
-    document.querySelector('.navigation')?.append(navAuth);
+    if (!actions.querySelector('.header-auth')) { // trang còn markup cũ (chuông + avatar)
+      actions.querySelector('.notify-button')?.remove();
+      actions.querySelector('.avatar-button')?.remove();
+      const auth = document.createElement('div');
+      auth.className = 'header-auth';
+      auth.innerHTML = AUTH_HTML;
+      actions.append(auth);
+    }
+    // Điện thoại: header chỉ đủ chỗ cho nút Đăng nhập → cặp nút ở cuối menu (CSS chỉ hiện ở ≤600px)
+    const nav = document.querySelector('.navigation');
+    if (nav && !nav.querySelector('.nav-auth')) {
+      const navAuth = document.createElement('div');
+      navAuth.className = 'nav-auth';
+      navAuth.innerHTML = AUTH_HTML;
+      nav.append(navAuth);
+    }
     return;
   }
+
+  // ---------- Đã đăng nhập: thay 2 nút bằng chuông thông báo + avatar ----------
+  actions.querySelector('.header-auth')?.remove();
+  document.querySelector('.navigation .nav-auth')?.remove();
+  if (!actions.querySelector('.avatar-button')) {
+    actions.insertAdjacentHTML('beforeend',
+      '<button class="icon-button notify-button" type="button" aria-label="Thông báo, có thông báo mới" data-panel="Thông báo"><svg class="icon"><use href="#bell"/></svg><span class="notify-dot" aria-hidden="true"></span></button>'
+      + '<button class="avatar-button" type="button" aria-label="Tài khoản của bạn"><svg class="icon"><use href="#user"/></svg></button>');
+  }
+  const button = actions.querySelector('.avatar-button');
 
   // ---------- Dữ liệu & icon (vẽ nét, không phụ thuộc sprite của từng trang) ----------
   const user = { name: 'Nguyễn Ngọc Trâm', email: 'tram.nguyen@gmail.com', initials: 'NT' };

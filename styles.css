@@ -7,7 +7,7 @@
   --space-section:clamp(48px,4.5vw,64px);--space-head:var(--space-section);
   /* Bo góc nút: nút vuông bo tròn (nút thường / nút nhỏ) */
   --radius-btn:12px;--radius-btn-sm:10px}
-html{scroll-behavior:smooth;scroll-padding-top:var(--header-h)}
+html{scroll-behavior:smooth;scroll-padding-top:var(--header-h);scrollbar-gutter:stable} /* chừa sẵn chỗ thanh cuộn: trang có / không có thanh cuộn (Bản đồ số…) header vẫn thẳng hàng, không giật khi chuyển trang */
 [hidden]{display:none!important}
 .skip-link{position:fixed;left:16px;top:-64px;z-index:100;padding:10px 16px;border-radius:10px;background:#fff;color:var(--color-text);font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,.15)}
 .skip-link:focus{top:12px}
@@ -769,7 +769,7 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .pin-spacer + .ngn{padding-top:0}
 .ngn:has(+ .awards.is-pinned){padding-bottom:32px}
 @media(min-width:1101px){.ngn-card{align-items:stretch}.ngn-media{position:relative;display:flex}.ngn-media img{height:100%;aspect-ratio:auto;object-fit:cover;object-position:center}} /* ảnh banner phủ kín khung (cắt bớt 2 mép trái/phải, nội dung banner nằm giữa nên không mất chữ) */
-@media(max-width:1100px){.ngn-card{grid-template-columns:1fr}}
+@media(max-width:1100px){.ngn-card{grid-template-columns:minmax(0,1fr)}} /* minmax(0,…): cột không giãn theo chữ dài → trang chủ mobile không tràn ngang (header không bị đẩy rộng) */
 @media(max-width:600px){.ngn-media{border-radius:20px}.ngn-content > .button{width:100%}}
 /* ==================== END SECTION: DỰ ÁN NGƯỜI GẦN NHẤT ==================== */
 
@@ -4620,6 +4620,17 @@ html.pf-reg-lock{overflow:hidden}
 .qnd-rules-list .ngn-item > div{flex:1;min-width:0}
 .qnd-rules-list .ngn-item:last-child{border-bottom:1px solid var(--color-border)}
 .qnd-rules-list .link-arrow{flex:none;font-size:14px}
+
+/* ---------- Popup Quy chế vận hành: dùng lại .info-dialog, bản rộng; nội dung dài cuộn trong khung ---------- */
+.info-dialog.qnd-rule-dialog{max-width:720px;max-height:calc(100svh - 48px);flex-direction:column}
+.info-dialog.qnd-rule-dialog[open]{display:flex}
+.qnd-rule-dialog .qnd-rule-kicker{margin:0 32px 8px 0;letter-spacing:0;color:var(--color-primary)}
+.qnd-rule-dialog h2{margin:0 32px 16px 0;font-size:24px;line-height:32px}
+.qnd-rule-body{flex:1 1 auto;min-height:0;margin:0 -12px 20px 0;padding-right:12px;overflow-y:auto;overscroll-behavior:contain}
+.qnd-rule-body p,.qnd-rule-sub li{margin:0;font-size:15px;line-height:26px;color:var(--color-text)}
+.qnd-rule-body > * + *{margin-top:12px}
+.qnd-rule-sub{display:grid;gap:8px;margin:0;padding:0 0 0 20px;list-style:none}
+.qnd-rule-dialog .dialog-done{align-self:flex-end}
 
 /* ---------- Responsive: trang Quỹ nhân đạo ---------- */
 @media(max-width:1100px){

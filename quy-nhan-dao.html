@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-1" />
+    <link rel="stylesheet" href="styles.css?v=20261112-16" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -73,11 +73,11 @@
             </div>
         </div>
         <a class="button button-primary nav-cta" href="chuong-trinh-thien-nguyen.html"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
+        <div class="nav-auth"><a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a><a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a></div>
       </nav>
       <div class="header-actions">
-        <!-- ---------- Thông báo & tài khoản: menu tài khoản do account-menu.js dựng ---------- -->
-        <button class="icon-button notify-button" type="button" aria-label="Thông báo, có thông báo mới" data-panel="Thông báo"><svg class="icon"><use href="#bell"/></svg><span class="notify-dot" aria-hidden="true"></span></button>
-        <button class="avatar-button" type="button" aria-label="Tài khoản của bạn"><svg class="icon"><use href="#user"/></svg></button>
+        <!-- ---------- Đăng nhập / Đăng ký (mặc định, có sẵn trong HTML để header không nháy); đã đăng nhập → account-menu.js đổi sang chuông + avatar ---------- -->
+        <div class="header-auth"><a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a><a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a></div>
       </div>
     </header>
 
@@ -306,7 +306,7 @@
       </section>
       <!-- ==================== END SECTION: GIỚI THIỆU VỀ QUỸ ==================== -->
 
-      <!-- ==================== SECTION: QUY CHẾ VẬN HÀNH — trái tiêu đề + mô tả · phải 4 mục đánh số (dùng lại danh sách số .ngn-list trang chủ) + "Xem chi tiết" (tạm mở hộp thoại xem trước) ==================== -->
+      <!-- ==================== SECTION: QUY CHẾ VẬN HÀNH — trái tiêu đề + mô tả · phải 4 mục đánh số (dùng lại danh sách số .ngn-list trang chủ) + "Xem chi tiết" mở popup nội dung từng mục (.qnd-rule-dialog, dữ liệu QND_RULES trong quy-nhan-dao.js) ==================== -->
       <section class="section qnd-rules" id="quy-che" aria-labelledby="qnd-rules-title">
         <div class="container qnd-rules-layout">
           <div class="qnd-rules-head">
@@ -314,10 +314,10 @@
             <p class="section-lead">Cơ sở bảo đảm các hoạt động của Hội Chữ thập đỏ được triển khai thống nhất, minh bạch, hiệu quả và đúng định hướng nhân đạo.</p>
           </div>
           <ol class="ngn-list qnd-rules-list" aria-label="Quy chế vận hành Quỹ">
-            <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Tôn chỉ, mục đích</h3></div><a class="link-arrow" href="#" data-panel="Tôn chỉ, mục đích">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
-            <li class="ngn-item"><span class="ngn-num">02</span><div><h3 class="ngn-name">Nguyên tắc tổ chức, hoạt động, phạm vi hoạt động và địa vị pháp lý</h3></div><a class="link-arrow" href="#" data-panel="Nguyên tắc tổ chức, hoạt động, phạm vi hoạt động và địa vị pháp lý">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
-            <li class="ngn-item"><span class="ngn-num">03</span><div><h3 class="ngn-name">Sử dụng các khoản vận động, tài trợ có mục đích</h3></div><a class="link-arrow" href="#" data-panel="Sử dụng các khoản vận động, tài trợ có mục đích">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
-            <li class="ngn-item"><span class="ngn-num">04</span><div><h3 class="ngn-name">Chi hoạt động quản lý Quỹ</h3></div><a class="link-arrow" href="#" data-panel="Chi hoạt động quản lý Quỹ">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
+            <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Tôn chỉ, mục đích</h3></div><a class="link-arrow" href="#quy-che" data-qnd-rule="01" aria-haspopup="dialog">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
+            <li class="ngn-item"><span class="ngn-num">02</span><div><h3 class="ngn-name">Nguyên tắc tổ chức, hoạt động, phạm vi hoạt động và địa vị pháp lý</h3></div><a class="link-arrow" href="#quy-che" data-qnd-rule="02" aria-haspopup="dialog">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
+            <li class="ngn-item"><span class="ngn-num">03</span><div><h3 class="ngn-name">Sử dụng các khoản vận động, tài trợ có mục đích</h3></div><a class="link-arrow" href="#quy-che" data-qnd-rule="03" aria-haspopup="dialog">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
+            <li class="ngn-item"><span class="ngn-num">04</span><div><h3 class="ngn-name">Chi hoạt động quản lý Quỹ</h3></div><a class="link-arrow" href="#quy-che" data-qnd-rule="04" aria-haspopup="dialog">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
           </ol>
         </div>
       </section>
@@ -375,6 +375,14 @@
     </footer>
 
     <!-- ==================== DIALOG: thông báo xem trước ==================== -->
+    <!-- ---------- Popup Quy chế vận hành: số mục · tiêu đề · nội dung (cuộn trong khung) · nút Đóng — dùng lại .info-dialog, bản rộng ---------- -->
+    <dialog class="info-dialog qnd-rule-dialog" aria-labelledby="qnd-rule-title">
+      <button class="dialog-close" aria-label="Đóng" type="button">×</button>
+      <p class="eyebrow qnd-rule-kicker" data-qnd-rule-kicker></p>
+      <h2 id="qnd-rule-title"></h2>
+      <div class="qnd-rule-body" data-qnd-rule-body></div>
+      <button class="button button-primary dialog-done" type="button">Đóng</button>
+    </dialog>
     <dialog class="info-dialog" aria-labelledby="dialog-title">
       <button class="dialog-close" aria-label="Đóng" type="button">×</button>
       <h2 id="dialog-title"></h2>
@@ -385,9 +393,9 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
     <script src="flow.js?v=20261102-1" defer></script>
-    <script src="account-menu.js?v=20261109-5" defer></script>
+    <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="quy-nhan-dao.js?v=20261111-2" defer></script>
+    <script src="quy-nhan-dao.js?v=20261112-1" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
   </body>
 </html>

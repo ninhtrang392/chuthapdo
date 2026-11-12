@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-14" />
+    <link rel="stylesheet" href="styles.css?v=20261112-16" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -110,11 +110,11 @@
                 </div>
             </div>
             <a class="button button-primary nav-cta" href="#chuong-trinh"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
-        </nav>
+          <div class="nav-auth"><a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a><a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a></div>
+      </nav>
         <div class="header-actions">
-            <!-- ---------- Thông báo & tài khoản: menu tài khoản do account-menu.js dựng ---------- -->
-            <button class="icon-button notify-button" type="button" aria-label="Thông báo, có thông báo mới" data-panel="Thông báo"><svg class="icon"><use href="#bell"/></svg><span class="notify-dot" aria-hidden="true"></span></button>
-            <button class="avatar-button" type="button" aria-label="Tài khoản của bạn"><svg class="icon"><use href="#user"/></svg></button>
+            <!-- ---------- Đăng nhập / Đăng ký (mặc định, có sẵn trong HTML để header không nháy); đã đăng nhập → account-menu.js đổi sang chuông + avatar ---------- -->
+            <div class="header-auth"><a class="button button-outline button-small" href="dang-nhap.html">Đăng nhập</a><a class="button button-primary button-small header-auth-register" href="dang-nhap.html#dang-ky">Đăng ký</a></div>
         </div>
     </header>
 
@@ -1458,7 +1458,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
     <script src="flow.js?v=20261106-1" defer></script>
-    <script src="account-menu.js?v=20261109-5" defer></script>
+    <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
     <script src="script.js?v=20261109-17" defer></script>
     <script src="chuong-trinh-data.js?v=20261105-22" defer></script>
