@@ -138,7 +138,15 @@ const programDonations = (p, d) => {
     const anonymous = rand() < 0.18;
     const note = rand() < 0.6 ? DONOR_NOTES[Math.floor(rand() * DONOR_NOTES.length)] : '';
     return { name: anonymous ? 'Người ủng hộ ẩn danh' : DONOR_NAMES[Math.floor(rand() * DONOR_NAMES.length)], kind: anonymous ? 'heart' : 'user', time, note, amount: d.isMoney ? SMALL_AMOUNTS[Math.floor(rand() * SMALL_AMOUNTS.length)] : 1 };
-  }).sort((a, b) => b.time - a.time);
+  }).sort((a, b) => b.time - a.time).map((x, i) => ({ ...x, ref: txRef(x.time, `${p.id}-${i}`) }));
+};
+// Mã giao dịch minh họa (kiểu mã chuyển khoản ngân hàng): FT + yyMMdd (ngày ủng hộ) + 6 số băm từ mã chương trình + thứ tự lượt → cố định mỗi lần tải
+const txRef = (time, seed) => {
+  const t = new Date(time);
+  const pad = (n, l = 2) => String(n).padStart(l, '0');
+  let h = 2166136261;
+  for (const ch of seed) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  return `FT${pad(t.getFullYear() % 100)}${pad(t.getMonth() + 1)}${pad(t.getDate())}${pad(h % 1e6, 6)}`;
 };
 
 // ---------- Người đồng hành (minh họa): người / tổ chức đứng ra kêu gọi, chia sẻ gây quỹ cho chương trình — số tiền và lượt ủng hộ kêu gọi được ----------
@@ -365,7 +373,7 @@ const renderProgram = (p) => {
   const dateInput = (id, label) => `<div class="pf-control pf-date" data-vi-date><input type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" aria-label="${label}" /><input class="pf-date-native" type="date" id="${id}" tabindex="-1" aria-hidden="true" /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — ${label.toLowerCase()}">${icon('calendar')}</button></div>`;
   const donorsCard = `<div class="pf-view-card pf-pv-donors">
       <div class="pf-pv-donors-tools">
-        <label class="pf-input is-search">${icon('search')}<span class="visually-hidden">Tìm kiếm người ủng hộ</span><input type="search" id="pf-pv-donor-q" placeholder="${d.isMoney ? 'Tìm kiếm người ủng hộ' : 'Tìm kiếm người hiến máu'}" autocomplete="off" /></label>
+        <label class="pf-input is-search">${icon('search')}<span class="visually-hidden">Tìm kiếm người ủng hộ</span><input type="search" id="pf-pv-donor-q" placeholder="${d.isMoney ? 'Tìm theo tên hoặc mã giao dịch' : 'Tìm theo tên hoặc mã phiếu'}" autocomplete="off" /></label>
         <button class="pf-btn pf-btn-ghost pf-adv-toggle" type="button" aria-expanded="false" aria-controls="pf-pv-donor-adv" data-pv-adv>${icon('filter')}Tìm kiếm nâng cao<span class="pf-filter-count" hidden></span></button>
       </div>
       <div class="pf-pv-donor-adv" id="pf-pv-donor-adv" role="region" aria-label="Tìm kiếm nâng cao" hidden>
@@ -384,11 +392,11 @@ const renderProgram = (p) => {
   const tab = (id, label, selected = false) => `<button type="button" role="tab" id="pf-pv-tab-${id}" aria-controls="pf-pv-panel-${id}" aria-selected="${selected}" ${selected ? '' : 'tabindex="-1"'}>${label}</button>`;
 
   root.innerHTML = `
-    <!-- ---------- Đầu trang: breadcrumb (Trang chủ › Chương trình thiện nguyện › tên) · tên chương trình · nhãn Khẩn cấp (đứng đầu) + nhóm đối tượng hưởng lợi (SRS #2) — không ảnh banner ---------- -->
+    <!-- ---------- Đầu trang: breadcrumb (Trang chủ › Ủng hộ › tên) · tên chương trình · nhãn Khẩn cấp (đứng đầu) + nhóm đối tượng hưởng lợi (SRS #2) — không ảnh banner ---------- -->
     <header class="pv-banner">
       <div class="container">
         <nav class="breadcrumb pv-breadcrumb" aria-label="Breadcrumb">
-          <a href="index.html">Trang chủ</a>${icon('chevron-right')}<a href="chuong-trinh-thien-nguyen.html">Chương trình thiện nguyện</a>${icon('chevron-right')}<span class="breadcrumb-current" aria-current="page">${escapeHtml(p.title)}</span>
+          <a href="index.html">Trang chủ</a>${icon('chevron-right')}<a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>${icon('chevron-right')}<span class="breadcrumb-current" aria-current="page">${escapeHtml(p.title)}</span>
         </nav>
         <div class="pv-banner-content">
           <h1 class="pv-banner-title" id="pv-title">${escapeHtml(p.title)}</h1>
@@ -726,7 +734,7 @@ const renderDonors = (page = ctx.donorPage) => {
   const to = $('#pf-pv-donor-to').value;
   const rows = ctx.donations.filter((x) => {
     const day = isoDate(new Date(x.time));
-    return (!q || fold(x.name).includes(q)) && (!min || x.amount >= min) && (!max || x.amount <= max) && (!from || day >= from) && (!to || day <= to);
+    return (!q || fold(x.name).includes(q) || fold(x.ref).includes(q)) && (!min || x.amount >= min) && (!max || x.amount <= max) && (!from || day >= from) && (!to || day <= to);
   });
   const active = [min || max, from || to].filter(Boolean).length;
   const count = $('[data-pv-adv] .pf-filter-count');
@@ -736,11 +744,11 @@ const renderDonors = (page = ctx.donorPage) => {
   ctx.donorPage = Math.min(Math.max(1, page), pages);
   const start = (ctx.donorPage - 1) * DONORS_PER_PAGE;
   const slice = rows.slice(start, start + DONORS_PER_PAGE);
-  // Cột: # · người · số tiền / số lượng · lời nhắn (rỗng → —, dài thì cắt 2 dòng, rê chuột xem đủ) · thời gian
-  const heads = d.isMoney ? ['Người ủng hộ', 'Số tiền ủng hộ', 'Lời nhắn', 'Thời gian ủng hộ'] : ['Người hiến máu', 'Số lượng', 'Lời nhắn', 'Thời gian hiến máu'];
-  $('#pf-pv-donor-list').innerHTML = rows.length ? `<div class="pf-view-table"><table class="pf-reg-table is-view is-v-donors is-v-notes">
+  // Cột: # · người (lời nhắn ngay dưới tên: in nghiêng, trong ngoặc kép, dài thì cắt 2 dòng, rê chuột xem đủ; không có lời nhắn → chỉ tên) · số tiền / số lượng · mã giao dịch · thời gian
+  const heads = d.isMoney ? ['Người ủng hộ', 'Số tiền ủng hộ', 'Mã giao dịch', 'Thời gian ủng hộ'] : ['Người hiến máu', 'Số lượng', 'Mã phiếu', 'Thời gian hiến máu'];
+  $('#pf-pv-donor-list').innerHTML = rows.length ? `<div class="pf-view-table"><table class="pf-reg-table is-view is-v-donors is-v-refs">
       <thead><tr><th scope="col" class="pf-col-index">#</th>${heads.map((t) => `<th scope="col">${t}</th>`).join('')}</tr></thead>
-      <tbody>${slice.map((x, i) => `<tr><td class="pf-col-index">${start + i + 1}</td><td><span class="pf-pv-donor"><b>${escapeHtml(x.name)}</b></span></td><td><b class="pf-pv-amount">${d.isMoney ? `${vnd(x.amount)}đ` : `${x.amount} đơn vị`}</b></td><td>${x.note ? `<span class="pv-donor-note" title="${escapeHtml(x.note)}">${escapeHtml(x.note)}</span>` : '<span class="pv-donor-note is-empty" aria-label="Không có lời nhắn">—</span>'}</td><td>${viDateTime(x.time)}</td></tr>`).join('')}</tbody>
+      <tbody>${slice.map((x, i) => `<tr><td class="pf-col-index">${start + i + 1}</td><td><span class="pf-pv-donor${x.note ? ' has-note' : ''}"><b>${escapeHtml(x.name)}</b>${x.note ? `<span class="pv-donor-note is-quote" title="${escapeHtml(x.note)}">“${escapeHtml(x.note)}”</span>` : ''}</span></td><td><b class="pf-pv-amount">${d.isMoney ? `${vnd(x.amount)}đ` : `${x.amount} đơn vị`}</b></td><td><span class="pv-donor-ref">${x.ref}</span></td><td>${viDateTime(x.time)}</td></tr>`).join('')}</tbody>
     </table></div>
     <div class="pf-table-foot">
       <p class="pf-muted" aria-live="polite">Hiển thị ${start + 1} – ${start + slice.length}/${vnd(rows.length)}</p>

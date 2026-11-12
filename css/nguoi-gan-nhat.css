@@ -6047,298 +6047,86 @@ html.has-smoother {
 }
 
 /* ==================== FOOTER ==================== */
-.footer {
-  position: relative;
-  overflow: hidden;
-  overflow: clip;
-  padding-top: var(--space-section);
-  border-top: 1px solid #f1e3df;
-  background: var(--color-bg);
-  color: var(--color-text)
-}
+
 
 /* ---------- Lưới thông tin ---------- */
-.footer-grid {
-  display: grid;
-  grid-template-columns: minmax(180px, 300px) repeat(2, auto) minmax(0, auto);
-  justify-content: space-between;
-  gap: 32px clamp(20px, 3vw, 48px)
-}
 
-.footer-brand img {
-  display: block;
-  width: min(100%, 300px);
-  height: auto
-}
 
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px
-}
 
-.footer-col h2 {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  color: var(--color-text)
-}
 
-.footer-col a {
-  position: relative;
-  font-size: 14px;
-  color: var(--color-text-muted);
-  transition: color .25s
-}
 
-.footer-col a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform .35s cubic-bezier(.22, 1, .36, 1)
-}
 
-.footer-col a:hover {
-  color: var(--color-primary)
-}
 
-.footer-col a:hover::after {
-  transform: scaleX(1);
-  transform-origin: left
-}
+
+
+
+
+
+
+
+
 
 /* ---------- Liên hệ: địa chỉ, điện thoại, email ---------- */
-.footer-contact-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-style: normal
-}
 
-.footer-contact-list p {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--color-text-muted)
-}
 
-.footer-contact-list .icon {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin-top: 1px;
-  color: var(--color-primary)
-}
 
-.footer-contact-list span {
-  overflow-wrap: break-word
-}
+
+
+
+
 
 /* ---------- Thanh cuối: chỉ dòng điều phối, căn giữa (đơn vị phát triển GTINX ở nhãn ghim .dev-tag) ---------- */
-.footer-bottom {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: clamp(32px, 4vw, 56px);
-  padding-block: 18px 22px;
-  border-top: 1px solid #efe1dc
-}
 
-.footer-bottom p {
-  margin: 0;
-  font-size: 13px;
-  color: var(--color-text-muted)
-}
 
-.footer-credit {
-  text-align: center
-}
+
+
+
 
 /* ---------- Nút lên đầu trang: tròn kính mờ, chỉ icon, ghim góc phải dưới màn hình
    (trang chủ đặt ngoài #smooth-wrapper); rê chuột → nền đỏ, mũi tên trắng ---------- */
-.footer-top {
-  position: fixed;
-  right: max(16px, calc(var(--gutter) - 8px));
-  bottom: 24px;
-  z-index: 90;
-  display: block;
-  border-radius: 50%;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, .14), inset 0 1px 0 rgba(255, 255, 255, .9);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(12px);
-  transition: opacity .3s, transform .3s, visibility .3s
-}
+
 
 /* Ẩn ở đầu trang, hiện khi đã cuộn (flow.js gắn .is-visible) */
-.footer-top.is-visible {
-  opacity: 1;
-  visibility: visible;
-  transform: none
-}
 
-.footer-top span {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border: 1px solid rgba(255, 255, 255, .7);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .72);
-  -webkit-backdrop-filter: blur(30px) saturate(110%);
-  backdrop-filter: blur(30px) saturate(110%);
-  color: var(--color-primary);
-  transition: background .3s, color .3s, border-color .3s
-}
 
-.footer-top .icon {
-  width: 20px;
-  height: 20px;
-  rotate: -90deg;
-  transition: transform .3s
-}
 
-.footer-top:focus-visible {
-  outline: 3px solid #9b0722;
-  outline-offset: 2px
-}
 
-.footer-top:hover span {
-  border-color: var(--red);
-  background: var(--red);
-  color: #fff
-}
 
-.footer-top:hover .icon {
-  transform: translateX(2px)
-}
+
+
+
+
+
+
 
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
 
-  .footer-top span,
-  .dev-tag {
-    background: rgba(255, 255, 255, .95)
-  }
+  
 }
 
 /* ---------- Nhãn "Đơn vị phát triển nền tảng GTINX": viên kính mờ ghim góc trái dưới màn hình, cân giữa với nút lên đầu trang.
    Thu gọn chỉ còn logo để ít che nội dung; rê chuột / chạm (focus) thì trượt mở dòng chữ ---------- */
-.dev-tag {
-  position: fixed;
-  left: max(16px, calc(var(--gutter) - 8px));
-  bottom: 30px;
-  z-index: 90;
-  display: inline-flex;
-  align-items: center;
-  margin: 0;
-  padding: 9px 14px;
-  cursor: default;
-  border: 1px solid rgba(255, 255, 255, .7);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .72);
-  -webkit-backdrop-filter: blur(30px) saturate(110%);
-  backdrop-filter: blur(30px) saturate(110%);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, .14), inset 0 1px 0 rgba(255, 255, 255, .9);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 16px;
-  color: var(--color-text-muted);
-  white-space: nowrap
-}
+
 
 /* Logo GTINX (Emages/Đối tác/Logo GTINX.webp, 6713×3650) có nhiều lề trong suốt: chữ chỉ chiếm ~97% ngang × 42% dọc (tỉ lệ ~4,2:1)
    → khung 58×14 + object-fit:cover cắt vừa sát chữ */
-.dev-tag img {
-  display: block;
-  width: 58px;
-  height: 14px;
-  object-fit: contain
-}
+
 
 /* logo Emages/Đối tác/gtinx.png (sát chữ, tỉ lệ ≈ 4:1) — contain để không cắt chữ */
-.dev-tag span {
-  max-width: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-width .35s ease, margin .35s ease, opacity .25s
-}
 
-.dev-tag:hover span,
-.dev-tag:focus span {
-  max-width: 220px;
-  margin-right: 8px;
-  opacity: 1
-}
 
-.dev-tag:focus-visible {
-  outline: 3px solid #9b0722;
-  outline-offset: 2px
-}
 
-@media(max-width:1100px) {
-  .footer-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr))
-  }
 
-  .footer-brand,
-  .footer-contact {
-    grid-column: 1 / -1
-  }
-}
 
-@media(max-width:767px) {
-  .footer-grid {
-    grid-template-columns: 1fr 1fr
-  }
 
-  .footer-contact {
-    grid-column: 1 / -1
-  }
-}
+
+
+
 
 /* Màn hẹp: chữ thanh cuối nhỏ hơn; nút lên đầu trang sát góc; ẩn nhãn GTINX nổi để tránh đè nội dung */
-@media(max-width:767px) {
-  .footer-bottom {
-    padding-bottom: 24px
-  }
 
-  .footer-bottom p {
-    font-size: 12px
-  }
 
-  .footer-top {
-    right: 16px;
-    bottom: 16px
-  }
 
-  .footer-top span {
-    width: 44px;
-    height: 44px
-  }
-
-  .dev-tag {
-    display: none !important
-  }
-}
-
-@media(max-width:480px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 24px
-  }
-}
 
 /* ==================== RESPONSIVE: SECTIONS 03–07 ==================== */
 @media(max-width:1199px) {
@@ -24056,7 +23844,62 @@ html.pf-reg-lock {
 .navigation a[aria-current="page"]{color:var(--color-primary)}
 /* ---------- Kế thừa: :root của styles.css (màu chữ + font) — :root trang này khác nên đặt thẳng cho header ---------- */
 .header{font-family:'Be Vietnam Pro',Arial,Helvetica,sans-serif;color:#202122}
-/* ---------- Lề header: tính theo khung 1560px như mọi trang (trang này khóa --container 1440px cho nội dung) ---------- */
-.header{--hdr-edge:max(var(--gutter),calc((100% - 1560px) / 2))}
 html{scrollbar-gutter:stable}
 /* ==================== END SECTION: HEADER ==================== */
+
+/* ==================== SECTION: FOOTER — đồng bộ nguyên văn từ styles.css (footer chung của web). Sửa footer: sửa styles.css rồi chép lại khối này ==================== */
+.footer{position:relative;overflow:hidden;overflow:clip;padding-top:var(--space-section);border-top:1px solid #f1e3df;background:var(--color-bg);color:var(--color-text)}
+.footer-grid{display:grid;grid-template-columns:minmax(180px,300px) repeat(2,auto) minmax(0,auto);justify-content:space-between;gap:32px clamp(20px,3vw,48px)}
+.footer-brand img{display:block;width:min(100%,300px);height:auto}
+.footer-col{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.footer-col h2{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:0;text-transform:uppercase;color:var(--color-text)}
+.footer-col a{position:relative;font-size:14px;color:var(--color-text-muted);transition:color .25s}
+.footer-col a::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.footer-col a:hover{color:var(--color-primary)}
+.footer-col a:hover::after{transform:scaleX(1);transform-origin:left}
+.footer-contact-list{display:flex;flex-direction:column;gap:12px;font-style:normal}
+.footer-contact-list p{display:flex;align-items:flex-start;gap:10px;margin:0;font-size:14px;line-height:1.5;color:var(--color-text-muted)}
+.footer-contact-list .icon{flex-shrink:0;width:18px;height:18px;margin-top:1px;color:var(--color-primary)}
+.footer-contact-list span{overflow-wrap:break-word}
+.footer-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px 32px;margin-top:clamp(32px,4vw,56px);padding-block:18px 22px;border-top:1px solid #efe1dc}
+.footer-bottom p{margin:0;font-size:13px;color:var(--color-text-muted)}
+.footer-credit{text-align:center}
+.footer-stat{display:inline-flex;align-items:center;gap:6px}
+.footer-stat-online{justify-self:start}
+.footer-stat-total{justify-self:end}
+.footer-stat b{font-weight:600;color:var(--color-text);font-variant-numeric:tabular-nums}
+.footer-stat-dot{width:8px;height:8px;border-radius:50%;background:var(--color-green);box-shadow:0 0 0 3px rgba(0,108,69,.15)}
+.footer-top{position:fixed;right:max(16px,calc(var(--gutter) - 8px));bottom:24px;z-index:90;display:block;border-radius:50%;box-shadow:0 12px 32px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.9);opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .3s,transform .3s,visibility .3s}
+.footer-top.is-visible{opacity:1;visibility:visible;transform:none}
+.footer-top span{display:grid;place-items:center;width:48px;height:48px;border:1px solid rgba(255,255,255,.7);border-radius:50%;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(110%);backdrop-filter:blur(30px) saturate(110%);color:var(--color-primary);transition:background .3s,color .3s,border-color .3s}
+.footer-top .icon{width:20px;height:20px;rotate:-90deg;transition:transform .3s}
+.footer-top:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
+.footer-top:hover span{border-color:var(--red);background:var(--red);color:#fff}
+.footer-top:hover .icon{transform:translateX(2px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .footer-top span,.dev-tag{background:rgba(255,255,255,.95)}
+}
+.dev-tag{position:fixed;left:max(16px,calc(var(--gutter) - 8px));bottom:30px;z-index:90;display:inline-flex;align-items:center;margin:0;padding:9px 14px;cursor:default;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(110%);backdrop-filter:blur(30px) saturate(110%);box-shadow:0 12px 32px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.9);font-size:12px;font-weight:500;line-height:16px;color:var(--color-text-muted);white-space:nowrap}
+.dev-tag img{display:block;width:58px;height:14px;object-fit:contain}
+.dev-tag span{max-width:0;overflow:hidden;opacity:0;transition:max-width .35s ease,margin .35s ease,opacity .25s}
+.dev-tag:hover span,.dev-tag:focus span{max-width:220px;margin-right:8px;opacity:1}
+.dev-tag:focus-visible{outline:3px solid #9b0722;outline-offset:2px}
+@media(max-width:1100px){
+  .footer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .footer-brand,.footer-contact{grid-column:1 / -1}
+}
+@media(max-width:767px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-contact{grid-column:1 / -1}
+  .footer-bottom{grid-template-columns:1fr 1fr;padding-bottom:76px}
+  .footer-bottom .footer-credit{grid-column:1 / -1;grid-row:2}
+  .footer-bottom p{font-size:12px}
+  .footer-top{right:16px;bottom:16px}
+  .footer-top span{width:44px;height:44px}
+  .dev-tag{left:16px;bottom:20px;padding:9px 12px;font-size:11px}
+  .dev-tag:hover span,.dev-tag:focus span{margin-right:6px}
+}
+/* ---------- Kế thừa: trang này đặt line-height 1.8 / font khác cho body → trả về như styles.css ---------- */
+.footer{line-height:normal;font-family:'Be Vietnam Pro',Arial,Helvetica,sans-serif}
+.footer-bottom p:not(.dev-tag){line-height:normal}
+/* ==================== END SECTION: FOOTER ==================== */

@@ -185,13 +185,13 @@ PROGRAMS.forEach((p, i) => {
 });
 
 // ==================== THẺ CHƯƠNG TRÌNH (dùng chung) ====================
-// ---------- Thẻ: ảnh + nhãn mức độ ưu tiên + avatar người vận động (góc phải trên: logo Hội / ảnh cá nhân / logo tổ chức) · địa bàn · tên · đã đạt / mục tiêu · thanh tiến độ · Đạt % · Còn N ngày · Ủng hộ ngay ----------
+// ---------- Thẻ: ảnh + nhãn mức độ ưu tiên + avatar người vận động (góc phải trên: logo Hội / ảnh cá nhân / logo tổ chức) · địa bàn · tên · đã đạt / mục tiêu · thanh tiến độ · Đạt % · Còn N ngày — KHÔNG có nút trên thẻ (bấm cả thẻ để vào chi tiết) ----------
 // heading: cấp tiêu đề thẻ (h3 ở trang danh sách, dưới tiêu đề h2 của khối)
 const programCard = (p, heading = 'h3') => {
   const pr = PRIORITY[p.priority];
   const href = `chuong-trinh.html?id=${p.id}`;
   const isEnded = ended(p);
-  // Đã kết thúc: nhãn xám "Đã kết thúc" thay nhãn mức độ · ảnh, thanh tiến độ ngả xám · nút "Xem kết quả" (viền trắng) thay "Ủng hộ ngay"
+  // Đã kết thúc: nhãn xám "Đã kết thúc" thay nhãn mức độ · ảnh, thanh tiến độ ngả xám
   return `<article class="cp-card${isEnded ? ' is-ended' : ''}">
     <div class="cp-card-media">
       <img src="${IMG}${p.img}" alt="" loading="lazy" />
@@ -207,7 +207,6 @@ const programCard = (p, heading = 'h3') => {
       </div>
       <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(p.pct, 100)}" aria-valuetext="Đã đạt ${p.pct}% mục tiêu"><span style="width:${Math.min(p.pct, 100)}%"></span></div>
       <div class="cp-meta"><span>Đạt ${p.pct}%</span><span class="cp-days ${daysInfo(p)[0]}"${upcoming(p) ? ` title="Mở nhận ủng hộ sau ${p.startIn} ngày"` : ''}>${icon(daysInfo(p)[1])}${daysInfo(p)[2]}</span></div>
-      ${isEnded ? `<a class="button button-small cp-donate is-result" href="${href}">Xem kết quả${icon('arrow')}</a>` : `<a class="button button-primary button-small cp-donate" href="${href}">${icon('heart-solid')}Ủng hộ ngay</a>`}
     </div>
   </article>`;
 };

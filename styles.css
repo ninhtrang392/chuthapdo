@@ -1616,8 +1616,8 @@ html.has-smoother{scroll-behavior:auto}
 .cp-list{margin-top:24px}
 /* ---------- Đầu danh sách: tiêu đề + nút Tạo chiến dịch ---------- */
 .cp-list-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.cp-list-title{margin:0;font-size:22px;font-weight:700;line-height:30px;scroll-margin-top:calc(var(--header-h) + 24px)}
-.cp-create{flex:none;min-height:40px;padding:0 20px}
+.cp-list-title{margin:0;font-size:22px;font-weight:600;line-height:30px;scroll-margin-top:calc(var(--header-h) + 24px)}
+.cp-create{flex:none;min-height:40px;padding:0 20px;border-radius:8px} /* bo góc = ô sắp xếp bên cạnh (.pf-input 8px) */
 /* Cụm phải: ô sắp xếp (dùng lại .pf-input, cao 40px bằng nút) + nút Tạo chiến dịch */
 .cp-list-actions{display:flex;flex:none;align-items:center;gap:12px}
 .cp-sort{width:220px}
@@ -1680,10 +1680,10 @@ html.has-smoother{scroll-behavior:auto}
 .cp-grid-cover .cp-card{border:0;border-radius:18px;background:#fff;box-shadow:0 2px 6px rgba(20,30,50,.06),0 12px 32px rgba(20,30,50,.1);color:var(--color-text)}
 .cp-grid-cover .cp-card:hover{box-shadow:0 4px 10px rgba(20,30,50,.08),0 20px 40px rgba(20,30,50,.16)}
 .cp-grid-cover .cp-card-media{margin:0;border-radius:0} /* ảnh tràn sát mép trái/phải/trên của thẻ (góc trên bo theo thẻ) */
-.cp-grid-cover .cp-card-media img:first-child{aspect-ratio:16 / 9} /* đúng tỉ lệ ảnh tải lên → không cắt, thẻ thấp gọn */
+.cp-grid-cover .cp-card-media img:first-child{aspect-ratio:3 / 2} /* ảnh cao hơn 16:9 (cắt nhẹ 2 bên) → thẻ thon dài, không bẹp */
 .cp-grid-cover .cp-priority .cp-dot{display:none}
 .cp-grid-cover .cp-priority,.cp-grid-cover .cp-card-media .cp-card-mark{z-index:1}
-.cp-grid-cover .cp-card-body{gap:6px;padding:14px 16px 16px}
+.cp-grid-cover .cp-card-body{gap:8px;padding:18px 20px 22px} /* đệm rộng hơn → thẻ cao, thoáng */
 .cp-grid-cover .cp-card-title{font-size:17px;font-weight:700;line-height:24px;min-height:48px;color:var(--color-text)}
 .cp-grid-cover .cp-card:hover .cp-card-title a{color:var(--color-primary)}
 .cp-grid-cover .cp-raised{font-size:20px;line-height:28px} /* số đã quyên góp: nhỏ lại, đậm vừa (600) */
@@ -3092,6 +3092,15 @@ html.pf-reg-lock{overflow:hidden}
 .pf-reg-table.is-view.is-v-notes th:nth-child(5){width:19%}
 .pv-donor-note{display:-webkit-box;overflow:hidden;font-size:13px;line-height:20px;color:var(--color-text-muted);-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
 .pv-donor-note.is-empty{display:inline;color:#bcbfc5}
+/* Lời nhắn ngay dưới tên người ủng hộ: in nghiêng, trong ngoặc kép (chuong-trinh.js renderDonors) */
+.pf-pv-donor.has-note{flex-direction:column;align-items:flex-start;gap:2px}
+.pv-donor-note.is-quote{font-style:italic}
+/* Cột Mã giao dịch (is-v-refs): người ủng hộ (còn lại) · số tiền 17% · mã 22% · thời gian 20% */
+.pf-view-table .pf-reg-table.is-v-donors.is-v-refs{min-width:760px}
+.pf-reg-table.is-view.is-v-refs th:nth-child(3){width:17%}
+.pf-reg-table.is-view.is-v-refs th:nth-child(4){width:22%}
+.pf-reg-table.is-view.is-v-refs th:nth-child(5){width:20%}
+.pv-donor-ref{font-size:13px;color:var(--color-text-muted);font-variant-numeric:tabular-nums;letter-spacing:0}
 
 /* ---------- Câu chuyện: Mục tiêu tổng quát, xuống dòng, Mục tiêu cụ thể/chỉ tiêu · mặc định thu gọn 3 dòng (mờ dần) · Xem thêm ---------- */
 .pf-pv-story{display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:22px;color:var(--color-text)}
@@ -4654,7 +4663,7 @@ html.pf-reg-lock{overflow:hidden}
 
 /* ==================== SECTION: ĐỒNG HÀNH — BANNER KỂ CHUYỆN (don-vi-dong-hanh.html, section đầu trang) ==================== */
 /* Lấy từ bản Đồng hành khách hàng gửi (css/dh-storytelling.css), đổi tiền tố class hero-/scene- → dhc- để không đụng banner trang chủ (.hero). Chuyển động: dh-hero.js */
-#chapter-hero{--primary-base:#ed2429;--neutral-50:#ffffff;--font-main:'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;--hero-ink:#170e0c;--focus:0% 52%;--hero-gutter:clamp(24px, 5.5vw, 104px);--hero-warm:#f6d9a8;--focus-m:52% 50%;--hero-ink-rgb:23, 14, 12;--hero-travel:320vh;--ease-out:cubic-bezier(0.16, 1, 0.3, 1);--dur-enter-media:1800ms;--dur-enter:900ms;--dur-enter-title:1100ms;--dist-enter:24px}
+#chapter-hero{--primary-base:#ed2429;--neutral-50:#ffffff;--font-main:'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;--hero-ink:#170e0c;--focus:0% 52%;--hero-gutter:max(var(--gutter), calc((100% - var(--container)) / 2)) /* = lề header (--hdr-edge): chữ + bộ đếm banner thẳng hàng logo / nút Đăng ký */;--hero-warm:#f6d9a8;--focus-m:52% 50%;--hero-ink-rgb:23, 14, 12;--hero-travel:320vh;--ease-out:cubic-bezier(0.16, 1, 0.3, 1);--dur-enter-media:1800ms;--dur-enter:900ms;--dur-enter-title:1100ms;--dist-enter:24px}
 /* Điểm lấy nét ảnh từng cảnh (ảnh mới lấy từ Emages/Chương trình/) */
 .dhc-scene--01{--focus: 50% 40%; --focus-m: 30% 45%;}
 .dhc-scene--02{--focus: 50% 40%; --focus-m: 45% 40%;}

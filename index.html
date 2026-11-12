@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-16" />
+    <link rel="stylesheet" href="styles.css?v=20261112-22" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -547,7 +547,7 @@
                             </div>
                         </article>
 
-                        <!-- ---------- 4 chương trình bên dưới: thẻ ảnh tràn viền giống trang danh sách (.cp-grid-cover) — HTML sinh từ programCard + PROGRAMS (chuong-trinh-data.js): ảnh Emages/Chương trình/, avatar người vận động góc phải, nút Ủng hộ ngay. Đổi dữ liệu chương trình thì sinh lại 4 thẻ này ---------- -->
+                        <!-- ---------- 4 chương trình bên dưới: thẻ ảnh tràn viền giống trang danh sách (.cp-grid-cover) — HTML sinh từ programCard + PROGRAMS (chuong-trinh-data.js): ảnh Emages/Chương trình/, avatar người vận động góc phải, KHÔNG có nút Ủng hộ ngay (bấm cả thẻ vào chi tiết — programCard(p)). Đổi dữ liệu chương trình thì sinh lại 4 thẻ này ---------- -->
                         <div class="cp-grid campaigns-grid cp-grid-cover">
                             <article class="cp-card">
                                 <div class="cp-card-media">
@@ -564,7 +564,6 @@
                                     </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="Đã đạt 62% mục tiêu"><span style="width:62%"></span></div>
                                     <div class="cp-meta"><span>Đạt 62%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 18 ngày</span></div>
-                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=lu-lut-mien-trung"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                             <article class="cp-card">
@@ -582,7 +581,6 @@
                                     </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="Đã đạt 62% mục tiêu"><span style="width:62%"></span></div>
                                     <div class="cp-meta"><span>Đạt 62%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 12 ngày</span></div>
-                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=hien-mau-mua-he"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                             <article class="cp-card">
@@ -600,7 +598,6 @@
                                     </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="57" aria-valuetext="Đã đạt 57% mục tiêu"><span style="width:57%"></span></div>
                                     <div class="cp-meta"><span>Đạt 57%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 40 ngày</span></div>
-                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=mai-am-nhan-ai"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                             <article class="cp-card">
@@ -618,7 +615,6 @@
                                     </div>
                                     <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="41" aria-valuetext="Đã đạt 41% mục tiêu"><span style="width:41%"></span></div>
                                     <div class="cp-meta"><span>Đạt 41%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 34 ngày</span></div>
-                                    <a class="button button-primary button-small cp-donate" href="chuong-trinh.html?id=tiep-suc-den-truong"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Ủng hộ ngay</a>
                                 </div>
                             </article>
                         </div>
@@ -1461,7 +1457,7 @@
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
     <script src="script.js?v=20261109-17" defer></script>
-    <script src="chuong-trinh-data.js?v=20261105-22" defer></script>
+    <script src="chuong-trinh-data.js?v=20261112-2" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
     <script src="hero-3d.js?v=20261031-2" defer></script>
 </body>
