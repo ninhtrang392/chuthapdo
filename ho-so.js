@@ -312,15 +312,22 @@ const ct = {
   creator: document.querySelector('#ct-creator'),
   from: document.querySelector('#ct-from'),
   to: document.querySelector('#ct-to'),
-  budget: document.querySelector('#ct-budget'),
+  budgetMin: document.querySelector('#ct-budget-min'), // Mục tiêu quyên góp: khoảng tiền Từ – Đến (VNĐ)
+  budgetMax: document.querySelector('#ct-budget-max'),
   statusSel: document.querySelector('#ct-status-filter'), // lọc trạng thái — chỉ hiện ở tab Tất cả
 };
-const ctFilters = [ct.statusSel, ct.field, ct.creator, ct.from, ct.to, ct.budget];
+const ctFilters = [ct.statusSel, ct.field, ct.creator, ct.from, ct.to, ct.budgetMin, ct.budgetMax];
+// Ô tiền: chỉ nhận chữ số, tự thêm dấu chấm hàng nghìn (giống ô Số tiền ủng hộ ở xem chi tiết)
+const ctMoney = (el) => Number((el.value || '').replace(/\D/g, '')) || 0;
+[ct.budgetMin, ct.budgetMax].forEach((el) => el.addEventListener('input', () => {
+  const n = ctMoney(el); el.value = n ? n.toLocaleString('vi-VN') : '';
+  applyProgramFilter();
+}));
 Object.entries(PROGRAM_STATUS).forEach(([key, st]) => ct.statusSel.add(new Option(st.label, key)));
 fillOptions(ct.field, [...new Set(PROGRAMS.map((p) => p.field))]);
 fillOptions(ct.creator, [...new Set(PROGRAMS.map((p) => p.creator))].sort((a, b) => a.localeCompare(b, 'vi')));
 // Khoảng Từ – Đến tính là 1 điều kiện khi đếm số bộ lọc đang áp dụng
-const countProgramFilters = setupFilterPanel('ct-filters', [ct.statusSel, ct.field, ct.creator, { get value() { return ct.from.value || ct.to.value; } }, ct.budget]);
+const countProgramFilters = setupFilterPanel('ct-filters', [ct.statusSel, ct.field, ct.creator, { get value() { return ct.from.value || ct.to.value; } }, { get value() { return ct.budgetMin.value || ct.budgetMax.value; } }]);
 
 // ---------- Tab Tất cả: STT · tên + “Mã: …” · lĩnh vực · địa bàn · mục tiêu quyên góp · thời gian triển khai (tiến độ · đã đạt/mục tiêu · BĐ · KT) · ngày tạo · trạng thái · thao tác ----------
 // Tab trạng thái: STT · tên + mã · lĩnh vực · người chịu trách nhiệm · địa bàn · mục tiêu quyên góp · thời gian triển khai · ngày tạo · thao tác
@@ -426,10 +433,15 @@ const matchPeriod = (p) => {
   const range = periodRange(p.period);
   return Boolean(range) && (!ct.from.value || range[1] >= ct.from.value) && (!ct.to.value || range[0] <= ct.to.value);
 };
-const BUDGET_MATCH = {
-  small: (p) => p.goalValue !== null && p.goalValue < 300,
-  medium: (p) => p.goalValue !== null && p.goalValue >= 300 && p.goalValue <= 800,
-  large: (p) => p.goalValue !== null && p.goalValue > 800,
+// Mục tiêu quyên góp trong khoảng Từ – Đến (VNĐ; bỏ trống = không giới hạn; nhập ngược thì tự đổi chỗ).
+// goalValue tính theo triệu đồng; chương trình không có mục tiêu tiền (hiến máu…) bị loại khi đang lọc khoảng tiền.
+const matchBudget = (p) => {
+  let min = ctMoney(ct.budgetMin), max = ctMoney(ct.budgetMax);
+  if (!min && !max) return true;
+  if (min && max && min > max) [min, max] = [max, min];
+  if (p.goalValue === null) return false;
+  const v = p.goalValue * 1e6;
+  return (!min || v >= min) && (!max || v <= max);
 };
 const applyProgramFilter = () => {
   renderProgramHead();
@@ -444,7 +456,7 @@ const applyProgramFilter = () => {
     && (!ct.field.value || p.field === ct.field.value)
     && (!ct.creator.value || p.creator === ct.creator.value)
     && matchPeriod(p)
-    && (!ct.budget.value || BUDGET_MATCH[ct.budget.value](p)));
+    && matchBudget(p));
   // TB01: tài khoản chưa có chương trình nào
   document.querySelector('#ct-empty').textContent = PROGRAMS.length ? 'Không có chương trình phù hợp với bộ lọc.' : 'Bạn chưa có chương trình nào.';
   countProgramFilters();

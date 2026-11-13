@@ -398,7 +398,6 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
    Rê chuột / focus → phủ đỏ (#ED2429 → #B91C2B) + mô tả giới thiệu mở ra; cả thẻ bấm được qua link trên tên (.stretched) ---------- */
 .event-card-photo{position:absolute;inset:0;z-index:2}
 .event-card-photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.22,1,.36,1)}
-.event-card-photo img.is-key-visual{object-fit:contain;object-position:center 38%;background:#0128b1} /* key visual ngang (16:9) có chữ → hiện trọn chiều ngang, phần trống cùng màu nền xanh của ảnh */
 .event-card-photo::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,0) 24%,rgba(0,0,0,.55) 50%,rgba(0,0,0,.9) 100%);pointer-events:none} /* như .cp-grid-cover */
 .event-card-photo::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(237,36,41,.7) 0%,rgba(185,28,43,.95) 100%);opacity:0;transition:opacity .4s;pointer-events:none} /* lớp đỏ khi rê chuột: Primary #ED2429 → Primary-Accent #B91C2B */
 .event-card-cover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px 18px;color:#fff}
@@ -2230,9 +2229,11 @@ html.has-smoother{scroll-behavior:auto}
 .pf-adv-panel{padding:16px 20px;border:1px solid var(--color-border);border-radius:16px;background:#fff}
 .pf-adv-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 /* Bộ lọc Chương trình: cột Thời gian triển khai (2 ô ngày Từ – Đến) rộng gấp rưỡi các cột chọn; 2 ô ngày luôn nằm ngang */
-.pf-adv-grid.is-programs{grid-template-columns:minmax(0,2fr) minmax(0,2fr) minmax(0,3fr) minmax(0,2fr)}
+/* Bộ lọc Chương trình của tôi: lưới 6 cột · mỗi trường chiếm nửa hàng; tab Tất cả (có Trạng thái): hàng trên 3 ô chọn (Trạng thái · Lĩnh vực · Đối tượng tạo), hàng dưới Thời gian triển khai + Mục tiêu (2 ô Từ – Đến) */
+.pf-adv-grid.is-programs{grid-template-columns:repeat(6,minmax(0,1fr))}
+.pf-adv-grid.is-programs > *{grid-column:span 3}
 /* Tab Tất cả: thêm ô Trạng thái ở đầu → 5 cột (màn hẹp vẫn theo lưới responsive 2 / 1 cột) */
-@media(min-width:1280px){.pf-adv-grid.is-programs:has(> #ct-status-field:not([hidden])){grid-template-columns:minmax(0,2fr) minmax(0,2fr) minmax(0,2fr) minmax(0,3fr) minmax(0,2fr)}}
+.pf-adv-grid.is-programs:has(> #ct-status-field:not([hidden])) > :nth-child(-n+3){grid-column:span 2}
 .pf-adv-field .pf-reg-range{grid-template-columns:repeat(2,minmax(0,1fr))}
 .pf-adv-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:13px;font-weight:500;line-height:18px;color:var(--color-text)}
 .pf-adv-field[hidden]{display:none}
@@ -3516,6 +3517,7 @@ html.pf-reg-lock{overflow:hidden}
 @media(max-width:1279px){
   .pf-layout{grid-template-columns:240px minmax(0,1fr);gap:24px}
   .pf-adv-grid,.pf-adv-grid.is-programs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pf-adv-grid.is-programs > *,.pf-adv-grid.is-programs:has(> #ct-status-field:not([hidden])) > :nth-child(-n+3){grid-column:auto}
   .pf-detail-grid{grid-template-columns:minmax(0,1fr)}
   .pf-head-tools .pf-input.is-search{width:220px}
 }
@@ -4250,27 +4252,47 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== END PAGE: ĐƠN VỊ ĐỒNG HÀNH ==================== */
 
 /* ==================== PAGE: TIN TỨC (tin-tuc.html) ==================== */
-/* Dùng lại: .cp-hero · .cp-search (banner trang Chương trình) · .period-switch (thanh chuyên mục) · .news-grid / .news-feature / .news-row (khối tin tức trang chủ) ·
-   .cp-grid / .cp-card (lưới thẻ trang Chương trình) · .section-title · .link-arrow · .cp-empty. Ở đây chỉ thêm bố cục riêng của trang */
-/* ==================== SECTION: THANH CHUYÊN MỤC ==================== */
-/* ---------- Ghim dưới header khi cuộn, nền trắng, kẻ mảnh dưới; màn hẹp thì thanh cuộn ngang ---------- */
-.nw-tabs-bar{position:sticky;top:var(--header-h);z-index:10;border-bottom:1px solid var(--color-border);background:#fff}
-.nw-tabs-bar .container{display:flex;justify-content:center;padding-block:12px}
-.nw-tabs{position:relative;min-width:0;max-width:100%;margin:0} /* min-width:0 → thanh co lại theo màn hình và cuộn ngang, không đẩy trang rộng ra */
-/* ==================== SECTION: TIN NỔI BẬT & CHUYÊN MỤC ==================== */
+/* Dùng lại: .pv-breadcrumb · .pf-pv-tabs (đầu trang / tab trang chi tiết chương trình) · .cp-search (ô tìm kiếm trang Chương trình) · .news-grid / .news-feature / .news-row (khối tin tức trang chủ) ·
+   .cp-grid / .cp-card (lưới thẻ trang Chương trình) · .pv-track .pv-cards · .pv-car-btn · .founders-dot (dải "Các chiến dịch khác") · .section-title · .link-arrow · .cp-empty. Ở đây chỉ thêm bố cục riêng của trang */
+/* ==================== SECTION: ĐẦU TRANG TIN TỨC ==================== */
+/* ---------- Không banner: chừa chỗ header viên thuốc như trang chi tiết chương trình (.pv-page) · breadcrumb · ô tìm kiếm · tab chuyên mục ---------- */
+.nw-page{padding-top:calc(var(--header-h) + 20px)}
+.nw-intro .pv-breadcrumb{margin-bottom:0}
+/* ---------- Tìm kiếm: rộng hết khung nội dung, nằm trên nền trắng → bỏ viền, bóng nhẹ như thẻ bài viết; nút không bóng ---------- */
+.nw-search{width:100%;margin-top:16px}
+.nw-search .cp-search-box{border-color:transparent;box-shadow:0 2px 4px rgba(20,30,50,.08),0 12px 20px -6px rgba(20,30,50,.2)}
+.nw-search .cp-search-box:focus-within{box-shadow:0 0 0 3px rgba(185,28,43,.2),0 12px 20px -6px rgba(20,30,50,.2)}
+.nw-search .cp-search-submit{box-shadow:none}
+.nw-page .cp-empty{margin:0 0 24px}
+/* ---------- Tab chuyên mục: kiểu tab trang chi tiết chương trình (chữ 15, tab đang chọn đậm 600 + gạch đỏ) ---------- */
+.nw-tabs{gap:32px;margin-top:24px}
+.nw-tabs button{padding:12px 0;font-size:15px;font-weight:500}
+.nw-tabs button[aria-selected="true"]{font-weight:600}
+/* ==================== SECTION: CHUYÊN MỤC ==================== */
 /* ---------- Nhịp section: đệm gọn hơn section trang chủ (các chuyên mục nối tiếp nhau) · tiêu đề trái, Xem tất cả phải ---------- */
 .nw-section{padding-block:clamp(32px,3.5vw,48px)}
-.nw-section + .nw-section{padding-top:0}
+.nw-section:not([hidden]) ~ .nw-section{padding-top:0} /* các khối nối tiếp: chỉ khối hiện đầu tiên có đệm trên (khối bị ẩn khi tìm kiếm không tính) */
 .nw-head{align-items:center;margin-bottom:24px}
-.nw-section .section-title{font-size:28px;line-height:36px}
+.nw-section .section-title{font-size:24px;line-height:32px}
 .nw-grid{margin-top:0}
 /* ---------- Thẻ bài viết (.cp-card): ngày · tiêu đề 2 dòng · tóm tắt 2 dòng ---------- */
+/* Không viền, thay bằng bóng đổ (cùng bóng thẻ "Các chiến dịch khác" trang chi tiết chương trình); rê chuột → bóng đậm hơn */
+.nw-card{border-color:transparent;box-shadow:0 2px 4px rgba(20,30,50,.08),0 12px 20px -6px rgba(20,30,50,.2)}
+.nw-card:hover{box-shadow:0 4px 8px rgba(20,30,50,.1),0 16px 26px -10px rgba(20,30,50,.32)}
+.nw-card:focus-within{box-shadow:0 0 0 3px rgba(185,28,43,.25)}
+/* ---------- Tin nổi bật | Tin mới nhất: 2 cột (.news-grid), mỗi cột có tiêu đề riêng; bài lớn giãn cao bằng cột Tin mới nhất · bỏ đường kẻ ngăn giữa các bài ---------- */
+.nw-col{display:flex;flex-direction:column;min-width:0}
+.nw-hot{display:flex;flex:1}
+.nw-hot .news-feature{flex:1}
+.nw-hot .news-cat{color:#fff} /* nhãn chuyên mục trên ảnh tối: trắng cho rõ (đỏ bị chìm) */
+.nw-page .news-row + .news-row{border-top:0}
+/* ---------- Tin đọc nhiều: dải thẻ chạy ngang (.pv-track .pv-cards — 4 thẻ / khung máy tính, 3 · 2 · 1,2 thẻ khi màn hẹp dần) ---------- */
+.nw-page .pv-car-nav{margin-left:auto}
 .nw-card .news-meta{margin:0}
 .nw-card .news-desc{margin:0;font-size:14px;line-height:22px;-webkit-line-clamp:2;line-clamp:2}
-.nw-page .cp-empty{margin:0 0 24px}
 /* ---------- Responsive: tin tức ---------- */
 @media(max-width:600px){
-  .nw-tabs-bar .container{justify-content:flex-start}
+  .nw-search .cp-search-box{flex:none} /* ô tìm và nút xếp dọc: giữ đủ cao 48px, không bị flex:1 ép dẹt */
   .nw-section .section-title{font-size:22px;line-height:30px}
 }
 /* ==================== END PAGE: TIN TỨC ==================== */
@@ -4337,7 +4359,7 @@ html.pf-reg-lock{overflow:hidden}
 /* ---------- Giới thiệu: câu dẫn đậm (tên giải thưởng tô đỏ) · gạch đỏ ngắn · mô tả ---------- */
 .gt-story-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
 .gt-story-text{max-width:860px;margin:0;font-size:28px;font-weight:600;line-height:40px;color:var(--color-text);text-wrap:balance}
-.gt-story-hl{color:var(--red)}
+.gt-story-hl{color:var(--red);white-space:nowrap} /* tên giải không bị tách xuống dòng giữa chừng */
 .gt-story-rule{display:block;width:48px;height:3px;margin:clamp(16px,2.6vh,24px) 0;border-radius:2px;background:var(--red)}
 .gt-story-lead{max-width:720px;margin:0;font-size:16px;line-height:28px;color:var(--color-text-muted);text-wrap:balance}
 
@@ -4413,7 +4435,7 @@ html.pf-reg-lock{overflow:hidden}
 .gt-org-name{margin:4px 0 0;font-size:14px;line-height:22px;color:var(--color-text)}
 
 /* ---------- Thông tin chi tiết: dải CTA nền đỏ đậm bo góc · chữ trắng · nút trắng · liên hệ · ảnh cúp bên phải ---------- */
-.gt-contact-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center;gap:32px;padding:clamp(32px,4vw,56px);overflow:hidden;border-radius:24px;min-height:460px;background:linear-gradient(90deg,rgba(122,18,25,.3) 0%,rgba(122,18,25,.12) 45%,rgba(122,18,25,0) 70%),#c8141f url('Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.png') 70% 45% / cover no-repeat;color:#fff} /* nền ảnh: bàn tay nâng trái tim (bên phải); lớp phủ đỏ sẫm bên trái để chữ trắng dễ đọc */
+.gt-contact-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);align-items:center;gap:32px;padding:clamp(32px,4vw,56px);overflow:hidden;border-radius:24px;min-height:460px;background:linear-gradient(90deg,rgba(122,18,25,.3) 0%,rgba(122,18,25,.12) 45%,rgba(122,18,25,0) 70%),#c8141f url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 70% 45% / cover no-repeat;color:#fff} /* nền ảnh: trái tim đỏ bóng trong đôi tay nâng niu (bên phải); lớp phủ đỏ sẫm bên trái để chữ trắng dễ đọc */
 .gt-contact-copy .eyebrow{color:#ffd0d3}
 .gt-contact-copy .section-title{color:#fff}
 .gt-contact-copy .section-lead{max-width:620px;color:rgba(255,255,255,.85)}
@@ -4465,9 +4487,6 @@ html.pf-reg-lock{overflow:hidden}
 .gt-meaning-mark{position: relative; z-index: 2; display: grid; place-items: center; width: min(235px, 68%); aspect-ratio: 1}
 .gt-meaning-mark img{width: 100%; height: auto; filter: none; transition: transform var(--motion-base) cubic-bezier(.16, 1, .3, 1)}
 .gt-meaning-mark img.is-lit{position: absolute; inset: 0; opacity: 0; filter: brightness(1.22); pointer-events: none}
-.gt-meaning-caption{position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 16px; text-align: center}
-.gt-meaning-badge{padding: 5px 16px; border-radius: 999px; background: rgba(237, 36, 41, .08); border: 1px solid #e5e7eb; font-size: 13px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--red)}
-.gt-meaning-logo-name{margin: 0; font-size: 15px; font-weight: 700; color: var(--color-text)}
 .gt-meaning-card--content{justify-content: center; padding: clamp(24px, 3vh, 32px) clamp(22px, 2.5vw, 32px)}
 .gt-meaning-track-wrap{position: relative; padding-left: 52px; height: 100%; display: flex; flex-direction: column; justify-content: center}
 .gt-meaning-rail{position: absolute; left: 17px; top: 38px; bottom: 38px; width: 2px; border-radius: 2px; background: #e5e7eb}
@@ -4516,7 +4535,6 @@ html.pf-reg-lock{overflow:hidden}
 .gt-meaning-card{border:0}
 .gt-meaning-item,.gt-meaning-item:hover{border-color:transparent}
 .gt-meaning.is-live .gt-meaning-item.is-active{border-color:transparent;box-shadow:0 8px 24px rgba(17,24,39,.08)}
-.gt-meaning-badge{border:0}
 /* Quầng sáng không bị cắt ở mép thẻ: phủ cả thẻ, mờ hẳn ngay tại cạnh ngắn (closest-side); JS chỉ phóng tới 1 */
 .gt-meaning-halo{inset:0;border-radius:0;background:radial-gradient(closest-side,rgba(255,190,110,.55) 0%,rgba(237,36,41,.15) 55%,transparent 100%)}
 /* Tỏa nhẹ liên tục: lớp sáng thứ 2 "thở" (lan rộng ra rồi thu lại), mép vẫn mờ hẳn trong thẻ nên không bị cắt */
@@ -4534,7 +4552,7 @@ html.pf-reg-lock{overflow:hidden}
   .gt-steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 16px}
   .gt-info-layout{grid-template-columns:1fr}
   .gt-info-media{min-height:0;aspect-ratio:16 / 9}
-  .gt-contact-card{grid-template-columns:1fr;min-height:0;background:linear-gradient(180deg,rgba(122,18,25,.78) 0%,rgba(122,18,25,.5) 100%),#c8141f url('Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.png') 80% 50% / cover no-repeat} /* màn hẹp: chữ phủ lên ảnh → lớp phủ đậm đều để chữ trắng dễ đọc */
+  .gt-contact-card{grid-template-columns:1fr;min-height:0;background:linear-gradient(180deg,rgba(122,18,25,.78) 0%,rgba(122,18,25,.5) 100%),#c8141f url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 80% 50% / cover no-repeat} /* màn hẹp: chữ phủ lên ảnh → lớp phủ đậm đều để chữ trắng dễ đọc */
 }
 @media(max-width:600px){
   .gt-story-text{font-size:24px;line-height:34px}
