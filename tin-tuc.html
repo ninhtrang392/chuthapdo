@@ -44,6 +44,8 @@
       <symbol id="chevron-right" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6.5 5.5 5.5-5.5 5.5"/></g></symbol>
       <symbol id="close" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/></g></symbol>
       <symbol id="page-arrow" viewBox="0 0 14 14"><path d="M8.82809 4.20651V6.50491H1.66422C1.53209 6.50491 1.40537 6.5574 1.31194 6.65084C1.21851 6.74427 1.16602 6.87099 1.16602 7.00312C1.16602 7.13526 1.21851 7.26198 1.31194 7.35541C1.40537 7.44884 1.53209 7.50133 1.66422 7.50133H8.82809V9.79309C8.82735 9.85577 8.8455 9.91722 8.88017 9.96945C8.91484 10.0217 8.96443 10.0623 9.02248 10.0859C9.08054 10.1096 9.14437 10.1152 9.20566 10.1021C9.26696 10.0889 9.32288 10.0577 9.36616 10.0123L12.7395 7.22233C12.769 7.19328 12.7924 7.15864 12.8084 7.12044C12.8244 7.08223 12.8327 7.04122 12.8327 6.9998C12.8327 6.95838 12.8244 6.91737 12.8084 6.87916C12.7924 6.84096 12.769 6.80632 12.7395 6.77727L9.36616 3.9873C9.32288 3.94195 9.26696 3.91067 9.20566 3.89755C9.14437 3.88442 9.08054 3.89005 9.02248 3.9137C8.96443 3.93735 8.91484 3.97793 8.88017 4.03015C8.8455 4.08238 8.82735 4.14383 8.82809 4.20651Z" fill="currentColor"/></symbol>
+      <symbol id="pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></symbol>
+      <symbol id="play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z"/></symbol>
     </svg>
 
     <a class="skip-link" href="#main">Bỏ qua điều hướng</a>
@@ -79,127 +81,125 @@
     </header>
 
     <main id="main" class="cp-page nw-page">
-      <!-- ==================== SECTION: ĐẦU TRANG TIN TỨC — không banner: breadcrumb (dùng lại .pv-breadcrumb) · ô tìm kiếm (dùng lại .cp-search) · tab chuyên mục; tiêu đề trang ẩn cho trình đọc màn hình ==================== -->
-      <header class="nw-intro">
+      <!-- ==================== SECTION: ĐẦU TRANG TIN TỨC — kiểu đầu trang báo: breadcrumb · tiêu đề lớn đỏ + gạch chân đỏ (SRS 3.1 #1) · hàng ngày hôm nay | chuyên mục (#2) | tìm kiếm (#3) ==================== -->
+      <section class="nw-mast" aria-labelledby="nw-title">
         <div class="container">
           <!-- ---------- Breadcrumb: Trang chủ › Tin tức ---------- -->
-          <nav class="breadcrumb pv-breadcrumb" aria-label="Breadcrumb">
+          <nav class="breadcrumb nw-mast-crumbs" aria-label="Breadcrumb">
             <a href="index.html">Trang chủ</a><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg><span class="breadcrumb-current" aria-current="page">Tin tức</span>
           </nav>
-          <h1 class="visually-hidden" id="nw-title">Tin tức</h1>
-          <!-- ---------- Tìm kiếm: lọc bài theo tiêu đề, tóm tắt, chuyên mục trên toàn trang (tin-tuc.js) ---------- -->
-          <form class="cp-search nw-search" role="search" id="nw-search-form">
-            <label class="cp-search-box">
-              <svg class="icon" aria-hidden="true"><use href="#search"/></svg>
-              <span class="visually-hidden">Tìm bài viết</span>
-              <input id="nw-search" type="search" placeholder="Tìm bài viết..." autocomplete="off" />
-            </label>
-            <button class="button button-primary cp-search-submit" type="submit"><svg class="icon" aria-hidden="true"><use href="#search"/></svg>Tìm kiếm</button>
-          </form>
-          <!-- ---------- Tab chuyên mục: Tất cả · Chiến dịch nhân đạo · Người tốt việc thiện · Đối tác & Đồng hành (dùng lại .pf-pv-tabs của trang chi tiết chương trình); bấm → đổi nội dung bên dưới ---------- -->
-          <div class="pf-pv-tabs nw-tabs" role="tablist" aria-label="Chuyên mục tin tức">
-            <button type="button" role="tab" id="nw-tab-all" aria-controls="nw-panel-all" aria-selected="true">Tất cả</button>
-            <button type="button" role="tab" id="nw-tab-chien-dich" aria-controls="nw-panel-chien-dich" aria-selected="false" tabindex="-1">Chiến dịch nhân đạo</button>
-            <button type="button" role="tab" id="nw-tab-nguoi-tot" aria-controls="nw-panel-nguoi-tot" aria-selected="false" tabindex="-1">Người tốt việc thiện</button>
-            <button type="button" role="tab" id="nw-tab-doi-tac" aria-controls="nw-panel-doi-tac" aria-selected="false" tabindex="-1">Đối tác &amp; Đồng hành</button>
+          <!-- ---------- Tiêu đề: chữ lớn đỏ · gạch chân đỏ ngắn ở giữa ---------- -->
+          <div class="nw-mast-brand">
+            <h1 class="nw-mast-title" id="nw-title">Tin tức</h1>
+          </div>
+          <!-- ---------- Hàng điều hướng: ngày hôm nay (tin-tuc.js) · 5 chuyên mục chọn một, ngăn bằng "/" (BR-DS-01) · ô tìm theo tên bài viết, tìm khi bấm kính lúp / Enter ---------- -->
+          <div class="nw-mast-bar">
+            <p class="nw-mast-date" id="nw-today"></p>
+            <div class="nw-chips" role="group" aria-label="Lọc theo chuyên mục">
+              <button class="nw-chip" type="button" data-cat="" aria-pressed="true">Tất cả</button>
+              <button class="nw-chip" type="button" data-cat="noi-bat" aria-pressed="false">Hoạt động nổi bật</button>
+              <button class="nw-chip" type="button" data-cat="chien-dich" aria-pressed="false">Chiến dịch nhân đạo</button>
+              <button class="nw-chip" type="button" data-cat="nguoi-tot" aria-pressed="false">Người tốt việc thiện</button>
+              <button class="nw-chip" type="button" data-cat="doi-tac" aria-pressed="false">Đối tác &amp; Đồng hành</button>
+            </div>
+            <form class="nw-mast-search" role="search" id="nw-search-form">
+              <label class="cp-search-box">
+                <span class="visually-hidden">Tìm theo tên bài viết</span>
+                <input id="nw-search" type="search" placeholder="Tìm theo tên bài viết..." maxlength="100" autocomplete="off" />
+              </label>
+              <button class="nw-mast-search-btn" type="submit" aria-label="Tìm kiếm"><svg class="icon" aria-hidden="true"><use href="#search"/></svg></button>
+            </form>
           </div>
         </div>
-      </header>
+      </section>
       <!-- ==================== END SECTION: ĐẦU TRANG TIN TỨC ==================== -->
 
       <p class="visually-hidden" id="nw-status" role="status" aria-live="polite"></p>
-      <!-- DỮ LIỆU MINH HỌA: bài viết, ảnh, ngày đăng, lượt xem lấy từ CMS khi có hệ thống chính thức. tin-tuc.js đổ bài vào các khối bên dưới -->
+      <!-- DỮ LIỆU MINH HỌA: bài viết, ảnh, ngày đăng, lượt xem, thời gian đọc lấy từ Web nội bộ Hội khi có hệ thống chính thức. tin-tuc.js đổ bài vào các khối bên dưới -->
 
-      <!-- ==================== SECTION: TAB TẤT CẢ — Tin nổi bật | Tin mới nhất · Tin đọc nhiều (dải ngang) · các tin khác theo chuyên mục ==================== -->
-      <div class="nw-panel" id="nw-panel-all" role="tabpanel" aria-labelledby="nw-tab-all">
-        <!-- ---------- Tin nổi bật (bài lớn, trái) | Tin mới nhất (4 bài, phải) — dùng lại .news-grid / .news-feature / .news-row của trang chủ ---------- -->
-        <section class="section nw-section" id="nw-top" aria-label="Tin nổi bật và tin mới nhất">
-          <div class="container news-grid nw-top">
-            <div class="nw-col">
-              <div class="section-head nw-head"><h2 class="section-title">Tin nổi bật</h2></div>
-              <div class="nw-hot" id="nw-hot"></div>
-            </div>
-            <div class="nw-col">
-              <div class="section-head nw-head"><h2 class="section-title">Tin mới nhất</h2></div>
-              <div class="news-list" id="nw-latest"></div>
-            </div>
+      <!-- ---------- Chuyên mục không có bài nào (NL03a, TB03) · tìm không ra bài (dùng lại .cp-empty) ---------- -->
+      <div class="container nw-empty-wrap">
+        <p class="cp-empty" id="nw-empty" hidden>Chưa có tin tức trong chuyên mục này.</p>
+      </div>
+
+      <!-- ==================== SECTION: KẾT QUẢ TÌM KIẾM — chỉ hiện khi có từ khóa: "Tìm thấy N tin tức" · lưới thẻ dọc như Tin tức khác ==================== -->
+      <section class="section nw-section" id="nw-results" aria-labelledby="nw-results-title" hidden>
+        <div class="container">
+          <div class="section-head nw-head">
+            <h2 class="section-title" id="nw-results-title">Kết quả tìm kiếm</h2>
+            <button class="link-arrow nw-clear" type="button" id="nw-clear"><svg class="icon" aria-hidden="true"><use href="#close"/></svg>Xóa tìm kiếm</button>
           </div>
-        </section>
+          <p class="nw-results-count" id="nw-results-count"></p>
+          <div class="nw-others" id="nw-results-list"></div>
+        </div>
+      </section>
+      <!-- ==================== END SECTION: KẾT QUẢ TÌM KIẾM ==================== -->
 
-        <!-- ---------- Tin đọc nhiều: dải thẻ chạy ngang (dùng lại .pv-track .pv-cards · nút ‹ › · chấm chuyển của "Các chiến dịch khác"), tự cuộn mỗi 10 giây, dừng khi rê chuột ---------- -->
-        <section class="section nw-section" id="nw-popular-section" aria-labelledby="nw-popular-title">
-          <div class="container">
+      <!-- ==================== SECTION: TIN TỨC NỔI BẬT · TIN MỚI NHẤT — 2 cột bằng nhau, vạch kẻ dọc ở giữa | trái: tối đa 5 bài nổi bật tự chuyển 10 giây (BR-NB-01 → 09) | phải: 5 bài mới nhất = 1 bài lớn + lưới 2×2 (BR-DS-02) ==================== -->
+      <section class="section nw-section" id="nw-top" aria-label="Tin tức nổi bật và tin mới nhất">
+        <div class="container nw-top">
+          <!-- ---------- Tin tức nổi bật: tiêu đề khối · 1 bài / lần (không khung thẻ) · ảnh lớn (không nhãn) · tiêu đề · sapo · ngày đăng; tự chạy, không nút ‹ › / Tạm dừng · chấm chỉ báo (thanh tiến trình) ---------- -->
+          <div class="nw-featured-col">
+          <div class="section-head nw-head">
+            <h2 class="section-title" id="nw-featured-title">Tin tức nổi bật</h2>
+          </div>
+          <div class="nw-featured" id="nw-featured" role="region" aria-roledescription="carousel" aria-labelledby="nw-featured-title" tabindex="-1">
+            <div class="nw-slides" id="nw-slides" aria-live="off"></div>
+            <div class="nw-car-bar" data-car-ctrl>
+              <div class="nw-dots" id="nw-dots" role="group" aria-label="Chọn bài nổi bật"></div>
+            </div>
+            <p class="nw-block-empty" id="nw-featured-empty" hidden>Hiện chưa có tin tức nào.</p>
+          </div>
+          </div>
+          <!-- ---------- Tin mới nhất: tiêu đề (không Xem tất cả) · 1 bài lớn (ảnh trái không nhãn · tiêu đề · sapo · ngày đăng) · lưới 2×2 bài nhỏ (ảnh trái · tiêu đề tối đa 2 dòng · ngày đăng = tối đa 3 dòng), kẻ mảnh ngăn cách ---------- -->
+          <div class="nw-latest-col">
             <div class="section-head nw-head">
-              <h2 class="section-title" id="nw-popular-title">Tin đọc nhiều</h2>
-              <div class="pv-car-nav"><button class="pv-car-btn is-prev" type="button" data-car="nw-popular" data-car-step="-1" aria-label="Bài trước"><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg></button><button class="pv-car-btn" type="button" data-car="nw-popular" data-car-step="1" aria-label="Bài sau"><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg></button></div>
+              <h2 class="section-title">Tin mới nhất</h2>
             </div>
-            <div class="pv-track pv-cards" id="nw-popular" role="group" aria-label="Tin đọc nhiều — tự cuộn mỗi 10 giây, dừng khi rê chuột"></div>
-            <div class="founders-dots pv-others-dots" id="nw-popular-dots" role="group" aria-label="Chọn vị trí dải Tin đọc nhiều"></div>
+            <div class="nw-latest" id="nw-latest"></div>
           </div>
-        </section>
+        </div>
+      </section>
+      <!-- ==================== END SECTION: TIN TỨC NỔI BẬT · TIN MỚI NHẤT ==================== -->
 
-        <!-- ---------- Các tin khác theo chuyên mục: mỗi mục 4 bài mới nhất (trừ bài đã ở Tin nổi bật / Tin mới nhất) · Xem tất cả → mở tab chuyên mục ---------- -->
-        <section class="section nw-section" data-cat="chien-dich" aria-labelledby="nw-all-chien-dich">
-          <div class="container">
-            <div class="section-head nw-head">
-              <h2 class="section-title" id="nw-all-chien-dich">Chiến dịch nhân đạo</h2>
-              <a class="link-arrow" href="#chien-dich" data-goto="chien-dich">Xem tất cả<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-            </div>
-            <div class="cp-grid nw-grid"></div>
-          </div>
-        </section>
-        <section class="section nw-section" data-cat="nguoi-tot" aria-labelledby="nw-all-nguoi-tot">
-          <div class="container">
-            <div class="section-head nw-head">
-              <h2 class="section-title" id="nw-all-nguoi-tot">Người tốt việc thiện</h2>
-              <a class="link-arrow" href="#nguoi-tot" data-goto="nguoi-tot">Xem tất cả<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-            </div>
-            <div class="cp-grid nw-grid"></div>
-          </div>
-        </section>
-        <section class="section nw-section" data-cat="doi-tac" aria-labelledby="nw-all-doi-tac">
-          <div class="container">
-            <div class="section-head nw-head">
-              <h2 class="section-title" id="nw-all-doi-tac">Đối tác &amp; Đồng hành</h2>
-              <a class="link-arrow" href="#doi-tac" data-goto="doi-tac">Xem tất cả<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-            </div>
-            <div class="cp-grid nw-grid"></div>
-          </div>
-        </section>
-      </div>
-      <!-- ==================== END SECTION: TAB TẤT CẢ ==================== -->
+      <!-- ==================== SECTION: BANNER TRUYỀN THÔNG — ảnh ngang hết chiều rộng nội dung, không phụ thuộc chuyên mục (SRS 3.1 #10); bản chính thức là ảnh cấu hình tại Web nội bộ Hội ==================== -->
+      <section class="section nw-section" id="nw-media" aria-label="Banner truyền thông">
+        <div class="container">
+          <!-- ---------- Ảnh banner Kỷ niệm 80 năm (Emages/): CSS cắt bỏ viền trong suốt + quầng đỏ quanh ảnh; điện thoại chỉ hiện phần trái (logo + chữ) ---------- -->
+          <a class="nw-media-banner" href="#" data-panel="Kỷ niệm 80 năm thành lập Hội Chữ thập đỏ Việt Nam">
+            <img src="Emages/K%E1%BB%B7%20ni%E1%BB%87m%2080%20n%C4%83m%20H%E1%BB%99i%20Ch%E1%BB%AF%20th%E1%BA%ADp%20%C4%91%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="Kỷ niệm 80 năm thành lập Hội Chữ thập đỏ Việt Nam (1946 – 2026) – Vì mọi người, ở mọi nơi" width="2172" height="724" loading="lazy" decoding="async" />
+          </a>
+        </div>
+      </section>
+      <!-- ==================== END SECTION: BANNER TRUYỀN THÔNG ==================== -->
 
-      <!-- ==================== SECTION: TAB CHUYÊN MỤC — mỗi tab: tiêu đề chuyên mục · lưới thẻ toàn bộ bài, mới nhất trước (dùng lại .cp-grid / .cp-card) ==================== -->
-      <div class="nw-panel" id="nw-panel-chien-dich" role="tabpanel" aria-labelledby="nw-tab-chien-dich" hidden>
-        <section class="section nw-section" data-cat="chien-dich" data-full aria-labelledby="nw-cat-chien-dich">
-          <div class="container">
-            <div class="section-head nw-head"><h2 class="section-title" id="nw-cat-chien-dich">Chiến dịch nhân đạo</h2></div>
-            <div class="cp-grid nw-grid"></div>
+      <!-- ==================== SECTION: TIN ĐỌC NHIỀU — tối đa 10 bài nhiều lượt xem (BR-DS-03); dải thẻ dọc cuộn ngang, máy tính 5 thẻ / khung; không nút ‹ ›; tự chạy 4 giây / thẻ, hết dải quay về đầu (vẫn vuốt / cuộn tay được) ==================== -->
+      <section class="section nw-section" id="nw-popular-section" aria-labelledby="nw-popular-title">
+        <div class="container">
+          <div class="section-head nw-head">
+            <h2 class="section-title" id="nw-popular-title">Tin đọc nhiều</h2>
           </div>
-        </section>
-      </div>
-      <div class="nw-panel" id="nw-panel-nguoi-tot" role="tabpanel" aria-labelledby="nw-tab-nguoi-tot" hidden>
-        <section class="section nw-section" data-cat="nguoi-tot" data-full aria-labelledby="nw-cat-nguoi-tot">
-          <div class="container">
-            <div class="section-head nw-head"><h2 class="section-title" id="nw-cat-nguoi-tot">Người tốt việc thiện</h2></div>
-            <div class="cp-grid nw-grid"></div>
+          <div class="nw-strip">
+            <div class="pv-track pv-cards nw-popular" id="nw-popular" role="group" aria-label="Tin đọc nhiều"></div>
           </div>
-        </section>
-      </div>
-      <div class="nw-panel" id="nw-panel-doi-tac" role="tabpanel" aria-labelledby="nw-tab-doi-tac" hidden>
-        <section class="section nw-section" data-cat="doi-tac" data-full aria-labelledby="nw-cat-doi-tac">
-          <div class="container">
-            <div class="section-head nw-head"><h2 class="section-title" id="nw-cat-doi-tac">Đối tác &amp; Đồng hành</h2></div>
-            <div class="cp-grid nw-grid"></div>
-          </div>
-        </section>
-      </div>
-      <!-- ==================== END SECTION: TAB CHUYÊN MỤC ==================== -->
+          <p class="nw-block-empty" id="nw-popular-empty" hidden>Hiện chưa có tin tức nào.</p>
+        </div>
+      </section>
+      <!-- ==================== END SECTION: TIN ĐỌC NHIỀU ==================== -->
 
-      <!-- ---------- Không có kết quả tìm kiếm trong tab đang xem (dùng lại .cp-empty) ---------- -->
-      <div class="container">
-        <p class="cp-empty" id="nw-empty" hidden>Không tìm thấy bài viết phù hợp. Hãy thử từ khóa khác.</p>
-      </div>
+      <!-- ==================== SECTION: TIN TỨC KHÁC — tối đa 16 bài mới nhất kế tiếp, không trùng 3 khối trên (BR-DS-04); lưới thẻ dọc 4 thẻ / hàng (3 · 2 · 1 trên màn hẹp) (ảnh · nhãn · tiêu đề · ngày | phút đọc · →) ==================== -->
+      <section class="section nw-section" id="nw-others-section" aria-labelledby="nw-others-title">
+        <div class="container">
+          <div class="section-head nw-head">
+            <h2 class="section-title" id="nw-others-title">Tin tức khác</h2>
+            <a class="link-arrow" href="#" data-panel="Danh sách tin tức">Xem tất cả<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+          </div>
+          <div class="nw-others" id="nw-others"></div>
+          <p class="nw-block-empty" id="nw-others-empty" hidden>Hiện chưa có tin tức nào.</p>
+        </div>
+      </section>
+      <!-- ==================== END SECTION: TIN TỨC KHÁC ==================== -->
+
     </main>
 
     <!-- ==================== FOOTER ==================== -->

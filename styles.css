@@ -4252,48 +4252,180 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== END PAGE: ĐƠN VỊ ĐỒNG HÀNH ==================== */
 
 /* ==================== PAGE: TIN TỨC (tin-tuc.html) ==================== */
-/* Dùng lại: .pv-breadcrumb · .pf-pv-tabs (đầu trang / tab trang chi tiết chương trình) · .cp-search (ô tìm kiếm trang Chương trình) · .news-grid / .news-feature / .news-row (khối tin tức trang chủ) ·
-   .cp-grid / .cp-card (lưới thẻ trang Chương trình) · .pv-track .pv-cards · .pv-car-btn · .founders-dot (dải "Các chiến dịch khác") · .section-title · .link-arrow · .cp-empty. Ở đây chỉ thêm bố cục riêng của trang */
+/* Theo SRS Trang Tin tức (mục 3.1); dàn trang tham khảo trang chủ báo Nhân Dân (khối lớn | cột tin, dải ngang, lưới tin).
+   Dùng lại: .cp-hero · .cp-search (banner trang Ủng hộ) · .pv-banner-tag (nhãn tròn) · .pf-badge (nhãn chuyên mục) · .pf-pv-nav-btn (nút tròn trên ảnh) ·
+   .news-item · .news-title · .news-desc · .media-photo · .stretched (khối tin tức trang chủ) · .cp-card (thẻ trang Chương trình) · .pv-track .pv-cards (dải ngang) ·
+   .section-title · .link-arrow · .cp-empty. Thẻ không viền, nổi bằng bóng đổ. Ở đây chỉ thêm bố cục riêng của trang */
+
 /* ==================== SECTION: ĐẦU TRANG TIN TỨC ==================== */
-/* ---------- Không banner: chừa chỗ header viên thuốc như trang chi tiết chương trình (.pv-page) · breadcrumb · ô tìm kiếm · tab chuyên mục ---------- */
-.nw-page{padding-top:calc(var(--header-h) + 20px)}
-.nw-intro .pv-breadcrumb{margin-bottom:0}
-/* ---------- Tìm kiếm: rộng hết khung nội dung, nằm trên nền trắng → bỏ viền, bóng nhẹ như thẻ bài viết; nút không bóng ---------- */
-.nw-search{width:100%;margin-top:16px}
-.nw-search .cp-search-box{border-color:transparent;box-shadow:0 2px 4px rgba(20,30,50,.08),0 12px 20px -6px rgba(20,30,50,.2)}
-.nw-search .cp-search-box:focus-within{box-shadow:0 0 0 3px rgba(185,28,43,.2),0 12px 20px -6px rgba(20,30,50,.2)}
-.nw-search .cp-search-submit{box-shadow:none}
-.nw-page .cp-empty{margin:0 0 24px}
-/* ---------- Tab chuyên mục: kiểu tab trang chi tiết chương trình (chữ 15, tab đang chọn đậm 600 + gạch đỏ) ---------- */
-.nw-tabs{gap:32px;margin-top:24px}
-.nw-tabs button{padding:12px 0;font-size:15px;font-weight:500}
-.nw-tabs button[aria-selected="true"]{font-weight:600}
-/* ==================== SECTION: CHUYÊN MỤC ==================== */
-/* ---------- Nhịp section: đệm gọn hơn section trang chủ (các chuyên mục nối tiếp nhau) · tiêu đề trái, Xem tất cả phải ---------- */
-.nw-section{padding-block:clamp(32px,3.5vw,48px)}
-.nw-section:not([hidden]) ~ .nw-section{padding-top:0} /* các khối nối tiếp: chỉ khối hiện đầu tiên có đệm trên (khối bị ẩn khi tìm kiếm không tính) */
-.nw-head{align-items:center;margin-bottom:24px}
-.nw-section .section-title{font-size:24px;line-height:32px}
-.nw-grid{margin-top:0}
-/* ---------- Thẻ bài viết (.cp-card): ngày · tiêu đề 2 dòng · tóm tắt 2 dòng ---------- */
-/* Không viền, thay bằng bóng đổ (cùng bóng thẻ "Các chiến dịch khác" trang chi tiết chương trình); rê chuột → bóng đậm hơn */
-.nw-card{border-color:transparent;box-shadow:0 2px 4px rgba(20,30,50,.08),0 12px 20px -6px rgba(20,30,50,.2)}
-.nw-card:hover{box-shadow:0 4px 8px rgba(20,30,50,.1),0 16px 26px -10px rgba(20,30,50,.32)}
+/* ---------- Khung: nền trắng, chừa chỗ header cố định · breadcrumb ---------- */
+.nw-mast{padding-top:calc(var(--header-h) + 16px)}
+.nw-mast-crumbs{margin-bottom:4px}
+/* ---------- Tiêu đề: chữ lớn đỏ · gạch chân đỏ ngắn 64 × 4px căn giữa dưới chữ ---------- */
+.nw-mast-brand{display:flex;flex-direction:column;align-items:center;padding:0 0 16px;text-align:center}
+.nw-mast-title{display:flex;flex-direction:column;align-items:center;gap:2px;margin:0;font-size:clamp(36px,4vw,48px);font-weight:800;line-height:1.2;color:var(--color-primary)}
+.nw-mast-title::after{content:'';width:64px;height:4px;border-radius:2px;background:var(--color-primary)}
+/* ---------- Hàng điều hướng: ngày (trái) · chuyên mục chữ in hoa ngăn bằng "/" (giữa, đang chọn chữ đỏ) · ô tìm bo tròn (phải); kẻ mảnh trên / dưới ---------- */
+.nw-mast-bar{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:24px;padding:8px 0;border-block:1px solid var(--color-border)}
+.nw-mast-date{margin:0;font-size:14px;line-height:20px;color:var(--color-text-muted);white-space:nowrap}
+.nw-chips{display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.nw-chip{padding:6px 0;border:0;background:none;font:inherit;font-size:14px;font-weight:700;line-height:20px;text-transform:uppercase;color:var(--color-text);cursor:pointer;transition:color .2s}
+.nw-chip + .nw-chip::before{content:'/';margin:0 14px;font-weight:400;color:#b5b9be}
+.nw-chip:hover,.nw-chip[aria-pressed="true"]{color:var(--color-primary)}
+.nw-chip:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px;border-radius:4px}
+/* Ô tìm: dùng lại .cp-search-box (bỏ viền / bóng riêng), khung vuông bo góc nhỏ 8px viền mảnh, nút kính lúp bên phải */
+.nw-mast-search{display:flex;justify-self:end;align-items:center;width:min(240px,100%);height:40px;border:1px solid var(--color-border);border-radius:var(--nw-radius-sm);background:#fff;transition:border-color .2s,box-shadow .2s}
+.nw-mast-search:focus-within{border-color:var(--color-primary);box-shadow:0 0 0 3px rgba(185,28,43,.15)}
+.nw-mast-search .cp-search-box,.nw-mast-search .cp-search-box:focus-within{height:100%;padding:0 4px 0 16px;border:0;background:none;box-shadow:none}
+.nw-mast-search .cp-search-box input{font-size:14px}
+.nw-mast-search-btn{display:grid;place-items:center;flex:none;width:40px;height:100%;padding:0;border:0;background:none;color:var(--color-text-muted);cursor:pointer;transition:color .2s}
+.nw-mast-search-btn:hover{color:var(--color-primary)}
+.nw-mast-search-btn:focus-visible{outline:2px solid var(--color-primary);outline-offset:-4px;border-radius:6px}
+.nw-mast-search-btn .icon{width:18px;height:18px}
+
+/* ==================== SECTION: KHỐI CHUNG ==================== */
+/* ---------- Bo góc theo cỡ: thẻ / ảnh lớn (cạnh ngắn ≥ ~200px: thẻ Đọc nhiều, thẻ Tin tức khác, ảnh Nổi bật, ảnh bài lớn Mới nhất, banner) 12px · ảnh nhỏ ~120px (lưới 2×2 Mới nhất) và ô tìm cao 40px: 8px (≈ 2/3) để độ cong nhìn tương đương ---------- */
+.nw-page{--nw-radius:12px;--nw-radius-sm:8px}
+/* ---------- Nhịp khối: các khối nối tiếp chỉ khối hiện đầu tiên có đệm trên · tiêu đề 24px có vạch đỏ bên trái (như mockup SRS) ---------- */
+.nw-section{padding-block:clamp(20px,2vw,28px)}
+.nw-section:not([hidden]) ~ .nw-section{padding-top:0}
+.nw-head{align-items:center;margin-bottom:16px}
+.nw-section .section-title{display:flex;align-items:center;gap:12px;font-size:24px;line-height:32px}
+.nw-section .section-title::before{content:'';flex:none;width:4px;height:24px;border-radius:2px;background:var(--color-primary)} /* cùng màu chữ tiêu đề "Tin tức" đầu trang */
+.nw-block-empty{margin:0;padding:24px 0;color:var(--color-text-muted)}
+.nw-page :is(.news-title,.news-desc){text-align:left} /* bỏ căn đều hai bên của khối tin trang chủ: màn hẹp bị giãn chữ */
+.nw-empty-wrap .cp-empty{margin:32px 0 0}
+/* ---------- Nhãn chuyên mục (.pf-badge màu theo chuyên mục); trên ảnh: góc trên trái ---------- */
+.nw-badge{flex:none;align-self:flex-start;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;line-height:18px}
+.nw-badge.is-on-photo{position:absolute;top:12px;left:12px;z-index:1;color:#fff;box-shadow:0 2px 6px rgba(20,30,50,.15)}
+/* Nhãn trên ảnh: nền đậm full (lấy đúng màu chữ của nhãn nhạt tương ứng) · chữ trắng */
+.nw-badge.is-on-photo.is-red{background:var(--color-primary)}
+.nw-badge.is-on-photo.is-orange{background:#8a3a12}
+.nw-badge.is-on-photo.is-green{background:var(--color-green)}
+.nw-badge.is-on-photo.is-blue{background:#2257b8}
+/* ---------- Dòng ngày | phút đọc ---------- */
+.nw-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0;font-size:13px;line-height:20px;color:var(--color-text-muted);font-variant-numeric:tabular-nums}
+.nw-meta .icon{width:14px;height:14px}
+/* ---------- Thẻ (.cp-card): không viền, bo góc 12px (--nw-radius), bóng đổ; rê chuột → bóng đậm hơn ---------- */
+.nw-card{border-color:transparent;border-radius:var(--nw-radius);box-shadow:0 1px 3px rgba(20,30,50,.05),0 8px 16px -8px rgba(20,30,50,.1)} /* bóng nhạt */
+.nw-card:hover{box-shadow:0 2px 6px rgba(20,30,50,.06),0 12px 22px -10px rgba(20,30,50,.18)}
 .nw-card:focus-within{box-shadow:0 0 0 3px rgba(185,28,43,.25)}
-/* ---------- Tin nổi bật | Tin mới nhất: 2 cột (.news-grid), mỗi cột có tiêu đề riêng; bài lớn giãn cao bằng cột Tin mới nhất · bỏ đường kẻ ngăn giữa các bài ---------- */
-.nw-col{display:flex;flex-direction:column;min-width:0}
-.nw-hot{display:flex;flex:1}
-.nw-hot .news-feature{flex:1}
-.nw-hot .news-cat{color:#fff} /* nhãn chuyên mục trên ảnh tối: trắng cho rõ (đỏ bị chìm) */
-.nw-page .news-row + .news-row{border-top:0}
-/* ---------- Tin đọc nhiều: dải thẻ chạy ngang (.pv-track .pv-cards — 4 thẻ / khung máy tính, 3 · 2 · 1,2 thẻ khi màn hẹp dần) ---------- */
-.nw-page .pv-car-nav{margin-left:auto}
-.nw-card .news-meta{margin:0}
-.nw-card .news-desc{margin:0;font-size:14px;line-height:22px;-webkit-line-clamp:2;line-clamp:2}
+.nw-card .cp-card-title{-webkit-line-clamp:2;line-clamp:2}
+
+/* ==================== SECTION: TIN TỨC NỔI BẬT · TIN MỚI NHẤT ==================== */
+/* ---------- Bố cục: 2 cột bằng nhau, vạch kẻ dọc mảnh ở giữa (cột phải có viền trái) ---------- */
+/* 2 cột cao bằng nhau: cột phải kéo dài bằng cột trái — lưới 2×2 giãn đều 2 hàng (1fr), nội dung mỗi ô căn giữa theo chiều dọc */
+.nw-top{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.nw-featured-col{min-width:0;padding-right:clamp(20px,2vw,32px)}
+.nw-latest-col{display:flex;flex-direction:column;min-width:0;padding-left:clamp(20px,2vw,32px);border-left:1px solid var(--color-border)}
+/* ---------- Tin tức nổi bật: không khung thẻ — ảnh bo góc · chữ ngay dưới ảnh; các bài chồng lên nhau (grid 1 ô), bài đang xem hiện, chuyển mờ dần 0,5 giây ---------- */
+.nw-featured{position:relative;outline:0}
+.nw-slides{display:grid}
+.nw-slide{grid-area:1 / 1;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .5s ease,visibility 0s linear .5s}
+.nw-slide.is-active{opacity:1;visibility:visible;transition:opacity .5s ease}
+.nw-slide-media{aspect-ratio:2 / 1;border-radius:var(--nw-radius)}
+.nw-slide-body{display:flex;flex-direction:column;gap:8px;padding:12px 0 0}
+.nw-slide-title{font-size:18px;font-weight:700;line-height:26px}
+.nw-slide-desc{margin:0;font-size:15px;line-height:24px}
+.nw-slide-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:4px}
+/* ---------- Điều khiển: chỉ còn chấm chỉ báo ở giữa đáy ảnh (lớp phủ cùng tỉ lệ 2:1 với ảnh); tự chạy, không nút ‹ › / Tạm dừng ---------- */
+.nw-car-bar{position:absolute;inset:0 0 auto;z-index:2;display:flex;align-items:flex-end;justify-content:center;gap:10px;padding:0 16px 14px;aspect-ratio:2 / 1;pointer-events:none}
+.nw-dots{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:rgba(17,24,39,.45);pointer-events:auto}
+.nw-dot{position:relative;width:8px;height:8px;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.6);overflow:hidden;cursor:pointer;transition:width .3s}
+.nw-dot[aria-current="true"]{width:32px;background:rgba(255,255,255,.45)}
+.nw-dot span{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left}
+.nw-dot.is-running span{animation:nw-progress 10s linear forwards}
+.nw-dot:focus-visible{outline:2px solid #fff;outline-offset:2px}
+@keyframes nw-progress{to{transform:scaleX(1)}}
+.nw-car-bar[hidden],[data-car-ctrl][hidden]{display:none}
+/* ---------- Tin mới nhất: bài lớn (ảnh trái ~45% · tiêu đề · sapo · ngày | phút đọc) · kẻ ngang · lưới 2×2 bài nhỏ (kẻ dọc giữa 2 cột, kẻ ngang giữa 2 hàng) ---------- */
+.nw-latest{display:flex;flex:1;flex-direction:column}
+.nw-latest-lead{display:grid;grid-template-columns:minmax(0,42fr) minmax(0,58fr);gap:20px;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--color-border)}
+.nw-latest-lead-media{aspect-ratio:4 / 3;border-radius:var(--nw-radius)}
+.nw-latest-lead .news-title{font-size:18px;line-height:26px}
+.nw-latest-lead .news-desc{margin:0;font-size:15px;line-height:24px}
+.nw-latest-grid{display:grid;flex:1;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr}
+.nw-latest-item{display:grid;grid-template-columns:clamp(96px,8vw,120px) minmax(0,1fr);gap:14px;align-items:center;padding-block:16px}
+.nw-latest-item:nth-child(odd){padding-right:16px;border-right:1px solid var(--color-border)}
+.nw-latest-item:nth-child(even){padding-left:16px}
+.nw-latest-item:nth-child(n+3){border-top:1px solid var(--color-border)}
+.nw-latest-media{aspect-ratio:4 / 3;border-radius:var(--nw-radius-sm)}
+.nw-latest-body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.nw-latest-item .news-title{font-size:15px;line-height:22px;-webkit-line-clamp:2;line-clamp:2} /* tiêu đề tối đa 2 dòng + 1 dòng ngày = nội dung tối đa 3 dòng */
+/* ==================== SECTION: BANNER TRUYỀN THÔNG ==================== */
+/* ---------- Ảnh banner "Kỷ niệm 80 năm" (PNG 2172 × 724, có viền trong suốt + quầng đỏ loang): chỉ hiện vùng banner sạch bên trong ---------- */
+/* Vùng cắt trên ảnh gốc: x 34 → 2141 (rộng 2107) · y 213 → 516 (cao 303) — lùi 8px vào trong mép đặc để không lộ quầng đỏ ở góc bo.
+   Khung giữ đúng tỉ lệ vùng cắt; ảnh đặt tuyệt đối, phóng theo bề rộng (2172 / vùng cắt) và dịch trái / lên đúng gốc vùng cắt */
+.nw-media-banner{--crop-w:2107;--crop-x:34;position:relative;display:block;aspect-ratio:2107 / 303;overflow:hidden;border-radius:var(--nw-radius);background:#c8141f;box-shadow:0 2px 4px rgba(20,30,50,.06),0 10px 20px -8px rgba(20,30,50,.16)}
+.nw-media-banner img{position:absolute;top:calc(-213 / 303 * 100%);left:calc(var(--crop-x) / var(--crop-w) * -100%);width:calc(2172 / var(--crop-w) * 100%);max-width:none;height:auto;transition:transform .6s ease}
+.nw-media-banner:hover img{transform:scale(1.02)}
+.nw-media-banner:focus-visible{outline:3px solid #9b0722;outline-offset:3px}
+
+/* ==================== SECTION: TIN ĐỌC NHIỀU ==================== */
+/* ---------- Dải thẻ dọc (.pv-track .pv-cards): 5 thẻ / khung máy tính; không nút ‹ ›, tự chạy (tin-tuc.js) ---------- */
+.nw-strip{position:relative;clip-path:inset(-40px 0)} /* cắt ngang đúng mép khung nội dung: thẻ / bóng đổ không lộ ra vùng đệm 16px hai bên dải khi tự chạy; chiều dọc vẫn chừa bóng đổ */
+.pv-track.nw-popular{grid-auto-columns:calc((100% - 64px) / 5);padding-bottom:24px}
+/* ---------- Thẻ đọc nhiều: ảnh đứng 4:5 phủ cả thẻ · tiêu đề chữ trắng căn giữa nằm trên lớp tối dần ở đáy ảnh ---------- */
+/* Ảnh và phần chữ chồng cùng 1 ô lưới; phần chữ phủ cả thẻ (z-index trên ảnh) để liên kết .stretched vẫn bấm được toàn thẻ */
+.nw-pop-card{display:grid}
+.nw-pop-card > *{grid-area:1 / 1}
+.nw-pop-card .cp-card-media{aspect-ratio:4 / 5}
+.nw-pop-card .cp-card-media img{aspect-ratio:auto;height:100%}
+.nw-pop-card .cp-card-body{position:relative;z-index:1;justify-content:flex-end;padding:16px 16px 20px;background:linear-gradient(to top,rgba(17,24,39,.88) 0%,rgba(17,24,39,.5) 30%,rgba(17,24,39,0) 58%)}
+.nw-pop-card .cp-card-title{min-height:0;font-size:16px;font-weight:700;line-height:24px;text-align:center;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);-webkit-line-clamp:3;line-clamp:3}
+.nw-pop-card:hover .cp-card-title a{color:#fff}
+.nw-pop-card .cp-card-title a:focus-visible{text-decoration:underline}
+
+/* ==================== SECTION: TIN TỨC KHÁC · KẾT QUẢ TÌM KIẾM ==================== */
+/* ---------- Lưới thẻ dọc, 4 thẻ / hàng (máy tính): ảnh trên 16:9, nhãn chuyên mục góc trên trái ảnh (.nw-badge.is-on-photo) · tiêu đề 2 dòng · mô tả 2 dòng (giữ chỗ đủ dòng để các thẻ cao bằng nhau) · ngày | phút đọc ---------- */
+.nw-others{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 20px}
+.nw-other-media{flex:none;width:100%;aspect-ratio:16 / 9}
+.nw-other-body{display:flex;flex:1;flex-direction:column;gap:8px;min-width:0;padding:14px 16px 16px}
+.nw-other-body .cp-card-title{min-height:48px;font-size:16px;line-height:24px}
+.nw-other-desc{min-height:44px;margin:0;font-size:14px;line-height:22px;-webkit-line-clamp:2;line-clamp:2} /* mô tả 2 dòng, giữ chỗ đủ 2 dòng để thẻ cao bằng nhau */
+.nw-other-foot{display:flex;align-items:center;gap:12px;margin-top:auto}
+.nw-results-count{margin:-8px 0 20px;font-size:15px;color:var(--color-text-muted)}
+.nw-clear{border:0;background:none;padding:0;font-family:inherit;cursor:pointer}
+
+/* ---------- Giảm chuyển động: tắt hiệu ứng chuyển bài và thanh tiến trình (BR-NB-07) ---------- */
+@media(prefers-reduced-motion:reduce){
+  .nw-slide,.nw-slide.is-active{transition:none}
+  .nw-dot.is-running span{animation:none}}
 /* ---------- Responsive: tin tức ---------- */
+@media(max-width:1240px){
+  .pv-track.nw-popular{grid-auto-columns:calc((100% - 48px) / 4)}
+  .nw-others{grid-template-columns:repeat(3,minmax(0,1fr))}
+  /* Hàng điều hướng: ngày (trái) · ô tìm (phải) ở hàng trên; chuyên mục xuống hàng dưới, căn giữa */
+  .nw-mast-bar{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}
+  .nw-mast-bar .nw-chips{grid-column:1 / -1;grid-row:2}
+}
+@media(max-width:1023px){
+  .nw-top{grid-template-columns:1fr;row-gap:32px}
+  .nw-featured-col{padding-right:0}
+  .nw-latest-col{padding-left:0;border-left:0}
+  .nw-others{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pv-track.nw-popular{grid-auto-columns:calc((100% - 32px) / 3)}
+}
 @media(max-width:600px){
-  .nw-search .cp-search-box{flex:none} /* ô tìm và nút xếp dọc: giữ đủ cao 48px, không bị flex:1 ép dẹt */
-  .nw-section .section-title{font-size:22px;line-height:30px}
+  .nw-mast-bar{gap:12px}
+  .nw-mast-date{font-size:13px}
+  .nw-mast-search{width:min(200px,100%)}
+  .nw-chips{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none} /* chuyên mục cuộn ngang 1 hàng */
+  .nw-chips::-webkit-scrollbar{display:none}
+  .nw-chip{flex:none}
+  .nw-chip + .nw-chip::before{margin:0 10px}  .nw-section .section-title{font-size:20px;line-height:28px}
+  .nw-slide-media{aspect-ratio:3 / 2}
+  .nw-car-bar{aspect-ratio:3 / 2}
+  .nw-slide-body{padding:12px 0 0}
+  .nw-slide-foot{flex-wrap:wrap}
+  .nw-latest-lead{grid-template-columns:1fr;gap:12px}
+  .nw-latest-grid{grid-template-columns:1fr;grid-auto-rows:auto}
+  .nw-latest-item:nth-child(n){padding-inline:0;border-right:0}
+  .nw-latest-item:nth-child(n+2){border-top:1px solid var(--color-border)}
+  .pv-track.nw-popular{grid-auto-columns:70%}
+  .nw-others{grid-template-columns:1fr}
+  .nw-other-body{padding:12px}
+  .nw-media-banner{--crop-w:1286;aspect-ratio:1286 / 303} /* điện thoại: chỉ lấy phần trái ảnh (logo 80 · tiêu đề · khẩu hiệu · 1946 – 2026), bỏ đôi tay, để chữ đủ to */
 }
 /* ==================== END PAGE: TIN TỨC ==================== */
 

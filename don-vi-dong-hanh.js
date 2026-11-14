@@ -293,7 +293,7 @@ document.querySelectorAll('.dh-founders').forEach((list, listIndex) => {
 });
 
 // ==================== SECTION: NGƯỜI ĐỒNG HÀNH NỔI BẬT — tối đa 4 thẻ (BR-04, NL02, NL03) ====================
-// Thẻ (nền ảnh hồng mờ): ảnh chân dung tròn viền trắng · tên chữ đen · danh xưng · nút UI KIT viền xanh "Theo dõi" · đường kẻ · trích dẫn nghiêng có dấu ngoặc xanh.
+// Thẻ (nền ảnh hồng mờ): ảnh chân dung tròn viền trắng · tên chữ đen · danh xưng · đường kẻ (đã ẩn nút "Theo dõi") · trích dẫn nghiêng có dấu ngoặc xanh.
 // pos (tuỳ chọn): object-position riêng để đầu các thẻ ngang nhau; zoom (tuỳ chọn): phóng ảnh đứng xa cho khuôn mặt cân với thẻ khác. Ảnh chân dung dùng ảnh gốc có nền (không tách nền), cắt tròn bằng CSS .dh-person-avatar. Ảnh lỗi → ảnh đại diện mặc định (chữ cái đầu). Không có người → TB03.
 const PEOPLE = [
   { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/b4f3cc87d25f00c95859daf33b3c5e40.jpg', quote: 'Lan tỏa yêu thương không chỉ là hành động, mà là trách nhiệm của mỗi chúng ta.' },
@@ -311,7 +311,6 @@ peopleGrid.innerHTML = people.map((p) => `<li class="cp-card dh-person">
     <div class="dh-person-info">
       <h3 class="dh-person-name">${escapeHtml(p.name)}</h3>
       <p class="dh-person-role">${escapeHtml(p.role)}</p>
-      <a class="button button-outline button-small dh-person-follow" href="#" data-panel="Theo dõi người đồng hành" aria-label="Theo dõi ${escapeHtml(p.name)}"><svg class="icon" aria-hidden="true"><use href="#user-plus"/></svg>Theo dõi</a>
       <blockquote class="dh-person-quote"><p>${escapeHtml(p.quote)}</p></blockquote>
     </div>
   </li>`).join('');

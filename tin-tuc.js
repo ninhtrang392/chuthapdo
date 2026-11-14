@@ -1,6 +1,6 @@
 // ==================== TRANG TIN TỨC ====================
-// Đầu trang: tìm kiếm + tab Tất cả · Chiến dịch nhân đạo · Người tốt việc thiện · Đối tác & Đồng hành.
-// Tab Tất cả: Tin nổi bật | Tin mới nhất (.news-grid trang chủ) · Tin đọc nhiều (dải ngang .pv-track) · các tin khác theo chuyên mục (.cp-grid / .cp-card trang Chương trình).
+// Theo SRS Trang Tin tức (mục 3.1): banner (tiêu đề · mô tả · tìm kiếm) · 5 nhãn chuyên mục · Tin tức nổi bật (tự chuyển bài) | Tin mới nhất ·
+// banner truyền thông · Tin đọc nhiều (dải ngang) · Tin tức khác. Bố cục dàn trang tham khảo trang chủ báo Nhân Dân.
 // DỮ LIỆU MINH HỌA — bài viết, ảnh, ngày đăng, lượt xem lấy từ CMS khi có hệ thống chính thức.
 
 // ==================== HEADER: menu mobile ====================
@@ -39,268 +39,335 @@ document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
 });
 
 // ==================== DỮ LIỆU: chuyên mục · bài viết (minh họa) ====================
+// SRS Tin tức: 4 chuyên mục, mỗi bài thuộc đúng 1 chuyên mục; nhãn chuyên mục dùng màu .pf-badge
 const CATEGORIES = {
+  'noi-bat': 'Hoạt động nổi bật',
   'chien-dich': 'Chiến dịch nhân đạo',
   'nguoi-tot': 'Người tốt việc thiện',
   'doi-tac': 'Đối tác & Đồng hành',
 };
-// Ảnh minh họa: Emages/ảnh minh họa/ — focus: điểm giữ khi cắt ảnh
+const CAT_BADGE = { 'noi-bat': 'is-red', 'chien-dich': 'is-orange', 'nguoi-tot': 'is-green', 'doi-tac': 'is-blue' };
+// Ảnh minh họa: Emages/ảnh minh họa/ — [tên file, mô tả ảnh]
 const IMG = {
-  traoQuaBenh: '2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg',
-  hienMauSunHa: 'Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg',
-  hienMauXuan: 'z765570465791.jpg',
-  cuuHoLu: 'z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg',
-  thamBaChau: 'bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg',
-  traoQuaTanNha: '1358142_gen-h-235_1777566365.jpg',
-  choNhanDao: '01 1.jpg',
-  traoBienDinhDuong: '3.-028ae9de1f.jpg',
-  traoQuaHocSinh: 'trao-qua-hoc-sinh.jpg',
-  denTruong: 'tre-em-vung-cao-den-truong.jpg',
-  nhanQua: 'tre-em-vung-cao-nhan-qua.jpg',
-  nuCuoi: 'tre-em-vung-cao-nu-cuoi.jpg',
-  vuiChoi: 'tre-em-vung-cao-vui-choi.jpg',
-  langNu: 'Làng nủ 3.jpg',
-  langNu2: 'Làng nủ 2.webp',
+  traoQuaBenh: ['2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg', 'Tình nguyện viên Chữ thập đỏ trao quà cho hai em nhỏ'],
+  hienMauSunHa: ['Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg', 'Người dân tham gia ngày hội hiến máu tình nguyện'],
+  hienMauXuan: ['z765570465791.jpg', 'Cán bộ Hội tham gia hiến máu tình nguyện'],
+  cuuHoLu: ['z7793485711445_87903495f28730b1681f43dbaf4873d1.jpg', 'Lực lượng cứu hộ phát áo phao, nhu yếu phẩm cho người dân vùng ngập lũ'],
+  thamBaChau: ['bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg', 'Cán bộ Chữ thập đỏ thăm hỏi bà và cháu nhỏ tại nhà'],
+  traoQuaTanNha: ['1358142_gen-h-235_1777566365.jpg', 'Cán bộ Chữ thập đỏ trao quà cho người dân tại nhà'],
+  choNhanDao: ['01 1.jpg', 'Cán bộ Chữ thập đỏ trao gạo cho người dân tại gian hàng Chợ nhân đạo'],
+  traoBienDinhDuong: ['3.-028ae9de1f.jpg', 'Đại diện Hội Chữ thập đỏ và nhà tài trợ trao tặng biển hỗ trợ cho trường học'],
+  traoQuaHocSinh: ['trao-qua-hoc-sinh.jpg', 'Trao quà cho học sinh'],
+  denTruong: ['tre-em-vung-cao-den-truong.jpg', 'Trẻ em vùng cao trên đường đến trường'],
+  nhanQua: ['tre-em-vung-cao-nhan-qua.jpg', 'Trẻ em vùng cao nhận quà'],
+  nuCuoi: ['tre-em-vung-cao-nu-cuoi.jpg', 'Nụ cười của trẻ em vùng cao'],
+  vuiChoi: ['tre-em-vung-cao-vui-choi.jpg', 'Trẻ em vùng cao vui chơi'],
+  langNu: ['Làng nủ 3.jpg', 'Người dân vùng sạt lở nhận đồ dùng thiết yếu'],
+  langNu2: ['Làng nủ 2.webp', 'Khu vực bị sạt lở sau mưa lũ'],
 };
-const imgSrc = (key) => encodeURI(`Emages/ảnh minh họa/${IMG[key]}`);
+const imgSrc = (key) => encodeURI(`Emages/ảnh minh họa/${IMG[key][0]}`);
 
-// hot: true → Tin nổi bật (bài mới nhất có hot là bài lớn) · views → xếp hạng Tin đọc nhiều
+// hot: thứ tự trong Tin tức nổi bật (cờ "Nổi bật" + thứ tự cấu hình tại Web nội bộ Hội) · at: ngày + giờ xuất bản · views: lượt xem · read: phút đọc
+const A = (cat, at, views, read, img, focus, title, desc, hot) => ({ cat, at, views, read, img, focus, title, desc, hot });
 const ARTICLES = [
+  // ---------- Hoạt động nổi bật ----------
+  A('noi-bat', '2026-11-12 08:30', 18420, 4, 'cuuHoLu', '60% 50%', 'Hội Chữ thập đỏ Việt Nam khẩn cấp hỗ trợ người dân vùng lũ miền Trung', 'Hơn 12.000 suất quà gồm nước uống, lương thực, áo phao và thuốc thiết yếu đã được chuyển tới các xã bị chia cắt chỉ trong 72 giờ đầu sau lũ.', 1),
+  A('noi-bat', '2026-11-10 15:10', 7260, 3, 'traoQuaBenh', '50% 40%', 'Tập huấn kỹ năng sơ cấp cứu cho đội tình nguyện viên trẻ năm 2026', 'Hơn 400 tình nguyện viên được trang bị kỹ năng sơ cấp cứu, tâm lý và tổ chức hoạt động cộng đồng tại 12 tỉnh, thành phố.'),
+  A('noi-bat', '2026-11-06 09:00', 11950, 4, 'choNhanDao', '50% 45%', '“Chợ nhân đạo” lan tỏa tại nhiều địa phương', 'Người dân khó khăn được chọn nhu yếu phẩm miễn phí tại các gian hàng gạo, dầu ăn, nước mắm do hội viên vận động.', 4),
+  A('noi-bat', '2026-10-30 14:20', 5180, 5, 'traoQuaTanNha', '50% 40%', 'Hội nghị sơ kết công tác nhân đạo 10 tháng đầu năm 2026', 'Hội nghị đánh giá kết quả triển khai các chương trình trọng điểm và đề ra nhiệm vụ cho những tháng cuối năm.'),
+  A('noi-bat', '2026-10-24 10:05', 4390, 3, 'thamBaChau', '50% 40%', 'Thăm hỏi, tặng quà người cao tuổi neo đơn nhân Tháng hành động vì người cao tuổi', 'Hơn 2.000 suất quà được trao tận nhà cho người cao tuổi neo đơn, khuyết tật trên địa bàn các xã vùng sâu.'),
+  A('noi-bat', '2026-10-18 08:45', 3520, 2, 'hienMauSunHa', '30% 40%', 'Ra mắt Câu lạc bộ hiến máu tình nguyện dự bị tại các trường đại học', 'Câu lạc bộ là nơi kết nối sinh viên sẵn sàng hiến máu khi các bệnh viện cần nhóm máu hiếm.'),
+  A('noi-bat', '2026-10-10 16:30', 2870, 3, 'langNu2', '50% 50%', 'Diễn tập ứng phó thiên tai cho đội ứng phó khẩn cấp cấp tỉnh', 'Buổi diễn tập mô phỏng tình huống lũ quét, sơ tán dân và cấp phát hàng cứu trợ tại điểm tập kết.'),
+  A('noi-bat', '2026-10-03 09:15', 2410, 2, 'nuCuoi', '50% 40%', 'Công bố kết quả vận động Quỹ nhân đạo quý III năm 2026', 'Toàn bộ khoản thu, chi được công khai theo từng chương trình để người dân và nhà hảo tâm cùng theo dõi.'),
+
   // ---------- Chiến dịch nhân đạo ----------
-  { id: 1, hot: true, cat: 'chien-dich', date: '2026-11-03', views: 18420, img: 'cuuHoLu', focus: '60% 50%', alt: 'Lực lượng cứu hộ phát áo phao, nhu yếu phẩm cho người dân vùng ngập lũ',
-    title: 'Hội Chữ thập đỏ Việt Nam khẩn cấp hỗ trợ người dân vùng lũ miền Trung',
-    desc: 'Hơn 12.000 suất quà gồm nước uống, lương thực, áo phao và thuốc thiết yếu đã được chuyển tới các xã bị chia cắt chỉ trong 72 giờ đầu sau lũ.' },
-  { id: 2, cat: 'chien-dich', date: '2026-11-01', views: 9310, img: 'hienMauSunHa', focus: '50% 35%', alt: 'Người dân tham gia ngày hội hiến máu tình nguyện',
-    title: 'Ngày hội “Giọt hồng sẻ chia” tiếp nhận hơn 3.000 đơn vị máu',
-    desc: 'Ngày hội có khu tư vấn sức khỏe, khám sàng lọc miễn phí và hướng dẫn chăm sóc sau hiến máu cho người tham gia.' },
-  { id: 3, cat: 'chien-dich', date: '2026-10-31', views: 7260, img: 'langNu', focus: '50% 50%', alt: 'Người dân vùng sạt lở nhận đồ dùng thiết yếu',
-    title: 'Trao đồ dùng thiết yếu cho người dân vùng sạt lở Làng Nủ',
-    desc: 'Mỗi hộ được nhận chậu, xô, chăn màn và nhu yếu phẩm để sớm ổn định sinh hoạt sau thiên tai.' },
-  { id: 4, cat: 'chien-dich', date: '2026-10-28', views: 12870, img: 'denTruong', focus: '50% 40%', alt: 'Trẻ em vùng cao trên đường đến trường',
-    title: 'Tiếp sức đến trường: 1.500 suất học bổng cho học sinh vùng cao',
-    desc: 'Mỗi suất gồm cặp sách, áo ấm và học bổng, trao tận tay các em tại điểm trường trước mùa đông.' },
-  { id: 5, cat: 'chien-dich', date: '2026-10-26', views: 6540, img: 'nhanQua', focus: '50% 40%', alt: 'Trẻ em vùng cao nhận quà',
-    title: 'Trao áo ấm cho học sinh vùng cao trước mùa đông',
-    desc: 'Hơn 3.000 chiếc áo ấm, chăn và mũ len được trao tận tay học sinh tại các điểm trường xa trung tâm.' },
-  { id: 6, cat: 'chien-dich', date: '2026-10-25', views: 4180, img: 'langNu2', focus: '50% 50%', alt: 'Khu vực bị sạt lở sau mưa lũ',
-    title: 'Khảo sát hiện trường, lập kế hoạch tái thiết vùng sạt lở',
-    desc: 'Đoàn công tác của Hội cùng chính quyền địa phương khảo sát, xác định vị trí an toàn để xây dựng khu dân cư mới.' },
-  { id: 7, cat: 'chien-dich', date: '2026-10-22', views: 10950, img: 'choNhanDao', focus: '50% 45%', alt: 'Cán bộ Chữ thập đỏ trao gạo cho người dân tại gian hàng Chợ nhân đạo',
-    title: '“Chợ nhân đạo” lan tỏa tại nhiều địa phương',
-    desc: 'Người dân khó khăn được chọn nhu yếu phẩm miễn phí tại các gian hàng gạo, dầu ăn, nước mắm do hội viên vận động.' },
+  A('chien-dich', '2026-11-11 10:00', 9310, 3, 'hienMauXuan', '50% 40%', 'Ngày hội “Giọt hồng sẻ chia” tiếp nhận hơn 3.000 đơn vị máu', 'Ngày hội có khu tư vấn sức khỏe, khám sàng lọc miễn phí và hướng dẫn chăm sóc sau hiến máu cho người tham gia.', 2),
+  A('chien-dich', '2026-11-09 08:15', 12870, 4, 'denTruong', '50% 40%', 'Tiếp sức đến trường: 1.500 suất học bổng cho học sinh vùng cao', 'Mỗi suất gồm cặp sách, áo ấm và học bổng, trao tận tay các em tại điểm trường trước mùa đông.'),
+  A('chien-dich', '2026-11-07 14:40', 7260, 3, 'langNu', '50% 50%', 'Trao đồ dùng thiết yếu cho người dân vùng sạt lở Làng Nủ', 'Mỗi hộ được nhận chậu, xô, chăn màn và nhu yếu phẩm để sớm ổn định sinh hoạt sau thiên tai.'),
+  A('chien-dich', '2026-11-02 09:30', 6540, 3, 'nhanQua', '50% 40%', 'Chiến dịch “Áo ấm mùa đông” trao 3.000 áo ấm cho học sinh vùng cao', 'Áo ấm, chăn và mũ len được trao tận tay học sinh tại các điểm trường xa trung tâm trước đợt rét đầu mùa.'),
+  A('chien-dich', '2026-10-27 15:00', 4180, 4, 'langNu2', '30% 50%', 'Khảo sát hiện trường, lập kế hoạch tái thiết vùng sạt lở', 'Đoàn công tác của Hội cùng chính quyền địa phương khảo sát, xác định vị trí an toàn để xây dựng khu dân cư mới.'),
+  A('chien-dich', '2026-10-21 08:20', 3610, 2, 'cuuHoLu', '30% 50%', 'Chuẩn bị sẵn 50 tấn hàng dự phòng cho mùa mưa bão', 'Kho hàng dự phòng tại các khu vực trọng điểm luôn sẵn sàng xuất cấp trong vòng 24 giờ khi có thiên tai.'),
+  A('chien-dich', '2026-10-14 10:10', 2980, 3, 'choNhanDao', '70% 50%', 'Phát động chiến dịch “Tết nhân ái 2027” trên toàn quốc', 'Chiến dịch hướng tới 100.000 suất quà Tết cho hộ nghèo, người khuyết tật và nạn nhân chất độc da cam.'),
+  A('chien-dich', '2026-10-06 14:45', 2240, 2, 'traoQuaHocSinh', '50% 40%', 'Trao 500 xe đạp cho học sinh nghèo vượt khó', 'Những chiếc xe đạp giúp các em ở bản xa rút ngắn quãng đường đến trường mỗi ngày.'),
 
   // ---------- Người tốt việc thiện ----------
-  { id: 8, cat: 'nguoi-tot', date: '2026-11-02', views: 8720, img: 'langNu2', focus: '70% 50%', alt: 'Tình nguyện viên giúp người dân dựng lại nhà sau sạt lở',
-    title: 'Những tình nguyện viên ở lại Làng Nủ giúp bà con dựng lại nhà',
-    desc: 'Suốt ba tuần, nhóm tình nguyện viên trẻ cùng người dân dọn bùn đất, dựng lại nhà tạm và lớp học cho các em nhỏ.' },
-  { id: 9, cat: 'nguoi-tot', date: '2026-10-29', views: 5630, img: 'hienMauXuan', focus: '50% 40%', alt: 'Cán bộ Hội tham gia hiến máu tình nguyện',
-    title: 'Cán bộ Hội gương mẫu tham gia hiến máu cứu người',
-    desc: 'Phong trào được lan tỏa tới các cơ quan, doanh nghiệp, góp phần bổ sung nguồn máu dự trữ cuối năm.' },
-  { id: 10, cat: 'nguoi-tot', date: '2026-10-24', views: 14360, img: 'traoQuaHocSinh', focus: '50% 40%', alt: 'Thầy giáo cùng học trò vùng cao',
-    title: 'Thầy giáo cắm bản 15 năm “cõng chữ” lên non',
-    desc: 'Không chỉ dạy chữ, thầy còn vận động áo ấm, sách vở và bữa trưa cho học trò ở điểm trường xa nhất xã.' },
-  { id: 11, cat: 'nguoi-tot', date: '2026-10-18', views: 11240, img: 'thamBaChau', focus: '60% 40%', alt: 'Tình nguyện viên Chữ thập đỏ thăm hỏi bà và cháu nhỏ tại nhà',
-    title: 'Nữ tình nguyện viên 10 năm chăm sóc người già neo đơn',
-    desc: 'Mỗi tuần, chị dành hai buổi đến thăm, nấu cơm và trò chuyện cùng các cụ già neo đơn trong xã.' },
-  { id: 12, cat: 'nguoi-tot', date: '2026-10-15', views: 3920, img: 'traoQuaBenh', focus: '50% 40%', alt: 'Tình nguyện viên Chữ thập đỏ trao quà cho hai em nhỏ',
-    title: 'Tập huấn kỹ năng cho đội tình nguyện viên trẻ năm 2026',
-    desc: 'Hơn 400 tình nguyện viên được trang bị kỹ năng sơ cấp cứu, tâm lý và tổ chức hoạt động cộng đồng.' },
-  { id: 13, cat: 'nguoi-tot', date: '2026-10-05', views: 9870, img: 'hienMauSunHa', focus: '70% 35%', alt: 'Ngày hội hiến máu đông người tham gia',
-    title: 'Tôn vinh 100 gương mặt hiến máu tiêu biểu năm 2026',
-    desc: 'Nhiều người đã hiến máu trên 30 lần, trở thành tấm gương lan tỏa tinh thần sẻ chia trong cộng đồng.' },
-  { id: 14, cat: 'nguoi-tot', date: '2026-10-02', views: 4410, img: 'vuiChoi', focus: '50% 40%', alt: 'Trẻ em vùng cao vui chơi',
-    title: 'Người dân góp công xây sân chơi cho trẻ em vùng cao',
-    desc: 'Sân chơi gồm cầu trượt, xích đu và góc đọc sách, phục vụ hơn 200 em nhỏ trong bản.' },
+  A('nguoi-tot', '2026-11-12 14:00', 8720, 5, 'langNu2', '70% 50%', 'Những tình nguyện viên ở lại Làng Nủ giúp bà con dựng lại nhà', 'Suốt ba tuần, nhóm tình nguyện viên trẻ cùng người dân dọn bùn đất, dựng lại nhà tạm và lớp học cho các em nhỏ.', 3),
+  A('nguoi-tot', '2026-11-08 07:50', 14360, 4, 'traoQuaHocSinh', '50% 40%', 'Thầy giáo cắm bản 15 năm “cõng chữ” lên non', 'Không chỉ dạy chữ, thầy còn vận động áo ấm, sách vở và bữa trưa cho học trò ở điểm trường xa nhất xã.'),
+  A('nguoi-tot', '2026-11-04 16:15', 11240, 3, 'thamBaChau', '60% 40%', 'Nữ tình nguyện viên 10 năm chăm sóc người già neo đơn', 'Mỗi tuần, chị dành hai buổi đến thăm, nấu cơm và trò chuyện cùng các cụ già neo đơn trong xã.'),
+  A('nguoi-tot', '2026-10-29 09:40', 9870, 3, 'hienMauSunHa', '70% 35%', 'Tôn vinh 100 gương mặt hiến máu tiêu biểu năm 2026', 'Nhiều người đã hiến máu trên 30 lần, trở thành tấm gương lan tỏa tinh thần sẻ chia trong cộng đồng.'),
+  A('nguoi-tot', '2026-10-22 11:25', 5630, 2, 'hienMauXuan', '80% 50%', 'Cụ bà 80 tuổi vẫn đều đặn ủng hộ Quỹ nhân đạo', 'Từ khoản lương hưu ít ỏi, bà dành dụm mỗi tháng một phần để góp vào Quỹ nhân đạo của phường.'),
+  A('nguoi-tot', '2026-10-16 15:35', 4410, 3, 'vuiChoi', '50% 40%', 'Người dân góp công xây sân chơi cho trẻ em vùng cao', 'Sân chơi gồm cầu trượt, xích đu và góc đọc sách, phục vụ hơn 200 em nhỏ trong bản.'),
+  A('nguoi-tot', '2026-10-09 08:05', 3170, 2, 'nhanQua', '30% 40%', 'Nhóm sinh viên mở lớp học tình thương miễn phí', 'Lớp học do sinh viên tình nguyện đứng lớp, giúp các em có hoàn cảnh đặc biệt được học chữ, học kỹ năng sống.'),
+  A('nguoi-tot', '2026-10-02 13:50', 2650, 2, 'traoQuaBenh', '30% 40%', 'Người lái xe ôm miễn phí chở bệnh nhân nghèo đi chạy thận', 'Gần 5 năm nay, anh dành buổi sáng chở miễn phí các bệnh nhân nghèo từ làng lên bệnh viện tỉnh.'),
 
   // ---------- Đối tác & Đồng hành ----------
-  { id: 15, cat: 'doi-tac', date: '2026-11-02', views: 5280, img: 'hienMauXuan', focus: '80% 50%', alt: 'Người lao động doanh nghiệp tham gia hiến máu',
-    title: 'Doanh nghiệp tổ chức ngày hội hiến máu cùng Hội Chữ thập đỏ',
-    desc: 'Hơn 600 cán bộ, người lao động đăng ký hiến máu, nhiều người lần đầu tham gia sau khi được tư vấn tại chỗ.' },
-  { id: 16, cat: 'doi-tac', date: '2026-10-30', views: 3460, img: 'traoQuaBenh', focus: '30% 40%', alt: 'Trao quà cho trẻ em mắc bệnh tan máu bẩm sinh',
-    title: 'Nhà tài trợ đồng hành hỗ trợ trẻ em mắc bệnh tan máu bẩm sinh',
-    desc: 'Mỗi em được hỗ trợ chi phí điều trị, quà và học bổng trong suốt năm học 2026 – 2027.' },
-  { id: 17, cat: 'doi-tac', date: '2026-10-27', views: 6120, img: 'traoBienDinhDuong', focus: '50% 40%', alt: 'Đại diện Hội Chữ thập đỏ và nhà tài trợ trao tặng biển hỗ trợ cho trường học',
-    title: 'Ra mắt dự án “Chăm em đủ chất” cùng nhà tài trợ',
-    desc: 'Dự án hỗ trợ bữa ăn dinh dưỡng và tổ chức hoạt động vui học kiến thức dinh dưỡng cho học sinh bán trú.' },
-  { id: 18, cat: 'doi-tac', date: '2026-10-20', views: 2970, img: 'traoQuaHocSinh', focus: '50% 40%', alt: 'Doanh nghiệp đồng hành trao quà cho học sinh',
-    title: 'Doanh nghiệp đồng hành trao 500 suất quà cho học sinh vượt khó',
-    desc: 'Mỗi suất quà gồm sách vở, đồ dùng học tập và học bổng, trao tại các trường trên địa bàn khó khăn.' },
-  { id: 19, cat: 'doi-tac', date: '2026-10-10', views: 7740, img: 'nuCuoi', focus: '50% 40%', alt: 'Nụ cười của trẻ em vùng cao',
-    title: 'Công bố danh sách nhà hảo tâm, đơn vị đồng hành tháng 9',
-    desc: 'Danh sách được cập nhật công khai trên nền tảng để mọi người có thể tra cứu khoản đóng góp của mình.' },
-  { id: 20, cat: 'doi-tac', date: '2026-10-08', views: 3150, img: 'traoQuaTanNha', focus: '50% 40%', alt: 'Cán bộ Chữ thập đỏ cùng đơn vị đồng hành trao quà tại nhà dân',
-    title: 'Gặp mặt tri ân các đơn vị đồng hành năm 2026',
-    desc: 'Hội cảm ơn hơn 120 doanh nghiệp, tổ chức đã đồng hành cùng các chương trình nhân đạo trong năm.' },
-];
+  A('doi-tac', '2026-11-11 15:30', 5280, 3, 'hienMauXuan', '30% 40%', 'Doanh nghiệp tổ chức ngày hội hiến máu cùng Hội Chữ thập đỏ', 'Hơn 600 cán bộ, người lao động đăng ký hiến máu, nhiều người lần đầu tham gia sau khi được tư vấn tại chỗ.', 5),
+  A('doi-tac', '2026-11-05 10:45', 6120, 4, 'traoBienDinhDuong', '50% 40%', 'Ra mắt dự án “Chăm em đủ chất” cùng nhà tài trợ', 'Dự án hỗ trợ bữa ăn dinh dưỡng và tổ chức hoạt động vui học kiến thức dinh dưỡng cho học sinh bán trú.'),
+  A('doi-tac', '2026-11-01 09:20', 3460, 3, 'traoQuaBenh', '50% 40%', 'Nhà tài trợ đồng hành hỗ trợ trẻ em mắc bệnh tan máu bẩm sinh', 'Mỗi em được hỗ trợ chi phí điều trị, quà và học bổng trong suốt năm học 2026 – 2027.'),
+  A('doi-tac', '2026-10-26 14:10', 2970, 3, 'traoQuaHocSinh', '50% 40%', 'Doanh nghiệp đồng hành trao 500 suất quà cho học sinh vượt khó', 'Mỗi suất quà gồm sách vở, đồ dùng học tập và học bổng, trao tại các trường trên địa bàn khó khăn.'),
+  A('doi-tac', '2026-10-19 16:00', 7740, 2, 'nuCuoi', '60% 40%', 'Công bố danh sách nhà hảo tâm, đơn vị đồng hành tháng 9', 'Danh sách được cập nhật công khai trên nền tảng để mọi người có thể tra cứu khoản đóng góp của mình.'),
+  A('doi-tac', '2026-10-12 09:55', 3150, 3, 'traoQuaTanNha', '40% 40%', 'Gặp mặt tri ân các đơn vị đồng hành năm 2026', 'Hội cảm ơn hơn 120 doanh nghiệp, tổ chức đã đồng hành cùng các chương trình nhân đạo trong năm.'),
+  A('doi-tac', '2026-10-07 10:30', 2560, 4, 'traoBienDinhDuong', '60% 40%', 'Ký kết hợp tác hỗ trợ bữa ăn bán trú với các tổ chức quốc tế', 'Thỏa thuận giúp hơn 5.000 học sinh bán trú có thêm bữa ăn đủ chất trong năm học mới.'),
+  A('doi-tac', '2026-10-01 15:15', 1980, 2, 'vuiChoi', '30% 40%', 'Ngân hàng đồng hành xây 10 sân chơi cho trẻ em vùng cao', 'Các sân chơi được xây tại điểm trường mầm non vùng cao, có góc đọc sách và khu vận động.'),
+].map((a, i) => ({ ...a, id: i + 1, alt: IMG[a.img][1] }));
 
-// ==================== DỰNG BÀI: Tin nổi bật · Tin mới nhất · thẻ bài ====================
+// ==================== DỰNG THẺ BÀI ====================
 const $ = (s) => document.querySelector(s);
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const viDate = (iso) => iso.split('-').reverse().join('/');
-const byNewest = (a, b) => b.date.localeCompare(a.date);
+const viDate = (at) => at.slice(0, 10).split('-').reverse().join('/');
+const byNewest = (a, b) => b.at.localeCompare(a.at);
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#${id}"/></svg>`;
 
-// ---------- Phần dùng chung: ảnh · dòng meta (chuyên mục · ngày · lượt xem — tùy chọn) · tiêu đề phủ cả bài (.stretched) · tóm tắt ----------
-const media = (a, cls) => `<div class="${cls}"${cls.includes('media-photo') ? ` style="--focus:${a.focus}"` : ''}><img src="${imgSrc(a.img)}" alt="${escapeHtml(a.alt)}" loading="lazy" style="object-position:${a.focus}" /></div>`;
-const meta = (a, { cat = true, date = true, views = false } = {}) => `<p class="news-meta">${cat ? `<span class="news-cat">${escapeHtml(CATEGORIES[a.cat])}</span>` : ''}${date ? `<time datetime="${a.date}">${viDate(a.date)}</time>` : ''}${views ? `<span>${a.views.toLocaleString('vi-VN')} lượt xem</span>` : ''}</p>`;
-const titleLink = (a) => `<a class="stretched" href="#" data-panel="Bài viết">${escapeHtml(a.title)}</a>`;
+// ---------- Phần dùng chung: nhãn chuyên mục · ảnh · dòng ngày | phút đọc (BR-DS-05) · tiêu đề phủ cả thẻ (.stretched, BR-DS-06) ----------
+const badge = (a, extra = '') => `<span class="pf-badge ${CAT_BADGE[a.cat]} nw-badge${extra}">${escapeHtml(CATEGORIES[a.cat])}</span>`;
+const media = (a, cls, eager = false, withBadge = true) => `<div class="media media-photo ${cls}" style="--focus:${a.focus}"><img src="${imgSrc(a.img)}" alt="${escapeHtml(a.alt)}" loading="${eager ? 'eager' : 'lazy'}" decoding="async" />${withBadge ? badge(a, ' is-on-photo') : ''}</div>`;
+const meta = (a, withRead = true) => `<p class="nw-meta">${icon('clock')}<time datetime="${a.at.replace(' ', 'T')}">${viDate(a.at)}</time>${withRead ? `<span aria-hidden="true">|</span><span>${a.read} phút đọc</span>` : ''}</p>`;
+const titleLink = (a) => `<a class="stretched" href="#" data-panel="Chi tiết tin tức">${escapeHtml(a.title)}</a>`;
 
-// ---------- Tin nổi bật: bài lớn (ảnh phủ kín, chữ trắng) — cùng HTML bài lớn khối tin tức trang chủ ----------
-const feature = (a) => `
-  <article class="news-item news-feature">
-    ${media(a, 'media media-photo')}
-    <div class="news-body">${meta(a)}<h3 class="news-title">${titleLink(a)}</h3><p class="news-desc">${escapeHtml(a.desc)}</p></div>
+// Tin tức nổi bật: 1 slide = ảnh lớn (không nhãn) · tiêu đề (2 dòng) · sapo (3 dòng) · ngày đăng
+const slide = (a, i, n) => `
+  <article class="news-item nw-slide" role="group" aria-roledescription="slide" aria-label="${i + 1} / ${n}">
+    ${media(a, 'nw-slide-media', i === 0, false)}
+    <div class="nw-slide-body">
+      <h3 class="news-title nw-slide-title">${titleLink(a)}</h3>
+      <p class="news-desc nw-slide-desc">${escapeHtml(a.desc)}</p>
+      <div class="nw-slide-foot">${meta(a, false)}</div>
+    </div>
   </article>`;
-// ---------- Tin mới nhất: ảnh nhỏ trái, chữ phải — cùng HTML danh sách khối tin tức trang chủ ----------
-const row = (a) => `
-  <article class="news-item news-row">
-    ${media(a, 'media media-photo')}
-    <div class="news-body">${meta(a)}<h3 class="news-title">${titleLink(a)}</h3><p class="news-desc">${escapeHtml(a.desc)}</p></div>
+// Tin mới nhất: bài 1 = thẻ ngang lớn (ảnh không nhãn · tiêu đề · sapo · ngày đăng); bài 2 – 5 = lưới 2×2 bài nhỏ (ảnh không nhãn · tiêu đề tối đa 2 dòng · ngày đăng = tối đa 3 dòng)
+const latestLead = (a) => `
+  <article class="news-item nw-latest-lead">
+    ${media(a, 'nw-latest-lead-media', false, false)}
+    <div class="nw-latest-body"><h3 class="news-title">${titleLink(a)}</h3><p class="news-desc">${escapeHtml(a.desc)}</p>${meta(a, false)}</div>
   </article>`;
-// ---------- Thẻ bài: .cp-card (ảnh trên · ngày · tiêu đề 2 dòng · tóm tắt 2 dòng); Tin đọc nhiều: chuyên mục · lượt xem (không ngày) ----------
-const card = (a, opts = { cat: false }) => `
-  <article class="cp-card nw-card">
-    ${media(a, 'cp-card-media')}
-    <div class="cp-card-body">${meta(a, opts)}<h3 class="cp-card-title">${titleLink(a)}</h3><p class="news-desc">${escapeHtml(a.desc)}</p></div>
+const latestCard = (a) => `
+  <article class="news-item nw-latest-item">
+    ${media(a, 'nw-latest-media', false, false)}
+    <div class="nw-latest-body"><h3 class="news-title">${titleLink(a)}</h3>${meta(a, false)}</div>
+  </article>`;
+const latestBlock = (list) => {
+  if (!list.length) return '<p class="nw-block-empty">Hiện chưa có tin tức nào.</p>';
+  const [lead, ...rest] = list;
+  return latestLead(lead) + (rest.length ? `<div class="nw-latest-grid">${rest.map(latestCard).join('')}</div>` : '');
+};
+// Tin đọc nhiều: thẻ dọc — ảnh đứng phủ cả thẻ, không nhãn chuyên mục · tiêu đề tối đa 3 dòng chữ trắng nằm trên đáy ảnh (CSS .nw-pop-card)
+const popularCard = (a) => `
+  <article class="cp-card nw-card nw-pop-card">
+    ${media(a, 'cp-card-media', false, false)}
+    <div class="cp-card-body"><h3 class="cp-card-title">${titleLink(a)}</h3></div>
+  </article>`;
+// Tin tức khác / kết quả tìm kiếm: thẻ dọc (4 thẻ / hàng) — ảnh trên, nhãn chuyên mục ở góc trên trái ảnh · tiêu đề 2 dòng · mô tả 2 dòng · ngày | phút đọc
+const otherCard = (a) => `
+  <article class="cp-card nw-card nw-other">
+    ${media(a, 'nw-other-media')}
+    <div class="nw-other-body"><h3 class="cp-card-title">${titleLink(a)}</h3><p class="news-desc nw-other-desc">${escapeHtml(a.desc)}</p><div class="nw-other-foot">${meta(a)}</div></div>
   </article>`;
 
-// ==================== DỰNG TAB + TÌM KIẾM ====================
-// Tab Tất cả: Tin nổi bật (1 bài) | Tin mới nhất (4 bài) · Tin đọc nhiều (8 bài nhiều lượt xem nhất) · mỗi chuyên mục 4 bài mới nhất chưa hiện ở trên
-// Tab chuyên mục: toàn bộ bài của chuyên mục, mới nhất trước
-// Có từ khóa → ẩn Tin nổi bật / Tin mới nhất / Tin đọc nhiều; mỗi chuyên mục chỉ giữ bài khớp (tiêu đề, tóm tắt, tên chuyên mục), mục không còn bài thì ẩn
-const LATEST_COUNT = 4;
-const POPULAR_COUNT = 8;
-const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
-let query = '';
-const render = () => {
-  const key = fold(query.trim());
-  const match = (a) => !key || fold(`${a.title} ${a.desc} ${CATEGORIES[a.cat]}`).includes(key);
-  const sorted = [...ARTICLES].sort(byNewest);
-  const hot = sorted.find((a) => a.hot) || sorted[0];
-  const latest = sorted.filter((a) => a !== hot).slice(0, LATEST_COUNT);
-  const shownTop = new Set([hot, ...latest]);
-  $('#nw-hot').innerHTML = feature(hot);
-  $('#nw-latest').innerHTML = latest.map(row).join('');
-  $('#nw-popular').innerHTML = [...ARTICLES].sort((a, b) => b.views - a.views).slice(0, POPULAR_COUNT).map((a) => card(a, { cat: true, date: false, views: true })).join('');
-  $('#nw-top').hidden = Boolean(key);
-  $('#nw-popular-section').hidden = Boolean(key);
-  document.querySelectorAll('.nw-section[data-cat]').forEach((section) => {
-    const full = section.hasAttribute('data-full');
-    let list = sorted.filter((a) => a.cat === section.dataset.cat && match(a));
-    if (!key && !full) list = list.filter((a) => !shownTop.has(a)).slice(0, 4);
-    section.querySelector('.nw-grid').innerHTML = list.map((a) => card(a)).join('');
-    section.hidden = !list.length;
+// ==================== QUY TẮC LẤY BÀI THEO CHUYÊN MỤC (BR-NB-01, BR-DS-01 → 04, NL02) ====================
+const pick = (cat) => {
+  const pool = ARTICLES.filter((a) => !cat || a.cat === cat);
+  const newest = [...pool].sort(byNewest);
+  // Nổi bật: tối đa 5 bài có cờ, theo thứ tự cấu hình; không có bài gắn cờ → bài mới nhất (hiển thị như 1 bài đơn)
+  let featured = pool.filter((a) => a.hot).sort((a, b) => a.hot - b.hot).slice(0, 5);
+  if (!featured.length && newest.length) featured = [newest[0]];
+  const latest = newest.filter((a) => !featured.includes(a)).slice(0, 5); // 1 bài lớn + lưới 2×2
+  // Đọc nhiều: tối đa 10 bài lượt xem cao nhất (bằng nhau thì bài mới hơn trước), không loại trừ khối khác
+  // (hệ thống chính thức chỉ tính lượt xem trong 30 ngày gần nhất)
+  const popular = [...pool].sort((a, b) => b.views - a.views || byNewest(a, b)).slice(0, 10);
+  const used = new Set([...featured, ...latest, ...popular]);
+  const others = newest.filter((a) => !used.has(a)).slice(0, 16);
+  return { pool, featured, latest, popular, others };
+};
+
+// ==================== TIN TỨC NỔI BẬT: tự chuyển 10 giây, vòng lặp; không nút ‹ › / Tạm dừng; tạm dừng khi rê chuột / focus / chạm giữ / tab ẩn (BR-NB-02 → 07) ====================
+const AUTO_MS = 10000;
+const featuredEl = $('#nw-featured');
+const slidesEl = $('#nw-slides');
+const dotsEl = $('#nw-dots');
+const car = { n: 0, i: 0, timer: 0, holds: new Set() };
+const slideEls = () => [...slidesEl.children];
+// Dừng bộ đếm + xóa thanh tiến trình của chấm đang chọn
+const stopCycle = () => {
+  clearTimeout(car.timer);
+  car.timer = 0;
+  dotsEl.querySelectorAll('.is-running').forEach((d) => d.classList.remove('is-running'));
+};
+// Chạy lại bộ đếm từ đầu chu kỳ (chỉ khi đủ điều kiện); bộ đếm bắt đầu khi ảnh bài đang hiện đã tải xong
+const startCycle = () => {
+  stopCycle();
+  if (car.n < 2 || reduced() || car.holds.size) return;
+  const img = slideEls()[car.i]?.querySelector('img');
+  if (img && !img.complete) { img.addEventListener('load', startCycle, { once: true }); img.addEventListener('error', startCycle, { once: true }); return; }
+  const dot = dotsEl.children[car.i];
+  if (dot) { void dot.offsetWidth; dot.classList.add('is-running'); }
+  car.timer = setTimeout(() => go(car.i + 1), AUTO_MS);
+};
+// Chuyển tới bài i (vòng: sau bài cuối về bài 1, trước bài 1 là bài cuối); tải trước ảnh bài kế tiếp
+const go = (i) => {
+  if (!car.n) return;
+  car.i = (i + car.n) % car.n;
+  slideEls().forEach((s, k) => {
+    const on = k === car.i;
+    s.classList.toggle('is-active', on);
+    s.setAttribute('aria-hidden', String(!on));
+    s.inert = !on;
   });
-  renderPopularDots();
-  updateEmpty();
+  [...dotsEl.children].forEach((d, k) => d.setAttribute('aria-current', String(k === car.i)));
+  const next = slideEls()[(car.i + 1) % car.n]?.querySelector('img');
+  if (next) next.loading = 'eager';
+  startCycle();
 };
-// Thông báo kết quả / không có kết quả theo tab đang xem
-const updateEmpty = () => {
-  const panel = document.querySelector('.nw-panel:not([hidden])');
-  const total = panel.querySelectorAll('.nw-section:not([hidden]) article').length;
-  const q = query.trim();
-  $('#nw-empty').hidden = !q || total > 0;
-  $('#nw-status').textContent = q ? (total ? `Tìm thấy ${total} bài viết cho “${q}”` : 'Không tìm thấy bài viết phù hợp') : '';
+const renderFeatured = (list) => {
+  car.n = list.length;
+  car.i = 0;
+  slidesEl.innerHTML = list.map((a, i) => slide(a, i, list.length)).join('');
+  dotsEl.innerHTML = list.map((a, k) => `<button class="nw-dot" type="button" data-slide="${k}" aria-label="Bài nổi bật ${k + 1}"><span></span></button>`).join('');
+  featuredEl.querySelectorAll('[data-car-ctrl]').forEach((c) => { c.hidden = car.n < 2; });
+  $('#nw-featured-empty').hidden = car.n > 0;
+  go(0);
 };
-
-// ---------- Gõ → lọc sau 300ms · bấm Tìm kiếm → lọc ngay và cuộn tới kết quả đầu ----------
-let searchTimer;
-$('#nw-search').addEventListener('input', (event) => {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => { query = event.target.value; render(); }, 300);
+// Bấm chấm chỉ báo: chuyển tới bài tương ứng
+featuredEl.addEventListener('click', (event) => {
+  const dot = event.target.closest('[data-slide]');
+  if (dot) go(Number(dot.dataset.slide));
 });
+// Tạm dừng: rê chuột · focus bàn phím · chạm giữ · tab ẩn — hết điều kiện thì chạy lại từ đầu chu kỳ
+const hold = (key, on) => { if (on) car.holds.add(key); else car.holds.delete(key); startCycle(); };
+featuredEl.addEventListener('mouseenter', () => hold('hover', true));
+featuredEl.addEventListener('mouseleave', () => hold('hover', false));
+featuredEl.addEventListener('focusin', () => hold('focus', true));
+featuredEl.addEventListener('focusout', (event) => { if (!featuredEl.contains(event.relatedTarget)) hold('focus', false); });
+document.addEventListener('visibilitychange', () => hold('hidden', document.hidden));
+// Vuốt ngang trên màn cảm ứng: chuyển bài; chạm giữ: tạm dừng
+let touchX = null;
+featuredEl.addEventListener('pointerdown', (event) => { if (event.pointerType !== 'mouse') { touchX = event.clientX; hold('touch', true); } });
+const endTouch = (event) => {
+  if (touchX === null) return;
+  const dx = event.clientX - touchX;
+  touchX = null;
+  if (Math.abs(dx) > 40) { car.holds.delete('touch'); go(car.i + (dx < 0 ? 1 : -1)); } else hold('touch', false);
+};
+featuredEl.addEventListener('pointerup', endTouch);
+featuredEl.addEventListener('pointercancel', endTouch);
+// Bàn phím: mũi tên trái / phải khi focus trong khối
+featuredEl.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowRight') { event.preventDefault(); go(car.i + 1); }
+  if (event.key === 'ArrowLeft') { event.preventDefault(); go(car.i - 1); }
+});
+
+// ==================== TIN ĐỌC NHIỀU: không nút ‹ ›; tự chạy liên tục (vẫn vuốt / cuộn tay được) ====================
+const popular = $('#nw-popular');
+const popularStrip = popular.parentElement;
+const stripStep = () => popular.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(popular).columnGap || 0);
+const atStripEnd = () => popular.scrollLeft + popular.clientWidth >= popular.scrollWidth - 2;
+// ---------- Tự chạy: mỗi 4 giây dịch 1 thẻ, tới cuối dải thì quay về đầu; tạm dừng khi rê chuột / focus / chạm / tab ẩn / giảm chuyển động ----------
+const STRIP_MS = 4000;
+const strip = { timer: 0, holds: new Set() };
+const startStrip = () => {
+  clearInterval(strip.timer);
+  strip.timer = 0;
+  if (reduced() || strip.holds.size) return;
+  strip.timer = setInterval(() => {
+    if (!popular.firstElementChild || !popular.offsetParent || popular.scrollWidth <= popular.clientWidth + 2) return;
+    if (atStripEnd()) popular.scrollTo({ left: 0, behavior: 'smooth' });
+    else popular.scrollBy({ left: stripStep(), behavior: 'smooth' });
+  }, STRIP_MS);
+};
+const holdStrip = (key, on) => { if (on) strip.holds.add(key); else strip.holds.delete(key); startStrip(); };
+popularStrip.addEventListener('mouseenter', () => holdStrip('hover', true));
+popularStrip.addEventListener('mouseleave', () => holdStrip('hover', false));
+popularStrip.addEventListener('focusin', () => holdStrip('focus', true));
+popularStrip.addEventListener('focusout', (event) => { if (!popularStrip.contains(event.relatedTarget)) holdStrip('focus', false); });
+popularStrip.addEventListener('touchstart', () => holdStrip('touch', true), { passive: true });
+popularStrip.addEventListener('touchend', () => holdStrip('touch', false), { passive: true });
+document.addEventListener('visibilitychange', () => holdStrip('hidden', document.hidden));
+startStrip();
+
+// ==================== ĐẦU TRANG: ngày hôm nay ====================
+// ---------- Ngày hôm nay: "Thứ Sáu, 13/11/2026" ----------
+const today = new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+$('#nw-today').textContent = today.charAt(0).toUpperCase() + today.slice(1);
+
+// ==================== LỌC CHUYÊN MỤC + TÌM KIẾM ====================
+// Chọn nhãn: chỉ dựng lại các khối (banner truyền thông giữ nguyên), Nổi bật về bài 1, ghi ?chuyen-muc= vào đường dẫn (chia sẻ / nút Back)
+// Tìm kiếm: theo tên bài trong chuyên mục đang chọn, bấm Tìm kiếm / Enter; 2 – 100 ký tự, không phân biệt hoa thường / có dấu
+const chips = [...document.querySelectorAll('.nw-chip')];
+const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+const state = { cat: '', q: '' };
+const show = (id, on) => { $(id).hidden = !on; };
+const render = () => {
+  chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.cat === state.cat)));
+  const data = pick(state.cat);
+  const key = fold(state.q.trim());
+  const searching = key.length >= 2;
+  const noPosts = !data.pool.length;
+  // Không có bài trong chuyên mục (NL03a): ẩn từ Nổi bật đến Tin tức khác, hiện TB03; banner truyền thông vẫn hiện
+  $('#nw-empty').textContent = noPosts ? 'Chưa có tin tức trong chuyên mục này.' : '';
+  show('#nw-empty', noPosts);
+  show('#nw-top', !noPosts && !searching);
+  show('#nw-popular-section', !noPosts && !searching);
+  show('#nw-others-section', !noPosts && !searching);
+  show('#nw-results', searching);
+  if (searching) {
+    stopCycle();
+    const found = data.pool.filter((a) => fold(a.title).includes(key)).sort(byNewest);
+    $('#nw-results-count').textContent = found.length ? `Tìm thấy ${found.length.toLocaleString('vi-VN')} tin tức cho “${state.q.trim()}”` : `Không tìm thấy tin tức phù hợp với “${state.q.trim()}”. Hãy thử từ khóa khác.`;
+    $('#nw-results-list').innerHTML = found.map(otherCard).join('');
+    $('#nw-status').textContent = $('#nw-results-count').textContent;
+    return;
+  }
+  $('#nw-status').textContent = '';
+  if (noPosts) { stopCycle(); return; }
+  renderFeatured(data.featured);
+  $('#nw-latest').innerHTML = latestBlock(data.latest);
+  popular.innerHTML = data.popular.map(popularCard).join('');
+  popular.scrollLeft = 0;
+  startStrip();
+  show('#nw-popular-empty', !data.popular.length);
+  popular.parentElement.hidden = !data.popular.length;
+  $('#nw-others').innerHTML = data.others.map(otherCard).join('');
+  show('#nw-others-empty', !data.others.length);
+};
+const urlFor = () => {
+  const p = new URLSearchParams(location.search);
+  if (state.cat) p.set('chuyen-muc', state.cat); else p.delete('chuyen-muc');
+  if (state.q.trim().length >= 2) p.set('q', state.q.trim()); else p.delete('q');
+  const qs = p.toString();
+  return location.pathname + (qs ? `?${qs}` : '');
+};
+chips.forEach((chip) => chip.addEventListener('click', () => {
+  if (chip.dataset.cat === state.cat) return;
+  state.cat = chip.dataset.cat;
+  history.pushState(null, '', urlFor());
+  render();
+}));
+const hint = $('#nw-status');
 $('#nw-search-form').addEventListener('submit', (event) => {
   event.preventDefault();
-  clearTimeout(searchTimer);
-  query = $('#nw-search').value;
+  const q = $('#nw-search').value.trim();
+  $('#nw-search').value = q;
+  if (q.length === 1) { hint.textContent = 'Vui lòng nhập ít nhất 2 ký tự để tìm kiếm.'; $('#nw-search').setCustomValidity('Vui lòng nhập ít nhất 2 ký tự để tìm kiếm.'); $('#nw-search').reportValidity(); return; }
+  state.q = q;
+  history.pushState(null, '', urlFor());
   render();
-  const first = document.querySelector('.nw-panel:not([hidden]) .nw-section:not([hidden])') || $('#nw-empty');
-  first.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
+  if (q) $('#nw-results').scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
 });
-
-// ==================== TAB CHUYÊN MỤC: bấm / phím mũi tên đổi tab · Xem tất cả → mở tab chuyên mục · #chien-dich trên URL mở sẵn tab ====================
-const tabs = [...document.querySelectorAll('.nw-tabs [role="tab"]')];
-const selectTab = (tab, focus = false) => {
-  tabs.forEach((t) => {
-    const on = t === tab;
-    t.setAttribute('aria-selected', String(on));
-    t.tabIndex = on ? 0 : -1;
-    document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
-  });
-  if (focus) tab.focus();
-  const id = tab.id.replace('nw-tab-', '');
-  history.replaceState(null, '', id === 'all' ? location.pathname + location.search : `#${id}`);
-  renderPopularDots();
-  updateEmpty();
+$('#nw-search').addEventListener('input', () => $('#nw-search').setCustomValidity(''));
+$('#nw-clear').addEventListener('click', () => {
+  state.q = '';
+  $('#nw-search').value = '';
+  history.pushState(null, '', urlFor());
+  render();
+});
+// Đọc chuyên mục / từ khóa từ đường dẫn (mở link chia sẻ, nút Back / Forward); giá trị lạ → mặc định
+const readUrl = () => {
+  const p = new URLSearchParams(location.search);
+  const cat = p.get('chuyen-muc') || '';
+  state.cat = cat in CATEGORIES ? cat : '';
+  state.q = (p.get('q') || '').slice(0, 100);
+  $('#nw-search').value = state.q;
 };
-tabs.forEach((tab) => tab.addEventListener('click', () => selectTab(tab)));
-$('.nw-tabs').addEventListener('keydown', (event) => {
-  const i = tabs.indexOf(document.activeElement);
-  if (i < 0) return;
-  const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[event.key];
-  if (next === undefined) return;
-  event.preventDefault();
-  selectTab(tabs[(next + tabs.length) % tabs.length], true);
-});
-document.addEventListener('click', (event) => {
-  const go = event.target.closest('[data-goto]');
-  if (!go) return;
-  event.preventDefault();
-  selectTab($(`#nw-tab-${go.dataset.goto}`));
-  $('.nw-tabs').scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
-});
-
-// ==================== TIN ĐỌC NHIỀU: dải thẻ chạy ngang — nút ‹ › · chấm chuyển · tự cuộn 1 thẻ mỗi 10 giây (cách làm của "Các chiến dịch khác" trang chi tiết chương trình) ====================
-const AUTO_MS = 10000;
-const popular = $('#nw-popular');
-const popularDots = $('#nw-popular-dots');
-const trackStep = (track) => track.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0);
-// Dịch 1 thẻ; hết thì quay về đầu / cuối
-const stepTrack = (track, dir) => {
-  if (!track.firstElementChild) return;
-  const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
-  const atStart = track.scrollLeft <= 2;
-  const left = dir > 0 ? (atEnd ? 0 : track.scrollLeft + trackStep(track)) : (atStart ? track.scrollWidth : track.scrollLeft - trackStep(track));
-  track.scrollTo({ left, behavior: reduced() ? 'auto' : 'smooth' });
-};
-// Chấm: số chấm = số thẻ − số thẻ trong khung + 1 (đổi theo cỡ màn hình); cuộn → tô chấm; bấm chấm → cuộn tới
-const syncPopularDots = () => {
-  if (!popular.firstElementChild || !popular.clientWidth) return;
-  const i = Math.round(popular.scrollLeft / trackStep(popular));
-  [...popularDots.children].forEach((dot, k) => dot.setAttribute('aria-current', String(k === Math.min(i, popularDots.children.length - 1))));
-};
-function renderPopularDots() {
-  if (!popular.firstElementChild || !popular.clientWidth) return;
-  const perView = Math.max(1, Math.round(popular.clientWidth / trackStep(popular)));
-  const count = Math.max(1, popular.children.length - perView + 1);
-  popularDots.hidden = count <= 1;
-  if (popularDots.children.length !== count) {
-    popularDots.innerHTML = Array.from({ length: count }, (_, k) => `<button class="founders-dot" type="button" data-popular-dot="${k}" aria-controls="nw-popular" aria-label="Vị trí ${k + 1} / ${count}"></button>`).join('');
-  }
-  syncPopularDots();
-}
-let popularRaf = 0;
-popular.addEventListener('scroll', () => {
-  if (popularRaf) return;
-  popularRaf = requestAnimationFrame(() => { popularRaf = 0; syncPopularDots(); });
-}, { passive: true });
-addEventListener('resize', () => renderPopularDots());
-document.addEventListener('click', (event) => {
-  const carBtn = event.target.closest('[data-car]');
-  if (carBtn) stepTrack(document.getElementById(carBtn.dataset.car), Number(carBtn.dataset.carStep));
-  const dot = event.target.closest('[data-popular-dot]');
-  if (dot) popular.scrollTo({ left: Number(dot.dataset.popularDot) * trackStep(popular), behavior: reduced() ? 'auto' : 'smooth' });
-});
-// Tự cuộn: dừng khi rê chuột / đang focus trong dải, khi dải đang ẩn (tab khác / đang tìm), tắt khi giảm chuyển động
-if (!reduced()) {
-  setInterval(() => {
-    if (popular.clientWidth && !popular.matches(':hover, :focus-within')) stepTrack(popular, 1);
-  }, AUTO_MS);
-}
-
-// ==================== KHỞI TẠO: từ khóa trên URL (?q=) · tab theo #chuyên-mục ====================
-query = new URLSearchParams(location.search).get('q') || '';
-$('#nw-search').value = query;
+addEventListener('popstate', () => { readUrl(); render(); });
+readUrl();
 render();
-const startTab = $(`#nw-tab-${location.hash.slice(1)}`);
-if (startTab && tabs.includes(startTab)) selectTab(startTab);
