@@ -4289,21 +4289,14 @@ html.pf-reg-lock{overflow:hidden}
 /* ---------- Nhịp khối: các khối nối tiếp chỉ khối hiện đầu tiên có đệm trên · tiêu đề 24px có vạch đỏ bên trái (như mockup SRS) ---------- */
 .nw-section{padding-block:clamp(20px,2vw,28px)}
 .nw-section:not([hidden]) ~ .nw-section{padding-top:0}
+#nw-media.nw-section,#nw-popular-section.nw-section{padding-top:16px} /* banner + Tin đọc nhiều: cách khối phía trên thêm 16px — các khối từ Tin mới nhất trở xuống cách đều nhau 44px (máy tính) */
 .nw-head{align-items:center;margin-bottom:16px}
-.nw-section .section-title{display:flex;align-items:center;gap:12px;font-size:24px;line-height:32px}
-.nw-section .section-title::before{content:'';flex:none;width:4px;height:24px;border-radius:2px;background:var(--color-primary)} /* cùng màu chữ tiêu đề "Tin tức" đầu trang */
+:is(.nw-section,.nw-side-block) .section-title{display:flex;align-items:center;gap:12px;font-size:24px;line-height:32px}
+:is(.nw-section,.nw-side-block) .section-title::before{content:'';flex:none;width:4px;height:24px;border-radius:2px;background:var(--color-primary)} /* cùng màu chữ tiêu đề "Tin tức" đầu trang */
 .nw-block-empty{margin:0;padding:24px 0;color:var(--color-text-muted)}
 .nw-page :is(.news-title,.news-desc){text-align:left} /* bỏ căn đều hai bên của khối tin trang chủ: màn hẹp bị giãn chữ */
 .nw-empty-wrap .cp-empty{margin:32px 0 0}
-/* ---------- Nhãn chuyên mục (.pf-badge màu theo chuyên mục); trên ảnh: góc trên trái ---------- */
-.nw-badge{flex:none;align-self:flex-start;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;line-height:18px}
-.nw-badge.is-on-photo{position:absolute;top:12px;left:12px;z-index:1;color:#fff;box-shadow:0 2px 6px rgba(20,30,50,.15)}
-/* Nhãn trên ảnh: nền đậm full (lấy đúng màu chữ của nhãn nhạt tương ứng) · chữ trắng */
-.nw-badge.is-on-photo.is-red{background:var(--color-primary)}
-.nw-badge.is-on-photo.is-orange{background:#8a3a12}
-.nw-badge.is-on-photo.is-green{background:var(--color-green)}
-.nw-badge.is-on-photo.is-blue{background:#2257b8}
-/* ---------- Dòng ngày | phút đọc ---------- */
+/* ---------- Dòng ngày | N phút trước ---------- */
 .nw-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:0;font-size:13px;line-height:20px;color:var(--color-text-muted);font-variant-numeric:tabular-nums}
 .nw-meta .icon{width:14px;height:14px}
 /* ---------- Thẻ (.cp-card): không viền, bo góc 12px (--nw-radius), bóng đổ; rê chuột → bóng đậm hơn ---------- */
@@ -4325,7 +4318,7 @@ html.pf-reg-lock{overflow:hidden}
 .nw-slide.is-active{opacity:1;visibility:visible;transition:opacity .5s ease}
 .nw-slide-media{aspect-ratio:2 / 1;border-radius:var(--nw-radius)}
 .nw-slide-body{display:flex;flex-direction:column;gap:8px;padding:12px 0 0}
-.nw-slide-title{font-size:18px;font-weight:700;line-height:26px}
+.nw-slide-title{font-size:20px;font-weight:700;line-height:28px}
 .nw-slide-desc{margin:0;font-size:15px;line-height:24px}
 .nw-slide-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:4px}
 /* ---------- Điều khiển: chỉ còn chấm chỉ báo ở giữa đáy ảnh (lớp phủ cùng tỉ lệ 2:1 với ảnh); tự chạy, không nút ‹ › / Tạm dừng ---------- */
@@ -4338,7 +4331,7 @@ html.pf-reg-lock{overflow:hidden}
 .nw-dot:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @keyframes nw-progress{to{transform:scaleX(1)}}
 .nw-car-bar[hidden],[data-car-ctrl][hidden]{display:none}
-/* ---------- Tin mới nhất: bài lớn (ảnh trái ~45% · tiêu đề · sapo · ngày | phút đọc) · kẻ ngang · lưới 2×2 bài nhỏ (kẻ dọc giữa 2 cột, kẻ ngang giữa 2 hàng) ---------- */
+/* ---------- Tin mới nhất: bài lớn (ảnh trái ~45% · tiêu đề · sapo · ngày | N phút trước) · kẻ ngang · lưới 2×2 bài nhỏ (kẻ dọc giữa 2 cột, kẻ ngang giữa 2 hàng) ---------- */
 .nw-latest{display:flex;flex:1;flex-direction:column}
 .nw-latest-lead{display:grid;grid-template-columns:minmax(0,42fr) minmax(0,58fr);gap:20px;align-items:center;padding-bottom:16px;border-bottom:1px solid var(--color-border)}
 .nw-latest-lead-media{aspect-ratio:4 / 3;border-radius:var(--nw-radius)}
@@ -4354,17 +4347,17 @@ html.pf-reg-lock{overflow:hidden}
 .nw-latest-item .news-title{font-size:15px;line-height:22px;-webkit-line-clamp:2;line-clamp:2} /* tiêu đề tối đa 2 dòng + 1 dòng ngày = nội dung tối đa 3 dòng */
 /* ==================== SECTION: BANNER TRUYỀN THÔNG ==================== */
 /* ---------- Ảnh banner "Kỷ niệm 80 năm" (PNG 2172 × 724, có viền trong suốt + quầng đỏ loang): chỉ hiện vùng banner sạch bên trong ---------- */
-/* Vùng cắt trên ảnh gốc: x 34 → 2141 (rộng 2107) · y 213 → 516 (cao 303) — lùi 8px vào trong mép đặc để không lộ quầng đỏ ở góc bo.
+/* Vùng cắt trên ảnh gốc: x 34 → 2141 (rộng 2107) · y 213 → 488 (cao 275) — mép trên lùi vào trong mép đặc để không lộ quầng đỏ; mép dưới chọn để khối chữ + logo (y 233 → 468) cách đều trên/dưới 20px ảnh gốc.
    Khung giữ đúng tỉ lệ vùng cắt; ảnh đặt tuyệt đối, phóng theo bề rộng (2172 / vùng cắt) và dịch trái / lên đúng gốc vùng cắt */
-.nw-media-banner{--crop-w:2107;--crop-x:34;position:relative;display:block;aspect-ratio:2107 / 303;overflow:hidden;border-radius:var(--nw-radius);background:#c8141f;box-shadow:0 2px 4px rgba(20,30,50,.06),0 10px 20px -8px rgba(20,30,50,.16)}
-.nw-media-banner img{position:absolute;top:calc(-213 / 303 * 100%);left:calc(var(--crop-x) / var(--crop-w) * -100%);width:calc(2172 / var(--crop-w) * 100%);max-width:none;height:auto;transition:transform .6s ease}
+.nw-media-banner{--crop-w:2107;--crop-x:34;position:relative;display:block;aspect-ratio:2107 / 275;overflow:hidden;border-radius:var(--nw-radius);background:#c8141f;box-shadow:0 2px 4px rgba(20,30,50,.06),0 10px 20px -8px rgba(20,30,50,.16)}
+.nw-media-banner img{position:absolute;top:calc(-213 / 275 * 100%);left:calc(var(--crop-x) / var(--crop-w) * -100%);width:calc(2172 / var(--crop-w) * 100%);max-width:none;height:auto;transition:transform .6s ease}
 .nw-media-banner:hover img{transform:scale(1.02)}
 .nw-media-banner:focus-visible{outline:3px solid #9b0722;outline-offset:3px}
 
 /* ==================== SECTION: TIN ĐỌC NHIỀU ==================== */
 /* ---------- Dải thẻ dọc (.pv-track .pv-cards): 5 thẻ / khung máy tính; không nút ‹ ›, tự chạy (tin-tuc.js) ---------- */
 .nw-strip{position:relative;clip-path:inset(-40px 0)} /* cắt ngang đúng mép khung nội dung: thẻ / bóng đổ không lộ ra vùng đệm 16px hai bên dải khi tự chạy; chiều dọc vẫn chừa bóng đổ */
-.pv-track.nw-popular{grid-auto-columns:calc((100% - 64px) / 5);padding-bottom:24px}
+.pv-track.nw-popular{grid-auto-columns:calc((100% - 64px) / 5);padding-bottom:16px} /* chừa bóng thẻ; + 28px đệm khối = cách Tin tức khác 44px như các khối khác */
 /* ---------- Thẻ đọc nhiều: ảnh đứng 4:5 phủ cả thẻ · tiêu đề chữ trắng căn giữa nằm trên lớp tối dần ở đáy ảnh ---------- */
 /* Ảnh và phần chữ chồng cùng 1 ô lưới; phần chữ phủ cả thẻ (z-index trên ảnh) để liên kết .stretched vẫn bấm được toàn thẻ */
 .nw-pop-card{display:grid}
@@ -4377,7 +4370,7 @@ html.pf-reg-lock{overflow:hidden}
 .nw-pop-card .cp-card-title a:focus-visible{text-decoration:underline}
 
 /* ==================== SECTION: TIN TỨC KHÁC · KẾT QUẢ TÌM KIẾM ==================== */
-/* ---------- Lưới thẻ dọc, 4 thẻ / hàng (máy tính): ảnh trên 16:9, nhãn chuyên mục góc trên trái ảnh (.nw-badge.is-on-photo) · tiêu đề 2 dòng · mô tả 2 dòng (giữ chỗ đủ dòng để các thẻ cao bằng nhau) · ngày | phút đọc ---------- */
+/* ---------- Lưới thẻ dọc, 4 thẻ / hàng (máy tính): ảnh trên 16:9 (không nhãn) · tiêu đề 2 dòng · mô tả 2 dòng (giữ chỗ đủ dòng để các thẻ cao bằng nhau) · ngày | N phút trước ---------- */
 .nw-others{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 20px}
 .nw-other-media{flex:none;width:100%;aspect-ratio:16 / 9}
 .nw-other-body{display:flex;flex:1;flex-direction:column;gap:8px;min-width:0;padding:14px 16px 16px}
@@ -4386,6 +4379,63 @@ html.pf-reg-lock{overflow:hidden}
 .nw-other-foot{display:flex;align-items:center;gap:12px;margin-top:auto}
 .nw-results-count{margin:-8px 0 20px;font-size:15px;color:var(--color-text-muted)}
 .nw-clear{border:0;background:none;padding:0;font-family:inherit;cursor:pointer}
+
+/* ==================== SECTION: DANH SÁCH TIN TỨC (tin-tuc-danh-sach.html) ==================== */
+/* Dùng lại: .nw-detail-head (breadcrumb) · .cp-list-head / .cp-sort (tiêu đề + sắp xếp) · .nw-chips · .pf-input · ô tìm .nw-mast-search · .nw-others + thẻ Tin tức khác · .pf-pager.cp-pager · .cp-empty */
+.nw-list .section-title{scroll-margin-top:calc(var(--header-h) + 24px)}
+.nw-list-chips{justify-content:flex-end} /* chuyên mục bên phải, cùng hàng tiêu đề */
+/* ---------- Hàng bộ lọc: Thời gian đăng · Từ ngày – Đến ngày (mờ khi không chọn "Khác") · ô tìm (phải) ---------- */
+.nw-list-filters{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:16px 0 24px}
+.nw-time{width:220px}
+.nw-date-range{display:flex;align-items:center;gap:8px}
+.nw-date-range .cp-field{width:150px}
+.nw-date-range input{padding:0 10px}
+.nw-date-range.is-disabled{opacity:.5}
+.nw-date-range input:disabled{cursor:not-allowed}
+.nw-date-sep{color:var(--color-text-muted)}
+.nw-list-filters-end{display:flex;align-items:center;gap:12px;margin-left:auto} /* sắp xếp + ô tìm bên phải */
+.nw-list-search{width:min(280px,100%)}
+.nw-filter-error{margin:8px 0 0;font-size:13px;line-height:18px;color:var(--color-primary)}
+
+/* ==================== SECTION: CHI TIẾT BÀI VIẾT (tin-tuc-chi-tiet.html) ==================== */
+/* Dùng lại: .nw-mast-crumbs (breadcrumb) · .nw-meta (dòng ngày) · .media-photo · .pf-icon-btn (nút chia sẻ) · .link-arrow · .section-title vạch đỏ ·
+   .nw-latest-item (cột phải) · .nw-others / .nw-other (Tin cùng chuyên mục) · .pf-toast · .cp-empty. Chữ chuyên mục giống .nw-chip đang chọn */
+/* ---------- Khung: chừa chỗ header cố định · 2 cột: bài viết (giãn hết phần còn lại) | cột tin 400px, cách nhau 48px ---------- */
+.nw-detail-head{padding-top:calc(var(--header-h) + 16px)}
+.nw-detail{display:grid;grid-template-columns:minmax(0,1fr) 400px;column-gap:48px;align-items:start;padding-block:16px 48px}
+.nw-detail[hidden],.nw-detail-missing[hidden]{display:none}
+.nw-detail-missing{display:flex;flex-direction:column;align-items:center;gap:16px;padding-bottom:48px}
+.nw-detail-missing .cp-empty{align-self:stretch}
+/* ---------- Đầu bài: tiêu đề · hàng ngày giờ | N phút trước | lượt xem + nút chia sẻ, kẻ mảnh phía dưới ---------- */
+.nw-article{min-width:0}
+.nw-article-title{margin:0;font-size:24px;font-weight:600;line-height:32px;color:var(--color-text);text-wrap:pretty}
+.nw-article-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 24px;margin-top:8px;padding:0 0 8px;border-bottom:1px solid var(--color-border)}
+.nw-share{display:flex;align-items:center;gap:8px}
+.nw-share-btn{width:36px;height:36px;border:1px solid var(--color-border);border-radius:50%;color:var(--color-text);transition:border-color .2s,color .2s}
+.nw-share-btn:hover{border-color:var(--color-primary);background:#fff;color:var(--color-primary)}
+.nw-share-btn .icon{width:18px;height:18px}
+.nw-share-btn.is-brand .icon{width:24px;height:24px} /* logo Facebook / Zalo đúng màu thương hiệu */
+/* ---------- Sapo (chữ đậm) · ảnh đầu bài 16:9 + chú thích nghiêng ---------- */
+.nw-article-lead{margin:24px 0 0;font-size:18px;font-weight:600;line-height:30px;color:var(--color-text)}
+.nw-article-figure{margin:24px 0 0}
+.nw-article-media{aspect-ratio:16 / 9;border-radius:var(--nw-radius)}
+.nw-article-figure figcaption{margin-top:8px;font-size:13px;font-style:italic;line-height:20px;color:var(--color-text-muted);text-align:center}
+/* ---------- Nội dung: đoạn văn 16/28 · tiêu đề nhỏ 20/30 · trích dẫn (vạch đỏ trái, nền xám nhạt) · ảnh trong bài ---------- */
+.nw-article-body{display:flex;flex-direction:column;gap:16px;margin-top:24px;font-size:16px;line-height:28px;color:#474d54}
+.nw-article-body p{margin:0}
+.nw-article-body h2{margin:8px 0 0;font-size:20px;font-weight:700;line-height:30px;color:var(--color-text)}
+.nw-article-body .nw-article-figure{margin:8px 0}
+.nw-quote{margin:8px 0;padding:16px 24px;border-left:4px solid var(--color-primary);border-radius:0 var(--nw-radius-sm) var(--nw-radius-sm) 0;background:var(--color-surface-alt)}
+.nw-quote p{font-size:17px;font-style:italic;line-height:28px;color:var(--color-text)}
+.nw-quote cite{display:block;margin-top:8px;font-size:14px;font-style:normal;font-weight:600;line-height:20px;color:var(--color-text-muted)}
+/* ---------- Cuối bài: tác giả (phải) ---------- */
+.nw-article-author{margin:24px 0 0;font-size:15px;font-weight:700;line-height:24px;color:var(--color-text);text-align:right}
+/* ---------- Cột phải: Tin mới nhất · Tin đọc nhiều — danh sách 1 cột thẻ .nw-latest-item, kẻ mảnh giữa các bài ---------- */
+.nw-detail-side{position:sticky;top:calc(var(--header-h) + 16px);display:flex;flex-direction:column;gap:32px;min-width:0} /* Tin liên quan dính theo khi cuộn bài (máy tính) */
+.nw-side-list .nw-latest-item{padding:16px 0;border-right:0}
+.nw-side-list .nw-latest-item:first-child{padding-top:0}
+.nw-side-list .nw-latest-item + .nw-latest-item{border-top:1px solid var(--color-border)}
+.nw-side-list .news-title{text-align:justify} /* Tin liên quan: tiêu đề căn đều 2 bên */
 
 /* ---------- Giảm chuyển động: tắt hiệu ứng chuyển bài và thanh tiến trình (BR-NB-07) ---------- */
 @media(prefers-reduced-motion:reduce){
@@ -4405,6 +4455,15 @@ html.pf-reg-lock{overflow:hidden}
   .nw-latest-col{padding-left:0;border-left:0}
   .nw-others{grid-template-columns:repeat(2,minmax(0,1fr))}
   .pv-track.nw-popular{grid-auto-columns:calc((100% - 32px) / 3)}
+  /* Chi tiết bài viết: 1 cột, cột tin xuống dưới bài */
+  .nw-detail{grid-template-columns:minmax(0,1fr);row-gap:40px}
+  .nw-detail-side{position:static} /* 1 cột: cột tin xuống dưới bài, không dính */
+  .nw-list-head{flex-wrap:wrap} /* Danh sách tin tức: chuyên mục xuống dưới tiêu đề */
+  .nw-list-chips{justify-content:flex-start;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none} /* 1 hàng cuộn ngang, không để "/" đứng đầu dòng */
+  .nw-list-chips::-webkit-scrollbar{display:none}
+  .nw-list-chips .nw-chip{flex:none}
+  .nw-list-filters-end{flex-wrap:wrap;margin-left:0;width:100%} /* sắp xếp + ô tìm xuống hàng riêng */
+  .nw-list-search{flex:1;width:auto;min-width:200px}
 }
 @media(max-width:600px){
   .nw-mast-bar{gap:12px}
@@ -4413,7 +4472,8 @@ html.pf-reg-lock{overflow:hidden}
   .nw-chips{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none} /* chuyên mục cuộn ngang 1 hàng */
   .nw-chips::-webkit-scrollbar{display:none}
   .nw-chip{flex:none}
-  .nw-chip + .nw-chip::before{margin:0 10px}  .nw-section .section-title{font-size:20px;line-height:28px}
+  .nw-chip + .nw-chip::before{margin:0 10px}
+  :is(.nw-section,.nw-side-block) .section-title{font-size:20px;line-height:28px}
   .nw-slide-media{aspect-ratio:3 / 2}
   .nw-car-bar{aspect-ratio:3 / 2}
   .nw-slide-body{padding:12px 0 0}
@@ -4424,8 +4484,13 @@ html.pf-reg-lock{overflow:hidden}
   .nw-latest-item:nth-child(n+2){border-top:1px solid var(--color-border)}
   .pv-track.nw-popular{grid-auto-columns:70%}
   .nw-others{grid-template-columns:1fr}
+  .nw-time,.nw-date-range{width:100%}
+  .nw-list-filters-end > *{flex:1 1 100%;width:100%} /* sắp xếp · ô tìm mỗi ô 1 hàng */
+  .nw-date-range .cp-field{flex:1;width:auto}
   .nw-other-body{padding:12px}
-  .nw-media-banner{--crop-w:1286;aspect-ratio:1286 / 303} /* điện thoại: chỉ lấy phần trái ảnh (logo 80 · tiêu đề · khẩu hiệu · 1946 – 2026), bỏ đôi tay, để chữ đủ to */
+  .nw-article-lead{font-size:16px;line-height:26px}
+  .nw-quote{padding:12px 16px}
+  .nw-media-banner{--crop-w:1286;aspect-ratio:1286 / 275} /* điện thoại: chỉ lấy phần trái ảnh (logo 80 · tiêu đề · khẩu hiệu · 1946 – 2026), bỏ đôi tay, để chữ đủ to */
 }
 /* ==================== END PAGE: TIN TỨC ==================== */
 
