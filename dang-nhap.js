@@ -48,7 +48,7 @@ const selectTab = (tab, { focus = false } = {}) => {
     label.textContent = `${verb} bằng`;
     label.closest('button').dataset.panel = label.parentElement.textContent;
   });
-  vneidButton.hidden = isRegister;
+  vneidButton.dataset.panel = `${verb} bằng tài khoản định danh điện tử (VNeID)`;
   switchText.textContent = isRegister ? 'Bạn đã có tài khoản?' : 'Bạn chưa có tài khoản?';
   switchLink.textContent = isRegister ? 'Đăng nhập ngay' : 'Đăng ký ngay';
   switchLink.href = isRegister ? '#dang-nhap' : '#dang-ky';
