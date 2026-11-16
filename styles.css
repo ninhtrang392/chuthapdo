@@ -3607,10 +3607,14 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== SECTION: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
 .auth{display:flex;flex-direction:column;gap:32px;min-height:100vh;min-height:100dvh;padding:56px 56px 24px 24px}
 
-/* ---------- Thanh trên: chỉ logo (góc trái trên, nằm trên ảnh) — bấm logo để về trang chủ ---------- */
-.auth-topbar{position:fixed;top:56px;left:84px;z-index:20;display:flex;align-items:center} /* ghim cố định: logo không cuộn theo trang */
+/* ---------- Thanh trên: logo (góc trái, nằm trên ảnh; bấm về trang chủ) · nút Về trang chủ (góc phải, trên nền trắng) ---------- */
+.auth-topbar{position:fixed;top:56px;left:84px;right:56px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;pointer-events:none} /* ghim cố định, trải ngang: logo (trái) · Về trang chủ (phải) — không cuộn theo trang */
+.auth-topbar > a{pointer-events:auto}
 .auth-brand{display:inline-flex;flex:none}
 .auth-brand img{display:block;width:280px;height:auto;filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 8px rgba(255,255,255,.9))} /* quầng trắng ôm theo hình logo để nổi trên ảnh */
+.auth-back{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:500;line-height:24px;color:var(--color-text);transition:color .2s}
+.auth-back:hover{color:var(--color-primary)}
+.auth-back .icon{width:20px;height:20px;transform:rotate(180deg)}
 
 /* ---------- Khung biểu mẫu: lệch vào so với logo, cách thanh trên theo chiều cao màn ---------- */
 .auth-card{display:flex;flex-direction:column;gap:24px;width:min(564px,100%);margin:calc(66px + 32px + clamp(16px,6vh,64px)) max(40px,calc(25vw - 336px)) auto auto} /* form bên phải, nằm khoảng giữa vùng trắng: màn rộng thì lùi về trái (1440: cách mép phải 96 · 1920: ~200); chừa chỗ logo ghim (cao ~66) */
@@ -3690,7 +3694,7 @@ html.pf-reg-lock{overflow:hidden}
 /* ---------- Laptop: thu lề trái, thu hẹp vùng ảnh để không đè biểu mẫu ---------- */
 @media(max-width:1280px){
   .auth{padding-right:40px}
-  .auth-topbar{left:56px}
+  .auth-topbar{left:56px;right:40px}
   .auth-card{margin-right:32px}
   .auth-page::before{-webkit-mask-size:88% 100%,100% 100%;mask-size:88% 100%,100% 100%} /* sóng hẹp lại để không chạm form */
 }
@@ -3699,7 +3703,7 @@ html.pf-reg-lock{overflow:hidden}
   .auth-page::before{display:none}
   .auth{align-items:center;padding:32px 24px 88px} /* chừa đáy cho nhãn GTINX (.dev-tag) ghim góc trái dưới */
   /* Logo nằm trong luồng nhưng dính đỉnh khi cuộn (nền trắng che nội dung cuộn bên dưới) */
-  .auth-topbar{position:sticky;top:0;left:auto;width:min(564px,100%);margin-top:-16px;padding:16px 0;background:#fff}
+  .auth-topbar{position:sticky;top:0;left:auto;right:auto;pointer-events:auto;width:min(564px,100%);margin-top:-16px;padding:16px 0;background:#fff}
   .auth-card,.auth-card:has(#auth-register:not([hidden])){margin:clamp(16px,6vh,64px) auto auto}
   .auth-card:has(#auth-register:not([hidden])){margin-top:16px}
   .auth-brand img{width:240px}
@@ -3723,6 +3727,8 @@ html.pf-reg-lock{overflow:hidden}
   .auth{gap:24px;padding:20px 16px 76px}
   .auth-topbar{margin-top:-12px;padding:12px 0}
   .auth-brand img{width:180px}
+  .auth-back{gap:6px;font-size:14px}
+  .auth-back .icon{width:18px;height:18px}
   .auth-card{gap:18px}
   .auth-head{margin-bottom:4px}
   .auth-form{gap:14px}

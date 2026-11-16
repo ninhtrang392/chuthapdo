@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261116-40" />
+    <link rel="stylesheet" href="styles.css?v=20261116-41" />
   </head>
   <body class="auth-body">
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -54,14 +54,15 @@
       <!-- Ảnh nền đặt bằng CSS trên .auth-page; không có nội dung HTML riêng. -->
       <!-- ==================== END SECTION: ẢNH NỀN ==================== -->
 
-      <!-- ==================== SECTION: ĐĂNG NHẬP / ĐĂNG KÝ — thanh trên (logo về trang chủ) · tiêu đề · biểu mẫu · đăng nhập bằng · chuyển Đăng ký ==================== -->
+      <!-- ==================== SECTION: ĐĂNG NHẬP / ĐĂNG KÝ — thanh trên (logo · về trang chủ) · tiêu đề · biểu mẫu · đăng nhập bằng · chuyển Đăng ký ==================== -->
       <!-- Dùng lại .segmented (tab), .field / .field-row (ô nhập), .check (đồng ý điều khoản), .button (nút). Xử lý ở dang-nhap.js. -->
       <section class="auth" aria-labelledby="auth-title">
-        <!-- ---------- Thanh trên: logo (bấm để về trang chủ) ---------- -->
+        <!-- ---------- Thanh trên: logo (trái, bấm để về trang chủ) · nút Về trang chủ (góc phải) ---------- -->
         <div class="auth-topbar">
           <a class="auth-brand" href="index.html" aria-label="Hội Chữ thập đỏ Việt Nam — Trang chủ">
             <img src="Emages/logo-hctd.svg" alt="Hội Chữ thập đỏ Việt Nam" width="358" height="84" />
           </a>
+          <a class="auth-back" href="index.html"><svg class="icon" aria-hidden="true"><use href="#arrow"/></svg>Về trang chủ</a>
         </div>
 
         <div class="auth-card">
