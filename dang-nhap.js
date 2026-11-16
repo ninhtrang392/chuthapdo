@@ -146,8 +146,7 @@ const validate = (form, rules) => {
   return !firstInvalid;
 };
 const filled = (input) => input.value.trim() !== '';
-const isPhone = (input) => /^(\+84|0)\d{9}$/.test(input.value.replace(/[\s.]/g, ''));
-const isEmail = (input) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+const isUsername = (input) => /^[a-z0-9._]{4,30}$/i.test(input.value.trim()); // 4–30 ký tự: chữ không dấu, số, dấu chấm, gạch dưới
 [loginForm, registerForm].forEach((form) => {
   form.addEventListener('input', (event) => {
     if (event.target.getAttribute('aria-invalid') === 'true') markInvalid(event.target, false);
@@ -191,19 +190,16 @@ loginForm.addEventListener('submit', async (event) => {
   }
 });
 
-// ---------- Gửi: Đăng ký → báo thành công, chuyển sang tab Đăng nhập với SĐT vừa đăng ký ----------
+// ---------- Gửi: Đăng ký → báo thành công, chuyển sang tab Đăng nhập với tên đăng nhập vừa tạo ----------
 registerForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-  const { name, phone, email, password, confirm, agree, captcha } = registerForm.elements;
+  const { name, username, password, confirm, agree, captcha } = registerForm.elements;
   const isNew = (input) => usesRealApi('register') || !findAccount(input.value);
   const valid = validate(registerForm, [
     [name, filled, 'Vui lòng nhập họ và tên.'],
-    [phone, filled, 'Vui lòng nhập số điện thoại.'],
-    [phone, isPhone, 'Số điện thoại chưa đúng (10 số, bắt đầu bằng 0).'],
-    [phone, isNew, 'Số điện thoại này đã có tài khoản. Vui lòng đăng nhập.'],
-    [email, filled, 'Vui lòng nhập email.'],
-    [email, isEmail, 'Email chưa đúng định dạng (VD: nguyenvana@gmail.com).'],
-    [email, isNew, 'Email này đã có tài khoản. Vui lòng đăng nhập.'],
+    [username, filled, 'Vui lòng nhập tên đăng nhập.'],
+    [username, isUsername, 'Tên đăng nhập gồm 4–30 ký tự: chữ không dấu, số, dấu chấm hoặc gạch dưới.'],
+    [username, isNew, 'Tên đăng nhập này đã được sử dụng. Vui lòng chọn tên khác.'],
     [password, (input) => input.value.length >= 8, 'Mật khẩu cần tối thiểu 8 ký tự.'],
     [confirm, (input) => filled(input) && input.value === password.value, 'Mật khẩu nhập lại không khớp.'],
     [agree, (input) => input.checked, 'Vui lòng đồng ý với Quy chế minh bạch & Điều khoản dịch vụ.'],
@@ -213,18 +209,18 @@ registerForm.addEventListener('submit', async (event) => {
     if (captcha.getAttribute('aria-invalid') === 'true') { drawCaptcha(); captcha.value = ''; }
     return;
   }
-  const account = { name: name.value.trim(), phone: normalizeId(phone.value), email: normalizeEmail(email.value), password: password.value };
+  const account = { name: name.value.trim(), username: normalizeId(username.value), password: password.value };
   try {
     if (usesRealApi('register')) await window.AccountSession.register(account);
-    else saveAccount({ name: account.name, ids: [account.phone, account.email], password: account.password });
+    else saveAccount({ name: account.name, ids: [account.username], password: account.password });
   } catch {
-    validate(registerForm, [[email, () => false, 'Không thể đăng ký với thông tin này. Vui lòng thử lại.']]);
+    validate(registerForm, [[username, () => false, 'Không thể đăng ký với thông tin này. Vui lòng thử lại.']]);
     return;
   }
-  loginForm.elements.username.value = account.phone;
+  loginForm.elements.username.value = username.value.trim();
   registerForm.reset();
   drawCaptcha();
   selectTab(authTabs[0]);
-  showDialog('Đăng ký thành công', 'Tài khoản của bạn đã được tạo. Hãy đăng nhập bằng số điện thoại hoặc email vừa đăng ký.');
+  showDialog('Đăng ký thành công', 'Tài khoản của bạn đã được tạo. Hãy đăng nhập bằng tên đăng nhập vừa đăng ký.');
   dialog.addEventListener('close', () => loginForm.elements.password.focus(), { once: true });
 });

@@ -3596,29 +3596,29 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== END PAGE: QUẢN LÝ HỒ SƠ ==================== */
 
 /* ==================== PAGE: ĐĂNG NHẬP / ĐĂNG KÝ (dang-nhap.html) — nền trắng, ảnh đôi tay nâng trái tim bên phải với mép cong · biểu mẫu bên trái; dùng lại .field, .field-row, .check, ô nhập .pf-input + nút .pf-btn (UI KIT) ==================== */
-.auth-page{position:relative;isolation:isolate;min-height:100vh;min-height:100dvh;background:radial-gradient(60% 40% at 0 100%,rgba(229,63,46,.1),rgba(229,63,46,0) 70%),#fff;color:var(--color-text)}
+.auth-page{position:relative;isolation:isolate;min-height:100vh;min-height:100dvh;background:radial-gradient(60% 40% at 100% 100%,rgba(229,63,46,.1),rgba(229,63,46,0) 70%),#fff;color:var(--color-text)} /* ánh hồng góc phải dưới (dưới form) */
 
 /* ==================== SECTION: ẢNH NỀN ==================== */
-/* Ảnh phủ cả màn, rõ nét trong 1 hình elip neo góc dưới-phải; mép cong là dải gradient rộng mờ dần sang trái (mask 62% → 98%).
-   Vùng trắng bên trái che kín hoàn toàn (lớp trắng 100%); riêng mép trên có thêm 1 vùng lộ mềm để thấy bầu trời */
-.auth-page::before{content:"";position:fixed;inset:0;z-index:-1;background:url("Emages/BG%20login.png") center/cover no-repeat;-webkit-mask-image:radial-gradient(62% 135% at 100% 100%,#000 62%,rgba(0,0,0,.5) 80%,transparent 98%),radial-gradient(70% 38% at 50% 0,rgba(0,0,0,.7),rgba(0,0,0,.35) 55%,transparent 100%);mask-image:radial-gradient(62% 135% at 100% 100%,#000 62%,rgba(0,0,0,.5) 80%,transparent 98%),radial-gradient(70% 38% at 50% 0,rgba(0,0,0,.7),rgba(0,0,0,.35) 55%,transparent 100%)}
+/* Ảnh phủ cả màn, lật ngang (scaleX(-1)) nên trái tim nằm bên TRÁI. Mép = đường lượn sóng (chữ S) đo theo mockup, vẽ bằng mặt nạ SVG 1440×960 co giãn theo màn:
+   ảnh rõ bên phải đường · dải kính mờ mảnh 18px sát mép (ảnh lộ 45%) · ngoài đường trắng hẳn; lớp 2 = vùng lộ mềm ở mép trên để thấy bầu trời */
+.auth-page::before{content:"";position:fixed;inset:0;z-index:-1;transform:scaleX(-1);background:url("Emages/BG%20login.png") center/cover no-repeat;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 960' preserveAspectRatio='none'%3E%3Cpath fill-opacity='.45' d='M963,0C947,19 895,74 866,116C838,158 812,205 792,250C772,295 757,345 747,384C737,423 734,455 731,484C728,513 728,532 728,560C728,588 731,624 731,650C731,676 732,695 730,718C729,741 726,768 722,790C718,812 713,831 708,852C703,874 695,901 690,919C685,937 679,953 677,960L1440,960L1440,0Z'/%3E%3Cpath d='M981,0C965,19 913,74 884,116C856,158 830,205 810,250C790,295 775,345 765,384C755,423 752,455 749,484C746,513 746,532 746,560C746,588 749,624 749,650C749,676 750,695 748,718C747,741 744,768 740,790C736,812 731,831 726,852C721,874 713,901 708,919C703,937 697,953 695,960L1440,960L1440,0Z'/%3E%3C/svg%3E"),radial-gradient(70% 38% at 50% 0,rgba(0,0,0,.7),rgba(0,0,0,.35) 55%,transparent 100%);mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 960' preserveAspectRatio='none'%3E%3Cpath fill-opacity='.45' d='M963,0C947,19 895,74 866,116C838,158 812,205 792,250C772,295 757,345 747,384C737,423 734,455 731,484C728,513 728,532 728,560C728,588 731,624 731,650C731,676 732,695 730,718C729,741 726,768 722,790C718,812 713,831 708,852C703,874 695,901 690,919C685,937 679,953 677,960L1440,960L1440,0Z'/%3E%3Cpath d='M981,0C965,19 913,74 884,116C856,158 830,205 810,250C790,295 775,345 765,384C755,423 752,455 749,484C746,513 746,532 746,560C746,588 749,624 749,650C749,676 750,695 748,718C747,741 744,768 740,790C736,812 731,831 726,852C721,874 713,901 708,919C703,937 697,953 695,960L1440,960L1440,0Z'/%3E%3C/svg%3E"),radial-gradient(70% 38% at 50% 0,rgba(0,0,0,.7),rgba(0,0,0,.35) 55%,transparent 100%);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:right top;mask-position:right top}
 /* ==================== END SECTION: ẢNH NỀN ==================== */
 
 /* ==================== SECTION: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
-.auth{display:flex;flex-direction:column;gap:32px;min-height:100vh;min-height:100dvh;padding:56px 24px 24px 84px}
+.auth{display:flex;flex-direction:column;gap:32px;min-height:100vh;min-height:100dvh;padding:56px 56px 24px 24px}
 
-/* ---------- Thanh trên: chỉ logo (trái) — bấm logo để về trang chủ ---------- */
+/* ---------- Thanh trên: chỉ logo (góc trái trên, nằm trên ảnh) — bấm logo để về trang chủ ---------- */
 .auth-topbar{position:fixed;top:56px;left:84px;z-index:20;display:flex;align-items:center} /* ghim cố định: logo không cuộn theo trang */
 .auth-brand{display:inline-flex;flex:none}
-.auth-brand img{display:block;width:280px;height:auto}
+.auth-brand img{display:block;width:280px;height:auto;filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 8px rgba(255,255,255,.9))} /* quầng trắng ôm theo hình logo để nổi trên ảnh */
 
 /* ---------- Khung biểu mẫu: lệch vào so với logo, cách thanh trên theo chiều cao màn ---------- */
-.auth-card{display:flex;flex-direction:column;gap:24px;width:min(564px,100%);margin:calc(66px + 32px + clamp(16px,6vh,64px)) 0 auto 68px} /* chừa chỗ logo ghim (cao ~66) */
+.auth-card{display:flex;flex-direction:column;gap:24px;width:min(564px,100%);margin:calc(66px + 32px + clamp(16px,6vh,64px)) max(40px,calc(25vw - 336px)) auto auto} /* form bên phải, nằm khoảng giữa vùng trắng: màn rộng thì lùi về trái (1440: cách mép phải 96 · 1920: ~200); chừa chỗ logo ghim (cao ~66) */
 /* Đăng ký dài hơn → đẩy khối lên sát dưới logo, thu khoảng cách để vừa 1 màn hình, không phải cuộn */
 .auth-card:has(#auth-register:not([hidden])){gap:20px;margin-top:calc(66px + 24px)}
 #auth-register{gap:16px}
 .auth-head{margin-bottom:8px;text-align:center} /* tiêu đề căn giữa theo bề ngang ô nhập */
-.auth-title{margin:0;font-size:32px;font-weight:700;line-height:40px}
+.auth-title{margin:0;font-size:32px;font-weight:600;line-height:40px} /* semibold */
 
 /* ---------- Tab Đăng nhập / Đăng ký: ẩn — chuyển qua liên kết cuối khung (.auth-switch) ---------- */
 .auth-tabs{display:none}
@@ -3689,10 +3689,10 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== RESPONSIVE: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
 /* ---------- Laptop: thu lề trái, thu hẹp vùng ảnh để không đè biểu mẫu ---------- */
 @media(max-width:1280px){
-  .auth{padding-left:56px}
+  .auth{padding-right:40px}
   .auth-topbar{left:56px}
-  .auth-card{margin-left:44px}
-  .auth-page::before{-webkit-mask-image:radial-gradient(54% 135% at 100% 100%,#000 62%,rgba(0,0,0,.5) 80%,transparent 98%),radial-gradient(70% 38% at 50% 0,rgba(0,0,0,.7),rgba(0,0,0,.35) 55%,transparent 100%);mask-image:radial-gradient(54% 135% at 100% 100%,#000 62%,rgba(0,0,0,.5) 80%,transparent 98%),radial-gradient(70% 38% at 50% 0,rgba(0,0,0,.7),rgba(0,0,0,.35) 55%,transparent 100%)}
+  .auth-card{margin-right:32px}
+  .auth-page::before{-webkit-mask-size:88% 100%,100% 100%;mask-size:88% 100%,100% 100%} /* sóng hẹp lại để không chạm form */
 }
 /* ---------- Máy tính bảng trở xuống: bỏ ảnh, căn giữa cả khối ---------- */
 @media(max-width:1100px){
