@@ -30,7 +30,6 @@ const switchLink = document.querySelector('#auth-switch-link');
 const socialButtons = [...document.querySelectorAll('.auth-social [data-social]')];
 const vneidButton = document.querySelector('.auth-vneid');
 const authTitle = document.querySelector('#auth-title');
-const authLead = document.querySelector('.auth-lead');
 
 // ---------- Tab: Đăng nhập / Đăng ký (← → chuyển tab; đồng bộ #dang-ky; đổi tiêu đề, chữ thanh trên & nút mạng xã hội) ----------
 const selectTab = (tab, { focus = false } = {}) => {
@@ -43,17 +42,14 @@ const selectTab = (tab, { focus = false } = {}) => {
   const isRegister = tab.id === 'auth-tab-register';
   const verb = isRegister ? 'Đăng ký' : 'Đăng nhập';
   authTitle.textContent = verb;
-  authLead.textContent = isRegister
-    ? 'Tạo tài khoản để cùng chung tay lan tỏa những điều tử tế.'
-    : 'Để tiếp tục, vui lòng nhập thông tin tài khoản của bạn.';
   document.title = `${verb} | Hội Chữ thập đỏ Việt Nam`;
-  altLabel.textContent = `hoặc ${verb.toLowerCase()} bằng`;
+  altLabel.textContent = `Hoặc ${verb.toLowerCase()} bằng`;
   socialButtons.forEach((label) => {
     label.textContent = `${verb} bằng`;
     label.closest('button').dataset.panel = label.parentElement.textContent;
   });
   vneidButton.hidden = isRegister;
-  switchText.textContent = isRegister ? 'Bạn đã có tài khoản?' : 'Chưa có tài khoản?';
+  switchText.textContent = isRegister ? 'Bạn đã có tài khoản?' : 'Bạn chưa có tài khoản?';
   switchLink.textContent = isRegister ? 'Đăng nhập ngay' : 'Đăng ký ngay';
   switchLink.href = isRegister ? '#dang-nhap' : '#dang-ky';
   history.replaceState(null, '', isRegister ? '#dang-ky' : location.pathname + location.search);
@@ -82,7 +78,7 @@ document.querySelectorAll('.auth-eye').forEach((button) => {
     input.type = show ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(show));
     button.setAttribute('aria-label', show ? 'Ẩn mật khẩu' : 'Hiện mật khẩu');
-    button.querySelector('use').setAttribute('href', show ? '#eye-off' : '#eye');
+    button.querySelector('use').setAttribute('href', show ? '#eye' : '#eye-off');
   });
 });
 
@@ -179,7 +175,7 @@ loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const { username, password, remember } = loginForm.elements;
   const valid = validate(loginForm, [
-    [username, filled, 'Vui lòng nhập tên đăng nhập, email hoặc số điện thoại.'],
+    [username, filled, 'Vui lòng nhập số điện thoại hoặc email.'],
     [password, filled, 'Vui lòng nhập mật khẩu.'],
   ]);
   if (!valid) return;
@@ -191,7 +187,7 @@ loginForm.addEventListener('submit', async (event) => {
     try { (remember.checked ? localStorage : sessionStorage).setItem('ctd-demo-session', '1'); } catch {}
     window.location.href = 'index.html';
   } catch {
-    validate(loginForm, [[password, () => false, 'Tên đăng nhập hoặc mật khẩu không đúng.']]);
+    validate(loginForm, [[password, () => false, 'Số điện thoại / email hoặc mật khẩu không đúng.']]);
   }
 });
 

@@ -3595,146 +3595,141 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== END SECTION: ĐỘI, CÂU LẠC BỘ CỦA TÔI ==================== */
 /* ==================== END PAGE: QUẢN LÝ HỒ SƠ ==================== */
 
-/* ==================== PAGE: ĐĂNG NHẬP / ĐĂNG KÝ (dang-nhap.html) — 2 cột: Giới thiệu (ảnh) | Biểu mẫu; dùng lại .segmented, .field, .field-row, .check, ô nhập .pf-input + nút .pf-btn (UI KIT, cao 40); cỡ gọn để vừa 1 màn hình ==================== */
-.auth-page{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:100vh;min-height:100dvh;background:#fff;color:var(--color-text)}
+/* ==================== PAGE: ĐĂNG NHẬP / ĐĂNG KÝ (dang-nhap.html) — nền trắng, ảnh đôi tay nâng trái tim bên phải với mép cong · biểu mẫu bên trái; dùng lại .field, .field-row, .check, ô nhập .pf-input + nút .pf-btn (UI KIT) ==================== */
+.auth-page{position:relative;isolation:isolate;min-height:100vh;min-height:100dvh;background:radial-gradient(60% 40% at 0 100%,rgba(229,63,46,.1),rgba(229,63,46,0) 70%),#fff;color:var(--color-text)}
 
-/* ==================== SECTION: GIỚI THIỆU ==================== */
-/* Ảnh căn 80% ngang để thấy rõ cả cô gái lẫn bà lão; logo trên cùng, khẩu hiệu + lời kết dồn xuống đáy để không che mặt hai người */
-.auth-intro{position:sticky;top:0;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;gap:24px;height:100vh;height:100dvh;padding:clamp(24px,3vw,48px);overflow:hidden;background:#8e0f1c url('Emages/hero 2.png') 80% center/cover no-repeat;color:#fff}
-/* Lớp phủ: trắng mờ dần ở đỉnh (làm nổi logo) · trong suốt ở vùng giữa (mặt hai người) · đỏ đậm dần ở đáy cho chữ dễ đọc */
-.auth-intro::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.7) 12%,rgba(255,255,255,0) 26%),linear-gradient(180deg,rgba(142,15,28,0) 48%,rgba(142,15,28,.75) 66%,rgba(142,15,28,.98) 100%)}
-
-/* ---------- Logo: logo gốc đặt thẳng trên ảnh, không nền ---------- */
-.auth-brand{align-self:flex-start;display:inline-flex;margin-bottom:auto}
-.auth-brand img{display:block;width:280px;height:auto}
-
-/* ---------- Khẩu hiệu ---------- */
-.auth-intro-title{max-width:480px;margin:0;font-size:clamp(26px,2.6vw,40px);font-weight:700;line-height:1.15;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.25)}
-.auth-intro-title span{color:#ffd6d8}
-.auth-intro-lead{max-width:440px;margin:12px 0 0;font-size:14px;line-height:1.6;color:rgba(255,255,255,.88)}
-
-/* ---------- Đơn vị đồng hành sáng lập: nhãn nhỏ + 4 ô logo trắng (như .partner-logo trang chủ, cỡ gọn) ---------- */
-.auth-partners{max-width:520px;padding-top:16px;border-top:1px solid rgba(255,255,255,.28)}
-.auth-partners-title{margin:0 0 10px;font-size:12px;font-weight:600;line-height:16px;text-transform:uppercase;color:rgba(255,255,255,.82)}
-.auth-partners-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
-.auth-partner{display:grid;place-items:center;height:64px;padding:6px 8px;border-radius:10px;background:#fff;overflow:hidden}
-.auth-partner img{display:block;width:100%;height:100%;object-fit:contain}
-.auth-partner .logo-gtinx{object-fit:cover} /* logo GTINX có lề trong suốt rộng → cắt sát để cỡ chữ ngang các logo khác *//* ==================== END SECTION: GIỚI THIỆU ==================== */
+/* ==================== SECTION: ẢNH NỀN ==================== */
+/* Ảnh phủ cả màn, rõ nét trong 1 hình elip neo góc dưới-phải; mép cong là dải gradient rộng mờ dần sang trái (mask 62% → 98%).
+   Vùng trắng bên trái không che kín: ảnh vẫn lộ 15% (lớp trắng ~85%) */
+.auth-page::before{content:"";position:fixed;inset:0;z-index:-1;background:url("Emages/BG%20login.png") center/cover no-repeat;-webkit-mask-image:radial-gradient(62% 135% at 100% 100%,#000 62%,rgba(0,0,0,.6) 80%,rgba(0,0,0,.15) 98%);mask-image:radial-gradient(62% 135% at 100% 100%,#000 62%,rgba(0,0,0,.6) 80%,rgba(0,0,0,.15) 98%)}
+/* ==================== END SECTION: ẢNH NỀN ==================== */
 
 /* ==================== SECTION: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
-.auth{display:flex;flex-direction:column;gap:12px;min-width:0;padding:clamp(16px,2.4vw,28px) clamp(16px,4vw,56px) 20px}
+.auth{display:flex;flex-direction:column;gap:32px;min-height:100vh;min-height:100dvh;padding:56px 24px 40px 84px}
 
-/* ---------- Thanh trên: về trang chủ · chuyển tab nhanh ---------- */
-.auth-topbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px}
-.auth-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--color-text);transition:color .2s}
-.auth-back:hover{color:var(--color-primary)}
-.auth-back .icon{width:16px;height:16px;transform:rotate(180deg)}
-.auth-switch{margin:0;font-size:13px;color:var(--color-text-muted)}
-.auth-switch a{font-weight:600;color:var(--color-primary)}
-.auth-switch a:hover{text-decoration:underline}
+/* ---------- Thanh trên: chỉ logo (trái) — bấm logo để về trang chủ ---------- */
+.auth-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(744px,100%)}
+.auth-brand{display:inline-flex;flex:none}
+.auth-brand img{display:block;width:280px;height:auto}
 
-/* ---------- Khung biểu mẫu: căn giữa theo chiều dọc phần còn lại ---------- */
-.auth-card{display:flex;flex-direction:column;gap:20px;width:min(600px,100%);margin:auto}
-.auth-card-logo{display:none;width:150px;height:auto;margin:0 auto}
-.auth-head{text-align:center}
-.auth-title{margin:0;font-size:clamp(22px,2vw,28px);font-weight:700;line-height:1.2}
-.auth-lead{margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--color-text-muted)}
+/* ---------- Khung biểu mẫu: lệch vào so với logo, cách thanh trên theo chiều cao màn ---------- */
+.auth-card{display:flex;flex-direction:column;gap:24px;width:min(564px,100%);margin:clamp(16px,6vh,64px) 0 auto 68px}
+.auth-head{margin-bottom:8px;text-align:center} /* tiêu đề căn giữa theo bề ngang ô nhập */
+.auth-title{margin:0;font-size:32px;font-weight:700;line-height:40px}
 
-/* ---------- Tab: Đăng nhập / Đăng ký (.segmented giãn đủ chiều ngang, thấp hơn) ---------- */
-.auth-tabs{display:flex;margin-top:0;padding:4px}
-.auth-tabs button{flex:1;justify-content:center;min-height:40px;padding:0 16px;font-size:14px}
-.auth-tabs button .icon{width:16px;height:16px}
-/* Tab đang chọn: nền xám nhạt, chữ đậm (bỏ gradient đỏ + bóng của .segmented) */
-.auth-tabs [aria-selected=true]{background:var(--color-surface-alt);color:var(--color-text);box-shadow:none}
+/* ---------- Tab Đăng nhập / Đăng ký: ẩn — chuyển qua liên kết cuối khung (.auth-switch) ---------- */
+.auth-tabs{display:none}
 
-/* ---------- Biểu mẫu: ô có icon đầu · nút hiện/ẩn mật khẩu · gợi ý · quên mật khẩu · lỗi · nút gửi ---------- */
-.auth-form{display:flex;flex-direction:column;gap:16px}
+/* ---------- Biểu mẫu: ô nhập UI KIT có icon đầu · nút hiện/ẩn mật khẩu · ghi nhớ · quên mật khẩu · lỗi · nút gửi ---------- */
+.auth-form{display:flex;flex-direction:column;gap:20px}
 .auth-form .field-row{gap:16px}
 .auth-form .field{gap:6px}
-.auth-form .field label{font-size:13px}
+.auth-form .field label{font-size:14px}
 .auth-form .field label .icon{width:14px;height:14px;margin-right:4px;vertical-align:-2px;color:var(--color-primary)}
-/* Ô nhập dùng UI KIT .pf-input (cao 40, bo 8, hover/focus info); ô input bên trong bỏ khung của .field input. Lỗi = viền primary, không vòng sáng */
-.auth-form .pf-input input,.auth-form .field.is-invalid .pf-input input{min-height:0;padding:0 12px;border-radius:0;box-shadow:none}
+/* Ô nhập = UI KIT .pf-input (chữ 14, icon đầu .is-search 16, hover/focus info) ở dạng CHỈ GẠCH CHÂN: bỏ viền 3 cạnh, bo góc, nền và vòng sáng focus;
+   chữ/icon sát mép trái. Hover/focus = gạch chân xanh info; lỗi = gạch chân đỏ */
+.auth-form .pf-input{height:56px;padding-left:0;border-width:0 0 1px;border-radius:0;background:transparent} /* cao bằng nút gửi .auth-submit (màn thấp / điện thoại: cùng 48) */
+.auth-form .pf-input:focus-within{box-shadow:0 1px 0 #2f6fe4} /* gạch chân dày thêm 1px thay cho vòng sáng */
+.auth-form .pf-input.is-search{padding-left:28px}
+.auth-form .pf-input.is-search > .icon{left:0}
+.auth-form .pf-input input,.auth-form .field.is-invalid .pf-input input{min-height:0;padding:0;border-radius:0;box-shadow:none}
 .auth-form .field.is-invalid .pf-input{border-color:var(--red)}
+.auth-form .field.is-invalid .pf-input:focus-within{box-shadow:0 1px 0 var(--red)}
 .auth-req{color:var(--color-primary)}
-.auth-hint{font-size:12px;font-style:italic;line-height:1.4;color:var(--color-text-muted)}
-.auth-control > .icon{position:absolute;top:50%;left:12px;width:18px;height:18px;color:#9aa0a6;transform:translateY(-50%);pointer-events:none;transition:color .2s}
-.auth-control:focus-within > .icon{color:#2f6fe4}
-.auth-form .auth-control input{padding-left:40px}
-.auth-form .auth-control:has(.auth-eye) input{padding-right:44px}
-.auth-eye{position:absolute;top:50%;right:3px;display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--color-text-muted);transform:translateY(-50%);transition:color .2s}
+/* Nút hiện/ẩn mật khẩu nằm cuối ô (icon 16 như icon đầu ô) */
+.auth-form .auth-control:has(.auth-eye){padding-right:32px}
+.auth-eye{position:absolute;top:50%;right:0;display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:6px;background:transparent;color:#8a9097;transform:translateY(-50%);transition:color .2s}
 .auth-eye:hover{color:var(--color-text)}
-.auth-eye .icon{width:18px;height:18px}
+.auth-eye .icon{width:16px;height:16px}
 .auth-eye:focus-visible{outline-offset:-2px}
-/* Hàng dưới ô mật khẩu: Ghi nhớ đăng nhập (trái) · Quên mật khẩu (phải) */
-.auth-options{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:-4px}
-.auth-options .check{align-items:center}
-.auth-options .check input{margin-top:0}
-.auth-forgot{font-size:13px;font-weight:600;color:var(--color-primary)}
-.auth-forgot:hover{text-decoration:underline}
-.auth-form .check{gap:8px;font-size:13px;line-height:1.4}
-.auth-form .check input{width:16px;height:16px;margin-top:1px}
+/* Hàng dưới ô mật khẩu: Ghi nhớ đăng nhập (trái) · Quên mật khẩu (phải, chữ gạch chân) */
+.auth-options{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.auth-form .auth-options .check{align-items:center;font-size:16px;color:var(--color-text)}
+.auth-form .auth-options .check input{width:20px;height:20px;margin-top:0}
+.auth-forgot{font-size:16px;font-weight:500;color:var(--color-text);text-decoration:underline;text-underline-offset:3px}
+.auth-forgot:hover{color:var(--color-primary)}
+.auth-form .check{gap:10px;font-size:14px;line-height:1.4}
+.auth-form .check input{width:18px;height:18px;margin-top:1px}
 .auth-form .check a{font-weight:600;color:var(--color-primary)}
-.auth-error{margin:0;font-size:13px;line-height:1.4;color:var(--color-primary)}
-/* Nút gửi: UI KIT .pf-btn.pf-btn-primary (cao 40), kéo full chiều ngang */
-.auth-submit{width:100%}
+.auth-error{margin:0;font-size:14px;line-height:1.4;color:var(--color-primary)}
+/* Nút gửi: UI KIT .pf-btn.pf-btn-primary, cao 56, kéo full chiều ngang */
+.auth-submit{width:100%;height:56px;margin-top:4px;border-radius:10px;font-size:18px;font-weight:600}
+.auth-submit .icon{width:20px;height:20px}
 
 /* ---------- Mã xác minh: ảnh mã · nút đổi · ô nhập trên 1 dòng ---------- */
 .auth-captcha{display:flex;align-items:center;gap:6px}
-.auth-captcha canvas{flex:none;display:block;width:102px;height:40px;border:1px solid var(--color-border);border-radius:8px}
-.auth-captcha-refresh{flex:none;display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--color-text-muted);transition:background .2s,color .2s}
+.auth-captcha canvas{flex:none;display:block;width:140px;height:56px;border:1px solid var(--color-border);border-radius:8px} /* cao bằng ô nhập */
+.auth-captcha-refresh{flex:none;display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--color-text-muted);transition:background .2s,color .2s}
 .auth-captcha-refresh:hover{background:var(--color-surface-alt);color:var(--color-text)}
-.auth-captcha-refresh .icon{width:18px;height:18px}
+.auth-captcha-refresh .icon{width:20px;height:20px}
 .auth-captcha-input{flex:1;min-width:0}
 .auth-form .auth-captcha input{font-weight:600;text-transform:uppercase}
 .auth-form .auth-captcha input::placeholder{font-weight:400;text-transform:none}
 
-/* ---------- Đăng nhập bằng: đường kẻ có chữ giữa · Google | Facebook · định danh điện tử ---------- */
-.auth-divider{display:flex;align-items:center;gap:12px;margin:0;font-size:12px;color:var(--color-text-muted)}
+/* ---------- Đăng nhập bằng: đường kẻ có chữ giữa · VNeID | Google | Facebook trên 1 hàng ---------- */
+.auth-divider{display:flex;align-items:center;gap:24px;margin:0;font-size:16px;color:var(--color-text-muted)}
 .auth-divider::before,.auth-divider::after{content:"";flex:1;height:1px;background:var(--color-border)}
-.auth-social{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-/* Nút mạng xã hội: UI KIT .pf-btn.pf-btn-ghost (cao 40) */
-.auth-social .pf-btn{min-width:0;padding:0 12px}
-.auth-social .pf-btn svg{flex:none;width:18px;height:18px}
-.auth-social .auth-vneid{grid-column:1/-1}
+.auth-social{display:flex;flex-wrap:wrap;gap:16px}
+/* Nút: UI KIT .pf-btn.pf-btn-ghost, cao 56, chia đều; chữ "Đăng nhập bằng" ẩn — chỉ còn tên dịch vụ */
+.auth-social .pf-btn{flex:1 1 0;min-width:120px;height:56px;padding:0 12px;border-radius:10px;font-size:16px;font-weight:500}
+.auth-social .pf-btn svg{flex:none;width:24px;height:24px}
+.auth-social .auth-vneid-logo{flex:none;display:block;width:24px;height:24px;border-radius:6px} /* logo VNeID dạng ô vuông bo góc: bo 6 để cắt góc trắng của ảnh gốc */
+.auth-social .pf-btn[hidden]{display:none}
+.auth-social-verb{display:none}
+
+/* ---------- Chuyển nhanh Đăng nhập ⇄ Đăng ký (cuối khung) ---------- */
+.auth-switch{margin:16px 0 0;font-size:16px;text-align:center;color:var(--color-text)}
+.auth-switch a{margin-left:8px;font-weight:600;color:var(--color-primary)}
+.auth-switch a:hover{text-decoration:underline}
 /* ==================== END SECTION: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
 
 /* ==================== RESPONSIVE: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
-@media(max-height:760px){.auth-intro-lead{display:none}}
-@media(max-width:1180px){.auth-page{grid-template-columns:minmax(0,4fr) minmax(0,6fr)}}
-@media(max-width:900px){
-  .auth-page{display:block}
-  .auth-intro{display:none}
-  .auth-card-logo{display:block}
+/* ---------- Laptop: thu lề trái, thu hẹp vùng ảnh để không đè biểu mẫu ---------- */
+@media(max-width:1280px){
+  .auth{padding-left:56px}
+  .auth-card{margin-left:44px}
+  .auth-page::before{-webkit-mask-image:radial-gradient(54% 135% at 100% 100%,#000 62%,rgba(0,0,0,.6) 80%,rgba(0,0,0,.15) 98%);mask-image:radial-gradient(54% 135% at 100% 100%,#000 62%,rgba(0,0,0,.6) 80%,rgba(0,0,0,.15) 98%)}
 }
-/* ---------- Màn thấp (laptop nhỏ, trình duyệt nhiều thanh công cụ): bỏ dòng mô tả, thu khoảng cách ---------- */
-@media(max-height:640px){
-  .auth{gap:8px;padding-top:12px;padding-bottom:12px}
-  .auth-card{gap:10px}
-  .auth-lead{display:none}
-  .auth-form{gap:10px}
+/* ---------- Máy tính bảng trở xuống: bỏ ảnh, căn giữa cả khối ---------- */
+@media(max-width:1100px){
+  .auth-page::before{display:none}
+  .auth{align-items:center;padding:32px 24px 88px} /* chừa đáy cho nhãn GTINX (.dev-tag) ghim góc trái dưới */
+  .auth-topbar{width:min(564px,100%)}
+  .auth-card{margin:clamp(16px,6vh,64px) auto auto}
+  .auth-brand img{width:240px}
 }
-/* ---------- Điện thoại: Đăng ký xếp lại lưới 2 cột (Họ tên · Email | SĐT · Mật khẩu | Nhập lại · Mã xác minh); bỏ icon đầu ô cho đủ chỗ ---------- */
+/* ---------- Màn thấp: thu khoảng cách, ô/nút cao 48 ---------- */
+@media(max-height:760px) and (min-width:561px){
+  .auth{gap:20px;padding-top:28px;padding-bottom:24px}
+  .auth-card{gap:18px}
+  .auth-head{margin-bottom:4px}
+  .auth-form{gap:16px}
+  .auth-form .pf-input,.auth-submit,.auth-social .pf-btn{height:48px}
+  .auth-captcha canvas{width:120px;height:48px}
+}
+/* ---------- Điện thoại: chữ nhỏ hơn; Đăng ký xếp lưới 2 cột (Họ tên · Email | SĐT · Mật khẩu | Nhập lại · Mã xác minh), bỏ icon đầu ô cho đủ chỗ ---------- */
 @media(max-width:560px){
-  .auth{padding-inline:16px}
-  .auth-social-verb{display:none}
+  .auth{gap:24px;padding:20px 16px 76px}
+  .auth-brand img{width:180px}
+  .auth-card{gap:18px}
+  .auth-head{margin-bottom:4px}
+  .auth-form{gap:14px}
+  .auth-form .pf-input,.auth-submit,.auth-social .pf-btn{height:48px}
+  .auth-captcha canvas{width:120px;height:48px}
+  .auth-form .auth-options .check,.auth-forgot,.auth-switch,.auth-divider{font-size:14px}
+  .auth-form .auth-options .check input{width:18px;height:18px}
+  .auth-submit{font-size:16px}
+  .auth-social{gap:8px}
+  .auth-social .pf-btn{min-width:96px;font-size:14px}
+  .auth-social .pf-btn svg,.auth-social .auth-vneid-logo{width:20px;height:20px}
   #auth-register{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
   #auth-register .field-row{display:contents}
   #auth-register > :not(.field-row){grid-column:1/-1}
-  .auth-control > .icon{display:none}
-  .auth-form .auth-control input{padding-left:12px}
+  #auth-register .pf-input.is-search{padding-left:0}
+  #auth-register .pf-input.is-search > .icon{display:none}
   .auth-form .check{font-size:12px}
 }
-@media(max-width:420px){#auth-switch-text{display:none}}
-@media(max-width:560px) and (max-height:700px){
-  .auth{gap:6px}
-  .auth-card{gap:8px}
-  .auth-card-logo{display:none}
-  .auth-lead{display:none}
-  #auth-register{gap:8px}
-  .auth-form .auth-control:has(.auth-eye) input{padding-right:38px}
-  .auth-eye{width:32px;height:32px}
-}
+@media(max-width:360px){#auth-switch-text{display:block}.auth-switch a{margin-left:0}}
 /* ==================== END PAGE: ĐĂNG NHẬP / ĐĂNG KÝ ==================== */
 
 /* ==================== PAGE: ĐƠN VỊ ĐỒNG HÀNH (don-vi-dong-hanh.html — SRS Đối tác đồng hành, Web công dân) ==================== */
