@@ -1,6 +1,6 @@
 /* ==================== TRANG QUỸ NHÂN ĐẠO (GSAP) — css/quy-nhan-dao.css ==================== */
 /* Nạp SAU styles.css. Giao diện dùng chung lấy từ styles.css: .section · .section-head · .section-title (32px) · .section-lead · .link-arrow · .button ·
-   .breadcrumb · .hero-pill · .award-card · .ngn-list / .qnd-rules-* · .news-* · .partners · .pf-tag · .info-dialog.
+   .breadcrumb · .hero-pill · .award-card · .ngn-list / .qnd-rules-* · .news-* · .pf-tag · .info-dialog.
    File này chỉ thêm bố cục riêng trang + trạng thái chuyển động (tiền tố qf-). Màu, chữ dùng token chung (--color-*, --red);
    nền trang trắng #FFFFFF; một font (Be Vietnam Pro); chữ không giãn khoảng; kích thước số nguyên px.
    Chuyển động ở quy-nhan-dao.js (GSAP + ScrollTrigger + SplitText). */
@@ -11,6 +11,9 @@
 .qf-page img{display:block;max-width:100%}
 :where(.qf-page) :where(h1,h2,h3,h4,p,blockquote,figure,dl,dd,ul,ol){margin:0} /* độ ưu tiên 0: không đè margin của lớp dùng chung (.section-lead…) */
 :where(.qf-page) :where(ul,ol){padding:0;list-style:none}
+/* ---------- Nhịp section: từ section 2 trở đi mỗi section chỉ đệm trên 64px, không đệm dưới → khoảng cách giữa 2 section luôn 64px; section cuối đệm dưới 64px trước footer ---------- */
+.qf-page > .section{padding-block:64px 0}
+.qf-page > .section:last-child{padding-bottom:64px}
 .qf-sl-mask{padding-block:6px;margin-block:-6px} /* mặt nạ dòng SplitText: chừa chỗ dấu tiếng Việt */
 .qf-mono{font-variant-numeric:tabular-nums;font-weight:700}
 
@@ -18,11 +21,12 @@
 .qf-motion .qf-hero{visibility:hidden}
 
 /* ==================== SECTION: HERO QUỸ NHÂN ĐẠO ==================== */
-.qf-hero{padding:calc(var(--header-h) + 16px) 0 var(--space-section)}
+/* ---------- Khung hero vừa khít 1 màn hình (desktop): breadcrumb trên cùng · lưới 2 cột căn giữa phần còn lại ---------- */
+.qf-hero{display:flex;flex-direction:column;min-height:100svh;padding:calc(var(--header-h) + 16px) 0 40px}
 /* ---------- Breadcrumb: hàng riêng trên cùng, cách header 16px (như các trang khác) ---------- */
-.qf-crumbs{margin-bottom:32px}
+.qf-crumbs{margin-bottom:24px}
 /* ---------- 2 cột: chữ trái · cụm ảnh phải ---------- */
-.qf-hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px 80px;align-items:center}
+.qf-hero-grid{flex:1;display:grid;grid-template-columns:minmax(448px,1fr) minmax(0,1.7fr);gap:48px 64px;align-items:center;align-content:center}
 /* ---------- Tiêu đề 2 dòng 48px (cỡ tiêu đề trang con), mặt nạ dòng cho chữ trượt lên ---------- */
 .qf-hero-title{font-size:48px;font-weight:700;line-height:58px;color:var(--color-text)}
 .qf-line{display:block;overflow:hidden;padding-block:4px}
@@ -35,13 +39,13 @@
 .qf-hero-actions .button{transition:background .2s,box-shadow .2s}
 .qf-hero-actions .button:hover{transform:none}
 /* ---------- Cụm 3 ảnh so le: ảnh chính cao bên trái · 2 ảnh phải lệch tầng ---------- */
-.qf-hero-visual{position:relative;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:repeat(12,minmax(0,1fr));gap:16px;height:clamp(480px,66svh,640px)}
+.qf-hero-visual{position:relative;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);grid-template-rows:repeat(12,minmax(0,1fr));gap:16px;height:clamp(400px,calc(100svh - var(--header-h) - 120px),640px)} /* cao = màn hình − header − breadcrumb − lề → cả hero gói trong 1 màn hình */
 .qf-shot{position:relative;overflow:hidden;border-radius:20px;background:var(--color-surface-alt)}
 .qf-shot img{width:100%;height:100%;object-fit:cover}
 .qf-shot--main{grid-column:1;grid-row:1 / span 12}
 .qf-shot--main img{object-position:30% 50%}
-.qf-shot--top{grid-column:2;grid-row:2 / span 5}
-.qf-shot--bottom{grid-column:2;grid-row:7 / span 6}
+.qf-shot--top{grid-column:2;grid-row:3 / span 5} /* 2 ảnh nhỏ (mỗi ảnh 5/12 chiều cao) sát nhau, dồn xuống: mép dưới thẳng hàng ảnh lớn; phía trên chừa chỗ thẻ Quét mã QR */
+.qf-shot--bottom{grid-column:2;grid-row:8 / span 5}
 .qf-shot--bottom img{object-position:50% 30%}
 /* ---------- Thẻ nổi: "Vừa ủng hộ" (dòng chạy luân phiên) · "Quét mã QR" ---------- */
 .qf-float{position:absolute;z-index:2;display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--color-border);border-radius:16px;background:#fff;box-shadow:0 16px 40px rgba(36,39,44,.14)}
@@ -52,37 +56,79 @@
 .qf-live-list{position:relative;height:22px;overflow:hidden}
 .qf-live-list li{font-size:14px;line-height:22px;white-space:nowrap}
 .qf-live-list li+li{position:absolute;left:0;top:0;visibility:hidden}
-.qf-float--qr{top:0;right:24px;transition:border-color .2s}
+.qf-float--qr{top:0;right:24px;transition:border-color .2s} /* nổi đè mép trên ảnh nhỏ (như thẻ "Vừa ủng hộ" đè ảnh lớn) */
 .qf-float--qr:hover{border-color:#efc8cb}
 .qf-float--qr b{display:block;font-size:15px;line-height:22px}
 .qf-float-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--red);color:#fff}
 .qf-float-icon .icon{width:20px;height:20px}
 
 /* ==================== SECTION: CÙNG QUỸ VUN ĐẮP NHỮNG ĐIỀU TỐT ĐẸP ==================== */
-/* ---------- 2 cột: text trái · khung chuyển khoản phải (rộng bằng popup ủng hộ ~900px) ---------- */
-.qf-give-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:48px 64px;align-items:center}
-/* ---------- Cột trái: 2 ý (dấu tích đỏ) · link chọn chương trình ---------- */
-.qf-checks{display:grid;gap:12px;margin-top:24px}
+/* ---------- Text trên · khung chuyển khoản dưới (trải hết bề ngang container) ---------- */
+.qf-give-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:40px}
+/* Khối text căn giữa: tiêu đề · mô tả · hàng 2 ý */
+.qf-give-copy{text-align:center}
+.qf-give-copy .section-lead{max-width:720px;margin-inline:auto}
+/* ---------- Hàng 2 ý (dấu tích đỏ) ---------- */
+.qf-give-meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 32px;margin-top:24px}
+.qf-checks{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 32px}
 .qf-checks li{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:500;line-height:24px}
 .qf-checks .icon{width:20px;height:20px;color:var(--color-primary)}
-.qf-give-link{margin-top:24px}
 /* ---------- Khung ủng hộ: dùng nguyên .pv-donate (popup ủng hộ trang chương trình, styles.css) — chỉ đổi từ popup sang khối nằm trong trang ---------- */
-.qf-donate{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);width:100%;max-height:none;border:1px solid var(--color-border);box-shadow:0 24px 60px rgba(36,39,44,.12);overflow:hidden}
-.qf-donate .pv-donate-form{gap:20px;padding:32px}
-/* Cột đỏ: không có nút đóng → bớt khoảng trên; thẻ QR + thông tin chuyển khoản giữ bề rộng như popup, căn giữa cột */
-.qf-donate .pv-donate-pay{justify-content:center;padding:32px}
-.qf-donate .pv-donate-pay>*{width:100%;max-width:440px;margin-inline:auto}
+.qf-donate{display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%;max-height:none;border:0;box-shadow:0 2px 8px rgba(36,39,44,.06),0 24px 60px rgba(36,39,44,.16);overflow:hidden} /* không viền, chỉ bóng đổ 2 lớp */
+.qf-donate .pv-donate-form{gap:24px;padding:32px}
+/* ---------- Form dàn ngang 2 cột: trái (ngân hàng · lời nhắn cao lấp hết cột) | phải (số tiền · tên hiển thị · email/SĐT) · ẩn danh | Tạo mã QR ---------- */
+.qf-donate .pv-donate-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"bank amount" "msg amount" "msg name" "msg contact" "anon submit";gap:16px 24px;align-items:start}
+.qf-f-bank{grid-area:bank}
+.qf-f-amount{grid-area:amount}
+.qf-f-msg{grid-area:msg;align-self:stretch;display:flex;flex-direction:column}
+.qf-f-msg .pf-control{flex:1;align-items:stretch}
+.qf-f-msg textarea{height:100%}
+.qf-f-name{grid-area:name}
+.qf-f-contact{grid-area:contact}
+.qf-f-anon{grid-area:anon;align-self:center}
+.qf-f-submit{grid-area:submit;margin-top:0}
+/* Nút chọn nhanh số tiền: rê chuột → viền, nền, chữ xanh (thay đỏ) */
+.qf-donate .pv-qr-quick button:hover{border-color:var(--color-green);background:#e5f3ea;color:var(--color-green)}
+/* Placeholder các ô nhập: chữ thường (400), không đậm theo ô */
+.qf-donate .pf-control input::placeholder,.qf-donate .pf-control textarea::placeholder{font-weight:400}
+/* Nút Tạo mã QR màu xanh (đồng bộ nền "hy vọng xanh") */
+.qf-donate .qf-f-submit{background:var(--color-green)}
+.qf-donate .qf-f-submit:hover{background:var(--color-green-dark)}
+/* ---------- Cột QR thu gọn (bề rộng cố định, form giãn phần còn lại): thẻ VietQR trái · thông tin chuyển khoản phải (cao bằng nhau) · lưu ý căn giữa dưới cùng ---------- */
+.qf-donate .pv-donate-pay{display:grid;grid-template-columns:256px 360px;justify-content:center;grid-template-areas:"card transfer" "warn warn";align-content:center;gap:16px 24px;padding:32px}
+/* ---------- Icon đầu form: lá hy vọng (thay trái tim), vòng tròn nền xanh nhạt ---------- */
+.qf-donate .qf-donate-leaf{background:radial-gradient(circle at 35% 30%,#fff 0%,#e3f3dc 70%);box-shadow:0 4px 12px rgba(40,110,40,.18)}
+.qf-donate .qf-donate-leaf img{width:28px;height:28px;object-fit:contain}
+/* ---------- Nền cột QR: ảnh "hy vọng xanh" (thay nền đỏ), lớp phủ nhẹ giữ ảnh sáng, tươi; khung thông tin chuyển khoản kính trắng mờ, chữ tối ---------- */
+.qf-donate .pv-donate-pay{background:linear-gradient(180deg,rgba(255,255,255,.1) 0%,rgba(20,60,30,.12) 50%,rgba(20,60,30,.22) 100%),url("../Emages/background_hy_vong_xanh_sach.png") center 65% / cover no-repeat}
+.qf-donate .pv-qr-transfer{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.72)}
+.qf-donate .pv-qr-transfer h3,.qf-donate .pv-qr-transfer dd b,.qf-donate .pv-qr-transfer dd button{color:var(--color-text)}
+.qf-donate .pv-qr-transfer dt{color:var(--color-text-muted)}
+.qf-donate .pv-qr-transfer dd button:hover{background:rgba(36,39,44,.08)}
+.qf-donate .pv-qr-transfer dd b{font-weight:500}
+.qf-donate .pv-qr-warn{color:#fff;text-shadow:0 1px 4px rgba(10,40,20,.55)}
+.qf-donate .pv-qr-card{grid-area:card;justify-content:center;padding-inline:16px}
+.qf-donate .pv-qr-card,.qf-donate .pv-qr-transfer{align-self:stretch}
+/* ---------- Vạch quét QR: tia đỏ phát sáng chạy lên xuống qua mã (tắt khi giảm chuyển động) ---------- */
+.qf-donate .pv-qr-frame::after{content:'';position:absolute;left:6px;right:6px;top:8px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--red) 20%,var(--red) 80%,transparent);box-shadow:0 0 8px 2px rgba(232,35,43,.45);pointer-events:none;animation:qf-qr-scan 2.4s ease-in-out infinite alternate}
+@keyframes qf-qr-scan{to{top:calc(100% - 10px)}}
+@media (prefers-reduced-motion:reduce){.qf-donate .pv-qr-frame::after{display:none}}
+/* Khung thông tin chuyển khoản cao bằng thẻ QR: các dòng giãn đều theo chiều cao */
+.qf-donate .pv-qr-transfer{grid-area:transfer;display:flex;flex-direction:column;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.qf-donate .pv-qr-transfer dl{flex:1;display:flex;flex-direction:column;justify-content:space-around}
+.qf-donate .pv-qr-transfer dl div{grid-template-columns:96px minmax(0,1fr)}
+.qf-donate .pv-qr-warn{grid-area:warn;text-align:center}
 
 /* ==================== SECTION: VỀ QUỸ ==================== */
 .qf-about-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.8fr);gap:48px 96px}
 /* ---------- Cột trái (ghim) ---------- */
 .qf-about-side{position:sticky;top:calc(var(--header-h) + 40px);align-self:start}
-.qf-about-photo{margin-top:32px;overflow:hidden;border-radius:20px;aspect-ratio:4/3;background:var(--color-surface-alt)}
+/* ---------- Đầu section căn giữa: mô tả rộng hơn để đoạn giới thiệu Quỹ gọn trong 3 dòng ---------- */
+.qf-about .section-lead{max-width:760px}
+.qf-about-photo{overflow:hidden;border-radius:20px;aspect-ratio:4/3;background:var(--color-surface-alt)}
 .qf-about-photo img{width:100%;height:100%;object-fit:cover}
-/* ---------- Tuyên bố (chữ sáng dần theo cuộn) ---------- */
-.qf-about-statement{font-size:24px;font-weight:500;line-height:38px;color:var(--color-text)}
 /* ---------- 3 đặc điểm ---------- */
-.qf-about-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin-top:56px;padding-top:32px;border-top:1px solid var(--color-border)}
+.qf-about-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
 .qf-fact-icon{display:grid;place-items:center;width:48px;height:48px;margin-bottom:20px;border-radius:50%;background:#fdecec;color:var(--color-primary)}
 .qf-fact-icon .icon{width:22px;height:22px}
 .qf-fact h3{margin-bottom:8px;font-size:18px;font-weight:600;line-height:26px}
@@ -99,31 +145,24 @@
 .qf-note b{font-weight:600;color:var(--color-text)}
 
 /* ==================== SECTION: LĨNH VỰC NHÂN ĐẠO ==================== */
-.qf-fields{padding-block:0}
-.qf-fields-pin{display:flex;flex-direction:column;justify-content:center;min-height:100svh;padding-block:calc(var(--header-h) + 32px) 40px}
+/* Desktop: đầu section + 2 hàng thẻ vừa 1 màn hình (chiều cao thẻ tính theo màn, xem .qf-fields-grid); khoảng cách section theo nhịp chung 64px */
+.qf-fields .section-head{margin-bottom:32px}
 .qf-fields-count{font-size:15px;color:var(--color-text-muted)}
 .qf-fields-count b{margin-right:4px;font-size:32px;line-height:40px;font-weight:600;color:var(--color-primary)}
-/* ---------- Dải thẻ: mặc định vuốt ngang (scroll-snap); desktop + có chuyển động → .is-scrubbed, GSAP kéo ngang ---------- */
-.qf-fields-viewport{overflow-x:auto;padding-inline:var(--qf-edge);scroll-snap-type:x mandatory;scroll-padding-inline:var(--qf-edge);scrollbar-width:none}
-.qf-fields-viewport::-webkit-scrollbar{display:none}
-.qf-fields-track{display:flex;gap:24px;width:max-content}
-.qf-fields.is-scrubbed .qf-fields-viewport{overflow:visible;scroll-snap-type:none}
+/* ---------- Lưới 6 thẻ: 3 cột × 2 hàng; chiều cao hàng chia theo màn hình (trừ header, đầu section, khoảng cách) ---------- */
+.qf-fields-grid{--qf-field-h:clamp(240px,calc((100svh - 320px) / 2),380px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:var(--qf-field-h);gap:24px;margin:0;padding:0;list-style:none}
 /* ---------- Thẻ lĩnh vực: ảnh phủ, chữ trắng đè đáy (như bài nổi bật Tin tức) ---------- */
-.qf-field{position:relative;isolation:isolate;flex:none;width:clamp(300px,28vw,420px);height:clamp(420px,56svh,560px);overflow:hidden;border-radius:20px;background:var(--color-surface-alt);color:#fff;scroll-snap-align:start}
+.qf-field{position:relative;isolation:isolate;overflow:hidden;border-radius:20px;background:var(--color-surface-alt);color:#fff}
 .qf-field-img{position:absolute;inset:0;z-index:-2;overflow:hidden}
-.qf-field-img img{width:124%;max-width:none;height:100%;margin-left:-12%;object-fit:cover;transition:transform .8s cubic-bezier(.22,1,.36,1)}
+.qf-field-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.22,1,.36,1)}
 .qf-field:hover .qf-field-img img{transform:scale(1.05)}
 .qf-field::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.45) 60%,rgba(0,0,0,.85) 100%)}
 .qf-field-num{position:absolute;top:24px;left:24px;font-size:15px;font-weight:600}
 .qf-field-icon{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--color-primary)}
 .qf-field-icon .icon{width:20px;height:20px}
 .qf-field-body{position:absolute;left:24px;right:24px;bottom:24px}
-.qf-field-body h3{margin-bottom:8px;font-size:24px;font-weight:600;line-height:32px}
+.qf-field-body h3{margin-bottom:8px;font-size:20px;font-weight:600;line-height:28px}
 .qf-field-body p{font-size:15px;line-height:24px;color:rgba(255,255,255,.88)}
-/* ---------- Thanh tiến độ dải thẻ ---------- */
-.qf-fields-foot{margin-top:32px}
-.qf-fields-bar{position:relative;display:block;height:2px;overflow:hidden;background:var(--color-border)}
-.qf-fields-bar span{position:absolute;inset:0;background:var(--red);transform:scaleX(.17);transform-origin:0 50%}
 
 /* ==================== SECTION: HOẠT ĐỘNG NHÂN ĐẠO ==================== */
 .qf-acts{position:relative}
@@ -142,29 +181,39 @@
 .qf-cursor-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
 .qf-cursor-media img.is-on{opacity:1}
 
-/* ==================== SECTION: CÂU CHUYỆN ==================== */
-/* ---------- Chồng thẻ .award-card (sticky, lệch 16px mỗi thẻ) ---------- */
-.qf-stories-note{margin:-32px 0 32px}
-.qf-story-stack{gap:32px}
-.qf-story{position:sticky;top:calc(var(--header-h) + 32px);min-height:min(520px,calc(100svh - var(--header-h) - 64px));transform-origin:50% 0}
-.qf-story:nth-child(2){top:calc(var(--header-h) + 48px)}
-.qf-story:nth-child(3){top:calc(var(--header-h) + 64px)}
-.qf-story .pf-tag{margin-bottom:20px}
-.qf-story .award-card-media{align-self:stretch;aspect-ratio:auto;min-height:320px}
-.qf-story .award-card-media img{object-position:50% 40%}
-.qf-story-link{margin-top:24px}
-
 /* ==================== SECTION: MINH BẠCH & TRÁCH NHIỆM ==================== */
-.qf-trust-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:48px 80px;align-items:start}
-/* ---------- Trái: khung "Mỗi nguồn lực đều cần được giải trình" ---------- */
+/* Trên: khung giải trình (3 bước dàn ngang) · dưới: tab tài liệu — xếp dọc, cùng bề rộng */
+.qf-trust-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:48px}
+/* ---------- Trên: khung "Mỗi nguồn lực đều cần được giải trình" — 3 bước dàn ngang 3 cột ---------- */
 .qf-account{padding:clamp(24px,3vw,40px);border:1px solid var(--color-border);border-top:4px solid var(--red);border-radius:20px}
 .qf-account h3{font-size:24px;font-weight:600;line-height:32px}
 .qf-account>p{margin-top:12px;font-size:16px;line-height:26px;color:var(--color-text-muted)}
-.qf-account-steps{margin:24px 0 0}
+.qf-account-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 32px;margin:24px 0 0}
 .qf-account-steps p,.qf-doc-desc{margin-top:4px;font-size:14px;line-height:22px;color:var(--color-text-muted)}
-/* ---------- Phải: tab tài liệu (.pf-tabs) + danh sách số (.ngn-list) ---------- */
+/* ---------- Dưới: tab tài liệu (.pf-tabs) + danh sách số (.ngn-list) ---------- */
+/* Khung nổi: viền mảnh · bo góc như khung giải trình phía trên · đổ bóng nhẹ (như .gt-info-card mở) */
+.qf-docs-panel{padding:clamp(24px,3vw,40px);border:1px solid var(--color-border);border-radius:20px;background:#fff;box-shadow:0 12px 32px rgba(17,24,39,.08)}
+.qf-docs-panel .ngn-item:first-child{border-top:0} /* bỏ vạch kẻ đôi ngay dưới thanh tab */
 .qf-docs-panel .pf-tabs{margin-bottom:8px}
+/* ---------- Tab Hồ sơ & quy chế: dòng tệp tài liệu (.pf-file dùng chung) — chữ to hơn bản trong form, nút Tải xuống bên phải ---------- */
+.qf-files{display:grid;gap:12px;margin-top:16px}
+.qf-files[hidden]{display:none}
+.qf-files .pf-file{gap:16px;padding:16px 20px;transition:border-color .2s,box-shadow .2s}
+.qf-files .pf-file:hover{border-color:#efc8cb;box-shadow:0 8px 20px rgba(185,28,43,.06)}
+.qf-files .pf-file-icon{width:44px;height:44px;border-radius:10px}
+.qf-files .pf-file-icon .icon{width:22px;height:22px}
+.qf-files .pf-file-name{font-size:16px;line-height:24px}
+.qf-files .qf-doc-desc{margin-top:2px}
+.qf-files .pf-file-meta{margin-top:4px}
 .qf-docs-panel .pf-tabs a{cursor:pointer}
+/* ---------- Tab Báo cáo: danh sách ủng hộ (.pf-table-card dùng chung) — cột # · người ủng hộ · số tiền · thời gian ---------- */
+.qf-donors{margin-top:16px}
+.qf-donors .qf-note{margin-top:12px}
+.qf-donor-table{min-width:520px}
+.qf-donor-table .qf-col-index{width:48px}
+.qf-donor-table .qf-col-amount{width:140px}
+.qf-donor-table .qf-col-time{width:136px}
+.qf-donor-table .pf-pv-amount{color:var(--color-primary);white-space:nowrap}
 .qf-docs-panel .ngn-list{margin:0}
 .qf-docs-panel .ngn-list[hidden]{display:none}
 .qf-docs-panel .pf-tag{flex:none}
@@ -193,75 +242,70 @@
 .qf-res-more .button{margin-top:20px}
 
 /* ==================== SECTION: TIN TỨC ==================== */
-/* ---------- 5 chuyên mục: thẻ viền mảnh (như .cp-card), cả thẻ bấm được (.stretched) ---------- */
-.qf-cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.qf-cat{position:relative;display:flex;flex-direction:column;gap:8px;padding:24px;border:1px solid var(--color-border);border-radius:14px;transition:border-color .25s,box-shadow .25s}
-.qf-cat:hover{border-color:#efc8cb;box-shadow:0 12px 28px rgba(185,28,43,.08)}
-.qf-cat h3{font-size:18px;font-weight:600;line-height:26px}
-.qf-cat:hover h3{color:var(--color-primary)}
-.qf-cat p{flex:1;font-size:15px;line-height:24px;color:var(--color-text-muted)}
-.qf-cat .link-arrow{margin-top:8px;font-size:14px}
-
-/* ==================== SECTION: ĐỐI TÁC ==================== */
-/* Dùng nguyên .partners / .partner-row / .partner-logo của trang chủ — không thêm style */
+/* ---------- Tab 5 chuyên mục (.pf-tabs dùng chung) · lưới bài viết dùng lại .news-grid trang chủ ---------- */
+.qf-news-head{align-items:center;margin-bottom:32px}
+.qf-news-tabs{min-width:0;max-width:100%}
+.qf-news-tabs a{cursor:pointer}
+.qf-news .news-grid.is-swapping{opacity:0;transform:translateY(12px)}
+.qf-news .news-grid{transition:opacity .3s,transform .3s}
 
 /* ==================== SECTION: HƯỚNG DẪN ĐỒNG HÀNH ==================== */
-.qf-guide-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:48px 96px}
-/* ---------- Cột trái (ghim) · hộp hỗ trợ ---------- */
+/* Bố cục hỏi đáp như "Bạn có thể đang băn khoăn" trang Người Gần Nhất: trái tiêu đề + liên hệ (ghim) · phải danh sách câu hỏi mở/đóng */
+.qf-guide-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:48px 96px}
+/* ---------- Cột trái (ghim): tiêu đề · liên hệ ---------- */
 .qf-guide-side{position:sticky;top:calc(var(--header-h) + 40px);align-self:start}
-.qf-help{display:inline-flex;align-items:center;gap:16px;margin-top:32px;padding:12px 20px 12px 12px;border:1px solid var(--color-border);border-radius:16px;transition:border-color .2s}
-.qf-help:hover{border-color:#efc8cb}
-.qf-help-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--red);color:#fff}
-.qf-help small{display:block;font-size:13px;color:var(--color-text-muted)}
-.qf-help b{font-size:18px;line-height:26px}
-/* ---------- 4 bước + đường dọc ---------- */
-.qf-steps{position:relative;padding-left:72px}
-.qf-steps-line{position:absolute;left:21px;top:22px;bottom:22px;width:2px;background:var(--color-border)}
-.qf-steps-line span{position:absolute;inset:0;background:var(--red);transform-origin:50% 0}
-.qf-step{position:relative;padding-bottom:56px}
-.qf-step:last-child{padding-bottom:0}
-.qf-step-dot{position:absolute;left:-72px;top:0;display:grid;place-items:center;width:44px;height:44px;border:2px solid var(--color-border);border-radius:50%;background:#fff;font-size:16px;font-weight:600;color:var(--color-text-muted);transition:background .4s,border-color .4s,color .4s}
-.qf-step.is-active .qf-step-dot{border-color:var(--red);background:var(--red);color:#fff}
-.qf-step h3{padding-top:8px;font-size:20px;font-weight:600;line-height:28px}
-.qf-step p{max-width:560px;margin-top:8px;font-size:16px;line-height:26px;color:var(--color-text-muted)}
-.qf-step .link-arrow{margin-top:12px}
-.qf-step-hint{display:inline-block;padding:10px 16px;border:1px dashed #efc8cb;border-radius:var(--radius-btn-sm);color:var(--color-text)!important;font-size:15px!important}
-.qf-step-hint .qf-mono{color:var(--color-primary)}
-
-/* ---------- Câu hỏi thường gặp (.gt-info-card dùng chung) ---------- */
-.qf-faq{display:grid;gap:12px;margin-top:64px}
-.qf-faq-title{margin-bottom:8px;font-size:24px;font-weight:600;line-height:32px}
-.qf-faq .gt-info-card{border:1px solid var(--color-border);box-shadow:none}
-.qf-faq .gt-info-card p{font-size:16px;line-height:26px;color:var(--color-text-muted)}
+.qf-guide-contact{margin-top:16px;font-size:16px;line-height:28px;color:var(--color-text-muted)}
+.qf-guide-contact a{font-weight:600;color:var(--red)}
+.qf-guide-contact a:hover{text-decoration:underline}
+/* ---------- Cột phải: câu hỏi mở/đóng — kẻ mảnh dưới mỗi câu; dấu + tròn xám, mở → − tròn đỏ; rê chuột / mở: chữ đỏ, nền hồng nhạt ---------- */
+.qf-faq-list details{border-bottom:1px solid var(--color-border)}
+.qf-faq-list summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 16px;border-radius:12px;font-size:16px;font-weight:600;line-height:24px;color:var(--color-text);cursor:pointer;list-style:none;transition:background .2s,color .2s}
+.qf-faq-list summary::-webkit-details-marker{display:none}
+.qf-faq-list summary::after{content:'+';flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#f3f4f6;font-size:18px;font-weight:500;line-height:1;color:var(--color-text-muted);transition:background .2s,color .2s}
+.qf-faq-list summary:hover,.qf-faq-list details[open] summary{background:#fef6f6;color:var(--red)}
+.qf-faq-list summary:hover::after{background:#fdecec;color:var(--red)}
+.qf-faq-list details[open] summary::after{content:'−';background:var(--red);color:#fff}
+.qf-faq-list summary:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
+.qf-faq-body{padding:12px 16px 24px;animation:qf-faq-in .22s ease-out}
+.qf-faq-body p{font-size:16px;line-height:28px;color:var(--color-text-muted)}
+.qf-faq-body .link-arrow{margin-top:12px}
+@keyframes qf-faq-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
 /* ==================== SECTION: KÊU GỌI CUỐI TRANG ==================== */
-.qf-cta{padding-top:0}
-.qf-cta-inner{align-items:center;margin:0;padding:clamp(32px,4vw,56px);border:1px solid var(--color-border);border-radius:24px}
+/* Khung bo góc có ảnh nền "Trái Tim Xanh Nảy Mầm" (trái tim nằm bên phải ảnh) → tiêu đề · mô tả · 2 nút dồn sang trái, xếp dọc */
+.qf-cta-inner{flex-direction:column;align-items:flex-start;justify-content:center;gap:28px;min-height:clamp(320px,26vw,440px);margin:0;padding:clamp(32px,4vw,64px);border:1px solid var(--color-border);border-radius:24px;background:#fdf8f0 url("../Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Tr%C3%A1i%20Tim%20Xanh%20N%E1%BA%A3y%20M%E1%BA%A7m.png") 80% 50%/cover no-repeat}
+.qf-cta-inner > div:first-child{max-width:560px}
+.qf-cta-inner .section-head-aside{justify-content:flex-start}
 
 /* ==================== RESPONSIVE ==================== */
-/* ---------- ≤ 1180px ---------- */
-@media (max-width:1180px){
-  .qf-give-grid{grid-template-columns:minmax(0,1fr)} /* khung chuyển khoản cần ~900px → text lên trên */
-  .qf-give-copy{max-width:720px}
+/* ---------- ≤ 1439px: khung ủng hộ form trên · cột đỏ dưới (cả hai vẫn dàn ngang) ---------- */
+@media (max-width:1439px){
+  .qf-donate{grid-template-columns:minmax(0,1fr)}
+}
+/* ---------- ≤ 860px: cột đỏ xếp dọc (thẻ QR · thông tin CK · lưu ý), giữ bề rộng như popup ---------- */
+@media (max-width:860px){
+  .qf-donate .pv-donate-pay{grid-template-columns:minmax(0,1fr);grid-template-areas:"card" "transfer" "warn"}
+  .qf-donate .pv-donate-pay>*{width:100%;max-width:440px;margin-inline:auto}
 }
 /* ---------- ≤ 1023px: một cột, bỏ ghim ---------- */
 @media (max-width:1023px){
+  .qf-hero{min-height:0;padding-bottom:var(--space-section)}
   .qf-hero-grid,.qf-about-grid,.qf-guide-grid,.qf-donate{grid-template-columns:minmax(0,1fr)}
   .qf-hero-visual{height:520px;margin-inline:24px}
   .qf-about-side,.qf-guide-side{position:static}
   .qf-about-photo{aspect-ratio:16/9}
-  .qf-story{position:relative;top:auto!important;min-height:0;grid-template-columns:minmax(0,1fr)}
-  .qf-story .award-card-media{min-height:0;aspect-ratio:16/10}
   .qf-res-list{flex-direction:column;height:auto}
   .qf-res-item{flex:none;min-height:420px;cursor:default}
   .qf-res-item .qf-res-more{grid-template-rows:1fr;opacity:1}
   .qf-res-item>img{transform:none}
   .qf-act a{grid-template-columns:48px minmax(0,1fr) 44px;gap:16px}
-  .qf-cats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .qf-trust-grid{grid-template-columns:minmax(0,1fr)}
+  .qf-account-steps{grid-template-columns:minmax(0,1fr)}
+  .qf-fields-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:360px}
 }
 /* ---------- ≤ 640px: điện thoại ---------- */
 @media (max-width:640px){
+  .qf-files .pf-file{flex-wrap:wrap}
+  .qf-files .pf-btn{width:100%}
   .qf-hero-title{font-size:36px;line-height:44px}
   .qf-hero-actions,.qf-hero-actions .button{width:100%}
   .qf-hero-visual{height:440px;margin-inline:0;gap:8px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
@@ -271,20 +315,18 @@
   .qf-float--qr{top:12px;right:8px}
   .qf-float--qr small{display:none}
   .qf-donate .pv-donate-form,.qf-donate .pv-donate-pay{padding:24px 16px}
-  .qf-cats{grid-template-columns:minmax(0,1fr)}
-  .qf-about-facts{grid-template-columns:minmax(0,1fr);margin-top:40px}
-  .qf-about-statement{font-size:20px;line-height:32px}
-  .qf-field{width:290px;height:440px}
+  .qf-donate .pv-donate-fields{grid-template-columns:minmax(0,1fr);grid-template-areas:"bank" "amount" "msg" "name" "contact" "anon" "submit"}
+  .qf-f-msg textarea{height:auto}
+  .qf-about-facts{grid-template-columns:minmax(0,1fr)}
+  .qf-fields-grid{grid-template-columns:minmax(0,1fr);grid-auto-rows:320px}
   .qf-act a{grid-template-columns:72px minmax(0,1fr);row-gap:2px}
   .qf-act-thumb{display:block;grid-row:1 / span 2;overflow:hidden;width:72px;height:72px;border-radius:12px}
   .qf-act-thumb img{width:100%;height:100%;object-fit:cover}
   .qf-act-date{grid-column:2;grid-row:1;align-self:end}
   .qf-act-title{grid-column:2}
   .qf-act-arrow{display:none}
-  .qf-steps{padding-left:60px}
-  .qf-step-dot{left:-60px;width:40px;height:40px;font-size:15px}
-  .qf-steps-line{left:19px}
   .qf-cta-inner .section-head-aside,.qf-cta-inner .button{width:100%}
+  .qf-cta-inner{background-image:linear-gradient(rgba(253,248,240,.82),rgba(253,248,240,.82)),url("../Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Tr%C3%A1i%20Tim%20Xanh%20N%E1%BA%A3y%20M%E1%BA%A7m.png")} /* màn hẹp: trái tim nằm sau chữ → phủ lớp sáng cho dễ đọc */
 }
 
 /* ==================== GIẢM CHUYỂN ĐỘNG ==================== */

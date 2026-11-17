@@ -184,9 +184,132 @@ docTabs.forEach((tab) => {
   });
 });
 
-// ==================== SECTION: ĐỐI TÁC — nhân bản hàng logo để băng chạy vòng liền mạch (hoạt ảnh CSS .partner-track có sẵn) ====================
-$$('[data-partner-clone]').forEach((clone) => {
-  clone.innerHTML = clone.previousElementSibling.innerHTML;
+// ---------- Tab Báo cáo: danh sách ủng hộ — 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
+// DỮ LIỆU MINH HỌA: 57 khoản ủng hộ sinh từ mẫu, mới nhất trước; tên đã che bớt. Khi triển khai lấy từ hệ thống giao dịch đã đối soát.
+const DONORS_PER_PAGE = 10;
+const QF_DONORS = (() => {
+  const names = ['Nguyễn V*** A***', 'Công ty TNHH M*** P***', 'Người ủng hộ ẩn danh', 'Trần T*** B***', 'Nhóm T*** N*** X***', 'Lê H*** N***', 'Phạm T*** C***', 'Ngân hàng TMCP Đ*** D***', 'Vũ M*** Q***', 'Đặng T*** H***', 'Hoàng M*** K***', 'Bùi T*** L***'];
+  const amounts = [2000000, 5000000, 500000, 200000, 10000000, 1000000, 300000, 1500000, 50000000, 100000, 3000000, 700000];
+  const notes = ['Lan tỏa yêu thương', 'Mong mọi người sớm vượt qua khó khăn, bình an trở lại sau cơn bão', '', 'Ủng hộ các em nhỏ vùng cao', 'Ủng hộ đồng bào vùng lũ', 'Cùng nhau vượt qua thiên tai', '', 'Gửi chút tấm lòng', 'Đồng hành cùng Hội Chữ thập đỏ Việt Nam', 'Cố lên bà con nhé!', '', 'Chúc mọi người bình an'];
+  const start = new Date(2026, 10, 18, 9, 45);
+  return Array.from({ length: 57 }, (_, i) => ({
+    name: names[i % names.length],
+    amount: amounts[(i * 7) % amounts.length],
+    note: notes[(i * 5) % notes.length],
+    time: new Date(start.getTime() - i * (97 + (i % 5) * 23) * 60000),
+  }));
+})();
+const donorRows = $('[data-qf-donor-rows]');
+const donorFoot = $('[data-qf-donor-foot]');
+if (donorRows && donorFoot) {
+  const escHtml = (text) => String(text).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const pad = (n) => String(n).padStart(2, '0');
+  const viDateTime = (d) => `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const arrow = '<svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg>';
+  const pagerHtml = (current, pages) => {
+    const numbers = [];
+    for (let i = 1; i <= pages; i += 1) {
+      if (i === 1 || i === pages || Math.abs(i - current) <= 1) numbers.push(i);
+      else if (numbers[numbers.length - 1] !== '…') numbers.push('…');
+    }
+    return `<div class="pf-pager"><div class="pf-pages">
+      <button class="pf-page-btn is-prev" type="button" data-qf-donor-page="${current - 1}" ${current === 1 ? 'disabled' : ''} aria-label="Trang trước">${arrow}</button>
+      ${numbers.map((n) => (n === '…' ? '<span aria-hidden="true">…</span>'
+        : `<button class="pf-page-btn" type="button" data-qf-donor-page="${n}" ${n === current ? 'aria-current="page"' : ''} aria-label="Trang ${n}">${n}</button>`)).join('')}
+      <button class="pf-page-btn" type="button" data-qf-donor-page="${current + 1}" ${current === pages ? 'disabled' : ''} aria-label="Trang sau">${arrow}</button>
+    </div></div>`;
+  };
+  const pages = Math.ceil(QF_DONORS.length / DONORS_PER_PAGE);
+  const renderDonors = (page) => {
+    const current = Math.min(Math.max(1, page), pages);
+    const first = (current - 1) * DONORS_PER_PAGE;
+    const slice = QF_DONORS.slice(first, first + DONORS_PER_PAGE);
+    donorRows.innerHTML = slice.map((x, i) => `<tr>
+      <td class="pf-col-index">${first + i + 1}</td>
+      <td><span class="pf-pv-donor${x.note ? ' has-note' : ''}"><b>${escHtml(x.name)}</b>${x.note ? `<span class="pv-donor-note is-quote" title="${escHtml(x.note)}">“${escHtml(x.note)}”</span>` : ''}</span></td>
+      <td><b class="pf-pv-amount">${x.amount.toLocaleString('vi-VN')}đ</b></td>
+      <td>${viDateTime(x.time)}</td>
+    </tr>`).join('');
+    donorFoot.innerHTML = `<p class="pf-muted" aria-live="polite">Hiển thị ${first + 1} – ${first + slice.length}/${QF_DONORS.length}</p>${pagerHtml(current, pages)}`;
+  };
+  donorFoot.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-qf-donor-page]');
+    if (!button || button.disabled) return;
+    renderDonors(Number(button.dataset.qfDonorPage));
+  });
+  renderDonors(1);
+}
+
+// ==================== SECTION: TIN TỨC — tab 5 chuyên mục: bấm tab → đổi bài trong .news-grid (bố cục tin tức trang chủ) ====================
+// DỮ LIỆU MINH HỌA: khi triển khai lấy từ CMS theo chuyên mục. Mỗi chuyên mục 4 bài: bài đầu = bài nổi bật, 3 bài sau = danh sách bên phải.
+// Tab "quy" (Tin hoạt động của Quỹ) viết sẵn trong HTML → lưu lại khi tải trang, không lặp dữ liệu ở đây.
+const QF_NEWS = {
+  'nhan-dao': [
+    { img: 'Emages/ảnh minh họa/Làng nủ 3.jpg', alt: 'Người dân vùng sạt lở nhận đồ dùng thiết yếu', date: '2026-11-03', title: 'Cùng bà con Làng Nủ dựng lại mái nhà sau sạt lở', desc: 'Tình nguyện viên và cán bộ Hội ở lại nhiều tuần, dọn bùn, dựng vách, trao nhu yếu phẩm cho từng hộ dân bị ảnh hưởng.' },
+    { img: 'Emages/ảnh minh họa/Chi-Hanh-hien-mau-tai-Sun-Ha-Nam-thang-9-nam-2026.jpg', alt: 'Người dân tham gia ngày hội hiến máu tình nguyện', date: '2026-09-28', title: 'Ngày hội hiến máu tình nguyện thu hút hàng nghìn người tham gia', desc: 'Mỗi đơn vị máu góp phần cứu sống người bệnh; ngày hội còn có khu tư vấn sức khỏe và khám sàng lọc miễn phí.' },
+    { img: 'Emages/Chương trình/Khoảnh Khắc Trao Gửi Yêu Thương.png', alt: 'Tình nguyện viên trao quà tận tay cụ bà và cháu nhỏ tại nhà', date: '2026-09-18', title: 'Trao quà, nhu yếu phẩm tận nhà cho các hộ neo đơn, khó khăn', desc: 'Mỗi suất quà gồm gạo, nhu yếu phẩm và tiền mặt, được cán bộ Hội trao tận tay từng gia đình.' },
+    { img: 'Emages/nguoi-gan-nhat/so-cap-cuu.webp', alt: 'Tình nguyện viên thực hành sơ cấp cứu', date: '2026-09-10', title: 'Tập huấn sơ cấp cứu cho tình nguyện viên trẻ tại cộng đồng', desc: 'Các lớp thực hành giúp người trẻ sẵn sàng giúp đúng lúc, đúng cách khi có tình huống khẩn cấp.' },
+  ],
+  'doi-tac': [
+    { img: 'Emages/ảnh minh họa/3.-028ae9de1f.jpg', alt: 'Đại diện Hội Chữ thập đỏ và nhà tài trợ trao tặng biển hỗ trợ cho trường học', date: '2026-10-28', title: 'Doanh nghiệp đồng hành trao tặng công trình cho điểm trường vùng cao', desc: 'Công trình giúp học sinh có thêm phòng học kiên cố, khu vệ sinh và nước sạch trước mùa đông.' },
+    { img: 'Emages/ảnh minh họa/trao-qua-hoc-sinh.jpg', alt: 'Trao quà cho học sinh có hoàn cảnh khó khăn', date: '2026-10-15', title: 'Ký kết hợp tác hỗ trợ học bổng cho học sinh có hoàn cảnh khó khăn', desc: 'Chương trình kéo dài ba năm, ưu tiên học sinh mồ côi, học sinh vùng thiên tai và vùng đặc biệt khó khăn.' },
+    { img: 'Emages/ảnh minh họa/01 1.jpg', alt: 'Cán bộ Chữ thập đỏ trao gạo cho người dân tại gian hàng Chợ nhân đạo', date: '2026-10-02', title: 'Chợ nhân đạo: các đối tác cùng góp gian hàng 0 đồng', desc: 'Gạo, nhu yếu phẩm và quần áo được các doanh nghiệp, tổ chức đóng góp để trao cho người dân khó khăn.' },
+    { img: 'Emages/ảnh minh họa/bong-hoa-nhan-ai-toa-huong-doi-thuong-35738.jpg', alt: 'Hoạt động nhân ái cùng cộng đồng', date: '2026-09-22', title: 'Cộng đồng người Việt ở nước ngoài chung tay hướng về vùng lũ', desc: 'Nguồn ủng hộ từ kiều bào được Quỹ tiếp nhận, phân bổ và công khai theo từng địa bàn.' },
+  ],
+  'cau-chuyen': [
+    { img: 'Emages/ảnh minh họa/1358142_gen-h-235_1777566365.jpg', alt: 'Cán bộ Chữ thập đỏ trao quà cho người dân tại nhà', date: '2026-11-01', title: 'Cụ bà 80 tuổi đều đặn để dành lương hưu ủng hộ Quỹ mỗi tháng', desc: '“Ít thôi, nhưng góp lại thì thành nhiều, mà người khó khăn thì đâu có chờ được.”' },
+    { img: 'Emages/ảnh minh họa/Làng nủ 2.webp', alt: 'Khu vực bị sạt lở sau mưa lũ', date: '2026-10-24', title: 'Ba tuần ở lại Làng Nủ của nhóm tình nguyện viên trẻ', desc: 'Họ ở lại dọn bùn, dựng vách cho tới khi mái nhà mới của bà con được lợp xong.' },
+    { img: 'Emages/ảnh minh họa/nu-cuoi-be-gai-vung-cao.jpg', alt: 'Nụ cười bé gái vùng cao trên đường đến lớp', date: '2026-10-09', title: 'Thầy giáo cắm bản 15 năm và mùa đông ấm ở điểm trường', desc: 'Áo ấm, sách vở về tới điểm trường, các em vẫn đến lớp đều suốt mùa đông.' },
+    { img: 'Emages/ảnh minh họa/2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg', alt: 'Trao quà cho hai em nhỏ mắc bệnh tan máu bẩm sinh', date: '2026-09-26', title: 'Đồng hành cùng các em mắc bệnh tan máu bẩm sinh ở Điện Biên', desc: 'Những chuyến thăm, những suất quà giúp các gia đình có thêm động lực theo đuổi việc điều trị lâu dài.' },
+  ],
+  'truyen-thong': [
+    { img: 'Emages/Ảnh News/Trao đi thời gian.png', alt: 'Tình nguyện viên trao đi thời gian cho cộng đồng', date: '2026-11-04', title: 'Phóng sự ảnh: Một năm của những bàn tay nhân ái', desc: 'Những khoảnh khắc từ các chuyến cứu trợ, ngày hội hiến máu và lớp học sơ cấp cứu trên khắp cả nước.' },
+    { img: 'Emages/ảnh minh họa/tre-em-vung-cao-nu-cuoi.jpg', alt: 'Nụ cười trẻ em vùng cao', date: '2026-10-18', title: 'Bộ ảnh “Nụ cười vùng cao” từ các điểm trường được hỗ trợ', desc: 'Tư liệu hình ảnh chính thức, được chia sẻ với sự đồng ý của nhà trường và gia đình các em.' },
+    { img: 'Emages/Ảnh News/Hoạt động gần nơi sống.jpg', alt: 'Hoạt động tình nguyện gần nơi sinh sống', date: '2026-10-06', title: 'Video: Người Gần Nhất, sẵn sàng giúp đúng lúc, đúng cách', desc: 'Phim ngắn giới thiệu chương trình phổ cập kỹ năng sơ cấp cứu cho người trẻ.' },
+    { img: 'Emages/Chương trình/72ad1836-57d6-41e3-aad3-6638cbc4c87e.png', alt: 'Ấn phẩm giới thiệu hoạt động nhân đạo', date: '2026-09-30', title: 'Ấn phẩm giới thiệu Quỹ Nhân đạo Việt Nam năm 2026', desc: 'Tổng quan sứ mệnh, lĩnh vực hoạt động, cơ chế quản trị và cách đồng hành cùng Quỹ.' },
+  ],
+};
+const newsGrid = $('[data-news-grid]');
+if (newsGrid) {
+  const esc = (text) => String(text).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const viDate = (iso) => iso.split('-').reverse().join('/');
+  const article = (item, type) => `
+    <article class="news-item ${type}">
+      <div class="media media-photo"><img src="${esc(encodeURI(item.img))}" alt="${esc(item.alt)}" loading="lazy" /></div>
+      <div class="news-body">
+        <p class="news-meta"><time datetime="${item.date}">${viDate(item.date)}</time></p>
+        <h3 class="news-title"><a class="stretched" href="#" data-panel="Bài viết">${esc(item.title)}</a></h3>
+        <p class="news-desc">${esc(item.desc)}</p>
+      </div>
+    </article>`;
+  const render = ([first, ...rest]) => `${article(first, 'news-feature')}<div class="news-list">${rest.map((item) => article(item, 'news-row')).join('')}</div>`;
+  const cache = { quy: newsGrid.innerHTML };
+  const newsTabs = $$('[data-news-tab]');
+  newsTabs.forEach((tab) => {
+    tab.addEventListener('click', (event) => {
+      event.preventDefault();
+      const key = tab.dataset.newsTab;
+      if (tab.getAttribute('aria-current') === 'page') return;
+      newsTabs.forEach((other) => other.toggleAttribute('aria-current', other === tab));
+      tab.setAttribute('aria-current', 'page');
+      cache[key] ??= render(QF_NEWS[key]);
+      newsGrid.classList.add('is-swapping');
+      setTimeout(() => {
+        newsGrid.innerHTML = cache[key];
+        newsGrid.classList.remove('is-swapping');
+      }, 200);
+    });
+  });
+}
+
+// ==================== SECTION: HƯỚNG DẪN ĐỒNG HÀNH — câu hỏi mở/đóng: mở 1 câu thì đóng các câu khác (như trang Người Gần Nhất) ====================
+const faqItems = $$('.qf-faq-list details');
+faqItems.forEach((item) => {
+  item.addEventListener('toggle', () => {
+    if (!item.open) return;
+    faqItems.forEach((other) => { if (other !== item) other.open = false; });
+    window.ScrollTrigger?.refresh(); // chiều cao trang đổi → cập nhật mốc cuộn của GSAP
+  });
 });
 
 // ==================== SECTION: KẾT NỐI NGUỒN LỰC — rê chuột / focus / bấm: mở rộng tấm ====================
@@ -242,6 +365,27 @@ const QND_RULES = {
       ['3. Tỷ lệ chi quản lý thực tế được công khai hằng năm cùng với báo cáo tài chính của Quỹ.'],
     ],
   },
+  // ---------- Section VỀ QUỸ: link "Xem đầy đủ…" — tóm tắt 4 phần (khối { heading } = tiêu đề nhỏ) ----------
+  'gioi-thieu': {
+    kicker: 'Về Quỹ Nhân đạo Việt Nam',
+    title: 'Giới thiệu, sứ mệnh, quản trị và văn bản pháp lý',
+    content: [
+      { heading: 'Giới thiệu' },
+      ['Quỹ Nhân đạo Việt Nam là quỹ xã hội, quỹ từ thiện hoạt động không vì mục tiêu lợi nhuận, do Hội Chữ thập đỏ Việt Nam khởi xướng thành lập, kế thừa Quỹ Hoạt động Chữ thập đỏ. Quỹ có phạm vi hoạt động toàn quốc, có tư cách pháp nhân, con dấu và tài khoản riêng.'],
+      { heading: 'Sứ mệnh' },
+      ['Huy động, tiếp nhận, quản lý, kết nối và sử dụng hiệu quả nguồn lực xã hội để hỗ trợ người có hoàn cảnh khó khăn, người dễ bị tổn thương và cộng đồng cần trợ giúp nhân đạo; tham gia phòng ngừa, ứng phó và khắc phục hậu quả thiên tai, thảm họa, dịch bệnh và các tình huống khẩn cấp.'],
+      ['Quỹ hướng tới trở thành công cụ tài chính nhân đạo chủ động, lâu dài, bền vững và minh bạch; là địa chỉ tin cậy để tổ chức, doanh nghiệp, cá nhân trong và ngoài nước đồng hành vì mục tiêu nhân đạo.'],
+      { heading: 'Quản trị' },
+      [
+        'Không vì mục tiêu lợi nhuận; không phân chia tài sản của Quỹ trong quá trình hoạt động.',
+        'Tài sản, tài chính của Quỹ được quản lý, hạch toán tách biệt với Hội Chữ thập đỏ Việt Nam và các tổ chức, cá nhân khác.',
+        'Hội đồng quản lý Quỹ quyết định tỷ lệ chi quản lý, không quá 10% tổng chi trong năm; Quỹ phấn đấu giữ ở mức không quá 5%.',
+        'Công khai thu, chi, tài chính, tài sản; bảo đảm trách nhiệm giải trình với nhà tài trợ, người thụ hưởng và xã hội.',
+      ],
+      { heading: 'Văn bản pháp lý' },
+      ['Quỹ tổ chức, hoạt động theo Hiến pháp, pháp luật và Điều lệ Quỹ Nhân đạo Việt Nam; chịu sự quản lý nhà nước của Bộ Nội vụ và các bộ, ngành liên quan. Toàn văn Điều lệ, quy chế và các văn bản liên quan được công bố tại mục Minh bạch & trách nhiệm.'],
+    ],
+  },
 };
 
 const ruleDialog = $('.qnd-rule-dialog');
@@ -250,6 +394,11 @@ if (ruleDialog) {
   const ruleTitle = $('#qnd-rule-title', ruleDialog);
   const body = $('[data-qnd-rule-body]', ruleDialog);
   const block = (lines) => {
+    if (!Array.isArray(lines)) { // { heading } → tiêu đề nhỏ trong popup
+      const h = document.createElement('h3');
+      h.textContent = lines.heading;
+      return h;
+    }
     if (lines.length === 1) {
       const p = document.createElement('p');
       p.textContent = lines[0];
@@ -269,7 +418,7 @@ if (ruleDialog) {
       const rule = QND_RULES[trigger.dataset.qndRule];
       if (!rule) return;
       event.preventDefault();
-      kicker.textContent = `Quy chế vận hành · ${trigger.dataset.qndRule}`;
+      kicker.textContent = rule.kicker || `Quy chế vận hành · ${trigger.dataset.qndRule}`;
       ruleTitle.textContent = rule.title;
       body.replaceChildren(...rule.content.map(block));
       body.scrollTop = 0;
@@ -352,17 +501,7 @@ if (ruleDialog) {
       .from('.qf-donate .pv-qr-card', { y: 32, scale: 0.94, autoAlpha: 0, duration: 0.9, ease: 'back.out(1.6)' }, 0.35)
       .from('.qf-donate .pv-qr-transfer, .qf-donate .pv-qr-warn', { y: 24, autoAlpha: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0.5);
 
-    // ---------- VỀ QUỸ: tuyên bố sáng dần từng chữ theo cuộn ----------
-    const statement = $('[data-words]');
-    if (statement && hasSplit) {
-      SplitText.create(statement, {
-        type: 'words', autoSplit: true,
-        onSplit: (self) => gsap.fromTo(self.words, { opacity: 0.14 }, {
-          opacity: 1, stagger: 0.1, ease: 'none',
-          scrollTrigger: { trigger: statement, start: 'top 80%', end: 'bottom 50%', scrub: true },
-        }),
-      });
-    }
+    // ---------- VỀ QUỸ: ảnh trong khung thu nhỏ dần theo cuộn ----------
     gsap.fromTo('.qf-about-photo img', { scale: 1.2 }, {
       scale: 1, ease: 'none', scrollTrigger: { trigger: '.qf-about-photo', start: 'top bottom', end: 'bottom top', scrub: true },
     });
@@ -372,23 +511,8 @@ if (ruleDialog) {
       gsap.fromTo(img, { scale: 1.15 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: img, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
 
-    // ---------- HƯỚNG DẪN: đường dọc tô đỏ dần · chấm bước sáng lên khi qua giữa màn ----------
-    gsap.fromTo('.qf-steps-line span', { scaleY: 0 }, {
-      scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.qf-steps', start: 'top 60%', end: 'bottom 60%', scrub: true },
-    });
-    const steps = $$('.qf-step');
-    steps.forEach((step) => {
-      step.classList.remove('is-active');
-      ScrollTrigger.create({
-        trigger: step, start: 'top 60%',
-        onEnter: () => step.classList.add('is-active'),
-        onLeaveBack: () => step.classList.remove('is-active'),
-      });
-    });
-
     return () => {
       root.classList.remove('qf-motion');
-      steps.forEach((step) => step.classList.add('is-active'));
     };
   });
 
@@ -418,47 +542,6 @@ if (ruleDialog) {
       hero.removeEventListener('pointermove', move);
       hero.removeEventListener('pointerleave', reset);
     };
-  });
-
-  // ---------- LĨNH VỰC (≥ 1024px): ghim section, cuộn dọc → dải thẻ trượt ngang; ảnh trong thẻ trôi ngược ----------
-  mm.add(`(min-width: 1024px) and ${motion}`, () => {
-    const section = $('.qf-fields');
-    const viewport = $('.qf-fields-viewport');
-    const track = $('.qf-fields-track');
-    section.classList.add('is-scrubbed');
-    const distance = () => {
-      const pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
-      return Math.max(0, track.scrollWidth - (viewport.clientWidth - pad * 2));
-    };
-    const slide = gsap.to(track, {
-      x: () => -distance(), ease: 'none',
-      scrollTrigger: {
-        trigger: section, pin: '.qf-fields-pin', start: 'top top', end: () => `+=${distance()}`,
-        scrub: 1, invalidateOnRefresh: true,
-      },
-    });
-    gsap.fromTo('.qf-fields-bar span', { scaleX: 0.17 }, {
-      scaleX: 1, ease: 'none',
-      scrollTrigger: { trigger: section, start: 'top top', end: () => `+=${distance()}`, scrub: true, invalidateOnRefresh: true },
-    });
-    $$('.qf-field-img img').forEach((img) => {
-      gsap.fromTo(img, { xPercent: 6 }, {
-        xPercent: -6, ease: 'none',
-        scrollTrigger: { trigger: img.closest('.qf-field'), containerAnimation: slide, start: 'left right', end: 'right left', scrub: true },
-      });
-    });
-    return () => section.classList.remove('is-scrubbed');
-  });
-
-  // ---------- CÂU CHUYỆN (≥ 1024px): thẻ sau trượt lên đè, thẻ trước thu nhỏ & phủ đỏ nhạt (như chương Giải thưởng trang chủ) ----------
-  mm.add(`(min-width: 1024px) and ${motion}`, () => {
-    const cards = $$('.qf-story');
-    cards.slice(0, -1).forEach((card, i) => {
-      const next = cards[i + 1];
-      // Kết thúc khi thẻ sau chạm vị trí ghim (top của sticky)
-      const tl = gsap.timeline({ scrollTrigger: { trigger: next, start: 'top bottom', end: () => `top ${parseInt(getComputedStyle(next).top, 10)}px`, scrub: true, invalidateOnRefresh: true } });
-      tl.to(card, { scale: 0.92, ease: 'none' }, 0).to($('.award-card-shade', card), { opacity: 0.12, ease: 'none' }, 0);
-    });
   });
 
   // ---------- HOẠT ĐỘNG (chuột): ảnh nổi đi theo con trỏ ----------

@@ -235,7 +235,8 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .marquee-track span:nth-of-type(even){font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:400}
 /* Nghĩa tiếng Anh: nhỏ hơn chữ Việt (~2/3) và màu hồng nhạt để tách khỏi chữ Việt trắng trên nền đỏ đậm */
 .marquee-track span[lang="en"]{font-size:clamp(26px,4vw,52px);color:#F4B1B8}
-.marquee-track i{flex:none;width:clamp(16px,2vw,28px);aspect-ratio:1;background:#fff;clip-path:polygon(33.3% 0,66.6% 0,66.6% 33.3%,100% 33.3%,100% 66.6%,66.6% 66.6%,66.6% 100%,33.3% 100%,33.3% 66.6%,0 66.6%,0 33.3%,33.3% 33.3%)}
+/* Dấu ngăn cách giữa các chữ: trái tim trắng (mask SVG) */
+.marquee-track i{flex:none;width:clamp(18px,2.4vw,32px);aspect-ratio:1;background:#fff;--heart:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");-webkit-mask:var(--heart) center/contain no-repeat;mask:var(--heart) center/contain no-repeat}
 /* ==================== END SECTION: BĂNG CHỮ CHẠY ==================== */
 
 /* ==================== SHARED: container, section head, media, status, progress ==================== */
@@ -654,8 +655,7 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 /* Nhiều câu dẫn chung một màn (Chương I: câu chuyển cảnh + câu dẫn chương) */
 .chapter-story-text + .chapter-story-text{margin-top:clamp(20px,3vh,40px)}
 /* Chương I (2 câu chung một màn): chữ nhỏ hơn câu dẫn thường để cả cụm gọn trong màn */
-.chapter-story--instant .chapter-story-text{max-width:24em;font-size:clamp(20px,2.2vw,34px)}
-.chapter-story--instant .chapter-story-text + .chapter-story-text{margin-top:clamp(12px,2vh,24px)}
+.chapter-story--instant .chapter-story-text{max-width:24em;font-size:clamp(20px,2.2vw,34px)}.chapter-story--instant .chapter-story-text + .chapter-story-text{margin-top:clamp(12px,2vh,24px)}
 .chapter:not(.is-pinned) .chapter-story{margin-bottom:24px} /* màn nhỏ: tách câu dẫn khỏi khối giới thiệu */
 
 /* ---------- Dải trượt ngang: khối giới thiệu + các mục (ảnh dọc so le cao thấp) ---------- */
@@ -4602,7 +4602,8 @@ html.pf-reg-lock{overflow:hidden}
 .gt-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;padding:0;list-style:none}
 .gt-tags li{padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.22);font-size:12px;line-height:20px;color:#fff}
 
-/* ---------- Hạng mục giải thưởng: 4 thẻ ảnh dùng lại .event-card (trang chủ) — kích thước, phủ đỏ + mô tả khi rê chuột giữ nguyên style gốc ---------- */
+/* ---------- Hạng mục giải thưởng: 5 thẻ ảnh dùng lại .event-card (trang chủ) — desktop 5 cột trên 1 hàng; phủ đỏ + mô tả khi rê chuột giữ nguyên style gốc ---------- */
+@media(min-width:1101px){.gt-categories .event-cards{grid-template-columns:repeat(5,minmax(0,1fr))}.gt-categories .event-card-desc{font-size:14px;line-height:22px}.gt-categories .event-card-name{min-height:56px}} /* thẻ hẹp hơn → mô tả 14/22 cho vừa thẻ; tên luôn cao 2 dòng (2×28) để nhãn "Hạng mục" + tên 5 thẻ thẳng hàng */
 .gt-categories .event-card-photo:focus-visible{outline:3px solid #fff;outline-offset:-6px} /* thẻ không có link → ảnh nhận focus bàn phím (tabindex), viền trắng như thẻ trang chủ */
 
 /* ---------- Quy trình tổ chức: 6 bước ngang, đường nối tự vẽ (scaleX theo cuộn), bước tới đâu sáng (.is-done) ---------- */
@@ -4866,6 +4867,9 @@ html.pf-reg-lock{overflow:hidden}
 .qnd-rule-body p,.qnd-rule-sub li{margin:0;font-size:15px;line-height:26px;color:var(--color-text)}
 .qnd-rule-body > * + *{margin-top:12px}
 .qnd-rule-sub{display:grid;gap:8px;margin:0;padding:0 0 0 20px;list-style:none}
+/* Tiêu đề nhỏ trong popup (Giới thiệu Quỹ: Giới thiệu · Sứ mệnh · Quản trị · Văn bản pháp lý) */
+.qnd-rule-body h3{margin:0;font-size:17px;font-weight:600;line-height:26px;color:var(--color-text)}
+.qnd-rule-body > * + h3{margin-top:24px}
 .qnd-rule-dialog .dialog-done{align-self:flex-end}
 
 /* ---------- Responsive: trang Quỹ nhân đạo ---------- */

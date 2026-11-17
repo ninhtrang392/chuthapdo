@@ -799,7 +799,7 @@ if (window.gsap && window.ScrollTrigger) {
     });
   });
 
-  // ==================== SECTION: CHƯƠNG — Tình nguyện viên (dải ngang) · Giải thưởng (4 hạng mục) ====================
+  // ==================== SECTION: CHƯƠNG — Tình nguyện viên (dải ngang) · Giải thưởng (5 hạng mục) ====================
   // Tách câu dẫn chuyện thành từng chữ (.chapter-word), giữ nguyên thẻ <em> từ khóa; chỉ tách khi có chuyển động
   const splitStoryWords = (element) => {
     if (element.dataset.split) return [...element.querySelectorAll('.chapter-word')];
@@ -896,9 +896,9 @@ if (window.gsap && window.ScrollTrigger) {
         autoAlpha: 1, y: 0, ease: 'power2.out',
         scrollTrigger: { trigger: pin, start: 'top 90%', end: 'top 30%', scrub: true },
       });
-      const lead = vh * 0.15; // nghỉ ở thẻ 01 ngay khi vừa ghim
-      const step = vh * 0.8;  // mỗi thẻ ~0.8 màn cuộn
-      const tail = vh * 0.3;  // nghỉ ở thẻ cuối trước khi nhả ghim
+      const lead = vh * 0.1; // nghỉ ở thẻ 01 ngay khi vừa ghim
+      const step = vh * 0.55; // mỗi thẻ ~0.55 màn cuộn (cuộn nhanh hơn)
+      const tail = vh * 0.2;  // nghỉ ở thẻ cuối trước khi nhả ghim
       const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
       cards.forEach((card, i) => gsap.set(card, { zIndex: i + 1 }));
       gsap.set(cards.slice(1), { y: vh }); // thẻ chờ nằm hẳn dưới mép màn (thẻ thấp nên không dùng yPercent)
