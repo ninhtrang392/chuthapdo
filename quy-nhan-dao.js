@@ -1,9 +1,14 @@
-// ==================== TRANG QUỸ NHÂN ĐẠO ====================
-// Header, footer, hộp thoại xem trước dùng chung với các trang khác; bảng quyên góp: DỮ LIỆU MINH HỌA (lọc ngay trên 10 dòng đang hiển thị).
+// ==================== TRANG QUỸ NHÂN ĐẠO (GSAP) ====================
+// Header, footer, hộp thoại xem trước dùng chung với các trang khác.
+// Chuyển động: GSAP + ScrollTrigger (+ SplitText nếu tải được). Người dùng chọn giảm chuyển động → chỉ hiện nội dung tĩnh.
+// DỮ LIỆU MINH HỌA: số tài khoản, mã QR ở khung ủng hộ (khi vận hành lấy VietQR do ngân hàng đối tác của Quỹ cấp) · chương trình · thẻ "Vừa ủng hộ".
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 // ==================== HEADER: menu mobile ====================
-const menuButton = document.querySelector('.menu-toggle');
-const navigation = document.querySelector('.navigation');
+const menuButton = $('.menu-toggle');
+const navigation = $('.navigation');
 const setMenu = (open) => {
   menuButton.setAttribute('aria-expanded', String(open));
   menuButton.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
@@ -21,54 +26,180 @@ document.addEventListener('keydown', (event) => {
 });
 
 // ==================== DIALOG: thông báo xem trước ====================
-const dialog = document.querySelector('.info-dialog:not(.qnd-rule-dialog)');
+const dialog = $('.info-dialog:not(.qnd-rule-dialog)');
 document.addEventListener('click', (event) => {
   const trigger = event.target.closest('[data-panel]');
   if (!trigger) return;
   event.preventDefault();
   const title = trigger.dataset.panel;
-  document.querySelector('#dialog-title').textContent = title;
-  document.querySelector('.dialog-description').textContent =
+  $('#dialog-title').textContent = title;
+  $('.dialog-description').textContent =
     `Đây là bản xem trước giao diện. Mục “${title}” sẽ được kết nối khi nội dung và chức năng chính thức được bổ sung.`;
   dialog.showModal();
 });
-document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
+$$('.dialog-close, .dialog-done').forEach((button) => {
   button.addEventListener('click', () => button.closest('dialog').close());
 });
 
-// ==================== DANH SÁCH QUYÊN GÓP: tìm theo chữ + lọc chương trình (trên các dòng minh họa) ====================
-const donorForm = document.querySelector('[data-qnd-donor-form]');
-if (donorForm) {
-  const rows = [...document.querySelectorAll('[data-qnd-rows] tr')];
-  const count = document.querySelector('[data-qnd-count]');
-  const normalize = (text) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
-  const apply = () => {
-    const q = normalize(donorForm.querySelector('[data-qnd-q]').value.trim());
-    const program = donorForm.querySelector('[data-qnd-program]').value;
-    let shown = 0;
-    rows.forEach((row) => {
-      const cells = row.querySelectorAll('td');
-      const okText = !q || normalize(row.textContent).includes(q);
-      const okProgram = !program || cells[2].textContent.trim() === program;
-      row.hidden = !(okText && okProgram);
-      if (!row.hidden) shown += 1;
-    });
-    count.textContent = q || program ? `Tìm thấy ${shown} khoản quyên góp phù hợp trên trang này` : 'Hiển thị 1 – 10/1.308';
-  };
-  donorForm.addEventListener('submit', (event) => { event.preventDefault(); apply(); });
-  donorForm.querySelector('[data-qnd-program]').addEventListener('change', apply);
-  donorForm.querySelector('[data-qnd-q]').addEventListener('input', apply);
-}
+// ==================== TOAST: thông báo ngắn (.pf-toast dùng chung, như trang chương trình) ====================
+const toast = $('.pf-toast');
+const TOAST_TIME = 2800;
+const TOAST_GLYPH = { success: '<svg class="icon" aria-hidden="true"><use href="#check"/></svg>', error: '!' };
+let toastTimer;
+const hideToast = () => { clearTimeout(toastTimer); toast.hidden = true; };
+const showToast = (message, type = 'success') => {
+  toast.className = `pf-toast is-${type}`;
+  $('.pf-toast-icon', toast).innerHTML = TOAST_GLYPH[type];
+  $('.pf-toast-text', toast).textContent = message;
+  toast.style.setProperty('--toast-time', `${TOAST_TIME}ms`);
+  const ring = $('.pf-toast-ring circle', toast);
+  ring.style.animation = 'none'; void ring.getBoundingClientRect(); ring.style.animation = '';
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, TOAST_TIME);
+};
+$('.pf-toast-close', toast).addEventListener('click', hideToast);
 
-// ---------- Ô bị cắt "…" (1 dòng): rê chuột hiện đủ nội dung ----------
-document.querySelectorAll('.pf-table.is-donations td').forEach((cell) => {
-  const text = cell.textContent.trim();
-  if (text && text !== '-' && !cell.title) cell.title = text;
+// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ (form · thẻ VietQR · thông tin chuyển khoản), cùng cách hoạt động với popup ủng hộ trang chương trình ====================
+// Minh họa: số tài khoản suy cố định theo ngân hàng; mã QR là hình minh họa (khi triển khai lấy VietQR do ngân hàng đối tác cung cấp)
+const QF_BANKS = {
+  BIDV: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam (BIDV)',
+  VCB: 'Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)',
+  CTG: 'Ngân hàng TMCP Công Thương Việt Nam (VietinBank)',
+  TCB: 'Ngân hàng TMCP Kỹ thương Việt Nam (Techcombank)',
+};
+const QF_HOLDER = 'QUY NHAN DAO VIET NAM';
+const seededRandom = (text) => {
+  let seed = [...text].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 233280, 7);
+  return () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+};
+const bankShort = (bank) => QF_BANKS[bank].match(/\((.+)\)/)[1];
+const qfAccount = (bank) => { const rand = seededRandom(`QNDVN-${bank}`); return Array.from({ length: 13 }, () => Math.floor(rand() * 10)).join(''); };
+// Hình mã QR minh họa: lưới 25 × 25 ô, 3 ô định vị ở góc, phần còn lại sinh cố định theo nội dung
+const qrSvg = (text) => {
+  const n = 25;
+  const rand = seededRandom(text);
+  const corner = (x, y, size) => (x < size && y < size) || (x >= n - size && y < size) || (x < size && y >= n - size);
+  const cells = [];
+  for (let y = 0; y < n; y += 1) {
+    for (let x = 0; x < n; x += 1) {
+      const fx = x < 7 ? x : x - (n - 7);
+      const fy = y < 7 ? y : y - (n - 7);
+      const on = corner(x, y, 8)
+        ? corner(x, y, 7) && (fx === 0 || fx === 6 || fy === 0 || fy === 6 || (fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4))
+        : rand() < 0.48;
+      if (on) cells.push(`M${x} ${y}h1v1h-1z`);
+    }
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 29 29" role="img" aria-label="Mã QR ủng hộ Quỹ (minh họa)"><rect x="-2" y="-2" width="29" height="29" fill="#fff"/><path d="${cells.join('')}" fill="#24272C"/></svg>`;
+};
+// Nội dung CK = mã ủng hộ: QNDVN-3 chữ + 4 số, sinh mới mỗi lần tải trang
+const qfMemo = () => {
+  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  return `QNDVN-${Array.from({ length: 3 }, () => letters[Math.floor(Math.random() * letters.length)]).join('')}${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
+};
+const copyText = async (text) => {
+  try { await navigator.clipboard.writeText(text); return true; } catch (error) {
+    const area = Object.assign(document.createElement('textarea'), { value: text });
+    area.setAttribute('readonly', '');
+    area.style.cssText = 'position:fixed;opacity:0';
+    document.body.append(area);
+    area.select();
+    const ok = document.execCommand('copy');
+    area.remove();
+    return ok;
+  }
+};
+const qf = { memo: qfMemo(), amount: 0 };
+const qrBox = $('#qf-qr');
+const qrForm = $('#qf-qr-form');
+const qrBank = $('#qf-qr-bank');
+const qrAmount = $('#qf-qr-amount');
+const qrAnon = $('#qf-qr-anon');
+const qrDisplay = $('#qf-qr-display');
+const amountValue = () => Number(qrAmount.value.replace(/\D/g, '')) || 0;
+// Vẽ lại QR + thông tin chuyển khoản theo ngân hàng, số tiền đã tạo mã và mã ủng hộ
+const renderQr = () => {
+  const bank = qrBank.value;
+  const account = qfAccount(bank);
+  $('#qf-qr-account').textContent = account;
+  $('#qf-qr-holder').textContent = QF_HOLDER;
+  $('#qf-qr-bank-short').textContent = bankShort(bank);
+  $('#qf-qr-bank-name').textContent = bankShort(bank);
+  $('#qf-qr-amount-view').textContent = qf.amount ? `${qf.amount.toLocaleString('vi-VN')} VNĐ` : 'Nhập trên ứng dụng';
+  $('#qf-qr-memo').textContent = qf.memo;
+  $('#qf-qr-image').innerHTML = qrSvg(`${bank}|${account}|${qf.amount}|${qf.memo}`);
+};
+qrBank.replaceChildren(...Object.entries(QF_BANKS).map(([value, label]) => new Option(`${qfAccount(value)} - ${label}`, value)));
+qrBank.addEventListener('change', renderQr);
+renderQr();
+// Số tiền: chỉ giữ chữ số, tự phân cách hàng nghìn bằng "."
+qrAmount.addEventListener('input', () => {
+  const digits = qrAmount.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 12);
+  qrAmount.value = digits ? Number(digits).toLocaleString('vi-VN') : '';
+  if (amountValue() >= 1000) $('#qf-qr-amount-field').classList.remove('is-invalid');
+});
+// Ủng hộ ẩn danh: khóa ô Tên hiển thị
+qrAnon.addEventListener('change', () => { qrDisplay.disabled = qrAnon.checked; });
+// Tạo mã QR: kiểm tra số tiền (tối thiểu 1.000 ₫) → đưa số tiền vào mã QR và thông tin chuyển khoản
+qrForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (amountValue() < 1000) {
+    $('#qf-qr-amount-field').classList.add('is-invalid');
+    qrAmount.focus();
+    return;
+  }
+  qf.amount = amountValue();
+  renderQr();
+  showToast('Đã tạo mã QR. Quét mã hoặc chuyển khoản theo thông tin bên cạnh.');
+});
+// Chọn nhanh số tiền · tải mã QR · sao chép thông tin chuyển khoản
+qrBox.addEventListener('click', async (event) => {
+  const quick = event.target.closest('[data-qr-quick]');
+  if (quick) { qrAmount.value = Number(quick.dataset.qrQuick).toLocaleString('vi-VN'); qrAmount.dispatchEvent(new Event('input')); return; }
+  if (event.target.closest('[data-qr-download]')) {
+    const blob = new Blob([$('#qf-qr-image').innerHTML], { type: 'image/svg+xml' });
+    const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `ma-qr-${qf.memo}.svg` });
+    link.click();
+    URL.revokeObjectURL(link.href);
+    return;
+  }
+  const copyBtn = event.target.closest('[data-qr-copy]');
+  if (!copyBtn) return;
+  const kind = copyBtn.dataset.qrCopy;
+  const text = $(`#qf-qr-${kind}`).textContent;
+  const done = { account: 'Đã sao chép số tài khoản.', holder: 'Đã sao chép tên chủ tài khoản.', memo: 'Đã sao chép nội dung chuyển khoản. Vui lòng giữ nguyên nội dung này khi chuyển khoản.' }[kind];
+  if (await copyText(text)) showToast(done);
+  else showToast(`Không thể sao chép tự động. Vui lòng sao chép: ${text}`, 'error');
 });
 
-// ==================== QUY CHẾ VẬN HÀNH: "Xem chi tiết" → popup nội dung từng mục ====================
-// Nội dung theo Điều lệ Quỹ Nhân đạo Việt Nam (lấy từ bản Quỹ nhân đạo trước: quy-nhan-dao/assets).
-// Mỗi mục: mảng khối — khối 1 chuỗi = đoạn văn; khối nhiều chuỗi = danh sách a), b), c)…
+// ==================== SECTION: MINH BẠCH & TRÁCH NHIỆM — tab tài liệu (Hồ sơ & quy chế · Quy chế vận hành · Báo cáo) ====================
+const docTabs = $$('[data-doc-tab]');
+docTabs.forEach((tab) => {
+  tab.addEventListener('click', (event) => {
+    event.preventDefault();
+    docTabs.forEach((other) => other.toggleAttribute('aria-current', other === tab));
+    tab.setAttribute('aria-current', 'page');
+    $$('[data-doc-panel]').forEach((panel) => { panel.hidden = panel.dataset.docPanel !== tab.dataset.docTab; });
+  });
+});
+
+// ==================== SECTION: ĐỐI TÁC — nhân bản hàng logo để băng chạy vòng liền mạch (hoạt ảnh CSS .partner-track có sẵn) ====================
+$$('[data-partner-clone]').forEach((clone) => {
+  clone.innerHTML = clone.previousElementSibling.innerHTML;
+});
+
+// ==================== SECTION: KẾT NỐI NGUỒN LỰC — rê chuột / focus / bấm: mở rộng tấm ====================
+const resItems = $$('.qf-res-item');
+const activateRes = (item) => resItems.forEach((other) => other.classList.toggle('is-active', other === item));
+resItems.forEach((item) => {
+  item.addEventListener('mouseenter', () => { if (matchMedia('(hover: hover)').matches) activateRes(item); });
+  item.addEventListener('focusin', () => activateRes(item));
+  item.addEventListener('click', () => activateRes(item));
+});
+
+// ==================== SECTION: MINH BẠCH & TRÁCH NHIỆM — tab Quy chế vận hành: bấm "Xem chi tiết" → popup nội dung ====================
+// Nội dung theo Điều lệ Quỹ Nhân đạo Việt Nam. Mỗi mục: mảng khối — khối 1 chuỗi = đoạn văn; khối nhiều chuỗi = danh sách a), b), c)…
 const QND_RULES = {
   '01': {
     title: 'Tôn chỉ, mục đích',
@@ -113,11 +244,11 @@ const QND_RULES = {
   },
 };
 
-const ruleDialog = document.querySelector('.qnd-rule-dialog');
+const ruleDialog = $('.qnd-rule-dialog');
 if (ruleDialog) {
-  const kicker = ruleDialog.querySelector('[data-qnd-rule-kicker]');
-  const ruleTitle = ruleDialog.querySelector('#qnd-rule-title');
-  const body = ruleDialog.querySelector('[data-qnd-rule-body]');
+  const kicker = $('[data-qnd-rule-kicker]', ruleDialog);
+  const ruleTitle = $('#qnd-rule-title', ruleDialog);
+  const body = $('[data-qnd-rule-body]', ruleDialog);
   const block = (lines) => {
     if (lines.length === 1) {
       const p = document.createElement('p');
@@ -133,12 +264,12 @@ if (ruleDialog) {
     });
     return list;
   };
-  document.querySelectorAll('[data-qnd-rule]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const rule = QND_RULES[link.dataset.qndRule];
+  $$('[data-qnd-rule]').forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      const rule = QND_RULES[trigger.dataset.qndRule];
       if (!rule) return;
       event.preventDefault();
-      kicker.textContent = `Quy chế vận hành · ${link.dataset.qndRule}`;
+      kicker.textContent = `Quy chế vận hành · ${trigger.dataset.qndRule}`;
       ruleTitle.textContent = rule.title;
       body.replaceChildren(...rule.content.map(block));
       body.scrollTop = 0;
@@ -148,3 +279,228 @@ if (ruleDialog) {
   // Bấm ra nền mờ ngoài khung → đóng
   ruleDialog.addEventListener('click', (event) => { if (event.target === ruleDialog) ruleDialog.close(); });
 }
+
+// ==================== CHUYỂN ĐỘNG GSAP (ScrollTrigger · SplitText) ====================
+(() => {
+  const root = document.documentElement;
+  if (!window.gsap || !window.ScrollTrigger) {
+    root.classList.remove('qf-motion');
+    return;
+  }
+  const hasSplit = Boolean(window.SplitText);
+  gsap.registerPlugin(ScrollTrigger, ...(hasSplit ? [SplitText] : []));
+  const fine = '(hover: hover) and (pointer: fine)';
+  const motion = '(prefers-reduced-motion: no-preference)';
+  const mm = gsap.matchMedia();
+
+  mm.add(motion, () => {
+    // ---------- HERO: chữ trượt lên · mô tả, nút hiện dần · 3 ảnh mở từ dưới lên lần lượt · thẻ nổi bật ra ----------
+    const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
+    intro
+      .from('.qf-crumb', { y: 20, autoAlpha: 0, duration: 0.8 })
+      .from('.qf-line-in', { yPercent: 110, duration: 1.3, stagger: 0.12 }, 0.15)
+      .from('.qf-hero-lead, .qf-hero-actions > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.06 }, 0.5)
+      .fromTo('.qf-shot', { clipPath: 'inset(100% 0% 0% 0% round 20px)' }, { clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.15 }, 0.2)
+      .from('.qf-shot img', { scale: 1.3, duration: 2, stagger: 0.15 }, 0.2)
+      .from('.qf-float', { y: 32, scale: 0.9, autoAlpha: 0, duration: 1, ease: 'back.out(1.6)', stagger: 0.12 }, 1.2);
+    gsap.set('.qf-hero', { visibility: 'visible' });
+    root.classList.remove('qf-motion');
+
+    // ---------- HERO: cuộn qua → ảnh, thẻ nổi trôi lên lệch tốc độ theo data-depth ----------
+    $$('.qf-hero-visual [data-depth]').forEach((el) => {
+      gsap.to(el, {
+        y: () => -80 * Number(el.dataset.depth), ease: 'none',
+        scrollTrigger: { trigger: '.qf-hero', start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
+      });
+    });
+
+    // ---------- HERO: thẻ "Vừa ủng hộ" — các dòng minh họa chạy luân phiên ----------
+    const liveItems = $$('.qf-live-list li');
+    gsap.set(liveItems.slice(1), { yPercent: 100, autoAlpha: 0 });
+    const live = gsap.timeline({ repeat: -1, delay: 2.4 });
+    liveItems.forEach((item, i) => {
+      const next = liveItems[(i + 1) % liveItems.length];
+      live
+        .to(item, { yPercent: -100, autoAlpha: 0, duration: 0.5, ease: 'power3.in' }, '+=2.2')
+        .fromTo(next, { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, ease: 'power3.out', immediateRender: false }, '<0.3');
+    });
+
+    // ---------- Tiêu đề section: từng dòng trượt lên trong mặt nạ (SplitText) ----------
+    $$('[data-split]').forEach((heading) => {
+      const trigger = { trigger: heading, start: 'top 85%', once: true };
+      if (!hasSplit) {
+        gsap.from(heading, { y: 48, autoAlpha: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: trigger });
+        return;
+      }
+      heading.classList.add('is-split');
+      SplitText.create(heading, {
+        type: 'lines', mask: 'lines', linesClass: 'qf-sl', autoSplit: true,
+        onSplit: (self) => gsap.from(self.lines, { yPercent: 110, duration: 1.2, ease: 'expo.out', stagger: 0.1, scrollTrigger: trigger }),
+      });
+    });
+
+    // ---------- Khối nội dung: trồi lên theo nhóm ----------
+    gsap.set('[data-reveal]', { autoAlpha: 0, y: 48 });
+    ScrollTrigger.batch('[data-reveal]', {
+      start: 'top 90%', once: true,
+      onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.09, overwrite: true }),
+    });
+
+    // ---------- CÙNG QUỸ VUN ĐẮP: khung ủng hộ trượt lên · thẻ VietQR bật ra ----------
+    gsap.timeline({ scrollTrigger: { trigger: '.qf-donate', start: 'top 80%', once: true } })
+      .from('.qf-donate', { y: 80, autoAlpha: 0, duration: 1.2, ease: 'expo.out' })
+      .from('.qf-donate .pv-qr-card', { y: 32, scale: 0.94, autoAlpha: 0, duration: 0.9, ease: 'back.out(1.6)' }, 0.35)
+      .from('.qf-donate .pv-qr-transfer, .qf-donate .pv-qr-warn', { y: 24, autoAlpha: 0, duration: 0.8, ease: 'expo.out', stagger: 0.1 }, 0.5);
+
+    // ---------- VỀ QUỸ: tuyên bố sáng dần từng chữ theo cuộn ----------
+    const statement = $('[data-words]');
+    if (statement && hasSplit) {
+      SplitText.create(statement, {
+        type: 'words', autoSplit: true,
+        onSplit: (self) => gsap.fromTo(self.words, { opacity: 0.14 }, {
+          opacity: 1, stagger: 0.1, ease: 'none',
+          scrollTrigger: { trigger: statement, start: 'top 80%', end: 'bottom 50%', scrub: true },
+        }),
+      });
+    }
+    gsap.fromTo('.qf-about-photo img', { scale: 1.2 }, {
+      scale: 1, ease: 'none', scrollTrigger: { trigger: '.qf-about-photo', start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+
+    // ---------- TIN TỨC: ảnh bài nổi bật thu từ phóng to về khi cuộn qua ----------
+    $$('.news-feature .media img').forEach((img) => {
+      gsap.fromTo(img, { scale: 1.15 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: img, start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+
+    // ---------- HƯỚNG DẪN: đường dọc tô đỏ dần · chấm bước sáng lên khi qua giữa màn ----------
+    gsap.fromTo('.qf-steps-line span', { scaleY: 0 }, {
+      scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.qf-steps', start: 'top 60%', end: 'bottom 60%', scrub: true },
+    });
+    const steps = $$('.qf-step');
+    steps.forEach((step) => {
+      step.classList.remove('is-active');
+      ScrollTrigger.create({
+        trigger: step, start: 'top 60%',
+        onEnter: () => step.classList.add('is-active'),
+        onLeaveBack: () => step.classList.remove('is-active'),
+      });
+    });
+
+    return () => {
+      root.classList.remove('qf-motion');
+      steps.forEach((step) => step.classList.add('is-active'));
+    };
+  });
+
+  // Giảm chuyển động: hiện hero ngay
+  mm.add('(prefers-reduced-motion: reduce)', () => {
+    root.classList.remove('qf-motion');
+    gsap.set('.qf-hero', { visibility: 'visible' });
+  });
+
+  // ---------- HERO (chuột): cụm ảnh, thẻ nổi lệch nhẹ theo con trỏ — mức lệch theo data-depth (dùng xPercent/yPercent để không đè y của cuộn) ----------
+  mm.add(`${fine} and ${motion}`, () => {
+    const hero = $('.qf-hero');
+    const layers = $$('.qf-hero-visual [data-depth]').map((el) => ({
+      depth: Number(el.dataset.depth),
+      x: gsap.quickTo(el, 'xPercent', { duration: 1, ease: 'power3' }),
+      y: gsap.quickTo(el, 'yPercent', { duration: 1, ease: 'power3' }),
+    }));
+    const move = (event) => {
+      const dx = event.clientX / innerWidth - 0.5;
+      const dy = event.clientY / innerHeight - 0.5;
+      layers.forEach((layer) => { layer.x(dx * -3 * layer.depth); layer.y(dy * -3 * layer.depth); });
+    };
+    const reset = () => layers.forEach((layer) => { layer.x(0); layer.y(0); });
+    hero.addEventListener('pointermove', move);
+    hero.addEventListener('pointerleave', reset);
+    return () => {
+      hero.removeEventListener('pointermove', move);
+      hero.removeEventListener('pointerleave', reset);
+    };
+  });
+
+  // ---------- LĨNH VỰC (≥ 1024px): ghim section, cuộn dọc → dải thẻ trượt ngang; ảnh trong thẻ trôi ngược ----------
+  mm.add(`(min-width: 1024px) and ${motion}`, () => {
+    const section = $('.qf-fields');
+    const viewport = $('.qf-fields-viewport');
+    const track = $('.qf-fields-track');
+    section.classList.add('is-scrubbed');
+    const distance = () => {
+      const pad = parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
+      return Math.max(0, track.scrollWidth - (viewport.clientWidth - pad * 2));
+    };
+    const slide = gsap.to(track, {
+      x: () => -distance(), ease: 'none',
+      scrollTrigger: {
+        trigger: section, pin: '.qf-fields-pin', start: 'top top', end: () => `+=${distance()}`,
+        scrub: 1, invalidateOnRefresh: true,
+      },
+    });
+    gsap.fromTo('.qf-fields-bar span', { scaleX: 0.17 }, {
+      scaleX: 1, ease: 'none',
+      scrollTrigger: { trigger: section, start: 'top top', end: () => `+=${distance()}`, scrub: true, invalidateOnRefresh: true },
+    });
+    $$('.qf-field-img img').forEach((img) => {
+      gsap.fromTo(img, { xPercent: 6 }, {
+        xPercent: -6, ease: 'none',
+        scrollTrigger: { trigger: img.closest('.qf-field'), containerAnimation: slide, start: 'left right', end: 'right left', scrub: true },
+      });
+    });
+    return () => section.classList.remove('is-scrubbed');
+  });
+
+  // ---------- CÂU CHUYỆN (≥ 1024px): thẻ sau trượt lên đè, thẻ trước thu nhỏ & phủ đỏ nhạt (như chương Giải thưởng trang chủ) ----------
+  mm.add(`(min-width: 1024px) and ${motion}`, () => {
+    const cards = $$('.qf-story');
+    cards.slice(0, -1).forEach((card, i) => {
+      const next = cards[i + 1];
+      // Kết thúc khi thẻ sau chạm vị trí ghim (top của sticky)
+      const tl = gsap.timeline({ scrollTrigger: { trigger: next, start: 'top bottom', end: () => `top ${parseInt(getComputedStyle(next).top, 10)}px`, scrub: true, invalidateOnRefresh: true } });
+      tl.to(card, { scale: 0.92, ease: 'none' }, 0).to($('.award-card-shade', card), { opacity: 0.12, ease: 'none' }, 0);
+    });
+  });
+
+  // ---------- HOẠT ĐỘNG (chuột): ảnh nổi đi theo con trỏ ----------
+  mm.add(`${fine} and ${motion}`, () => {
+    const list = $('.qf-acts-list');
+    const media = $('.qf-cursor-media');
+    const images = new Map();
+    $$('.qf-act a', list).forEach((link) => {
+      const img = Object.assign(document.createElement('img'), { src: link.dataset.img, alt: '', decoding: 'async' });
+      media.append(img);
+      images.set(link, img);
+    });
+    gsap.set(media, { xPercent: -50, yPercent: -50, scale: 0.6 });
+    const xTo = gsap.quickTo(media, 'x', { duration: 0.6, ease: 'power3' });
+    const yTo = gsap.quickTo(media, 'y', { duration: 0.6, ease: 'power3' });
+    const rTo = gsap.quickTo(media, 'rotation', { duration: 0.8, ease: 'power3' });
+    let lastX = 0;
+    const move = (event) => {
+      xTo(event.clientX + 40);
+      yTo(event.clientY);
+      rTo(gsap.utils.clamp(-10, 10, (event.clientX - lastX) * 0.6));
+      lastX = event.clientX;
+    };
+    const show = (event) => {
+      const link = event.target.closest('.qf-act a');
+      if (!link) return;
+      images.forEach((img, key) => img.classList.toggle('is-on', key === link));
+      gsap.to(media, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'expo.out', overwrite: 'auto' });
+    };
+    const hide = () => gsap.to(media, { autoAlpha: 0, scale: 0.6, duration: 0.4, ease: 'power3.in', overwrite: 'auto' });
+    gsap.set(media, { x: innerWidth / 2, y: innerHeight / 2 });
+    list.addEventListener('pointermove', move);
+    list.addEventListener('pointerover', show);
+    list.addEventListener('pointerleave', hide);
+    return () => {
+      list.removeEventListener('pointermove', move);
+      list.removeEventListener('pointerover', show);
+      list.removeEventListener('pointerleave', hide);
+      media.replaceChildren();
+    };
+  });
+
+  // Phông chữ tải xong → đo lại vị trí ghim / chia dòng
+  document.fonts?.ready.then(() => ScrollTrigger.refresh());
+})();
