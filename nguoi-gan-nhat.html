@@ -30,7 +30,7 @@
   <meta name="theme-color" content="#ed2429">
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;650;700;800;900&family=Playfair+Display:ital,wght@1,400;1,500&subset=vietnamese&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,650;0,700;0,800;0,900;1,400;1,500;1,600&family=Playfair+Display:ital,wght@1,400;1,500&subset=vietnamese&display=swap"
     rel="stylesheet">
   <style>
     :root {
@@ -5489,20 +5489,22 @@
       gap: 4px !important;
     }
 
+    /* UI kit: Heading/H5 — 17/24 SemiBold */
     html body main#main#main #buoc-dau .skill-stats b {
       font-family: "Be Vietnam Pro", sans-serif !important;
       font-size: 17px !important;
-      font-weight: 700 !important;
+      font-weight: 600 !important;
       line-height: 24px !important;
       color: var(--color-text, #24272c) !important;
       margin: 0 !important;
     }
 
+    /* UI kit: Body/Small — 14/22 Regular (mô tả phụ trong thẻ nhỏ) */
     html body main#main#main #buoc-dau .skill-stats small {
       font-family: "Be Vietnam Pro", sans-serif !important;
-      font-size: 13px !important;
+      font-size: 14px !important;
       font-weight: 400 !important;
-      line-height: 18px !important;
+      line-height: 22px !important;
       color: var(--color-text-muted, #687078) !important;
       margin: 0 !important;
     }
@@ -5781,6 +5783,64 @@
       html body main#main#main#main .hero-grid {
         flex: 1 !important;
         align-content: center !important;
+      }
+    }
+  
+    /* 5 trụ cột: khung ảnh bằng khung ảnh Huy hiệu — cùng tỉ lệ cột (ảnh 1fr / chữ 1.15fr, màn ≥1680 đảo 1.15fr / 1fr) + cùng chiều cao (JS đồng bộ --hh-frame-h) */
+    @media (min-width: 1051px) {
+      html body main#main#main#main #buoc-dau .skill-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) !important;
+        column-gap: 64px !important;
+        align-items: center !important;
+      }
+
+      html body main#main#main#main #buoc-dau .skill-grid>div:last-child {
+        display: block;
+      }
+
+      html body main#main#main#main #buoc-dau figure.skill-photo {
+        flex: none;
+        width: 100%;
+        min-height: 0;
+        height: var(--hh-frame-h, 659px);
+      }
+    }
+
+    @media (min-width: 1680px) {
+      html body main#main#main#main #buoc-dau .skill-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important;
+      }
+    }
+
+    /* 5 trụ cột: tiêu đề + câu dẫn trải ngang cả section; danh sách 5 mục đứng cạnh ảnh, đỉnh ảnh thẳng đỉnh danh sách */
+    @media (min-width: 1051px) {
+      html body main#main#main#main #buoc-dau .skill-grid {
+        align-items: start !important;
+        row-gap: 0 !important;
+      }
+
+      html body main#main#main#main #buoc-dau .skill-copy {
+        display: contents;
+      }
+
+      html body main#main#main#main #buoc-dau .skill-copy>.section-heading,
+      html body main#main#main#main #buoc-dau .skill-copy>p {
+        grid-column: 1 / -1;
+      }
+
+      html body main#main#main#main #buoc-dau .skill-copy>p {
+        margin-bottom: 40px !important;
+      }
+
+      html body main#main#main#main #buoc-dau .skill-topics {
+        grid-column: 1;
+        grid-row: 3;
+        margin-top: 0 !important;
+      }
+
+      html body main#main#main#main #buoc-dau .skill-grid>div:last-child {
+        grid-column: 2;
+        grid-row: 3;
       }
     }
   </style>
@@ -6871,6 +6931,26 @@
   </script>
 
 
+  <script>
+    // 5 trụ cột: chiều cao khung ảnh = chiều cao khung ảnh Huy hiệu (khung đó co theo màn hình khi ghim)
+    (function () {
+      const sec = document.getElementById('buoc-dau');
+      const ref = document.querySelector('#huy-hieu .journey-visual');
+      if (!sec || !ref) return;
+      let raf = 0;
+      const sync = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const h = Math.round(ref.getBoundingClientRect().height);
+          if (h > 0) sec.style.setProperty('--hh-frame-h', h + 'px');
+        });
+      };
+      if ('ResizeObserver' in window) new ResizeObserver(sync).observe(ref);
+      addEventListener('resize', sync);
+      addEventListener('load', sync);
+      sync();
+    })();
+  </script>
 </body>
 
 </html>
