@@ -36,26 +36,6 @@ document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
   button.addEventListener('click', () => dialog.close());
 });
 
-// ==================== HERO: trạng thái kỳ giải — nhận đề cử 01/01 – 30/11 hằng năm (theo mục Đề cử) ====================
-// Trong hạn: "Đang nhận đề cử · Kỳ giải <năm> · Còn N ngày"; hết hạn (01/12 – 31/12): "Đã đóng đề cử · Kỳ giải <năm sau> mở từ 01/01"
-(() => {
-  const badge = document.querySelector('[data-award-badge]');
-  const text = document.querySelector('[data-award-text]');
-  if (!badge || !text) return;
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const year = today.getFullYear();
-  const deadline = new Date(year, 10, 30); // 30/11
-  if (today <= deadline) {
-    const days = Math.round((deadline - today) / 86400000);
-    text.textContent = days === 0 ? `Kỳ giải ${year} · Hôm nay là ngày cuối gửi đề cử` : `Kỳ giải ${year} · Còn ${days} ngày để gửi đề cử`;
-  } else {
-    badge.textContent = 'Đã đóng đề cử';
-    badge.classList.replace('is-green', 'is-orange');
-    text.textContent = `Kỳ giải ${year + 1} mở nhận đề cử từ 01/01`;
-  }
-})();
-
 // ==================== HERO: "NGỌN ĐÈN" giãn đúng bằng 2 mép container ====================
 // Đo nét chữ thật bằng canvas (actualBoundingBox, bỏ lề trong của font) → đặt --t (cỡ chữ, số nguyên px) cho .gt-hero
 // để mép trái chữ N đầu và mép phải chữ N cuối chạm 2 mép container; bù lệch lề trong bằng translate.
