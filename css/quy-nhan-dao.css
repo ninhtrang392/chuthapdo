@@ -117,7 +117,7 @@
 /* ---------- Đoạn giới thiệu chức năng (chữ phụ như .section-lead) ---------- */
 .qf-about-intro{margin-bottom:40px;font-size:18px;line-height:30px;color:var(--color-text-muted)}
 /* ---------- 3 đặc điểm ---------- */
-.qf-about-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.qf-about-facts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,.9fr);gap:32px} /* cột giữa rộng hơn: "Tự tạo vốn, tự trang trải, tự chịu trách nhiệm bằng tài sản của Quỹ" gọn 2 dòng; cả 3 điểm nhấn đều 2 dòng */
 .qf-fact-icon{display:grid;place-items:center;width:48px;height:48px;margin-bottom:20px;border-radius:50%;background:#fdecec;color:var(--color-primary)}
 .qf-fact-icon .icon{width:22px;height:22px}
 .qf-fact h3{margin:0;font-size:18px;font-weight:600;line-height:26px}
@@ -165,7 +165,7 @@
 .qf-account-head{min-height:52px;padding-left:88px}
 .qf-account h3{font-size:24px;font-weight:600;line-height:32px}
 .qf-account-head>p{margin-top:4px;font-size:16px;line-height:26px;color:var(--color-text-muted)}
-.qf-account-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:20px 0 0}
+.qf-account-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:20px 0 0}
 .qf-account-steps .ngn-item{align-items:center;gap:20px;padding:0 24px;border-top:0;border-left:1px solid #f0d6d8}
 .qf-account-steps .ngn-item:first-child{padding-left:0;border-left:0}
 .qf-account-steps .ngn-item:last-child{padding-right:0}

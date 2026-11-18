@@ -350,7 +350,7 @@ const QND_RULES = {
     title: 'Giới thiệu, sứ mệnh, quản trị và văn bản pháp lý',
     content: [
       { heading: 'Giới thiệu' },
-      ['Quỹ Nhân đạo Việt Nam là quỹ xã hội, quỹ từ thiện hoạt động không vì mục tiêu lợi nhuận, do Hội Chữ thập đỏ Việt Nam khởi xướng thành lập, kế thừa Quỹ Hoạt động Chữ thập đỏ. Quỹ có phạm vi hoạt động toàn quốc, có tư cách pháp nhân, con dấu và tài khoản riêng.'],
+      ['Quỹ Nhân đạo Việt Nam (Viet Nam Humanitarian Foundation – VNHF) là quỹ từ thiện do Hội Chữ thập đỏ Việt Nam sáng lập, hoạt động không vì mục tiêu lợi nhuận, phạm vi toàn quốc. Quỹ có tư cách pháp nhân, con dấu, tài khoản riêng.'],
       { heading: 'Sứ mệnh' },
       ['Huy động, tiếp nhận, quản lý, kết nối và sử dụng hiệu quả nguồn lực xã hội để hỗ trợ người có hoàn cảnh khó khăn, người dễ bị tổn thương và cộng đồng cần trợ giúp nhân đạo; tham gia phòng ngừa, ứng phó và khắc phục hậu quả thiên tai, thảm họa, dịch bệnh và các tình huống khẩn cấp.'],
       ['Quỹ hướng tới trở thành công cụ tài chính nhân đạo chủ động, lâu dài, bền vững và minh bạch; là địa chỉ tin cậy để tổ chức, doanh nghiệp, cá nhân trong và ngoài nước đồng hành vì mục tiêu nhân đạo.'],
