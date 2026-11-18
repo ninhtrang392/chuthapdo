@@ -100,8 +100,8 @@
     <!-- Giao diện dùng chung của web (styles.css): .section · .section-head · .section-title · .section-lead · .link-arrow · .button · .breadcrumb · .hero-pill ·
          .award-card · .ngn-list · .news-* · .qnd-about / .qnd-rules-*. css/quy-nhan-dao.css chỉ thêm bố cục + trạng thái chuyển động (tiền tố qf-). -->
     <main id="main" class="qf-page">
-      <!-- ==================== SECTION: HERO QUỸ NHÂN ĐẠO — desktop: cả hero vừa khít 1 màn hình · breadcrumb trên cùng (ngay dưới header) · 2 cột: trái (tiêu đề 3 dòng 48px "Trao một tấm lòng / Nối dài yêu thương / Vun đắp tương lai" · mô tả · 2 nút Đồng hành cùng Quỹ / Tìm hiểu về Quỹ)
-           · phải: cụm 3 ảnh so le (mở từ dưới lên, trôi lệch tốc độ khi cuộn, nghiêng theo chuột) + thẻ nổi "Vừa ủng hộ" (chạy luân phiên) + thẻ "Quét mã QR" ==================== -->
+      <!-- ==================== SECTION: HERO QUỸ NHÂN ĐẠO — desktop: cả hero vừa khít 1 màn hình · breadcrumb trên cùng (ngay dưới header) · 2 cột: trái (tiêu đề 1 dòng "Quỹ nhân đạo Việt Nam" · khẩu hiệu đỏ in hoa "Kết nối nguồn lực – Lan tỏa nhân ái" · mô tả · 2 nút Đồng hành cùng Quỹ / Tìm hiểu về Quỹ)
+           · phải: cụm 3 ảnh so le (mở từ dưới lên, trôi lệch tốc độ khi cuộn, nghiêng theo chuột) + thẻ nổi "Vừa ủng hộ" (chạy luân phiên, nằm trên ảnh nhỏ thứ nhất) ==================== -->
       <section class="qf-hero" id="dau-trang" aria-labelledby="qf-title">
         <!-- ---------- Breadcrumb: luôn ở trên cùng, ngay dưới header (như các trang khác) ---------- -->
         <div class="container qf-crumbs">
@@ -113,13 +113,12 @@
         <div class="container qf-hero-grid">
           <!-- ---------- Cột trái: chữ ---------- -->
           <div class="qf-hero-copy">
-            <!-- Tiêu đề 3 dòng: mỗi dòng có mặt nạ, chữ trượt lên khi vào trang -->
+            <!-- Tiêu đề 1 dòng "Quỹ nhân đạo Việt Nam": có mặt nạ, chữ trượt lên khi vào trang · khẩu hiệu đỏ in hoa · mô tả -->
             <h1 class="qf-hero-title" id="qf-title">
-              <span class="qf-line"><span class="qf-line-in">Trao một tấm lòng</span></span>
-              <span class="qf-line"><span class="qf-line-in">Nối dài yêu thương</span></span>
-              <span class="qf-line"><span class="qf-line-in qf-accent">Vun đắp tương lai</span></span>
+              <span class="qf-line"><span class="qf-line-in">Quỹ nhân đạo Việt Nam</span></span>
             </h1>
-            <p class="section-lead qf-hero-lead">Quỹ Nhân đạo Việt Nam là quỹ xã hội, quỹ từ thiện hoạt động không vì mục tiêu lợi nhuận, do Hội Chữ thập đỏ Việt Nam khởi xướng thành lập, kế thừa Quỹ Hoạt động Chữ thập đỏ.</p>
+            <p class="qf-hero-slogan">Kết nối nguồn lực – Lan tỏa nhân ái</p>
+            <p class="section-lead qf-hero-lead">Chung tay kết nối những tấm lòng, nguồn lực và hành động nhân đạo để kịp thời trợ giúp những người có hoàn cảnh khó khăn, xây dựng cộng đồng an toàn, nhân ái và phát triển bền vững.</p>
             <div class="qf-hero-actions">
               <a class="button button-primary" href="#dong-hanh"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Đồng hành cùng Quỹ</a>
               <a class="button button-outline" href="#ve-quy">Tìm hiểu về Quỹ<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
@@ -132,8 +131,8 @@
             <figure class="qf-shot qf-shot--top" data-depth="0.4"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Trao%20qu%C3%A0%20c%E1%BB%A9u%20tr%E1%BB%A3%20gi%E1%BB%AFa%20l%C3%A0ng%20ng%E1%BA%ADp%20l%C5%A9.png" alt="Tình nguyện viên Chữ thập đỏ trao quà cứu trợ cho cụ bà giữa làng ngập lũ" width="1672" height="941" /></figure>
             <figure class="qf-shot qf-shot--bottom" data-depth="0.4"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/s%E1%BB%ADa%20m%C3%A1i%20nh%C3%A0%20sau%20b%C3%A3o.png" alt="Tình nguyện viên Chữ thập đỏ cùng người dân lợp lại mái nhà sau bão" width="1672" height="941" /></figure>
 
-            <!-- Thẻ "Vừa ủng hộ": 4 dòng minh họa chạy luân phiên (quy-nhan-dao.js › HERO: thẻ vừa ủng hộ) -->
-            <div class="qf-float qf-float--live" data-depth="1.4">
+            <!-- Thẻ "Vừa ủng hộ": nằm trên ảnh nhỏ thứ nhất (chỗ thẻ Quét mã QR cũ), không đè ảnh · data-depth bằng các ảnh (0.4) → trôi cùng ảnh · 4 dòng minh họa chạy luân phiên (quy-nhan-dao.js › HERO: thẻ vừa ủng hộ) -->
+            <div class="qf-float qf-float--live" data-depth="0.4">
               <span class="qf-live-dot" aria-hidden="true"></span>
               <div>
                 <small>Vừa ủng hộ Quỹ</small>
@@ -145,11 +144,6 @@
                 </ul>
               </div>
             </div>
-            <!-- Thẻ lối tắt Quét mã QR → section Cùng Quỹ vun đắp · data-depth bằng các ảnh (0.4) → trôi cùng ảnh, giữ nguyên vị trí chớm mép ảnh khi cuộn / rê chuột -->
-            <a class="qf-float qf-float--qr" href="#dong-hanh" data-depth="0.4">
-              <span class="qf-float-icon" aria-hidden="true"><svg class="icon"><use href="#qr"/></svg></span>
-              <span><b>Quét mã QR</b><small>Ủng hộ trực tiếp vào tài khoản Quỹ</small></span>
-            </a>
           </div>
         </div>
       </section>
@@ -188,9 +182,8 @@
               <!-- Mã VietQR · nút tải mã QR -->
               <figure class="pv-qr-card">
                 <button class="pv-qr-download" type="button" data-qr-download aria-label="Tải mã QR" title="Tải mã QR"><svg class="icon" aria-hidden="true"><use href="#download"/></svg></button>
-                <p class="pv-vietqr" aria-label="VietQR"><b>VIET</b><span>QR</span></p>
                 <div class="pv-qr-frame"><div class="pv-qr-image" id="qf-qr-image"></div></div>
-                <p class="pv-qr-brands"><b>napas <i>247</i></b><span id="qf-qr-bank-name"></span></p>
+                <p class="pv-qr-brands"><span id="qf-qr-bank-name"></span></p>
                 <figcaption><svg class="icon" aria-hidden="true"><use href="#phone"/></svg>Quét bằng mọi App Ngân hàng / Ví</figcaption>
               </figure>
               <!-- Thông tin chuyển khoản: số tài khoản, chủ tài khoản, nội dung CK kèm Sao chép -->
@@ -201,7 +194,7 @@
                   <div><dt>Ngân hàng</dt><dd><b id="qf-qr-bank-short"></b></dd></div>
                   <div><dt>Số tài khoản</dt><dd><b id="qf-qr-account"></b><button type="button" data-qr-copy="account" aria-label="Sao chép số tài khoản"><svg class="icon" aria-hidden="true"><use href="#copy"/></svg></button></dd></div>
                   <div><dt>Chủ tài khoản</dt><dd><b id="qf-qr-holder"></b><button type="button" data-qr-copy="holder" aria-label="Sao chép tên chủ tài khoản"><svg class="icon" aria-hidden="true"><use href="#copy"/></svg></button></dd></div>
-                  <div><dt>Nội dung CK</dt><dd><b id="qf-qr-memo"></b><button type="button" data-qr-copy="memo" aria-label="Sao chép nội dung chuyển khoản"><svg class="icon" aria-hidden="true"><use href="#copy"/></svg></button></dd></div>
+                  <div><dt>Nội dung CK</dt><dd><b>Nhập lời nhắn gửi</b></dd></div>
                 </dl>
               </section>
               <p class="pv-qr-warn">Vui lòng giữ nguyên nội dung chuyển khoản để Quỹ tự động ghi nhận khoản ủng hộ của bạn.</p>
@@ -373,22 +366,22 @@
                 <li class="ngn-item"><span class="ngn-num">04</span><div><h4 class="ngn-name">Chi hoạt động quản lý Quỹ</h4></div><a class="link-arrow" href="#minh-bach" data-qnd-rule="04" aria-haspopup="dialog">Xem chi tiết<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a></li>
               </ol>
               <!-- ---------- Khoản ủng hộ: danh sách ủng hộ như bản ver01 (bộ UI kit danh sách: .pf-table-card · .pf-section-head · .pf-input · .pf-table.is-donations · .pf-table-foot · .pf-pager)
-                   chỉ khoản ủng hộ vào Quỹ chung (không gồm khoản ủng hộ chương trình) — thanh công cụ: tìm kiếm · khoảng thời gian · nút Tìm kiếm — bảng 10 dòng/trang: # · tài khoản quyên góp (tên đầy đủ, lời nhắn in nghiêng dưới tên) · số tiền · thời gian
+                   chỉ khoản ủng hộ vào Quỹ chung (không gồm khoản ủng hộ chương trình) — thanh công cụ: tìm kiếm · khoảng thời gian · nút Tìm kiếm — bảng 10 dòng/trang: # · tài khoản quyên góp (tên đầy đủ) · nội dung chuyển khoản · số tiền · thời gian
                    DỮ LIỆU MINH HỌA: quy-nhan-dao.js dựng dòng + lọc + phân trang (QF_DONORS). Khi triển khai lấy từ hệ thống giao dịch đã đối soát. ---------- -->
               <div class="qf-donors" data-doc-panel="khoan-ung-ho" hidden>
                 <div class="pf-table-card qnd-donor-card">
                   <!-- ---------- Thanh công cụ trong thẻ bảng: tìm kiếm · khoảng thời gian · nút Tìm kiếm ---------- -->
                   <form class="pf-section-head qnd-donor-head" role="search" data-qf-donor-form>
                     <div class="pf-head-tools qnd-donor-tools">
-                      <label class="pf-input is-search qnd-donor-q"><svg class="icon" aria-hidden="true"><use href="#search"/></svg><span class="visually-hidden">Tìm kiếm khoản quyên góp</span><input type="search" placeholder="Tìm kiếm theo tài khoản quyên góp, lời nhắn..." autocomplete="off" data-qf-donor-q /></label>
+                      <label class="pf-input is-search qnd-donor-q"><svg class="icon" aria-hidden="true"><use href="#search"/></svg><span class="visually-hidden">Tìm kiếm khoản quyên góp</span><input type="search" placeholder="Tìm kiếm theo tài khoản quyên góp, nội dung chuyển khoản..." autocomplete="off" data-qf-donor-q /></label>
                       <label class="pf-input is-search qnd-donor-date"><svg class="icon" aria-hidden="true"><use href="#calendar"/></svg><span class="visually-hidden">Khoảng thời gian</span><input type="text" value="01/11/2026 - 30/11/2026" readonly /></label>
                     </div>
-                    <button class="pf-btn pf-btn-ghost" type="submit">Tìm kiếm</button>
+                    <button class="pf-btn pf-btn-primary qf-donor-search" type="submit"><svg class="icon" aria-hidden="true"><use href="#search"/></svg>Tìm kiếm</button>
                   </form>
                   <div class="pf-table-scroll">
                     <table class="pf-table is-donations qf-donor-table">
                       <caption class="visually-hidden">Danh sách ủng hộ Quỹ Nhân đạo Việt Nam</caption>
-                      <thead><tr><th scope="col" class="pf-col-index">#</th><th scope="col">Tài khoản quyên góp</th><th scope="col">Số tiền quyên góp</th><th scope="col">Thời gian ủng hộ</th></tr></thead>
+                      <thead><tr><th scope="col" class="pf-col-index">#</th><th scope="col">Tài khoản quyên góp</th><th scope="col">Nội dung chuyển khoản</th><th scope="col">Số tiền quyên góp</th><th scope="col">Thời gian ủng hộ</th></tr></thead>
                       <tbody data-qf-donor-rows></tbody>
                     </table>
                   </div>
@@ -403,50 +396,44 @@
       </section>
       <!-- ==================== END SECTION: MINH BẠCH & TRÁCH NHIỆM ==================== -->
 
-      <!-- ==================== SECTION: KẾT NỐI NGUỒN LỰC — 3 tấm ảnh dọc (Doanh nghiệp & tổ chức · Đối tác quốc tế · Cộng đồng người Việt ở nước ngoài) · rê chuột / focus: tấm mở rộng, hiện cách đồng hành + liên hệ · màn nhỏ: xếp dọc, mở sẵn ==================== -->
+      <!-- ==================== SECTION: KẾT NỐI NGUỒN LỰC — 3 tấm ảnh dọc (Doanh nghiệp & tổ chức · Đối tác quốc tế · Cộng đồng người Việt ở nước ngoài) · rê chuột / focus: tấm mở rộng, hiện cách đồng hành · màn nhỏ: xếp dọc, mở sẵn ==================== -->
       <section class="section qf-res" id="ket-noi" aria-labelledby="qf-res-title">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head qnd-head-center">
             <div>
-              <h2 class="section-title" id="qf-res-title" data-split>Mỗi nguồn lực. Một giá trị nhân đạo.</h2>
+              <h2 class="section-title" id="qf-res-title" data-split>Mỗi nguồn lực, một giá trị nhân đạo</h2>
               <p class="section-lead">Tài chính, hiện vật, tri thức hay sự đồng hành lâu dài — cùng Quỹ tạo thêm cơ hội cho những cộng đồng cần hỗ trợ.</p>
             </div>
           </div>
 
           <ul class="qf-res-list">
             <li class="qf-res-item is-active">
-              <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/3.-028ae9de1f.jpg" alt="" loading="lazy" />
+              <img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Trao%20t%E1%BA%B7ng%20y%C3%AAu%20th%C6%B0%C6%A1ng%20n%C6%A1i%20l%C3%A0ng%20qu%C3%AA.png" alt="" loading="lazy" />
               <span class="qf-res-num">01</span><span class="qf-res-icon" aria-hidden="true"><svg class="icon"><use href="#building"/></svg></span>
               <div class="qf-res-body">
                 <h3>Doanh nghiệp &amp; tổ chức</h3>
                 <div class="qf-res-more"><div>
-                  <p>Đồng hành qua tài trợ chương trình, trách nhiệm xã hội, phối hợp vận động và kết nối người lao động tham gia tình nguyện.</p>
-                  <ul><li>Tài trợ chương trình theo lĩnh vực, địa bàn</li><li>Đóng góp hiện vật, tri thức, chuyên môn</li><li>Báo cáo tác động định kỳ cho nhà tài trợ</li></ul>
-                  <a class="button button-primary button-small" href="mailto:vanphongctd@gmail.com?subject=H%E1%BB%A3p%20t%C3%A1c%20Qu%E1%BB%B9%20Nh%C3%A2n%20%C4%91%E1%BA%A1o%20-%20Doanh%20nghi%E1%BB%87p%20%26%20t%E1%BB%95%20ch%E1%BB%A9c">Liên hệ hợp tác<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                  <p>Đồng hành theo chương trình, tài trợ dài hạn, đóng góp hiện vật hoặc chuyên môn. Thông tin đầu mối tiếp nhận của Quỹ đang chờ công bố.</p>
                 </div></div>
               </div>
             </li>
             <li class="qf-res-item">
-              <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/2.-Chi-Nguyen-Thi-Hong-ngoai-cung-ben-trai-trao-qua-cho-2-em-mac-benh-tan-mau-bam-sinh-tai-xa-Thanh-Yen-tinh-Dien-Bien.jpg" alt="" loading="lazy" />
+              <img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Trao%20g%E1%BB%ADi%20y%C3%AAu%20th%C6%B0%C6%A1ng%20gi%E1%BB%AFa%20n%E1%BA%AFng%20v%C3%A0ng.png" alt="" loading="lazy" />
               <span class="qf-res-num">02</span><span class="qf-res-icon" aria-hidden="true"><svg class="icon"><use href="#globe"/></svg></span>
               <div class="qf-res-body">
                 <h3>Đối tác quốc tế</h3>
                 <div class="qf-res-more"><div>
-                  <p>Hợp tác cùng Phong trào Chữ thập đỏ – Trăng lưỡi liềm đỏ quốc tế, tổ chức phi chính phủ và nhà tài trợ nước ngoài.</p>
-                  <ul><li>Viện trợ không hoàn lại theo quy định</li><li>Dự án hợp tác, chuyển giao kỹ thuật</li><li>Ứng phó thảm họa quy mô lớn</li></ul>
-                  <a class="button button-primary button-small" href="mailto:international@redcross.org.vn?subject=Partnership%20-%20Vietnam%20Humanitarian%20Fund">Liên hệ hợp tác<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                  <p>Kết nối nguồn tài trợ, viện trợ và các chương trình nhân đạo theo phạm vi hoạt động của Quỹ. Đầu mối hợp tác sẽ được bổ sung khi xác nhận.</p>
                 </div></div>
               </div>
             </li>
             <li class="qf-res-item">
-              <img src="Emages/nguoi-gan-nhat/cta-relief.webp" alt="" loading="lazy" />
+              <img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/H%E1%BB%99p%20quy%C3%AAn%20g%C3%B3p%20v%E1%BB%9Bi%20tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%E0%AA%BE%E0%AA%82%E0%AA%9A.png" alt="" loading="lazy" />
               <span class="qf-res-num">03</span><span class="qf-res-icon" aria-hidden="true"><svg class="icon"><use href="#heart"/></svg></span>
               <div class="qf-res-body">
                 <h3>Cộng đồng người Việt ở nước ngoài</h3>
                 <div class="qf-res-more"><div>
-                  <p>Kiều bào gửi yêu thương về quê hương qua tài khoản ngoại tệ của Quỹ, thông tin minh bạch tới từng chương trình.</p>
-                  <ul><li>Chuyển khoản ngoại tệ (USD, EUR…)</li><li>Chọn chương trình, địa phương mong muốn</li></ul>
-                  <a class="button button-primary button-small" href="mailto:international@redcross.org.vn?subject=Ki%E1%BB%81u%20b%C3%A0o%20%C4%91%E1%BB%93ng%20h%C3%A0nh%20Qu%E1%BB%B9%20Nh%C3%A2n%20%C4%91%E1%BA%A1o">Liên hệ hợp tác<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                  <p>Thông tin phương thức đóng góp và hướng dẫn chuyển khoản quốc tế sẽ được công bố sau khi Quỹ xác nhận tài khoản tiếp nhận.</p>
                 </div></div>
               </div>
             </li>
@@ -457,7 +444,8 @@
 
       <!-- ==================== SECTION: TIN TỨC VÀ ĐỐI TÁC — đầu section: tiêu đề · tab 5 chuyên mục (.pf-tabs) cùng hàng · bố cục tin tức trang chủ (.news-grid: trái 1 bài nổi bật ảnh phủ kín · phải 3 bài danh sách)
            DỮ LIỆU MINH HỌA: bài viết phải lấy từ CMS theo chuyên mục. Tab đầu viết sẵn trong HTML; 4 tab còn lại dựng từ QF_NEWS trong quy-nhan-dao.js ==================== -->
-      <section class="section news qf-news" id="tin-tuc" aria-labelledby="qf-news-title">
+      <!-- Section đang ẩn (hidden) — mở lại: bỏ thuộc tính hidden -->
+      <section class="section news qf-news" id="tin-tuc" aria-labelledby="qf-news-title" hidden>
         <div class="container">
           <!-- ---------- Đầu section: tiêu đề (trái) · tab 5 chuyên mục (phải, cùng hàng; dùng lại .pf-tabs như tab Minh bạch) ---------- -->
           <div class="section-head qf-news-head">
@@ -523,59 +511,32 @@
       </section>
       <!-- ==================== END SECTION: TIN TỨC VÀ ĐỐI TÁC ==================== -->
 
-      <!-- ==================== SECTION: HƯỚNG DẪN ĐỒNG HÀNH — bố cục hỏi đáp như "Bạn có thể đang băn khoăn" trang Người Gần Nhất: trái (ghim): tiêu đề · liên hệ · phải: danh sách câu hỏi dạng mở/đóng (bấm câu hỏi → hiện nội dung chi tiết, mỗi lúc mở 1 câu) ==================== -->
+      <!-- ==================== SECTION: HƯỚNG DẪN ĐỒNG HÀNH — bố cục hỏi đáp như "Bạn có thể đang băn khoăn" trang Người Gần Nhất: trái (ghim): tiêu đề · phải: 3 câu hỏi dạng mở/đóng (bấm câu hỏi → hiện nội dung chi tiết, mỗi lúc mở 1 câu) ==================== -->
       <section class="section qf-guide" id="huong-dan" aria-labelledby="qf-guide-title">
         <div class="container qf-guide-grid">
-          <!-- ---------- Trái: tiêu đề · liên hệ ---------- -->
+          <!-- ---------- Trái: tiêu đề ---------- -->
           <div class="qf-guide-side">
             <h2 class="section-title" id="qf-guide-title" data-split>Những điều bạn cần biết</h2>
-            <p class="qf-guide-contact">Chưa thấy câu trả lời bạn cần?<br>Liên hệ <a href="tel:+842438224030">024-3 8224030</a> hoặc <a href="mailto:vanphongctd@gmail.com">vanphongctd@gmail.com</a></p>
           </div>
 
-          <!-- ---------- Phải: câu hỏi mở/đóng (dấu + / − tròn bên phải; mở: chữ đỏ, nền hồng nhạt) ---------- -->
+          <!-- ---------- Phải: câu hỏi mở/đóng (dấu + / − tròn bên phải; mở: chữ đỏ, nền hồng nhạt) — chỉ 3 câu theo nội dung được cung cấp ---------- -->
           <div class="qf-faq-list">
             <details open>
-              <summary>Có những cách nào để đồng hành cùng Quỹ?</summary>
-              <div class="qf-faq-body">
-                <p>Bạn có thể ủng hộ vào nguồn lực chung để Quỹ chủ động điều phối tới nơi cần nhất, hoặc chọn một chương trình cụ thể đang vận động.</p>
-              </div>
-            </details>
-            <details>
-              <summary>Chuyển khoản ủng hộ tới tài khoản nào?</summary>
-              <div class="qf-faq-body">
-                <p>Chỉ chuyển khoản tới tài khoản tiếp nhận do Quỹ công bố; kiểm tra đúng tên tài khoản trước khi xác nhận.</p>
-                <a class="link-arrow" href="#dong-hanh">Xem thông tin tiếp nhận<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-              </div>
-            </details>
-            <details>
-              <summary>Cần ghi nội dung chuyển khoản như thế nào?</summary>
-              <div class="qf-faq-body">
-                <p>Ghi nội dung theo hướng dẫn để Quỹ ghi nhận đúng khoản ủng hộ; hướng dẫn chính thức được công bố cùng thông tin tài khoản.</p>
-              </div>
-            </details>
-            <details>
-              <summary>Làm sao theo dõi kết quả sử dụng khoản ủng hộ?</summary>
-              <div class="qf-faq-body">
-                <p>Khoản ủng hộ được cập nhật vào danh sách công khai; bạn có thể theo dõi phân bổ và kết quả theo từng chương trình.</p>
-                <a class="link-arrow" href="#minh-bach">Minh bạch &amp; trách nhiệm<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
-              </div>
-            </details>
-            <details>
               <summary>Ủng hộ Quỹ khác gì ủng hộ theo chương trình?</summary>
               <div class="qf-faq-body">
-                <p>Ủng hộ Quỹ là đóng góp vào nguồn lực chung để Quỹ chủ động điều phối cho các hoạt động thường xuyên, dài hạn và ứng phó khẩn cấp. Ủng hộ theo chương trình thì khoản đóng góp được dùng đúng cho chương trình bạn chọn — khoản tài trợ có mục đích được chi 100% đúng đối tượng, địa bàn đã công bố.</p>
+                <p>Ủng hộ chung bổ sung nguồn lực cho Quỹ phân bổ theo chức năng và quy chế. Đóng góp theo chương trình gắn với mục đích, đối tượng và kế hoạch được công bố của chương trình đó.</p>
               </div>
             </details>
             <details>
               <summary>Khi nào khoản ủng hộ được hiển thị?</summary>
               <div class="qf-faq-body">
-                <p>Sau khi Quỹ đối soát với sao kê ngân hàng, khoản ủng hộ được cập nhật vào danh sách công khai. Bạn cũng có thể chọn ủng hộ ẩn danh.</p>
+                <p>Khoản ủng hộ chỉ được công khai sau khi tiếp nhận và đối soát. Thời gian cập nhật thực tế sẽ được thông báo theo quy trình của Quỹ. Bản thiết kế hiện chưa kết nối dữ liệu ngân hàng.</p>
               </div>
             </details>
             <details>
               <summary>Có thể ủng hộ khi chưa có chương trình cụ thể không?</summary>
               <div class="qf-faq-body">
-                <p>Có. Bạn có thể ủng hộ vào nguồn lực chung của Quỹ; Quỹ phân bổ cho các hoạt động nhân đạo theo quy chế và công khai kết quả sử dụng.</p>
+                <p>Có thể bố trí ủng hộ vào nguồn lực chung khi tài khoản tiếp nhận và hướng dẫn chính thức của Quỹ đã được công bố. Người dùng không cần chọn chương trình để truy cập khu vực này.</p>
               </div>
             </details>
           </div>
@@ -583,7 +544,7 @@
       </section>
       <!-- ==================== END SECTION: HƯỚNG DẪN ĐỒNG HÀNH ==================== -->
 
-      <!-- ==================== SECTION: KÊU GỌI CUỐI TRANG — khung bo góc, ảnh nền Emages/QUỹ nhân đạo/Trái Tim Xanh Nảy Mầm.png (trái tim bên phải) · bên trái: tiêu đề · mô tả · 2 nút (trồi lên khi cuộn tới) ==================== -->
+      <!-- ==================== SECTION: KÊU GỌI CUỐI TRANG — khung bo góc, ảnh nền Emages/QUỹ nhân đạo/Trái Tim Xanh Nảy Mầm.png (trái tim bên phải) · bên trái: tiêu đề · mô tả · nút Quét mã QR ủng hộ (trồi lên khi cuộn tới) ==================== -->
       <section class="section qf-cta" aria-labelledby="qf-cta-title">
         <div class="container"><div class="section-head qf-cta-inner" data-reveal>
           <div>
@@ -592,7 +553,6 @@
           </div>
           <div class="section-head-aside">
             <a class="button button-primary" href="#dong-hanh" data-magnetic><svg class="icon" aria-hidden="true"><use href="#qr"/></svg>Quét mã QR ủng hộ</a>
-            <a class="button button-outline" href="chuong-trinh-thien-nguyen.html" data-magnetic>Xem chương trình đang vận động</a>
           </div>
         </div></div>
       </section>

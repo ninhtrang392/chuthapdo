@@ -60,21 +60,18 @@ const showToast = (message, type = 'success') => {
 };
 $('.pf-toast-close', toast).addEventListener('click', hideToast);
 
-// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: chỉ hiển thị thẻ VietQR + thông tin chuyển khoản (ngân hàng QF_BANK; số tiền nhập trên ứng dụng ngân hàng) ====================
-// Minh họa: số tài khoản suy cố định theo ngân hàng; mã QR là hình minh họa (khi triển khai lấy VietQR do ngân hàng đối tác cung cấp)
+// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: chỉ hiển thị thẻ VietQR + thông tin chuyển khoản (ngân hàng MB · STK 1999 · QUY HOAT DONG CHU THAP DO; số tiền nhập trên ứng dụng ngân hàng) ====================
+// Tài khoản nhận ủng hộ của Quỹ (mã QR vẫn là hình minh họa — khi triển khai lấy VietQR do ngân hàng cung cấp)
 const QF_BANKS = {
-  BIDV: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam (BIDV)',
-  VCB: 'Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)',
-  CTG: 'Ngân hàng TMCP Công Thương Việt Nam (VietinBank)',
-  TCB: 'Ngân hàng TMCP Kỹ thương Việt Nam (Techcombank)',
+  MB: 'Ngân hàng TMCP Quân đội (MB)',
 };
-const QF_HOLDER = 'QUY NHAN DAO VIET NAM';
+const QF_ACCOUNT = '1999'; // số tài khoản
+const QF_HOLDER = 'QUY HOAT DONG CHU THAP DO'; // tên chủ tài khoản
 const seededRandom = (text) => {
   let seed = [...text].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 233280, 7);
   return () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
 };
 const bankShort = (bank) => QF_BANKS[bank].match(/\((.+)\)/)[1];
-const qfAccount = (bank) => { const rand = seededRandom(`QNDVN-${bank}`); return Array.from({ length: 13 }, () => Math.floor(rand() * 10)).join(''); };
 // Hình mã QR minh họa: lưới 25 × 25 ô, 3 ô định vị ở góc, phần còn lại sinh cố định theo nội dung
 const qrSvg = (text) => {
   const n = 25;
@@ -93,7 +90,7 @@ const qrSvg = (text) => {
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 29 29" role="img" aria-label="Mã QR ủng hộ Quỹ (minh họa)"><rect x="-2" y="-2" width="29" height="29" fill="#fff"/><path d="${cells.join('')}" fill="#24272C"/></svg>`;
 };
-// Nội dung CK = mã ủng hộ: QNDVN-3 chữ + 4 số, sinh mới mỗi lần tải trang
+// Mã ủng hộ QNDVN-3 chữ + 4 số (không hiển thị — chỉ dùng sinh hình QR minh họa và tên file khi tải mã), sinh mới mỗi lần tải trang
 const qfMemo = () => {
   const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   return `QNDVN-${Array.from({ length: 3 }, () => letters[Math.floor(Math.random() * letters.length)]).join('')}${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
@@ -112,16 +109,15 @@ const copyText = async (text) => {
 };
 const qf = { memo: qfMemo(), amount: 0 }; // amount = 0 → QR không kèm số tiền, người ủng hộ nhập trên ứng dụng ngân hàng
 const qrBox = $('#qf-qr');
-const QF_BANK = 'BIDV'; // ngân hàng thụ hưởng hiển thị trên thẻ QR (khóa trong QF_BANKS)
+const QF_BANK = 'MB'; // ngân hàng thụ hưởng hiển thị trên thẻ QR (khóa trong QF_BANKS)
 // Vẽ QR + thông tin chuyển khoản theo ngân hàng QF_BANK và mã ủng hộ
 const renderQr = () => {
   const bank = QF_BANK;
-  const account = qfAccount(bank);
+  const account = QF_ACCOUNT;
   $('#qf-qr-account').textContent = account;
   $('#qf-qr-holder').textContent = QF_HOLDER;
   $('#qf-qr-bank-short').textContent = bankShort(bank);
   $('#qf-qr-bank-name').textContent = bankShort(bank);
-  $('#qf-qr-memo').textContent = qf.memo;
   $('#qf-qr-image').innerHTML = qrSvg(`${bank}|${account}|${qf.amount}|${qf.memo}`);
 };
 renderQr();
@@ -138,7 +134,7 @@ qrBox.addEventListener('click', async (event) => {
   if (!copyBtn) return;
   const kind = copyBtn.dataset.qrCopy;
   const text = $(`#qf-qr-${kind}`).textContent;
-  const done = { account: 'Đã sao chép số tài khoản.', holder: 'Đã sao chép tên chủ tài khoản.', memo: 'Đã sao chép nội dung chuyển khoản. Vui lòng giữ nguyên nội dung này khi chuyển khoản.' }[kind];
+  const done = { account: 'Đã sao chép số tài khoản.', holder: 'Đã sao chép tên chủ tài khoản.' }[kind];
   if (await copyText(text)) showToast(done);
   else showToast(`Không thể sao chép tự động. Vui lòng sao chép: ${text}`, 'error');
 });
@@ -154,18 +150,18 @@ docTabs.forEach((tab) => {
   });
 });
 
-// ---------- Tab Khoản ủng hộ: danh sách ủng hộ vào Quỹ chung (không gồm khoản ủng hộ chương trình) — tìm theo chữ (tài khoản · lời nhắn) · 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
-// DỮ LIỆU MINH HỌA: 57 khoản ủng hộ sinh từ mẫu, mới nhất trước; tên hiển thị đầy đủ, lời nhắn in nghiêng dưới tên. Khi triển khai lấy từ hệ thống giao dịch đã đối soát.
+// ---------- Tab Khoản ủng hộ: danh sách ủng hộ vào Quỹ chung (không gồm khoản ủng hộ chương trình) — tìm theo chữ (tài khoản · nội dung chuyển khoản) · 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
+// DỮ LIỆU MINH HỌA: 57 khoản ủng hộ sinh từ mẫu, mới nhất trước; tên hiển thị đầy đủ (không kèm lời nhắn dưới tên). Khi triển khai lấy từ hệ thống giao dịch đã đối soát.
 const DONORS_PER_PAGE = 10;
+const toAscii = (text) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
 const QF_DONORS = (() => {
   const names = ['Nguyễn Văn An', 'Công ty TNHH Minh Phát', 'Người ủng hộ ẩn danh', 'Trần Thị Bình', 'Nhóm Thiện Nguyện Xanh', 'Lê Hoàng Nam', 'Phạm Thu Cúc', 'Tập thể cán bộ Trường THCS Đoàn Kết', 'Vũ Minh Quân', 'Đặng Thu Hà', 'Hoàng Minh Khoa', 'Bùi Thanh Lan'];
   const amounts = [2000000, 5000000, 500000, 200000, 10000000, 1000000, 300000, 1500000, 50000000, 100000, 3000000, 700000];
-  const notes = ['Lan tỏa yêu thương', 'Mong mọi người sớm vượt qua khó khăn, bình an trở lại sau cơn bão', '', 'Ủng hộ các em nhỏ vùng cao', 'Ủng hộ đồng bào vùng lũ', 'Cùng nhau vượt qua thiên tai', '', 'Gửi chút tấm lòng', 'Đồng hành cùng Hội Chữ thập đỏ Việt Nam', 'Cố lên bà con nhé!', '', 'Chúc mọi người bình an'];
   const start = new Date(2026, 10, 18, 9, 45);
   return Array.from({ length: 57 }, (_, i) => ({
     name: names[i % names.length],
     amount: amounts[(i * 7) % amounts.length],
-    note: notes[(i * 5) % notes.length],
+    memo: names[i % names.length] === 'Người ủng hộ ẩn danh' ? 'UNG HO QUY NHAN DAO' : `${toAscii(names[i % names.length]).toUpperCase()} UNG HO QUY NHAN DAO`, // nội dung CK như trên sao kê (không dấu, in hoa)
     time: new Date(start.getTime() - (i * 110 + (i % 3) * 17) * 60000), // lùi dần → luôn mới nhất trước
   }));
 })();
@@ -174,7 +170,7 @@ const donorRows = $('[data-qf-donor-rows]');
 const donorFoot = $('[data-qf-donor-foot]');
 if (donorForm && donorRows && donorFoot) {
   const escHtml = (text) => String(text).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const normalize = (text) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+  const normalize = (text) => text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
   const pad = (n) => String(n).padStart(2, '0');
   const viDateTime = (d) => `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const arrow = '<svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg>';
@@ -200,16 +196,17 @@ if (donorForm && donorRows && donorFoot) {
     const slice = list.slice(first, first + DONORS_PER_PAGE);
     donorRows.innerHTML = slice.length ? slice.map((x, i) => `<tr>
       <td class="pf-col-index">${first + i + 1}</td>
-      <td><span class="pf-pv-donor${x.note ? ' has-note' : ''}"><b>${escHtml(x.name)}</b>${x.note ? `<span class="pv-donor-note is-quote" title="${escHtml(x.note)}">“${escHtml(x.note)}”</span>` : ''}</span></td>
+      <td><span class="pf-pv-donor"><b>${escHtml(x.name)}</b></span></td>
+      <td><span title="${escHtml(x.memo)}">${escHtml(x.memo)}</span></td>
       <td><b class="pf-pv-amount">${x.amount.toLocaleString('vi-VN')} đ</b></td>
       <td>${viDateTime(x.time)}</td>
-    </tr>`).join('') : '<tr><td class="qf-donor-empty" colspan="4">Không tìm thấy khoản quyên góp phù hợp.</td></tr>';
+    </tr>`).join('') : '<tr><td class="qf-donor-empty" colspan="5">Không tìm thấy khoản quyên góp phù hợp.</td></tr>';
     donorFoot.innerHTML = `<p class="pf-muted" aria-live="polite">${list.length ? `Hiển thị ${first + 1} – ${first + slice.length}/${list.length}` : 'Hiển thị 0/0'}</p>${list.length > DONORS_PER_PAGE ? pagerHtml(current, pages) : ''}`;
   };
-  // Lọc: chữ khớp tài khoản · lời nhắn (không dấu) → về trang 1
+  // Lọc: chữ khớp tài khoản · nội dung chuyển khoản (không dấu) → về trang 1
   const applyFilter = () => {
     const q = normalize(qInput.value.trim());
-    list = QF_DONORS.filter((x) => !q || normalize(`${x.name} ${x.note}`).includes(q));
+    list = QF_DONORS.filter((x) => !q || normalize(`${x.name} ${x.memo}`).includes(q));
     renderDonors(1);
   };
   donorForm.addEventListener('submit', (event) => { event.preventDefault(); applyFilter(); });
@@ -430,7 +427,7 @@ if (ruleDialog) {
     intro
       .from('.qf-crumb', { y: 20, autoAlpha: 0, duration: 0.8 })
       .from('.qf-line-in', { yPercent: 110, duration: 1.3, stagger: 0.12 }, 0.15)
-      .from('.qf-hero-lead, .qf-hero-actions > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.06 }, 0.5)
+      .from('.qf-hero-slogan, .qf-hero-lead, .qf-hero-actions > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.06 }, 0.5)
       .fromTo('.qf-shot', { clipPath: 'inset(100% 0% 0% 0% round 20px)' }, { clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.15 }, 0.2)
       .from('.qf-shot img', { scale: 1.3, duration: 2, stagger: 0.15 }, 0.2)
       .from('.qf-float', { y: 32, scale: 0.9, autoAlpha: 0, duration: 1, ease: 'back.out(1.6)', stagger: 0.12 }, 1.2);
