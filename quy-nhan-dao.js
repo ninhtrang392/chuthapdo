@@ -173,7 +173,7 @@ qrBox.addEventListener('click', async (event) => {
   else showToast(`Không thể sao chép tự động. Vui lòng sao chép: ${text}`, 'error');
 });
 
-// ==================== SECTION: MINH BẠCH & TRÁCH NHIỆM — tab tài liệu (Hồ sơ & quy chế · Quy chế vận hành · Báo cáo) ====================
+// ==================== SECTION: MINH BẠCH & TRÁCH NHIỆM — tab tài liệu (Hồ sơ & quy chế · Quy chế vận hành · Khoản ủng hộ) ====================
 const docTabs = $$('[data-doc-tab]');
 docTabs.forEach((tab) => {
   tab.addEventListener('click', (event) => {
@@ -184,7 +184,7 @@ docTabs.forEach((tab) => {
   });
 });
 
-// ---------- Tab Báo cáo: danh sách ủng hộ — 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
+// ---------- Tab Khoản ủng hộ: danh sách ủng hộ — 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
 // DỮ LIỆU MINH HỌA: 57 khoản ủng hộ sinh từ mẫu, mới nhất trước; tên đã che bớt. Khi triển khai lấy từ hệ thống giao dịch đã đối soát.
 const DONORS_PER_PAGE = 10;
 const QF_DONORS = (() => {
