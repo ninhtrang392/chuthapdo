@@ -184,25 +184,29 @@ docTabs.forEach((tab) => {
   });
 });
 
-// ---------- Tab Khoản ủng hộ: danh sách ủng hộ — 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
-// DỮ LIỆU MINH HỌA: 57 khoản ủng hộ sinh từ mẫu, mới nhất trước; tên đã che bớt. Khi triển khai lấy từ hệ thống giao dịch đã đối soát.
+// ---------- Tab Khoản ủng hộ: danh sách ủng hộ như bản ver01 — tìm theo chữ (tài khoản · chương trình · lời nhắn) + lọc chương trình · 10 dòng/trang, phân trang rút gọn “…” (kiểu nút .pf-page-btn như trang chi tiết chương trình) ----------
+// DỮ LIỆU MINH HỌA: 57 khoản ủng hộ sinh từ mẫu, mới nhất trước; tên hiển thị đầy đủ, lời nhắn in nghiêng dưới tên. Khi triển khai lấy từ hệ thống giao dịch đã đối soát.
 const DONORS_PER_PAGE = 10;
+const QF_PROGRAMS = ['Hỗ trợ khẩn cấp cho đồng bào bị thiệt hại do thiên tai', 'Chung tay vì cộng đồng', 'Khám chữa bệnh nhân đạo', 'Mái ấm nhân ái', 'Tiếp sức cho học sinh vùng cao đến trường'];
 const QF_DONORS = (() => {
-  const names = ['Nguyễn V*** A***', 'Công ty TNHH M*** P***', 'Người ủng hộ ẩn danh', 'Trần T*** B***', 'Nhóm T*** N*** X***', 'Lê H*** N***', 'Phạm T*** C***', 'Ngân hàng TMCP Đ*** D***', 'Vũ M*** Q***', 'Đặng T*** H***', 'Hoàng M*** K***', 'Bùi T*** L***'];
+  const names = ['Nguyễn Văn An', 'Công ty TNHH Minh Phát', 'Người ủng hộ ẩn danh', 'Trần Thị Bình', 'Nhóm Thiện Nguyện Xanh', 'Lê Hoàng Nam', 'Phạm Thu Cúc', 'Tập thể cán bộ Trường THCS Đoàn Kết', 'Vũ Minh Quân', 'Đặng Thu Hà', 'Hoàng Minh Khoa', 'Bùi Thanh Lan'];
   const amounts = [2000000, 5000000, 500000, 200000, 10000000, 1000000, 300000, 1500000, 50000000, 100000, 3000000, 700000];
   const notes = ['Lan tỏa yêu thương', 'Mong mọi người sớm vượt qua khó khăn, bình an trở lại sau cơn bão', '', 'Ủng hộ các em nhỏ vùng cao', 'Ủng hộ đồng bào vùng lũ', 'Cùng nhau vượt qua thiên tai', '', 'Gửi chút tấm lòng', 'Đồng hành cùng Hội Chữ thập đỏ Việt Nam', 'Cố lên bà con nhé!', '', 'Chúc mọi người bình an'];
   const start = new Date(2026, 10, 18, 9, 45);
   return Array.from({ length: 57 }, (_, i) => ({
     name: names[i % names.length],
+    program: QF_PROGRAMS[(i * 3) % QF_PROGRAMS.length],
     amount: amounts[(i * 7) % amounts.length],
     note: notes[(i * 5) % notes.length],
-    time: new Date(start.getTime() - i * (97 + (i % 5) * 23) * 60000),
+    time: new Date(start.getTime() - (i * 110 + (i % 3) * 17) * 60000), // lùi dần → luôn mới nhất trước
   }));
 })();
+const donorForm = $('[data-qf-donor-form]');
 const donorRows = $('[data-qf-donor-rows]');
 const donorFoot = $('[data-qf-donor-foot]');
-if (donorRows && donorFoot) {
+if (donorForm && donorRows && donorFoot) {
   const escHtml = (text) => String(text).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const normalize = (text) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
   const pad = (n) => String(n).padStart(2, '0');
   const viDateTime = (d) => `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const arrow = '<svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg>';
@@ -213,25 +217,39 @@ if (donorRows && donorFoot) {
       else if (numbers[numbers.length - 1] !== '…') numbers.push('…');
     }
     return `<div class="pf-pager"><div class="pf-pages">
-      <button class="pf-page-btn is-prev" type="button" data-qf-donor-page="${current - 1}" ${current === 1 ? 'disabled' : ''} aria-label="Trang trước">${arrow}</button>
+      <button class="pf-page-btn is-chev is-prev" type="button" data-qf-donor-page="${current - 1}" ${current === 1 ? 'disabled' : ''} aria-label="Trang trước">${arrow}</button>
       ${numbers.map((n) => (n === '…' ? '<span aria-hidden="true">…</span>'
         : `<button class="pf-page-btn" type="button" data-qf-donor-page="${n}" ${n === current ? 'aria-current="page"' : ''} aria-label="Trang ${n}">${n}</button>`)).join('')}
-      <button class="pf-page-btn" type="button" data-qf-donor-page="${current + 1}" ${current === pages ? 'disabled' : ''} aria-label="Trang sau">${arrow}</button>
+      <button class="pf-page-btn is-chev" type="button" data-qf-donor-page="${current + 1}" ${current === pages ? 'disabled' : ''} aria-label="Trang sau">${arrow}</button>
     </div></div>`;
   };
-  const pages = Math.ceil(QF_DONORS.length / DONORS_PER_PAGE);
+  const qInput = $('[data-qf-donor-q]', donorForm);
+  const programSelect = $('[data-qf-donor-program]', donorForm);
+  let list = QF_DONORS;
   const renderDonors = (page) => {
+    const pages = Math.max(1, Math.ceil(list.length / DONORS_PER_PAGE));
     const current = Math.min(Math.max(1, page), pages);
     const first = (current - 1) * DONORS_PER_PAGE;
-    const slice = QF_DONORS.slice(first, first + DONORS_PER_PAGE);
-    donorRows.innerHTML = slice.map((x, i) => `<tr>
+    const slice = list.slice(first, first + DONORS_PER_PAGE);
+    donorRows.innerHTML = slice.length ? slice.map((x, i) => `<tr>
       <td class="pf-col-index">${first + i + 1}</td>
       <td><span class="pf-pv-donor${x.note ? ' has-note' : ''}"><b>${escHtml(x.name)}</b>${x.note ? `<span class="pv-donor-note is-quote" title="${escHtml(x.note)}">“${escHtml(x.note)}”</span>` : ''}</span></td>
-      <td><b class="pf-pv-amount">${x.amount.toLocaleString('vi-VN')}đ</b></td>
+      <td>${escHtml(x.program)}</td>
+      <td><b class="pf-pv-amount">${x.amount.toLocaleString('vi-VN')} đ</b></td>
       <td>${viDateTime(x.time)}</td>
-    </tr>`).join('');
-    donorFoot.innerHTML = `<p class="pf-muted" aria-live="polite">Hiển thị ${first + 1} – ${first + slice.length}/${QF_DONORS.length}</p>${pagerHtml(current, pages)}`;
+    </tr>`).join('') : '<tr><td class="qf-donor-empty" colspan="5">Không tìm thấy khoản quyên góp phù hợp.</td></tr>';
+    donorFoot.innerHTML = `<p class="pf-muted" aria-live="polite">${list.length ? `Hiển thị ${first + 1} – ${first + slice.length}/${list.length}` : 'Hiển thị 0/0'}</p>${list.length > DONORS_PER_PAGE ? pagerHtml(current, pages) : ''}`;
   };
+  // Lọc: chữ khớp tài khoản · chương trình · lời nhắn (không dấu) + đúng chương trình đã chọn → về trang 1
+  const applyFilter = () => {
+    const q = normalize(qInput.value.trim());
+    const program = programSelect.value;
+    list = QF_DONORS.filter((x) => (!q || normalize(`${x.name} ${x.program} ${x.note}`).includes(q)) && (!program || x.program === program));
+    renderDonors(1);
+  };
+  donorForm.addEventListener('submit', (event) => { event.preventDefault(); applyFilter(); });
+  qInput.addEventListener('input', applyFilter);
+  programSelect.addEventListener('change', applyFilter);
   donorFoot.addEventListener('click', (event) => {
     const button = event.target.closest('[data-qf-donor-page]');
     if (!button || button.disabled) return;
@@ -541,46 +559,6 @@ if (ruleDialog) {
     return () => {
       hero.removeEventListener('pointermove', move);
       hero.removeEventListener('pointerleave', reset);
-    };
-  });
-
-  // ---------- HOẠT ĐỘNG (chuột): ảnh nổi đi theo con trỏ ----------
-  mm.add(`${fine} and ${motion}`, () => {
-    const list = $('.qf-acts-list');
-    const media = $('.qf-cursor-media');
-    const images = new Map();
-    $$('.qf-act a', list).forEach((link) => {
-      const img = Object.assign(document.createElement('img'), { src: link.dataset.img, alt: '', decoding: 'async' });
-      media.append(img);
-      images.set(link, img);
-    });
-    gsap.set(media, { xPercent: -50, yPercent: -50, scale: 0.6 });
-    const xTo = gsap.quickTo(media, 'x', { duration: 0.6, ease: 'power3' });
-    const yTo = gsap.quickTo(media, 'y', { duration: 0.6, ease: 'power3' });
-    const rTo = gsap.quickTo(media, 'rotation', { duration: 0.8, ease: 'power3' });
-    let lastX = 0;
-    const move = (event) => {
-      xTo(event.clientX + 40);
-      yTo(event.clientY);
-      rTo(gsap.utils.clamp(-10, 10, (event.clientX - lastX) * 0.6));
-      lastX = event.clientX;
-    };
-    const show = (event) => {
-      const link = event.target.closest('.qf-act a');
-      if (!link) return;
-      images.forEach((img, key) => img.classList.toggle('is-on', key === link));
-      gsap.to(media, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'expo.out', overwrite: 'auto' });
-    };
-    const hide = () => gsap.to(media, { autoAlpha: 0, scale: 0.6, duration: 0.4, ease: 'power3.in', overwrite: 'auto' });
-    gsap.set(media, { x: innerWidth / 2, y: innerHeight / 2 });
-    list.addEventListener('pointermove', move);
-    list.addEventListener('pointerover', show);
-    list.addEventListener('pointerleave', hide);
-    return () => {
-      list.removeEventListener('pointermove', move);
-      list.removeEventListener('pointerover', show);
-      list.removeEventListener('pointerleave', hide);
-      media.replaceChildren();
     };
   });
 
