@@ -36,46 +36,6 @@ document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
   button.addEventListener('click', () => dialog.close());
 });
 
-// ==================== HERO: "NGỌN ĐÈN" giãn đúng bằng 2 mép container ====================
-// Đo nét chữ thật bằng canvas (actualBoundingBox, bỏ lề trong của font) → đặt --t (cỡ chữ, số nguyên px) cho .gt-hero
-// để mép trái chữ N đầu và mép phải chữ N cuối chạm 2 mép container; bù lệch lề trong bằng translate.
-// Màn ≤600px: giữ cỡ chữ CSS (tên xuống 2 dòng).
-(() => {
-  const hero = document.querySelector('.gt-hero');
-  const title = hero && hero.querySelector('.gt-hero-title');
-  const name = title && title.querySelector('.gt-hero-name');
-  if (!name) return;
-  const ctx = document.createElement('canvas').getContext('2d');
-  const wide = window.matchMedia('(min-width: 601px)');
-  const fit = () => {
-    if (!wide.matches) {
-      hero.style.removeProperty('--t');
-      name.style.translate = '';
-      return;
-    }
-    const style = getComputedStyle(name);
-    const text = name.textContent.trim().toLocaleUpperCase('vi');
-    ctx.font = `${style.fontWeight} 100px ${style.fontFamily}`;
-    const m = ctx.measureText(text);
-    const ink = m.actualBoundingBoxLeft + m.actualBoundingBoxRight; // bề rộng nét chữ ở cỡ 100px
-    const width = title.clientWidth;
-    const size = Math.floor((width / ink) * 100);
-    const k = size / 100;
-    const inkLeft = (width - m.width * k) / 2 - m.actualBoundingBoxLeft * k; // chữ căn giữa → vị trí mép nét trái
-    const inkRight = inkLeft + ink * k;
-    hero.style.setProperty('--t', `${size}px`);
-    name.style.translate = `${Math.round(-(inkLeft + inkRight - width) / 2)}px 0`; // canh nét chữ vào giữa 2 mép
-  };
-  let frame = 0;
-  const refit = () => {
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(fit);
-  };
-  fit();
-  if (document.fonts) document.fonts.ready.then(fit);
-  window.addEventListener('resize', refit);
-})();
-
 // ==================== CHUYỂN ĐỘNG (GSAP + ScrollTrigger) ====================
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
@@ -88,14 +48,13 @@ if (window.gsap && window.ScrollTrigger) {
   if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
 
   mm.add('(prefers-reduced-motion: no-preference)', () => {
-    // ==================== HERO: vào trang — cúp nở ra, "NGỌN ĐÈN" trồi lên, chữ viết tay "Nhân ái" hiện dần từ trái sang ====================
-    // Cuộn: tên giải và cúp đứng yên đúng vị trí (cúp luôn ở chân banner, luôn hiển thị).
+    // ==================== HERO: vào trang — "NGỌN ĐÈN NHÂN ÁI" trồi lên, 3 ảnh trồi lên lần lượt ====================
+    // Cuộn: tên giải và cụm ảnh đứng yên đúng vị trí, luôn hiển thị.
     const hero = document.querySelector('.gt-hero');
     if (hero) {
       gsap.timeline({ defaults: { ease: 'expo.out' } })
         .from('.gt-hero-name', { yPercent: 18, autoAlpha: 0, duration: 1.3 }, 0.1)
-        .from('.gt-hero-cup', { y: 80, scale: 0.85, autoAlpha: 0, duration: 1.5 }, 0.3)
-        .fromTo('.gt-hero-script', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.4, ease: 'power2.inOut' }, 0.8)
+        .from('.gt-shot', { y: 60, autoAlpha: 0, duration: 1.3, stagger: 0.12 }, 0.3)
         .from('.gt-hero-side > *', { y: 32, autoAlpha: 0, duration: 1, stagger: 0.1 }, 0.9);
     }
 

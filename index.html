@@ -25,11 +25,13 @@
 
 <body>
     <!-- ==================== SECTION: PRELOADER (chỉ trang chủ) ==================== -->
-    <!-- Nền đỏ: logo trái tim hiện dần · câu trích dẫn dưới logo · 3 nguyên tắc trên cùng · đếm % góc trái dưới.
+    <!-- Nền đỏ: tên cổng in hoa · logo trái tim hiện dần · câu trích dẫn dưới logo · 3 nguyên tắc trên cùng · đếm % góc trái dưới.
          Tải xong → logo thu nhỏ, màn đỏ kéo lên để lộ hero (script.js › HERO: preloader → intro). -->
     <div class="preloader" aria-hidden="true">
         <!-- ---------- Khối giữa: logo + câu trích dẫn, căn giữa màn hình cả cụm ---------- -->
         <div class="preloader-center">
+            <!-- ---------- Tên cổng: chữ in hoa, trên logo trái tim ---------- -->
+            <p class="preloader-title">Cổng nhân đạo số quốc gia</p>
             <!-- ---------- Logo: trái tim ôm người (Emages/logo-demo/Embracing Hearts Logo.png, trắng nền trong suốt) ---------- -->
             <img class="preloader-logo" src="Emages/logo-demo/Embracing Hearts Logo.png" alt="" width="1288" height="1221" decoding="async" />
             <!-- ---------- Câu trích dẫn (theo bộ giới thiệu Đề án Người Gần Nhất) ---------- -->
@@ -94,7 +96,7 @@
         <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
             <a href="ban-do-so.html">Bản đồ số</a>
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
-            <a href="quy-nhan-dao.html">Quỹ nhân đạo</a>
+            <a href="quy-nhan-dao.html">Quỹ Nhân đạo Việt Nam</a>
             <a href="nguoi-gan-nhat.html">Người gần nhất</a>
             <a href="giai-thuong.html">Giải thưởng nhân đạo</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
@@ -404,24 +406,24 @@
            Trang riêng dự án chưa có → nút Xem thêm tạm mở hộp thoại xem trước (data-panel); khi có trang, đổi href và bỏ data-panel. -->
                 <section class="section ngn" id="nguoi-gan-nhat" aria-labelledby="nguoi-gan-nhat-title">
                     <div class="container">
+                        <!-- ---------- Đầu section căn giữa (trên banner + danh sách): nhãn "Chương trình xã hội quốc gia" · tiêu đề · mô tả ---------- -->
+                        <div class="section-head ngn-intro">
+                            <p class="eyebrow">Chương trình xã hội quốc gia</p>
+                            <h2 class="section-title" id="nguoi-gan-nhat-title">Chương trình Người Gần Nhất</h2>
+                            <p class="section-lead">Người Gần Nhất là chương trình xã hội với tầm nhìn dài hạn do Hội Chữ thập đỏ Việt Nam chủ trì, VCCorp và Báo Tuổi Trẻ là đơn vị khởi xướng, nhằm xây dựng một cộng đồng Việt Nam nhân ái, đủ kiến thức và kỹ năng để biến lòng tốt thành hành động thiết thực, đúng lúc, đúng cách, trong đó người trẻ là lực lượng nòng cốt.</p>
+                        </div>
                         <div class="ngn-card" data-reveal>
                             <!-- ---------- Banner chương trình 16:9 (logo trong khung, đã có chữ) ---------- -->
                             <figure class="ngn-media"><img src="Emages/Ng%C6%B0%E1%BB%9Di%20G%E1%BA%A7n%20Nh%E1%BA%A5t/Banner/Banner%201600%C3%97900%20%E2%80%93%20Ngang%2016_9%20%C2%B7%20Logo%20khung.png" alt="Banner Chương trình Người Gần Nhất: logo chương trình trong khung, khẩu hiệu Gần để thấu hiểu – Gọi để kết nối – Giúp để lan tỏa nhân ái, cơ quan chủ trì Hội Chữ thập đỏ Việt Nam, đơn vị khởi xướng VCCorp và báo Tuổi Trẻ" width="1920" height="1080" loading="lazy" decoding="async" /></figure>
                             <div class="ngn-content">
-                                <!-- ---------- Giới thiệu chương trình: nhãn "Chương trình xã hội quốc gia" · tiêu đề · mô tả ---------- -->
-                                <div class="ngn-intro">
-                                    <p class="eyebrow">Chương trình xã hội quốc gia</p>
-                                    <h2 class="section-title" id="nguoi-gan-nhat-title">Chương trình Người Gần Nhất</h2>
-                                    <p class="section-lead">Người Gần Nhất là chương trình xã hội với tầm nhìn dài hạn do Hội Chữ thập đỏ Việt Nam chủ trì, VCCorp và Báo Tuổi Trẻ là đơn vị khởi xướng, nhằm xây dựng một cộng đồng Việt Nam nhân ái, đủ kiến thức và kỹ năng để biến lòng tốt thành hành động thiết thực, đúng lúc, đúng cách, trong đó người trẻ là lực lượng nòng cốt.</p>
-                                </div>
-                                <!-- ---------- 3 hoạt động: Học kỹ năng sơ cấp cứu · Nhận Huy hiệu · Tìm kiếm, tôn vinh, lan tỏa ---------- -->
-                                <ol class="ngn-list" aria-label="Chương trình Người Gần Nhất: Học kỹ năng sơ cấp cứu, Nhận Huy hiệu Người Gần Nhất, Tìm kiếm, tôn vinh, lan tỏa">
-                                    <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Học kỹ năng sơ cấp cứu</h3><p class="ngn-desc">Kết hợp công nghệ và thực hành trực tiếp cùng huấn luyện viên, đào tạo và cấp chứng chỉ theo giáo trình chuyên môn.</p></div></li>
+                                <!-- ---------- 3 hoạt động: Đào tạo 5 trụ cột năng lực (danh sách 5 năng lực) · Nhận Huy hiệu · Tìm kiếm, tôn vinh, lan tỏa ---------- -->
+                                <ol class="ngn-list" aria-label="Chương trình Người Gần Nhất: Đào tạo 5 trụ cột năng lực, Nhận Huy hiệu Người Gần Nhất, Tìm kiếm, tôn vinh, lan tỏa">
+                                    <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Đào tạo 5 trụ cột năng lực</h3><ul class="ngn-points"><li>Năng lực sơ cấp cứu và ứng phó khẩn cấp</li><li>Năng lực trợ giúp nhân đạo</li><li>Năng lực phòng ngừa và ứng phó thảm họa</li><li>Năng lực tham gia hoạt động nhân đạo</li><li>Năng lực công dân nhân ái trong thời đại số</li></ul></div></li>
                                     <li class="ngn-item"><span class="ngn-num">02</span><div><h3 class="ngn-name">Nhận Huy hiệu Người Gần Nhất</h3><p class="ngn-desc">Ghi nhận hành trình từ hiểu biết đến hành động qua 4 cấp độ: Nhận thức, Kỹ năng, Hành động, Lan tỏa.</p></div></li>
                                     <li class="ngn-item"><span class="ngn-num">03</span><div><h3 class="ngn-name">Tìm kiếm, tôn vinh, lan tỏa</h3><p class="ngn-desc">Tôn vinh những hành động giúp người đúng lúc, đúng cách, lan tỏa câu chuyện nhân ái và kỹ năng hữu ích đến cộng đồng.</p></div></li>
                                 </ol>
                                 <!-- ---------- Nút → trang riêng đề án & khóa học sơ cấp cứu (tạm: hộp thoại xem trước) ---------- -->
-                                <a class="button button-primary" href="nguoi-gan-nhat.html" data-magnetic>Tìm hiểu Chương trình &amp; Khóa học sơ cấp cứu<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                                <a class="button button-primary" href="nguoi-gan-nhat.html" data-magnetic>Tìm hiểu về chương trình Người Gần Nhất<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                             </div>
                         </div>
                     </div>
@@ -1116,7 +1118,7 @@
                 <!-- ==================== END SECTION: ĐƠN VỊ ĐỒNG HÀNH ==================== -->
 
                 <!-- ==================== SECTION: ĐƠN VỊ ĐỒNG HÀNH & PHÁT TRIỂN HỆ THỐNG ==================== -->
-                <!-- 3 slide: GTINX & BIDV · GTINX & Vietjet · GTINX & Camel — nội dung, ảnh Vietjet/Camel là DỮ LIỆU MINH HỌA (thay bằng nội dung chính thức).
+                <!-- 2 slide: GTINX & BIDV · GTINX & Vietjet — nội dung, ảnh Vietjet là DỮ LIỆU MINH HỌA (thay bằng nội dung chính thức).
            Dùng lại .partners-head (tiêu đề căn giữa), bố cục .sponsor-* (ảnh trái, chữ phải), ô logo .partner-logo (logo: Emages/Đối tác/) và dải trượt .pv-track của trang chương trình + chấm chỉ slide.
            Tự chuyển slide mỗi 6 giây, dừng khi rê chuột / focus (script.js). -->
                 <section class="section partners founders" id="phat-trien-he-thong" aria-labelledby="founders-title">
@@ -1130,7 +1132,7 @@
                     <div class="container founders-slider" data-reveal>
                         <div class="pv-track founders-track" id="founders-track" role="group" aria-roledescription="carousel" aria-label="Đơn vị đồng hành — tự chuyển mỗi 6 giây, dừng khi rê chuột">
                             <!-- ---------- Slide 1: GTINX & BIDV ---------- -->
-                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="1 / 3: GTINX và BIDV">
+                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="1 / 2: GTINX và BIDV">
                                 <figure class="sponsor-media media media-photo" style="--focus:50% 55%">
                                     <img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/picture6.avif" alt="Lễ ký kết thỏa thuận hợp tác toàn diện giữa BIDV và GTEL" width="820" height="432" loading="lazy" />
                                 </figure>
@@ -1150,7 +1152,7 @@
                             </article>
 
                             <!-- ---------- Slide 2: GTINX & Vietjet ---------- -->
-                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="2 / 3: GTINX và Vietjet">
+                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="2 / 2: GTINX và Vietjet">
                                 <figure class="sponsor-media media media-photo" style="--focus:50% 40%">
                                     <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-nhan-qua.jpg" alt="Trẻ em vùng cao nhận quà" loading="lazy" />
                                 </figure>
@@ -1168,33 +1170,12 @@
                                     </blockquote>
                                 </div>
                             </article>
-
-                            <!-- ---------- Slide 3: GTINX & Camel ---------- -->
-                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="3 / 3: GTINX và Camel">
-                                <figure class="sponsor-media media media-photo" style="--focus:50% 45%">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-den-truong.jpg" alt="Trẻ em vùng cao đến trường" loading="lazy" />
-                                </figure>
-                                <div class="sponsor-content">
-                                    <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
-                                    <h3 class="founders-logos"><span class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Logo%20GTINX.webp" alt="GTINX" width="6713" height="3650" loading="lazy" decoding="async" /></span><span class="sponsor-amp">&amp;</span>
-                                        <span
-                                            class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="Camel Beer" width="733" height="448" loading="lazy" decoding="async" /></span>
-                                    </h3>
-                                    <p class="sponsor-lead">Camel đồng sáng lập nền tảng, cùng GTINX và Hội Chữ thập đỏ Việt Nam kết nối nguồn lực tới những hoàn cảnh cần giúp đỡ.</p>
-                                    <p class="sponsor-meta">Phát triển hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đồng hành sáng lập: <strong>Camel</strong></p>
-                                    <blockquote class="sponsor-quote">
-                                        <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
-                                        <cite>— Hội Chữ thập đỏ Việt Nam</cite>
-                                    </blockquote>
-                                </div>
-                            </article>
                         </div>
 
                         <!-- ---------- Chấm chỉ slide: chấm dài = slide đang xem, bấm để chuyển (script.js) ---------- -->
                         <div class="founders-dots">
                             <button class="founders-dot" type="button" data-founders-slide="0" aria-controls="founders-track" aria-label="Slide 1: GTINX và BIDV" aria-current="true"></button>
                             <button class="founders-dot" type="button" data-founders-slide="1" aria-controls="founders-track" aria-label="Slide 2: GTINX và Vietjet"></button>
-                            <button class="founders-dot" type="button" data-founders-slide="2" aria-controls="founders-track" aria-label="Slide 3: GTINX và Camel"></button>
                         </div>
                     </div>
                 </section>
@@ -1316,7 +1297,7 @@
     <!-- ==================== END FLOW: khung ScrollSmoother ==================== -->
 
     <!-- ---------- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình — nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
-    <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
+    <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển hệ thống</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
 
     <!-- ---------- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) — nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
     <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>

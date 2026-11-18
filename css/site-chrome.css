@@ -9,7 +9,7 @@
 @media(max-width:1440px){
 :root{--header-h:80px}
 }
-@media(max-width:1240px){
+@media(max-width:1300px){
 :root{--header-h:72px}
 }
 @media(max-width:1120px){
@@ -73,15 +73,16 @@
 @media(max-width:1440px){
 .header{}
 .brand img{width:186px;height:44px}
-.navigation a,.nav-more-toggle{padding:12px 12px}
+.navigation a,.nav-more-toggle{padding:12px 10px}
 }
 @media(max-width:1360px){
-.navigation a,.nav-more-toggle{padding:12px 8px}
+.navigation a,.nav-more-toggle{padding:12px 6px}
 }
-@media(max-width:1240px){
+/* mốc 1300 (trước 1240) + đệm 4px: chừa chỗ cho tên dài "Quỹ Nhân đạo Việt Nam" (cùng styles.css) */
+@media(max-width:1300px){
 .header{gap:8px}
 .brand img{width:152px;height:36px}
-.navigation a,.nav-more-toggle{padding:12px 5px;font-size:13px}
+.navigation a,.nav-more-toggle{padding:12px 4px;font-size:13px}
 }
 @media(max-width:1120px){
 .header{gap:4px;padding:0 8px 0 14px;}

@@ -1,7 +1,7 @@
 // ==================== TRANG QUỸ NHÂN ĐẠO (GSAP) ====================
 // Header, footer, hộp thoại xem trước dùng chung với các trang khác.
 // Chuyển động: GSAP + ScrollTrigger (+ SplitText nếu tải được). Người dùng chọn giảm chuyển động → chỉ hiện nội dung tĩnh.
-// DỮ LIỆU MINH HỌA: số tài khoản, mã QR ở khung ủng hộ (khi vận hành lấy VietQR do ngân hàng đối tác của Quỹ cấp) · chương trình · thẻ "Vừa ủng hộ".
+// DỮ LIỆU MINH HỌA: số tài khoản, mã QR ở khung ủng hộ (khi vận hành lấy VietQR do ngân hàng đối tác của Quỹ cấp) · chương trình · dải Ủng hộ mới nhất.
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -59,6 +59,27 @@ const showToast = (message, type = 'success') => {
   toastTimer = setTimeout(hideToast, TOAST_TIME);
 };
 $('.pf-toast-close', toast).addEventListener('click', hideToast);
+
+// ==================== SECTION: ỦNG HỘ TRỰC TIẾP — băng thẻ chạy ngang: nhân bản danh sách để lặp liền mạch · nhãn thời gian ====================
+// DỮ LIỆU MINH HỌA: các thẻ trong HTML. Khi triển khai thật, dựng danh sách từ luồng giao dịch của Quỹ (WebSocket / polling).
+const liveTrack = $('.qf-live-marquee .partner-track');
+if (liveTrack) {
+  const liveList = $('.feed-list', liveTrack);
+  const agoLabel = (ms) => {
+    const minutes = Math.floor((Date.now() - ms) / 60000);
+    return minutes < 1 ? 'Vừa xong' : `${minutes} phút trước`;
+  };
+  // Mốc thời gian các giao dịch (data-ago = số phút trước)
+  $$('.feed-item', liveList).forEach((item) => { item.dataset.time = Date.now() - Number(item.dataset.ago || 0) * 60000; });
+  // Bản sao cho vòng lặp (track chạy -50%), trình đọc màn hình bỏ qua
+  const clone = liveList.cloneNode(true);
+  clone.setAttribute('aria-hidden', 'true');
+  clone.removeAttribute('aria-label');
+  liveTrack.append(clone);
+  liveTrack.style.setProperty('--qf-live-dur', `${liveList.children.length * 8}s`); // ~8 giây / thẻ
+  const refreshTimes = () => $$('.feed-item', liveTrack).forEach((item) => { $('.feed-time span', item).textContent = agoLabel(Number(item.dataset.time)); });
+  setInterval(refreshTimes, 30000);
+}
 
 // ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: chỉ hiển thị thẻ VietQR + thông tin chuyển khoản (ngân hàng MB · STK 1999 · QUY HOAT DONG CHU THAP DO; số tiền nhập trên ứng dụng ngân hàng) ====================
 // Tài khoản nhận ủng hộ của Quỹ (mã QR vẫn là hình minh họa — khi triển khai lấy VietQR do ngân hàng cung cấp)
@@ -314,30 +335,34 @@ const QND_RULES = {
   '02': {
     title: 'Nguyên tắc tổ chức, hoạt động, phạm vi hoạt động và địa vị pháp lý',
     content: [
-      ['1. Quỹ tổ chức, hoạt động theo các nguyên tắc sau:'],
+      ['1. Quỹ được hình thành từ nguồn tài sản đóng góp ban đầu của sáng lập viên và tài sản của Quỹ trên cơ sở vận động tài trợ, vận động quyên góp của các tổ chức, cá nhân trong và ngoài nước theo quy định của pháp luật để thực hiện các hoạt động theo tôn chỉ, mục đích và Điều lệ của Quỹ.'],
+      ['2. Quỹ được tổ chức, hoạt động theo các nguyên tắc sau:'],
       [
-        'a) Không vì mục tiêu lợi nhuận; không phân chia tài sản của Quỹ trong quá trình hoạt động;',
+        'a) Thành lập và hoạt động không vì mục tiêu lợi nhuận;',
         'b) Tự nguyện, tự tạo vốn, tự trang trải kinh phí và tự chịu trách nhiệm trước pháp luật bằng tài sản của Quỹ;',
-        'c) Công khai, minh bạch về thu, chi, tài chính, tài sản; bảo đảm trách nhiệm giải trình với nhà tài trợ, người thụ hưởng, cơ quan nhà nước có thẩm quyền và xã hội;',
-        'd) Nhân đạo, vô tư, công bằng, không phân biệt đối xử; lấy con người và nhu cầu nhân đạo làm trung tâm; bảo đảm trợ giúp đúng đối tượng, đúng nhu cầu, kịp thời, hiệu quả;',
-        'đ) Tuân thủ Hiến pháp, pháp luật và Điều lệ này; chịu sự quản lý nhà nước của Bộ Nội vụ và các bộ, ngành liên quan đến lĩnh vực hoạt động của Quỹ;',
-        'e) Không thay thế trách nhiệm của Nhà nước và chức năng, nhiệm vụ của các cơ quan, tổ chức, các quỹ xã hội, quỹ từ thiện khác; hợp tác, kết nối trên cơ sở tự nguyện;',
-        'g) Lấy chuyển đổi số và đổi mới sáng tạo làm động lực; số hóa, công khai, minh bạch các hoạt động vận động, tiếp nhận, quản lý và phân bổ nguồn lực; bảo đảm an toàn thông tin và bảo vệ dữ liệu cá nhân theo quy định của pháp luật.',
+        'c) Công khai, minh bạch về tổ chức, hoạt động và thu, chi tài chính, tài sản của Quỹ;',
+        'd) Không phân chia tài sản của Quỹ trong quá trình Quỹ đang hoạt động;',
+        'đ) Tổ chức và hoạt động theo quy định của pháp luật và Điều lệ Quỹ được Bộ Nội vụ công nhận; chịu sự quản lý nhà nước của Bộ Nội vụ, Bộ Y tế và các bộ, ngành có liên quan đến lĩnh vực hoạt động của Quỹ;',
+        'e) Lấy chuyển đổi số và đổi mới sáng tạo làm động lực; số hóa, công khai, minh bạch các hoạt động vận động, tiếp nhận, quản lý và phân bổ nguồn lực; bảo đảm an toàn thông tin và bảo vệ dữ liệu cá nhân theo quy định của pháp luật.',
       ],
-      ['2. Quỹ có phạm vi hoạt động toàn quốc. Trong trường hợp cần thiết, Quỹ tham gia hoạt động hỗ trợ nhân đạo quốc tế theo quyết định của cấp có thẩm quyền và quy định của pháp luật.'],
-      ['3. Quỹ có tư cách pháp nhân, có con dấu, tài khoản riêng (bao gồm tài khoản ngoại tệ) mở tại ngân hàng theo quy định của pháp luật.'],
+      ['3. Quỹ có phạm vi hoạt động trên toàn quốc;'],
+      ['4. Quỹ có tư cách pháp nhân, có con dấu, tài khoản tại ngân hàng theo quy định của pháp luật.'],
     ],
   },
   '03': {
-    title: 'Sử dụng các khoản vận động, tài trợ có mục đích',
+    title: 'Sử dụng quỹ',
     content: [
-      ['1. Các khoản vận động, quyên góp, tài trợ để hỗ trợ trực tiếp cho đối tượng, địa bàn hoặc đợt vận động cụ thể phải được chuyển, chi 100% cho đúng đối tượng, địa bàn, mục đích đã công bố ngay sau khi tiếp nhận và hoàn thành thủ tục theo quy định.'],
-      ['2. Khoản tài trợ có mục đích phải được sử dụng đúng mục đích và thỏa thuận hợp pháp với nhà tài trợ; không được chuyển sang tích lũy, bảo toàn hoặc sử dụng cho mục đích khác, trừ trường hợp được nhà tài trợ đồng ý bằng văn bản hoặc không thể thực hiện mục đích ban đầu và được xử lý theo quy định của pháp luật.'],
-      ['3. Việc vận động, tiếp nhận, phân phối và sử dụng các nguồn đóng góp tự nguyện hỗ trợ nhân dân khắc phục khó khăn do thiên tai, hỏa hoạn, sự cố nghiêm trọng, bệnh nhân mắc bệnh hiểm nghèo thực hiện theo quy định của pháp luật về lĩnh vực này; việc tiếp nhận, sử dụng viện trợ không hoàn lại của cơ quan, tổ chức, cá nhân nước ngoài thực hiện theo quy định của pháp luật về quản lý, sử dụng viện trợ.'],
+      ['1. Chi tài trợ, bao gồm: Tài trợ cho các chương trình, các đề án nhằm mục đích nhân đạo, từ thiện, khuyến khích phát triển văn hóa, giáo dục, y tế, thể dục, thể thao, khoa học và các mục đích xã hội khác vì sự phát triển cộng đồng theo điều lệ Quỹ. Tài trợ theo sự ủy nhiệm của cá nhân, tổ chức và thực hiện các dự án tài trợ có địa chỉ theo quy định của pháp luật. Tài trợ cho tổ chức, cá nhân phù hợp với mục đích của Quỹ.'],
+      ['2. Đối với việc vận động, tiếp nhận, phân phối và sử dụng các nguồn đóng góp tự nguyện hỗ trợ người dân khắc phục khó khăn do thiên tai, hỏa hoạn, sự cố nghiêm trọng, các bệnh nhân mắc bệnh hiểm nghèo thực hiện theo quy định của Chính phủ về vận động, tiếp nhận, phân phối và sử dụng các nguồn đóng góp tự nguyện.'],
+      ['3. Việc tiếp nhận, sử dụng viện trợ từ tổ chức phi chính phủ nước ngoài thực hiện theo quy định của Chính phủ ban hành về Quy chế quản lý và sử dụng viện trợ phi chính phủ nước ngoài và các văn bản liên quan.'],
+      ['4. Chi thực hiện nhiệm vụ được giao từ kinh phí do ngân sách nhà nước hỗ trợ theo quy định pháp luật về ngân sách nhà nước.'],
+      ['5. Chi cho hoạt động quản lý quỹ.'],
+      ['6. Mua trái phiếu Chính phủ, gửi tiết kiệm đối với tiền nhàn rỗi của Quỹ (không bao gồm kinh phí ngân sách nhà nước cấp, nếu có).'],
+      ['7. Chi thực hiện hoạt động cung cấp dịch vụ hoặc các hoạt động khác theo quy định pháp luật và điều lệ của Quỹ.'],
     ],
   },
   '04': {
-    title: 'Chi hoạt động quản lý Quỹ',
+    title: 'Nội dung chi cho hoạt động quản lý Quỹ',
     content: [
       ['1. Chi hoạt động quản lý Quỹ gồm: tiền lương, tiền công, phụ cấp và các khoản đóng góp theo quy định; thuê trụ sở (nếu có); mua sắm, sửa chữa trang thiết bị; văn phòng phẩm, dịch vụ công cộng, thông tin liên lạc; hội họp, công tác phí; kiểm toán; phát triển nền tảng số và các khoản chi cần thiết khác cho bộ máy.'],
       ['2. Hội đồng quản lý Quỹ quyết định tỷ lệ chi cho hoạt động quản lý Quỹ nhưng không quá 10% tổng chi trong năm của Quỹ để tài trợ, hỗ trợ cho các chương trình, đề án theo Điều lệ này (không bao gồm các khoản: tài trợ bằng hiện vật; thực hiện nhiệm vụ do cơ quan nhà nước giao; tài trợ của Nhà nước để thực hiện dịch vụ công, đề tài nghiên cứu khoa học, chương trình mục tiêu, đề án do Nhà nước đặt hàng; các khoản tài trợ có số tiền, địa chỉ của người nhận). Quỹ phấn đấu duy trì tỷ lệ chi quản lý không quá 5%. Kinh phí quản lý chưa sử dụng hết trong năm được chuyển sang năm sau tiếp tục sử dụng.'],
@@ -422,7 +447,7 @@ if (ruleDialog) {
   const mm = gsap.matchMedia();
 
   mm.add(motion, () => {
-    // ---------- HERO: chữ trượt lên · mô tả, nút hiện dần · 3 ảnh mở từ dưới lên lần lượt (thẻ "Vừa ủng hộ" hiện sẵn, không bật ra) ----------
+    // ---------- HERO: chữ trượt lên · mô tả, nút hiện dần · 3 ảnh mở từ dưới lên lần lượt ----------
     const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
     intro
       .from('.qf-crumb', { y: 20, autoAlpha: 0, duration: 0.8 })
@@ -433,23 +458,12 @@ if (ruleDialog) {
     gsap.set('.qf-hero', { visibility: 'visible' });
     root.classList.remove('qf-motion');
 
-    // ---------- HERO: cuộn qua → ảnh, thẻ nổi trôi lên lệch tốc độ theo data-depth ----------
+    // ---------- HERO: cuộn qua → ảnh trôi lên lệch tốc độ theo data-depth ----------
     $$('.qf-hero-visual [data-depth]').forEach((el) => {
       gsap.to(el, {
         y: () => -80 * Number(el.dataset.depth), ease: 'none',
         scrollTrigger: { trigger: '.qf-hero', start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
       });
-    });
-
-    // ---------- HERO: thẻ "Vừa ủng hộ" — các dòng minh họa chạy luân phiên ----------
-    const liveItems = $$('.qf-live-list li');
-    gsap.set(liveItems.slice(1), { yPercent: 100, autoAlpha: 0 });
-    const live = gsap.timeline({ repeat: -1, delay: 2.4 });
-    liveItems.forEach((item, i) => {
-      const next = liveItems[(i + 1) % liveItems.length];
-      live
-        .to(item, { yPercent: -100, autoAlpha: 0, duration: 0.5, ease: 'power3.in' }, '+=2.2')
-        .fromTo(next, { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.6, ease: 'power3.out', immediateRender: false }, '<0.3');
     });
 
     // ---------- Tiêu đề section: từng dòng trượt lên trong mặt nạ (SplitText) ----------
@@ -500,10 +514,10 @@ if (ruleDialog) {
     gsap.set('.qf-hero', { visibility: 'visible' });
   });
 
-  // ---------- HERO (chuột): cụm ảnh lệch nhẹ theo con trỏ (thẻ nổi đứng yên) — mức lệch theo data-depth (dùng xPercent/yPercent để không đè y của cuộn) ----------
+  // ---------- HERO (chuột): cụm ảnh lệch nhẹ theo con trỏ — mức lệch theo data-depth (dùng xPercent/yPercent để không đè y của cuộn) ----------
   mm.add(`${fine} and ${motion}`, () => {
     const hero = $('.qf-hero');
-    const layers = $$('.qf-hero-visual [data-depth]:not(.qf-float)').map((el) => ({ // thẻ "Vừa ủng hộ" không lệch theo chuột → luôn ghim đúng chỗ phía trên ảnh nhỏ
+    const layers = $('.qf-hero-visual [data-depth]').map((el) => ({
       depth: Number(el.dataset.depth),
       x: gsap.quickTo(el, 'xPercent', { duration: 1, ease: 'power3' }),
       y: gsap.quickTo(el, 'yPercent', { duration: 1, ease: 'power3' }),

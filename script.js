@@ -716,6 +716,7 @@ if (window.gsap && window.ScrollTrigger) {
       const setNum = () => { num.textContent = Math.round(counter.value); };
       const drawIn = gsap.timeline()
         .from('.preloader-logo', { scale: 0.6, autoAlpha: 0, duration: 1.1, ease: 'expo.out' })
+        .from('.preloader-title', { y: 24, autoAlpha: 0, duration: 0.9, ease: 'expo.out' }, 0.2)
         .from('.preloader-meta span', { yPercent: 120, autoAlpha: 0, stagger: 0.08, duration: 0.8, ease: 'expo.out' }, 0.2)
         .from('.preloader-quote blockquote, .preloader-quote figcaption', { y: 24, autoAlpha: 0, stagger: 0.15, duration: 0.9, ease: 'expo.out' }, 0.6)
         .to(counter, { value: 86, duration: 1.6, ease: 'power2.out', onUpdate: setNum }, 0)
@@ -729,7 +730,7 @@ if (window.gsap && window.ScrollTrigger) {
         gsap.timeline({ onComplete: () => { preloader.remove(); root.classList.remove('hero-intro'); lockScroll(false); } })
           .to(counter, { value: 100, duration: 0.45, ease: 'power1.inOut', onUpdate: setNum })
           .to('.preloader-logo', { scale: 0, autoAlpha: 0, duration: 0.7, ease: 'power3.in' })
-          .to('.preloader-count, .preloader-meta, .preloader-quote', { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: 'power3.in' }, '<')
+          .to('.preloader-count, .preloader-meta, .preloader-title, .preloader-quote', { yPercent: -60, autoAlpha: 0, duration: 0.6, ease: 'power3.in' }, '<')
           .to(preloader, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'expo.inOut' }, '-=0.15')
           .add(heroIntro, '-=0.75');
       });
