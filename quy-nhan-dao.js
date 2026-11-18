@@ -422,15 +422,14 @@ if (ruleDialog) {
   const mm = gsap.matchMedia();
 
   mm.add(motion, () => {
-    // ---------- HERO: chữ trượt lên · mô tả, nút hiện dần · 3 ảnh mở từ dưới lên lần lượt · thẻ nổi bật ra ----------
+    // ---------- HERO: chữ trượt lên · mô tả, nút hiện dần · 3 ảnh mở từ dưới lên lần lượt (thẻ "Vừa ủng hộ" hiện sẵn, không bật ra) ----------
     const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
     intro
       .from('.qf-crumb', { y: 20, autoAlpha: 0, duration: 0.8 })
       .from('.qf-line-in', { yPercent: 110, duration: 1.3, stagger: 0.12 }, 0.15)
       .from('.qf-hero-slogan, .qf-hero-lead, .qf-hero-actions > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.06 }, 0.5)
       .fromTo('.qf-shot', { clipPath: 'inset(100% 0% 0% 0% round 20px)' }, { clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.15 }, 0.2)
-      .from('.qf-shot img', { scale: 1.3, duration: 2, stagger: 0.15 }, 0.2)
-      .from('.qf-float', { y: 32, scale: 0.9, autoAlpha: 0, duration: 1, ease: 'back.out(1.6)', stagger: 0.12 }, 1.2);
+      .from('.qf-shot img', { scale: 1.3, duration: 2, stagger: 0.15 }, 0.2);
     gsap.set('.qf-hero', { visibility: 'visible' });
     root.classList.remove('qf-motion');
 
@@ -501,10 +500,10 @@ if (ruleDialog) {
     gsap.set('.qf-hero', { visibility: 'visible' });
   });
 
-  // ---------- HERO (chuột): cụm ảnh, thẻ nổi lệch nhẹ theo con trỏ — mức lệch theo data-depth (dùng xPercent/yPercent để không đè y của cuộn) ----------
+  // ---------- HERO (chuột): cụm ảnh lệch nhẹ theo con trỏ (thẻ nổi đứng yên) — mức lệch theo data-depth (dùng xPercent/yPercent để không đè y của cuộn) ----------
   mm.add(`${fine} and ${motion}`, () => {
     const hero = $('.qf-hero');
-    const layers = $$('.qf-hero-visual [data-depth]').map((el) => ({
+    const layers = $$('.qf-hero-visual [data-depth]:not(.qf-float)').map((el) => ({ // thẻ "Vừa ủng hộ" không lệch theo chuột → luôn ghim đúng chỗ phía trên ảnh nhỏ
       depth: Number(el.dataset.depth),
       x: gsap.quickTo(el, 'xPercent', { duration: 1, ease: 'power3' }),
       y: gsap.quickTo(el, 'yPercent', { duration: 1, ease: 'power3' }),
