@@ -60,9 +60,9 @@ const showToast = (message, type = 'success') => {
 };
 $('.pf-toast-close', toast).addEventListener('click', hideToast);
 
-// ==================== SECTION: ỦNG HỘ TRỰC TIẾP — băng thẻ chạy ngang: nhân bản danh sách để lặp liền mạch · nhãn thời gian ====================
+// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — Ủng hộ trực tiếp (cột phải khung chuyển khoản): thẻ tự cuộn lên, nhân bản danh sách để lặp liền mạch · nhãn thời gian ====================
 // DỮ LIỆU MINH HỌA: các thẻ trong HTML. Khi triển khai thật, dựng danh sách từ luồng giao dịch của Quỹ (WebSocket / polling).
-const liveTrack = $('.qf-live-marquee .partner-track');
+const liveTrack = $('.qf-live-track');
 if (liveTrack) {
   const liveList = $('.feed-list', liveTrack);
   const agoLabel = (ms) => {
@@ -71,12 +71,12 @@ if (liveTrack) {
   };
   // Mốc thời gian các giao dịch (data-ago = số phút trước)
   $$('.feed-item', liveList).forEach((item) => { item.dataset.time = Date.now() - Number(item.dataset.ago || 0) * 60000; });
-  // Bản sao cho vòng lặp (track chạy -50%), trình đọc màn hình bỏ qua
+  // Bản sao cho vòng lặp (track cuộn lên -50%), trình đọc màn hình bỏ qua
   const clone = liveList.cloneNode(true);
   clone.setAttribute('aria-hidden', 'true');
   clone.removeAttribute('aria-label');
   liveTrack.append(clone);
-  liveTrack.style.setProperty('--qf-live-dur', `${liveList.children.length * 8}s`); // ~8 giây / thẻ
+  liveTrack.style.setProperty('--qf-live-dur', `${liveList.children.length * 5}s`); // ~5 giây / thẻ
   const refreshTimes = () => $$('.feed-item', liveTrack).forEach((item) => { $('.feed-time span', item).textContent = agoLabel(Number(item.dataset.time)); });
   setInterval(refreshTimes, 30000);
 }
