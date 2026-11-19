@@ -539,9 +539,9 @@ if (ruleDialog) {
     intro
       .from('.qf-crumb', { y: 20, autoAlpha: 0, duration: 0.8 })
       .from('.qf-line-in', { yPercent: 110, duration: 1.3, stagger: 0.12 }, 0.15)
-      .from('.qf-hero-slogan, .qf-hero-lead, .qf-hero-actions > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.06 }, 0.5)
-      .fromTo('.qf-shot', { clipPath: 'inset(100% 0% 0% 0% round 20px)' }, { clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.15 }, 0.2)
-      .from('.qf-shot img', { scale: 1.3, duration: 2, stagger: 0.15 }, 0.2);
+      .from('.qf-hero-en, .qf-hero-slogan, .qf-hero-lead, .qf-hero-actions > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.06 }, 0.5)
+      .fromTo('.qf-shot', { clipPath: 'inset(100% 0% 0% 0% round 24px)' }, { clipPath: 'inset(0% 0% 0% 0% round 24px)', duration: 1.4, ease: 'expo.inOut', stagger: 0.15 }, 0.2)
+      .from('.qf-shot img', { '--qf-zoom': 1.3, duration: 2, stagger: 0.15 }, 0.2); // phóng qua biến CSS để giữ skewX ngược của ảnh (ảnh vát)
     gsap.set('.qf-hero', { visibility: 'visible' });
     root.classList.remove('qf-motion');
 

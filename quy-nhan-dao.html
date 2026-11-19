@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20261119-20" />
-    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261119-22" />
+    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261119-36" />
     <!-- Có chuyển động → ẩn hero tới khi GSAP dựng xong (quy-nhan-dao.js gỡ lớp; quá 4 giây chưa gỡ thì tự gỡ) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -113,10 +113,12 @@
         <div class="container qf-hero-grid">
           <!-- ---------- Cột trái: chữ ---------- -->
           <div class="qf-hero-copy">
-            <!-- Tiêu đề 1 dòng "Quỹ Nhân đạo Việt Nam": có mặt nạ, chữ trượt lên khi vào trang · khẩu hiệu đỏ in hoa · mô tả -->
+            <!-- Tiêu đề 2 dòng "Quỹ Nhân đạo / Việt Nam" (đỏ đậm): mỗi dòng có mặt nạ, chữ trượt lên khi vào trang · gạch đỏ + tên tiếng Anh · khẩu hiệu đỏ in hoa · mô tả -->
             <h1 class="qf-hero-title" id="qf-title">
-              <span class="qf-line"><span class="qf-line-in">Quỹ Nhân đạo Việt Nam</span></span>
+              <span class="qf-line"><span class="qf-line-in">Quỹ Nhân đạo</span></span>
+              <span class="qf-line"><span class="qf-line-in">Việt Nam</span></span>
             </h1>
+            <p class="qf-hero-en" lang="en">Viet Nam Humanitarian Foundation</p>
             <p class="qf-hero-slogan">Kết nối nguồn lực – Lan tỏa nhân ái</p>
             <p class="section-lead qf-hero-lead">Chung tay kết nối những tấm lòng, nguồn lực và hành động nhân đạo để kịp thời trợ giúp những người có hoàn cảnh khó khăn, xây dựng cộng đồng an toàn, nhân ái và phát triển bền vững.</p>
             <div class="qf-hero-actions">
@@ -125,11 +127,15 @@
             </div>
           </div>
 
-          <!-- ---------- Cột phải: cụm 3 ảnh so le — ảnh lớn trái, 2 ảnh nhỏ xếp dọc phải (data-depth: độ trôi khi cuộn / theo chuột) ---------- -->
+          <!-- ---------- Cột phải: khung trắng chứa cụm 3 ảnh — ảnh lớn trái (mép cong), 2 ảnh nhỏ xếp dọc phải (data-depth trên khung: độ trôi khi cuộn / theo chuột) ---------- -->
           <div class="qf-hero-visual">
-            <figure class="qf-shot qf-shot--main" data-depth="0.4"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Sharing%20Compassion,%20One%20Heart%20at%20a%20Time.png" alt="Đôi tay tình nguyện viên Chữ thập đỏ trao trái tim đỏ cho cụ bà đội nón lá" width="1254" height="1254" /></figure>
-            <figure class="qf-shot qf-shot--top" data-depth="0.4"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/H%E1%BB%99p%20quy%C3%AAn%20g%C3%B3p%20v%E1%BB%9Bi%20tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%E0%AA%BE%E0%AA%82%E0%AA%9A.png" alt="Nhóm bạn trẻ cùng chuẩn bị hộp quyên góp in hình trái tim đỏ" width="1672" height="941" /></figure>
-            <figure class="qf-shot qf-shot--bottom" data-depth="0.4"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/s%E1%BB%ADa%20m%C3%A1i%20nh%C3%A0%20sau%20b%C3%A3o.png" alt="Tình nguyện viên Chữ thập đỏ cùng người dân lợp lại mái nhà sau bão" width="1672" height="941" /></figure>
+            <!-- Khung trắng (mép trái cong vòng cung) chứa 3 ảnh + dải đỏ; data-depth trên khung → cả khung trôi khi cuộn / theo chuột -->
+            <div class="qf-hero-frame" data-depth="0.4">
+              <span class="qf-hero-arc" aria-hidden="true"></span><!-- dải đỏ cong ôm ngoài góc trên-trái khung trắng -->
+              <figure class="qf-shot qf-shot--main"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Sharing%20Compassion,%20One%20Heart%20at%20a%20Time.png" alt="Đôi tay tình nguyện viên Chữ thập đỏ trao trái tim đỏ cho cụ bà đội nón lá" width="1254" height="1254" /></figure>
+              <div class="qf-shot-wrap qf-shot-wrap--top"><figure class="qf-shot qf-shot--top"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/H%E1%BB%99p%20quy%C3%AAn%20g%C3%B3p%20v%E1%BB%9Bi%20tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%E0%AA%BE%E0%AA%82%E0%AA%9A.png" alt="Nhóm bạn trẻ cùng chuẩn bị hộp quyên góp in hình trái tim đỏ" width="1672" height="941" /></figure></div>
+              <div class="qf-shot-wrap qf-shot-wrap--bottom"><figure class="qf-shot qf-shot--bottom"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/s%E1%BB%ADa%20m%C3%A1i%20nh%C3%A0%20sau%20b%C3%A3o.png" alt="Tình nguyện viên Chữ thập đỏ cùng người dân lợp lại mái nhà sau bão" width="1672" height="941" /></figure></div>
+            </div>
           </div>
         </div>
       </section>
@@ -261,6 +267,8 @@
           <div>
             <h2 class="section-title" id="qf-about-title" data-split>Một điểm kết nối, nhiều hành trình nhân ái</h2>
             <p class="section-lead">Quỹ Nhân đạo Việt Nam (Viet Nam Humanitarian Foundation – VNHF) là quỹ từ thiện do<br />Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam sáng lập, hoạt động không vì mục tiêu lợi nhuận, phạm vi toàn&nbsp;quốc.</p>
+            <!-- ---------- Văn bản pháp lý: Quyết định của Bộ Nội vụ (nhãn bo tròn, icon tài liệu) ---------- -->
+            <p class="qf-about-decree"><svg class="icon" aria-hidden="true"><use href="#document"/></svg>Quyết định số <strong>1421/QĐ-BNV</strong> ngày 19/11/2026 của Bộ Nội vụ</p>
           </div>
         </div>
 
@@ -274,7 +282,7 @@
 
           <!-- ---------- Phải: đoạn giới thiệu chức năng · 3 đặc điểm · mục mở/đóng "Tìm hiểu sứ mệnh và quản trị Quỹ" · link xem đầy đủ ---------- -->
           <div class="qf-about-main">
-            <p class="qf-about-intro" data-reveal>Quỹ huy động, tiếp nhận, quản lý và sử dụng hiệu quả các nguồn lực hợp pháp để hỗ trợ người có hoàn cảnh khó khăn, người dễ bị tổn thương; tham gia phòng ngừa, ứng phó và khắc phục hậu quả thiên tai, thảm họa, dịch bệnh, sự cố nghiêm trọng; góp phần thực hiện chính sách an sinh xã hội. Quỹ có tư cách pháp nhân, con dấu, tài khoản riêng; hoạt động theo Điều lệ được Bộ Nội vụ công nhận tại Quyết định số …/QĐ-BNV ngày …/…/2026.</p>
+            <p class="qf-about-intro" data-reveal>Quỹ huy động, tiếp nhận, quản lý và sử dụng hiệu quả các nguồn lực hợp pháp để hỗ trợ người có hoàn cảnh khó khăn, người dễ bị tổn thương; tham gia phòng ngừa, ứng phó và khắc phục hậu quả thiên tai, thảm họa, dịch bệnh, sự cố nghiêm trọng; góp phần thực hiện chính sách an sinh xã hội. Quỹ có tư cách pháp nhân, con dấu, tài khoản riêng; hoạt động theo Điều lệ được Bộ Nội vụ công nhận tại Quyết định số 1421/QĐ-BNV ngày 19/11/2026.</p>
 
             <ul class="qf-about-facts">
               <li class="qf-fact" data-reveal><span class="qf-fact-icon" aria-hidden="true"><svg class="icon"><use href="#hand-heart"/></svg></span><h3>Không vì lợi nhuận, không phân chia tài sản</h3></li>
@@ -696,6 +704,6 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="quy-nhan-dao.js?v=20261119-5" defer></script>
+    <script src="quy-nhan-dao.js?v=20261119-9" defer></script>
   </body>
 </html>

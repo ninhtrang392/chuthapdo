@@ -27,25 +27,39 @@
 /* ---------- 2 cột: chữ trái · cụm ảnh phải ---------- */
 .qf-hero-grid{flex:1;display:grid;grid-template-columns:minmax(448px,1fr) minmax(0,1.7fr);gap:48px 64px;align-items:center;align-content:center}
 /* ---------- Tiêu đề 2 dòng 48px (cỡ tiêu đề trang con), mặt nạ dòng cho chữ trượt lên ---------- */
-.qf-hero-title{font-size:40px;font-weight:700;line-height:50px;white-space:nowrap;color:var(--color-text)} /* "Quỹ nhân đạo Việt Nam" 1 dòng: 40px vừa cột chữ (cột tối thiểu 448px) */
+.qf-hero-title{font-size:64px;font-weight:700;line-height:72px;white-space:nowrap;color:var(--red)} /* 2 dòng "Quỹ Nhân đạo / Việt Nam", màu primary/base (#ed2429) */
 .qf-line{display:block;overflow:hidden;padding-block:4px}
 .qf-line-in{display:inline-block}
 /* ---------- Mô tả · nút ---------- */
-.qf-hero-slogan{margin-top:16px;font-size:20px;font-weight:700;line-height:28px;text-transform:uppercase;color:var(--red)} /* khẩu hiệu "Kết nối nguồn lực – Lan tỏa nhân ái" */
+.qf-hero-en{display:flex;align-items:center;gap:16px;margin-top:16px;font-size:18px;font-weight:500;line-height:26px;color:var(--color-text-muted)} /* gạch đỏ + tên tiếng Anh dưới tiêu đề */
+.qf-hero-en::before{content:"";flex:none;width:40px;height:3px;border-radius:2px;background:var(--red)}
+.qf-hero-slogan{margin-top:24px;font-size:20px;font-weight:700;line-height:28px;text-transform:uppercase;color:var(--red)} /* khẩu hiệu "Kết nối nguồn lực – Lan tỏa nhân ái" */
 .qf-hero-lead{margin-top:16px}
 .qf-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
 /* 2 nút banner đứng yên khi di chuột: bỏ nhấc 2px của .button; bỏ transition transform để không tranh với GSAP intro */
 .qf-hero-actions .button{transition:background .2s,box-shadow .2s}
 .qf-hero-actions .button:hover{transform:none}
 /* ---------- Cụm 3 ảnh so le: ảnh chính cao bên trái · 2 ảnh phải lệch tầng ---------- */
-.qf-hero-visual{position:relative;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);grid-template-rows:repeat(12,minmax(0,1fr));gap:16px;height:clamp(400px,calc(100svh - var(--header-h) - 120px),640px)} /* cao = màn hình − header − breadcrumb − lề → cả hero gói trong 1 màn hình */
-.qf-shot{position:relative;overflow:hidden;border-radius:20px;background:var(--color-surface-alt)}
-.qf-shot img{width:100%;height:100%;object-fit:cover}
-.qf-shot--main{grid-column:1;grid-row:1 / span 12}
+.qf-hero-visual{position:relative;height:clamp(400px,calc(100svh - var(--header-h) - 120px),640px)} /* cao = màn hình − header − breadcrumb − lề → cả hero gói trong 1 màn hình */
+/* Khung chứa 3 ảnh (không nền): lưới 2 cột, khe 10px — mép trái cong vòng cung (ngang 20% · dọc 50%) làm khuôn cho dải đỏ */
+.qf-hero-frame{position:relative;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);grid-template-rows:repeat(12,minmax(0,1fr));gap:10px;height:100%;border-radius:20% 24px 24px 20% / 50% 24px 24px 50%}
+/* Dải đỏ dày 10px ôm ngoài góc trên-trái khung trắng (cùng dạng vòng cung, lệch ra ngoài 18px), mờ dần về phía dưới + phải */
+.qf-hero-arc{position:absolute;z-index:0;left:-18px;top:-18px;width:calc(100% + 36px);height:calc(100% + 36px);border:10px solid transparent;border-top-color:var(--red);border-left-color:var(--red);border-radius:20% 0 0 20% / 50% 0 0 50%;pointer-events:none;transform:skewX(-5deg);-webkit-mask-image:linear-gradient(150deg,#000 0%,#000 8%,rgba(0,0,0,.35) 20%,transparent 34%);mask-image:linear-gradient(150deg,#000 0%,#000 8%,rgba(0,0,0,.35) 20%,transparent 34%)}
+/* Ảnh vát chéo: khung nghiêng skewX(-5deg) (cạnh đứng chéo kiểu “/”), ảnh bên trong nghiêng ngược lại để người vẫn đứng thẳng.
+   Tâm nghiêng của mọi khung = tâm dọc của cả cụm (transform-origin) → các khe giữa ảnh song song, dải đỏ khớp mép cong ảnh lớn */
+.qf-shot{position:relative;z-index:1;overflow:hidden;border-radius:24px;background:var(--color-surface-alt);transform:skewX(-5deg);transform-origin:50% 50%}
+.qf-shot img{--qf-zoom:1;width:120%;max-width:none;height:100%;margin-left:-10%;object-fit:cover;transform:skewX(5deg) scale(var(--qf-zoom,1))} /* rộng 120% để bù phần nghiêng, không hở góc; --qf-zoom: GSAP phóng ảnh khi vào trang */
+.qf-shot--main{grid-column:1;grid-row:1 / span 12;border-radius:28% 24px 24px 28% / 50% 24px 24px 50%} /* mép trái cong vòng cung, đồng tâm với khung */
 .qf-shot--main img{object-position:85% 50%} /* ảnh vuông "Sharing Compassion, One Heart at a Time" → khung đứng: lệch phải để giữ trọn mặt cụ bà, trái tim + đôi tay vẫn trong khung */
-.qf-shot--top{grid-column:2;grid-row:1 / span 6} /* 2 ảnh nhỏ (mỗi ảnh nửa chiều cao) xếp dọc, cao bằng ảnh lớn */
-.qf-shot--top img{object-position:45% 50%} /* khung gần vuông: giữ nhóm người quanh laptop ở giữa */
-.qf-shot--bottom{grid-column:2;grid-row:7 / span 6}
+/* 2 ảnh nhỏ: mép trái chéo (song song mép phải ảnh lớn), mép phải THẲNG — khung bọc .qf-shot-wrap thẳng đứng, bo 2 góc phải, lấn trái 32px để không cắt mép chéo;
+   ảnh nghiêng bên trong kéo dài 40px qua mép phải rồi bị khung cắt thẳng */
+.qf-shot-wrap{position:relative;z-index:1;margin-left:-32px;overflow:hidden;border-radius:0 24px 24px 0}
+.qf-shot-wrap--top{grid-column:2;grid-row:1 / span 6}
+.qf-shot-wrap--bottom{grid-column:2;grid-row:7 / span 6}
+.qf-shot-wrap .qf-shot{position:absolute;top:0;bottom:0;left:32px;right:-40px}
+.qf-shot--top{transform-origin:50% calc(100% + 5px)} /* 2 ảnh nhỏ (mỗi ảnh nửa chiều cao) xếp dọc, cao bằng ảnh lớn */
+.qf-shot--top img{object-position:100% 50%;margin-left:calc(-10% - 40px)} /* căn phải + lùi 40px (phần khung kéo dài bị che bên phải) → thấy trọn người nước ngoài ở mép phải ảnh */
+.qf-shot--bottom{transform-origin:50% -5px}
 .qf-shot--bottom img{object-position:50% 50%} /* khung gần vuông: giữ 3 người đang lợp mái ở giữa */
 
 /* ==================== SECTION: CÙNG QUỸ VUN ĐẮP NHỮNG ĐIỀU TỐT ĐẸP ==================== */
@@ -152,6 +166,10 @@
 .qf-about-side{position:sticky;top:calc(var(--header-h) + 40px);align-self:start}
 /* ---------- Đầu section căn giữa: mô tả rộng hơn để đoạn giới thiệu Quỹ gọn trong 3 dòng ---------- */
 .qf-about .section-lead{max-width:800px} /* dòng 2 "Hội Chữ thập đỏ Việt Nam sáng lập, … phạm vi toàn quốc." ≈ 779px → trọn 1 dòng */
+/* Nhãn Quyết định 1421/QĐ-BNV dưới mô tả: viên bo tròn nền đỏ rất nhạt, icon tài liệu đỏ, số quyết định đậm */
+.qf-about-decree{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 16px;border:1px solid #fadede;border-radius:999px;background:#fff7f7;font-size:14px;line-height:20px;color:var(--color-text)}
+.qf-about-decree .icon{flex:none;width:18px;height:18px;color:var(--red)}
+.qf-about-decree strong{font-weight:700;color:var(--red)}
 @media(max-width:899px){.qf-about .section-lead br{display:none}} /* màn hẹp: bỏ ngắt dòng cố định, chữ tự chảy (tránh rơi chữ "do") */
 .qf-about-photo{overflow:hidden;border-radius:20px;aspect-ratio:4/3;background:var(--color-surface-alt)}
 .qf-about-photo img{width:100%;height:100%;object-fit:cover}
@@ -367,10 +385,14 @@
   .qf-step-icon{width:56px;height:56px;border-radius:12px}
   .qf-step-icon .icon{width:26px;height:26px}
   .qf-docs-panel .pf-tabs{gap:24px}
-  .qf-hero-title{font-size:28px;line-height:36px} /* điện thoại: 28px để tiêu đề vẫn 1 dòng */
+  .qf-hero-title{font-size:36px;line-height:44px} /* điện thoại: tiêu đề 2 dòng 36px */
+  .qf-hero-arc{display:none} /* điện thoại: bỏ dải đỏ cong cho gọn */
+  .qf-hero-en{font-size:16px;line-height:24px}
   .qf-hero-actions,.qf-hero-actions .button{width:100%}
-  .qf-hero-visual{height:440px;margin-inline:0;gap:8px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
-  .qf-shot{border-radius:16px}
+  .qf-hero-visual{height:440px;margin-inline:0}
+  .qf-hero-frame{gap:8px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+  .qf-shot{border-radius:20px}
+  .qf-shot-wrap{border-radius:0 20px 20px 0}
   .qf-donate .pv-donate-pay{padding:24px 16px}
   .qf-donate .pv-qr-transfer dd b{white-space:normal;overflow-wrap:anywhere} /* màn hẹp: tên chủ tài khoản dài xuống dòng, không đè nút Sao chép */
   .qf-about-facts{grid-template-columns:minmax(0,1fr)}
