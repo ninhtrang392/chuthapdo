@@ -5935,6 +5935,27 @@
         text-wrap: wrap;
       }
     }
+  
+    /* Hero: "Người Gần Nhất" theo UI kit Display/Hero Accent (72/78 Bold) — co theo màn để luôn nằm 1 dòng trong cột chữ */
+    html body main#main#main#main .hero h1.hero-title-line em.accent {
+      display: block !important;
+      font-size: clamp(44px, 4.8vw, 72px) !important;
+      line-height: 1.08 !important;
+      font-weight: 700 !important;
+      margin-top: 4px !important;
+      white-space: nowrap;
+    }
+
+    html body main#main#main#main .hero h1.hero-title-line em.accent::before {
+      content: none;
+    }
+
+    /* "Người Gần Nhất" cố định 72px từ màn 1440 (vừa cột chữ: chữ ~570px / cột ~573px); màn nhỏ hơn vẫn co để không tràn */
+    @media (min-width: 1440px) {
+      html body main#main#main#main .hero h1.hero-title-line em.accent {
+        font-size: 72px !important;
+      }
+    }
   </style>
 </head>
 
