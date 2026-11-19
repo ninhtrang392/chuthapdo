@@ -173,10 +173,10 @@
 .footer-bottom p{margin:0;font-size:13px;color:var(--color-text-muted)}
 .footer-credit{text-align:center}
 .footer-stat{display:inline-flex;align-items:center;gap:6px}
-.footer-stat-online{justify-self:start}
+.footer-stat-online{justify-self:end}
 .footer-stat-total{justify-self:end}
-/* Đơn vị phát triển hệ thống + logo GTINX: góc phải thanh cuối (thay Tổng số lượt; trang Đăng nhập không có footer vẫn dùng nhãn ghim .dev-tag) */
-.footer-dev{display:inline-flex;align-items:center;justify-self:end;gap:8px}
+/* Đơn vị phát triển hệ thống + logo GTINX: góc trái thanh cuối (lượt truy cập sang phải; trang Đăng nhập không có footer vẫn dùng nhãn ghim .dev-tag) */
+.footer-dev{display:inline-flex;align-items:center;justify-self:start;gap:8px}
 .footer-dev img{display:block;width:58px;height:14px;object-fit:contain}
 .footer-stat b{font-weight:600;color:var(--color-text);font-variant-numeric:tabular-nums}
 .footer-stat-dot{width:8px;height:8px;border-radius:50%;background:var(--color-green);box-shadow:0 0 0 3px rgba(0,108,69,.15)}
