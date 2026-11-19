@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-24" />
+    <link rel="stylesheet" href="styles.css?v=20261119-42" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -39,6 +39,7 @@
       <symbol id="hand-heart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 11.6s-4-2.4-4-5.1a2.1 2.1 0 0 1 4-1 2.1 2.1 0 0 1 4 1c0 2.7-4 5.1-4 5.1z"/><path d="M2.5 14.2h2.8l3.9 1.5a1.45 1.45 0 0 1-.55 2.8H6.8"/><path d="M9.6 18.5h4.6l5.3-2.7a1.5 1.5 0 0 1 1.75 2.35l-3.7 3.1H8.4l-3.1-1.4H2.5"/></g></symbol>
       <symbol id="phone" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z" fill="currentColor"/></symbol>
       <symbol id="mail" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/></symbol>
+      <symbol id="chevron-right" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6.5 5.5 5.5-5.5 5.5"/></g></symbol>
       <symbol id="chevron-down" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6.5 9.5 5.5 5.5 5.5-5.5"/></g></symbol>
       <symbol id="globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/></g></symbol>
       <symbol id="facebook" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3.1h-3V8.5c0-.9.3-1.5 1.6-1.5h1.6V4.2c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H7.9v3.1h2.6V21h3Z"/></symbol>
@@ -80,24 +81,32 @@
     </header>
 
     <main id="main" class="gt-page">
-      <!-- ==================== SECTION: HERO GIẢI THƯỞNG — nền trắng · "NGỌN ĐÈN" Playfair Display in hoa (chữ cách điệu) đỏ mờ, giãn bằng 2 mép container · cúp pha lê ở giữa · "Nhân ái" Playfair nghiêng (như "vì một" trang chủ) · mô tả + trạng thái kỳ giải + số liệu góc trái ==================== -->
-      <!-- Vào trang: cúp nở ra, tên trồi lên, chữ viết tay hiện dần (giai-thuong.js › HERO). Cúp LUÔN hiển thị (không mờ / mất khi cuộn). -->
+      <!-- ==================== SECTION: HERO GIẢI THƯỞNG — nền sóng đỏ + ngôi sao (Glossy Red Waves and Glowing Star) · trái: "GIẢI THƯỞNG NHÂN ĐẠO VIỆT NAM" · "NGỌN ĐÈN / NHÂN ÁI" 2 dòng gradient đỏ · mô tả · 3 số liệu (chữ theo bản Vercel) · cả khối chữ rộng bằng dòng "NGỌN ĐÈN" · phải: huy chương (ảnh tách nền) ==================== -->
+      <!-- Vào trang: huy chương hiện dần, chữ trồi lên lần lượt (giai-thuong.js › HERO). -->
       <section class="gt-hero" id="top" aria-labelledby="gt-title">
+        <!-- ---------- Breadcrumb: trên cùng hero, ngay dưới header (như bản Vercel / trang Quỹ nhân đạo) ---------- -->
+        <div class="container gt-crumbs">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">Trang chủ</a><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg><span class="breadcrumb-current" aria-current="page">Giải thưởng nhân đạo</span>
+          </nav>
+        </div>
         <div class="container gt-hero-inner">
-          <!-- ---------- Tên giải: "NGỌN ĐÈN" lớn + "Nhân ái" viết tay đặt chéo bên phải ---------- -->
-          <h1 class="gt-hero-title" id="gt-title"><span class="gt-hero-name">Ngọn đèn</span> <em class="gt-hero-script">Nhân ái</em></h1>
-          <!-- ---------- Cúp pha lê: đứng giữa, đè lên phần dưới tên giải ---------- -->
-          <div class="gt-hero-cup"><img src="Emages/Gi%E1%BA%A3i%20th%C6%B0%E1%BB%9Fng/C%C3%BAp%20Pha%20L%C3%AA%20Ng%E1%BB%8Dn%20%C4%90%C3%A8n%20Nh%C3%A2n%20%C3%81i.png" alt="Cúp pha lê Giải thưởng Ngọn đèn Nhân ái" width="1031" height="1525" /></div>
-          <!-- ---------- Mô tả + nút (góc trái; màn hẹp: xuống dưới cúp, căn giữa) ---------- -->
-          <div class="gt-hero-side">
-            <!-- ---------- Mô tả · đường kẻ · 3 số liệu (.hero-stat trang chủ) ---------- -->
-            <p class="gt-hero-lead">Tôn vinh những trái tim nhân ái, lan tỏa hành động vì cộng đồng.</p>
-            <dl class="hero-stats-grid gt-hero-facts">
-              <div class="hero-stat"><dd>04</dd><dt>Hạng mục giải thưởng</dt></div>
-              <div class="hero-stat"><dd>Toàn quốc</dd><dt>Phạm vi tổ chức</dt></div>
-              <div class="hero-stat"><dd>Thường niên</dd><dt>Định kỳ trao giải</dt></div>
-            </dl>
+          <!-- ---------- Cột chữ ---------- -->
+          <div class="gt-hero-copy">
+            <!-- ---------- Tên giải: dòng nhỏ "GIẢI THƯỞNG NHÂN ĐẠO VIỆT NAM" + "NGỌN ĐÈN NHÂN ÁI" ---------- -->
+            <h1 class="gt-hero-title" id="gt-title"><span class="gt-hero-eyebrow">Giải thưởng nhân đạo Việt Nam</span> <span class="gt-hero-name"><span class="gt-hero-name-line">Ngọn đèn</span> <span class="gt-hero-name-line">nhân ái</span></span></h1>
+            <!-- ---------- Mô tả · 3 số liệu (.hero-stat trang chủ) ---------- -->
+            <div class="gt-hero-side">
+              <p class="gt-hero-lead">Tôn vinh những trái tim nhân ái, lan tỏa hành động vì cộng đồng.</p>
+              <dl class="hero-stats-grid gt-hero-facts">
+                <div class="hero-stat"><dd>05</dd><dt>Hạng mục giải thưởng</dt></div>
+                <div class="hero-stat"><dd>Toàn quốc</dd><dt>Phạm vi tổ chức</dt></div>
+                <div class="hero-stat"><dd>Thường niên</dd><dt>Định kỳ trao giải</dt></div>
+              </dl>
+            </div>
           </div>
+          <!-- ---------- Huy chương: ảnh tách nền (Huy-chuong-01.webp → giai-thuong-huy-chuong-3.webp, đã cắt sát viền, cao 1480px) ---------- -->
+          <div class="gt-hero-medal"><img src="Emages/giai-thuong-huy-chuong-3.webp" alt="Huy chương Giải thưởng nhân đạo Việt Nam Ngọn đèn nhân ái" width="843" height="1480" fetchpriority="high" /></div>
         </div>
       </section>
       <!-- ==================== END SECTION: HERO GIẢI THƯỞNG ==================== -->
@@ -132,16 +141,23 @@
           <!-- ---------- Đầu section: tiêu đề · mô tả, căn giữa ---------- -->
           <div class="gt-meaning-head">
             <h2 class="section-title" id="gt-meaning-title">Mỗi ngọn lửa nhỏ góp phần thắp sáng cộng đồng</h2>
-            <p class="section-lead gt-meaning-lead">“Ngọn đèn Nhân ái” biểu tượng cho lòng nhân ái được lan tỏa qua những hành động sẻ chia, nâng đỡ và trao gửi hy vọng, tiếp thêm sức mạnh cho con người vượt qua khó khăn.</p>
+            <p class="section-lead gt-meaning-lead">“Giải thưởng Nhân đạo Việt Nam – Ngọn đèn Nhân ái” là biểu tượng cho lòng nhân ái được lan tỏa<br />qua những hành động sẻ chia, nâng đỡ và trao gửi hy vọng, tiếp thêm sức mạnh cho con người vượt qua khó khăn.</p>
           </div>
           <!-- ---------- Thân (lấy từ bản Giải thưởng khách hàng gửi): 2 thẻ cao bằng nhau — trái quầng sáng + biểu trưng · phải 4 thông điệp; desktop ghim section, cuộn tới đâu ý đó sáng + quầng sáng tỏa rộng (giai-thuong.js) ---------- -->
           <div class="gt-meaning-layout">
-            <!-- ---------- Thẻ trái: quầng sáng tỏa (.gt-meaning-halo) + biểu trưng Trái Tim Lửa (lớp .is-lit bừng sáng khi cuộn) ---------- -->
+            <!-- ---------- Thẻ trái: slide 2 ảnh tự chuyển theo cuộn (ý 1–2 → biểu trưng, ý 3–4 → giấy chứng nhận; giai-thuong.js › setMeaningSlide) ---------- -->
             <div class="gt-meaning-card gt-meaning-card--visual">
-              <div class="gt-meaning-halo" aria-hidden="true"></div>
-              <div class="gt-meaning-mark">
-                <img src="Emages/bieu-trung-trai-tim-lua.webp" alt="Biểu trưng Trái Tim Lửa" width="600" height="800" loading="lazy" />
-                <img class="is-lit" src="Emages/bieu-trung-trai-tim-lua.webp" alt="" aria-hidden="true" width="600" height="800" loading="lazy" />
+              <!-- ---------- Slide 1: quầng sáng tỏa (.gt-meaning-halo) + biểu trưng Ngọn đèn Nhân ái (Emages/Giải thưởng/Biểu trưng Ngọn Đèn Nhân Ái.png → webp; lớp .is-lit bừng sáng khi cuộn) ---------- -->
+              <div class="gt-meaning-slide is-current" data-slide="0">
+                <div class="gt-meaning-halo" aria-hidden="true"></div>
+                <div class="gt-meaning-mark">
+                  <img src="Emages/bieu-trung-ngon-den-nhan-ai.webp" alt="Biểu trưng Giải thưởng nhân đạo Việt Nam Ngọn đèn Nhân ái" width="900" height="1214" loading="lazy" />
+                  <img class="is-lit" src="Emages/bieu-trung-ngon-den-nhan-ai.webp" alt="" aria-hidden="true" width="900" height="1214" loading="lazy" />
+                </div>
+              </div>
+              <!-- ---------- Slide 2: giấy chứng nhận Giải thưởng ---------- -->
+              <div class="gt-meaning-slide" data-slide="1" aria-hidden="true">
+                <img class="gt-meaning-cert" src="Emages/giay-chung-nhan-giai-thuong.webp" alt="Mẫu giấy chứng nhận Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái”" width="1600" height="1131" loading="lazy" />
               </div>
             </div>
 
@@ -223,15 +239,15 @@
           <!-- ---------- Đầu section: tiêu đề căn giữa ---------- -->
           <div class="section-head gt-head-center">
             <div>
-              <h2 class="section-title" id="gt-categories-title">Hạng mục Ngọn đèn Nhân ái</h2>
+              <h2 class="section-title" id="gt-categories-title">Hạng mục Giải thưởng Nhân đạo Việt Nam – Ngọn đèn Nhân ái</h2>
             </div>
           </div>
-          <!-- ---------- 5 thẻ hạng mục (tên + mô tả như trang chủ): desktop 5 cột 1 hàng · ≤1100px 2 cột · ≤600px 1 cột ---------- -->
+          <!-- ---------- 5 thẻ hạng mục (tên + mô tả như trang chủ): desktop 5 cột 1 hàng · ≤1100px 2 cột · ≤600px 1 cột · ảnh: Emages/giai-thuong-hang-muc/hang-muc-01…05.webp (ảnh ngang, chỉnh điểm cắt theo nhân vật ở styles.css) ---------- -->
           <ol class="event-cards" aria-label="Các hạng mục Giải thưởng Ngọn đèn Nhân ái">
             <li class="event-card">
               <div class="event-card-box">
                 <div class="event-card-photo" tabindex="0">
-                  <img src="Emages/th%E1%BA%BB%201.png" alt="Tình nguyện viên Chữ thập đỏ nắm tay trò chuyện cùng cụ bà trước hiên nhà vùng cao" loading="lazy" decoding="async" />
+                  <img src="Emages/giai-thuong-hang-muc/hang-muc-01.webp" width="1200" height="900" alt="Tình nguyện viên Chữ thập đỏ nắm tay trò chuyện cùng cụ bà trước hiên nhà vùng cao" loading="lazy" decoding="async" />
                   <div class="event-card-cover">
                     <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Hạng mục 01</p>
                     <h3 class="event-card-name">Cá nhân tiêu biểu</h3>
@@ -247,7 +263,7 @@
             <li class="event-card">
               <div class="event-card-box">
                 <div class="event-card-photo" tabindex="0">
-                  <img src="Emages/th%E1%BA%BB%202.png" alt="Tình nguyện viên Chữ thập đỏ trao thùng hàng cứu trợ cho cụ bà dân tộc vùng cao" loading="lazy" decoding="async" />
+                  <img src="Emages/giai-thuong-hang-muc/hang-muc-02.webp" width="1198" height="900" alt="Tình nguyện viên Chữ thập đỏ trao thùng hàng cứu trợ cho cụ bà dân tộc vùng cao" loading="lazy" decoding="async" />
                   <div class="event-card-cover">
                     <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Hạng mục 02</p>
                     <h3 class="event-card-name">Tổ chức đồng hành</h3>
@@ -263,7 +279,7 @@
             <li class="event-card">
               <div class="event-card-box">
                 <div class="event-card-photo" tabindex="0">
-                  <img src="Emages/th%E1%BA%BB%203.png" alt="Điểm khám sức khỏe lưu động của Hội Chữ thập đỏ: tình nguyện viên hướng dẫn cụ bà, bác sĩ đo huyết áp" loading="lazy" decoding="async" />
+                  <img src="Emages/giai-thuong-hang-muc/hang-muc-03.webp" width="1198" height="900" alt="Điểm khám sức khỏe lưu động của Hội Chữ thập đỏ: tình nguyện viên hướng dẫn cụ bà, bác sĩ đo huyết áp" loading="lazy" decoding="async" />
                   <div class="event-card-cover">
                     <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Hạng mục 03</p>
                     <h3 class="event-card-name">Sáng kiến, mô hình nhân đạo</h3>
@@ -279,7 +295,7 @@
             <li class="event-card">
               <div class="event-card-box">
                 <div class="event-card-photo" tabindex="0">
-                  <img src="Emages/th%E1%BA%BB%204.png" alt="Tình nguyện viên Chữ thập đỏ vác bao gạo, dìu cụ bà trên đường làng; đoàn tình nguyện viên mang quà phía sau" loading="lazy" decoding="async" />
+                  <img src="Emages/giai-thuong-hang-muc/hang-muc-04.webp" width="1198" height="900" alt="Tình nguyện viên Chữ thập đỏ vác bao gạo, dìu cụ bà trên đường làng; đoàn tình nguyện viên mang quà phía sau" loading="lazy" decoding="async" />
                   <div class="event-card-cover">
                     <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Hạng mục 04</p>
                     <h3 class="event-card-name">Cống hiến bền bỉ</h3>
@@ -295,7 +311,7 @@
             <li class="event-card">
               <div class="event-card-box">
                 <div class="event-card-photo" tabindex="0">
-                  <img src="Emages/tinh-nguyen-vien/tnv-cap-cuu-thang-cuon.webp" alt="Tình nguyện viên Chữ thập đỏ sơ cấp cứu người bị nạn bên thang cuốn" loading="lazy" decoding="async" />
+                  <img src="Emages/giai-thuong-hang-muc/hang-muc-05.webp?v=20261119" width="1376" height="768" alt="Tình nguyện viên Chữ thập đỏ hướng dẫn người dân hiến máu tại điểm hiến máu dưới mái che" loading="lazy" decoding="async" />
                   <div class="event-card-cover">
                     <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Hạng mục 05</p>
                     <h3 class="event-card-name">Hành động nhân đạo đặc biệt</h3>
@@ -342,12 +358,12 @@
           <div class="section-head gt-head-center">
             <div>
               <h2 class="section-title" id="gt-info-title">Xét chọn và đề cử</h2>
-              <p class="section-lead">Những tiêu chí để xét chọn, cách Giải thưởng được lan tỏa và thông tin để bạn đề cử một ngọn đèn nhân ái.</p>
+              <p class="section-lead gt-info-lead">Những tiêu chí để xét chọn, cách Giải thưởng được lan tỏa<br />và thông tin để bạn đề cử Giải thưởng Nhân đạo Việt Nam – Ngọn đèn Nhân ái.</p>
             </div>
           </div>
           <div class="gt-info-layout">
             <!-- ---------- Ảnh minh họa ---------- -->
-            <figure class="gt-info-media"><img src="Emages/Trao%20g%E1%BB%ADi%20y%C3%AAu%20th%C6%B0%C6%A1ng%20v%C3%B9ng%20cao-1.png" alt="Tình nguyện viên Chữ thập đỏ trao gửi yêu thương cho người dân vùng cao" width="1197" height="1314" loading="lazy" decoding="async" /></figure>
+            <figure class="gt-info-media"><img src="Emages/Trao%20g%E1%BB%ADi%20y%C3%AAu%20th%C6%B0%C6%A1ng%20v%C3%B9ng%20cao-1.png?v=20261119-2" alt="Tình nguyện viên trao gửi yêu thương cho người dân vùng cao" width="1197" height="1314" loading="lazy" decoding="async" /></figure>
             <!-- ---------- 3 mục mở/gập (details/summary, không cần JS) ---------- -->
             <div class="gt-info-grid">
               <!-- ---------- Tiêu chí xét chọn ---------- -->
@@ -391,9 +407,9 @@
       <section class="section gt-contact" id="lien-he-giai-thuong" aria-labelledby="gt-contact-title">
         <div class="container">
           <div class="gt-contact-card">
-            <!-- ---------- Chữ: tiêu đề · mô tả · thời gian / hồ sơ · liên hệ ---------- -->
+            <!-- ---------- Chữ: tiêu đề 1 dòng · mô tả · thời gian / hồ sơ · liên hệ ---------- -->
             <div class="gt-contact-copy">
-              <h2 class="section-title" id="gt-contact-title">Đề cử một ngọn đèn nhân ái</h2>
+              <h2 class="section-title gt-contact-title" id="gt-contact-title">Đề cử Giải thưởng Nhân đạo Việt Nam – Ngọn đèn Nhân ái</h2>
               <p class="section-lead">Cá nhân, tập thể có thể tự ứng cử hoặc được tổ chức, cộng đồng đề cử. Ban tổ chức tiếp nhận hồ sơ xét chọn hàng năm.</p>
               <ul class="gt-check-list gt-contact-notes">
                 <li><svg class="icon" aria-hidden="true"><use href="#check"/></svg><span><b>Thời gian tiếp nhận:</b> Từ 01/01 đến 30/11 hằng năm</span></li>
@@ -476,6 +492,6 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="giai-thuong.js?v=20261112-8" defer></script>
+    <script src="giai-thuong.js?v=20261119-10" defer></script>
   </body>
 </html>
