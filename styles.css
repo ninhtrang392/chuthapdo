@@ -4663,7 +4663,7 @@ html.pf-reg-lock{overflow:hidden}
 .gt-process.is-live .gt-step-dot{background:#fff;color:var(--red)}
 .gt-process.is-live .gt-step.is-done .gt-step-dot{background:var(--red);color:#fff}
 .gt-step-name{margin:0;font-size:17px;font-weight:600;line-height:24px;color:var(--color-primary)}
-.gt-step-desc{margin:0;font-size:14px;line-height:22px;color:var(--color-text-muted)}
+.gt-step-desc{margin:0;font-size:14px;line-height:22px;color:var(--color-text-muted);text-wrap:balance} /* chia dòng đều, không để 1 chữ lẻ dòng cuối; từ ghép nối &nbsp; trong HTML */
 
 /* ---------- Xét chọn và đề cử: trái ảnh bo góc · phải 3 mục mở/gập (details) — mục mở: bóng đậm hơn, chữ V lật lên ---------- */
 .gt-info{background:#fff}
