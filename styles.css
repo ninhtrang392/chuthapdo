@@ -410,6 +410,8 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .event-card-reveal{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1)}
 .event-card-reveal > div{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:0;overflow:hidden;opacity:0;transition:opacity .35s}
 .event-card-desc{margin:10px 0 0;font-size:15px;line-height:24px;color:rgba(255,255,255,.95)}
+#hanh-trinh .event-card-name{font-size:18px;line-height:26px} /* trang chủ: 18/26 để "Giải thưởng Nhân đạo Việt Nam" vừa 1 dòng ở thẻ hẹp nhất (~288px) — 4 thẻ đồng đều; trang Giải thưởng giữ 20/28 */
+@media(min-width:1101px) and (max-width:1429px){#hanh-trinh .event-card-name{font-size:16px;line-height:24px}} /* 4 thẻ 1 hàng nhưng thẻ hẹp (218–288px) → 16/24, dòng 1 vừa từ ~1300px (laptop 1366) */
 .event-card-name a{color:inherit}
 .event-card-name a:focus-visible{outline:none}
 .event-card-photo:has(a:focus-visible){outline:3px solid #fff;outline-offset:-6px} /* focus bàn phím: viền trắng trong thẻ */
