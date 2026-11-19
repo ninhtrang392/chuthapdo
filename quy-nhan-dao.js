@@ -141,13 +141,13 @@ if (liveList) {
   setInterval(refreshTimes, 30000);
 }
 
-// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: chỉ hiển thị thẻ VietQR + thông tin chuyển khoản (ngân hàng MB · STK 1999 · QUY HOAT DONG CHU THAP DO; số tiền nhập trên ứng dụng ngân hàng) ====================
+// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: chỉ hiển thị thẻ VietQR + thông tin chuyển khoản (ngân hàng MB · STK 1999 · QUỸ NHÂN ĐẠO VIỆT NAM; số tiền nhập trên ứng dụng ngân hàng) ====================
 // Tài khoản nhận ủng hộ của Quỹ (mã QR vẫn là hình minh họa — khi triển khai lấy VietQR do ngân hàng cung cấp)
 const QF_BANKS = {
   MB: 'Ngân hàng TMCP Quân đội (MB)',
 };
 const QF_ACCOUNT = '1999'; // số tài khoản
-const QF_HOLDER = 'QUY HOAT DONG CHU THAP DO'; // tên chủ tài khoản
+const QF_HOLDER = 'QUỸ NHÂN ĐẠO VIỆT NAM'; // tên chủ tài khoản
 const seededRandom = (text) => {
   let seed = [...text].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 233280, 7);
   return () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };

@@ -51,11 +51,12 @@
 /* ==================== SECTION: CÙNG QUỸ VUN ĐẮP NHỮNG ĐIỀU TỐT ĐẸP ==================== */
 /* ---------- 1 cột: trên = tiêu đề · mô tả · 2 ý (căn trái) + thẻ KPI (phải) | dưới = khung chuyển khoản · Ủng hộ trực tiếp ---------- */
 .qf-page > .qf-give{padding-block:24px 0} /* nội dung gọn vừa 1 màn hình (≥ 1536×864); rút khoảng trống với ảnh hero (mặc định .qf-page > .section 64px) — dưới: 64px đầu section kế tiếp */
-.qf-give-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:20px}
+.qf-give-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:48px} /* khoảng cách hàng tiêu đề + KPI ↔ khung chuyển khoản */
 /* ---------- Hàng trên: text căn trái (cột trái, thẳng khung chuyển khoản) · 2 thẻ KPI (cột phải, thẳng danh sách Ủng hộ trực tiếp) ---------- */
 .qf-give-top{display:grid;grid-template-columns:minmax(0,840px) minmax(0,1fr);align-items:stretch;gap:24px;width:100%} /* thẻ KPI cao bằng khối chữ (tiêu đề → 2 ý) */
 .qf-give-copy{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
-.qf-give-copy .section-lead{max-width:600px;margin-inline:0;text-wrap:pretty} /* đủ rộng cho 2 dòng, không để 1 chữ rớt dòng cuối */
+.qf-give-copy .section-lead{max-width:640px;margin-inline:0;text-wrap:pretty} /* dòng 1 "Đóng góp … các hoạt động" ≈ 600px → trọn 1 dòng */
+@media(max-width:767px){.qf-give-copy .section-lead br{display:none}} /* màn hẹp: bỏ ngắt dòng cố định, chữ tự chảy */
 /* ---------- 2 ý (dấu tích đỏ) cạnh nhau dưới mô tả, căn trái (màn hẹp xếp dọc) ---------- */
 .qf-give-meta{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:16px 32px;margin-top:12px} /* sát mô tả hơn */
 .qf-checks{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:12px 32px}
@@ -63,7 +64,10 @@
 .qf-checks .icon{width:20px;height:20px;color:var(--color-primary)}
 /* ---------- Thẻ KPI tổng ủng hộ: dùng lại .pf-view-stat (thẻ số liệu hồ sơ), 2 thẻ cạnh nhau · icon đỏ (tiền) / xanh lá (lượt) ---------- */
 .qf-give-kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin:0;container-type:inline-size} /* đổi cỡ nội dung thẻ theo bề rộng khối KPI (@container bên dưới) */
-.qf-give-kpis .pf-view-stat{gap:20px;padding:24px;border:0;box-shadow:0 8px 24px rgba(36,39,44,.08)} /* bỏ viền, đổ bóng mềm */
+.qf-give-kpis .pf-view-stat{gap:20px;padding:24px;border:1px solid transparent;border-radius:20px;box-shadow:0 8px 24px rgba(36,39,44,.08)} /* bỏ viền, bo 20px, đổ bóng mềm */
+.qf-give-kpis .pf-view-stat:nth-child(1){border-color:#fadede;background:linear-gradient(135deg,#fffafa 0%,#fdefef 100%)} /* nền hồng nhạt theo icon đỏ (tổng tiền) */
+.qf-give-kpis .pf-view-stat:nth-child(2){border-color:#d8eee1;background:linear-gradient(135deg,#f9fdfb 0%,#ebf7f0 100%)} /* nền xanh nhạt theo icon xanh (tổng lượt) */
+.qf-give-kpis .pf-view-stat-icon:is(.is-red,.is-green){background:#fff} /* ô icon nền trắng nổi trên nền thẻ màu */
 /* thẻ cao bằng khối chữ → phóng to icon, nhãn, số cho cân */
 .qf-give-kpis .pf-view-stat-icon{width:56px;height:56px;border-radius:14px}
 .qf-give-kpis .pf-view-stat-icon .icon{width:28px;height:28px}
@@ -147,7 +151,8 @@
 /* ---------- Cột trái (ghim) ---------- */
 .qf-about-side{position:sticky;top:calc(var(--header-h) + 40px);align-self:start}
 /* ---------- Đầu section căn giữa: mô tả rộng hơn để đoạn giới thiệu Quỹ gọn trong 3 dòng ---------- */
-.qf-about .section-lead{max-width:760px}
+.qf-about .section-lead{max-width:800px} /* dòng 2 "Hội Chữ thập đỏ Việt Nam sáng lập, … phạm vi toàn quốc." ≈ 779px → trọn 1 dòng */
+@media(max-width:899px){.qf-about .section-lead br{display:none}} /* màn hẹp: bỏ ngắt dòng cố định, chữ tự chảy (tránh rơi chữ "do") */
 .qf-about-photo{overflow:hidden;border-radius:20px;aspect-ratio:4/3;background:var(--color-surface-alt)}
 .qf-about-photo img{width:100%;height:100%;object-fit:cover}
 /* ---------- Đoạn giới thiệu chức năng (chữ phụ như .section-lead) ---------- */
@@ -267,6 +272,7 @@
 .qf-res-more>div{min-height:0;overflow:hidden}
 .qf-res-item.is-active .qf-res-more{grid-template-rows:1fr;opacity:1;transition-delay:0s,.25s}
 .qf-res-more p{max-width:620px;text-wrap:balance;margin-top:8px;font-size:15px;line-height:24px;color:rgba(255,255,255,.88)}
+@media(max-width:767px){.qf-res-more p br{display:none}} /* màn hẹp: bỏ ngắt dòng cố định trong mô tả tấm */
 
 /* ==================== SECTION: TIN TỨC ==================== */
 /* ---------- Tab 5 chuyên mục (.pf-tabs dùng chung) · lưới bài viết dùng lại .news-grid trang chủ ---------- */
