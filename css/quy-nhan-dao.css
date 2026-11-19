@@ -21,7 +21,7 @@
 
 /* ==================== SECTION: HERO QUỸ NHÂN ĐẠO ==================== */
 /* ---------- Khung hero vừa khít 1 màn hình (desktop): breadcrumb trên cùng · lưới 2 cột căn giữa phần còn lại ---------- */
-.qf-hero{display:flex;flex-direction:column;min-height:100svh;padding:calc(var(--header-h) + 16px) 0 40px}
+.qf-hero{display:flex;flex-direction:column;min-height:100svh;padding:calc(var(--header-h) + 16px) 0 24px} /* đáy 24px: section Cùng Quỹ vun đắp sát ảnh hero hơn */
 /* ---------- Breadcrumb: hàng riêng trên cùng, cách header 16px (như các trang khác) ---------- */
 .qf-crumbs{margin-bottom:24px}
 /* ---------- 2 cột: chữ trái · cụm ảnh phải ---------- */
@@ -49,41 +49,69 @@
 .qf-shot--bottom img{object-position:50% 50%} /* khung gần vuông: giữ 3 người đang lợp mái ở giữa */
 
 /* ==================== SECTION: CÙNG QUỸ VUN ĐẮP NHỮNG ĐIỀU TỐT ĐẸP ==================== */
-/* ---------- 1 cột: trên = tiêu đề · mô tả · 2 ý (căn giữa) | dưới = khung chuyển khoản (căn giữa) ---------- */
-.qf-give-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:40px}
-.qf-give-copy{display:flex;flex-direction:column;align-items:center;text-align:center}
-.qf-give-copy .section-lead{max-width:600px;margin-inline:auto;text-wrap:pretty} /* đủ rộng cho 2 dòng, không để 1 chữ rớt dòng cuối */
-/* ---------- 2 ý (dấu tích đỏ) cạnh nhau dưới mô tả, căn giữa (màn hẹp xếp dọc) ---------- */
-.qf-give-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:16px 32px;margin-top:24px}
-.qf-checks{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 32px}
+/* ---------- 1 cột: trên = tiêu đề · mô tả · 2 ý (căn trái) + thẻ KPI (phải) | dưới = khung chuyển khoản · Ủng hộ trực tiếp ---------- */
+.qf-page > .qf-give{padding-block:24px 0} /* nội dung gọn vừa 1 màn hình (≥ 1536×864); rút khoảng trống với ảnh hero (mặc định .qf-page > .section 64px) — dưới: 64px đầu section kế tiếp */
+.qf-give-grid{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:20px}
+/* ---------- Hàng trên: text căn trái (cột trái, thẳng khung chuyển khoản) · 2 thẻ KPI (cột phải, thẳng danh sách Ủng hộ trực tiếp) ---------- */
+.qf-give-top{display:grid;grid-template-columns:minmax(0,840px) minmax(0,1fr);align-items:stretch;gap:24px;width:100%} /* thẻ KPI cao bằng khối chữ (tiêu đề → 2 ý) */
+.qf-give-copy{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.qf-give-copy .section-lead{max-width:600px;margin-inline:0;text-wrap:pretty} /* đủ rộng cho 2 dòng, không để 1 chữ rớt dòng cuối */
+/* ---------- 2 ý (dấu tích đỏ) cạnh nhau dưới mô tả, căn trái (màn hẹp xếp dọc) ---------- */
+.qf-give-meta{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:16px 32px;margin-top:12px} /* sát mô tả hơn */
+.qf-checks{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:12px 32px}
 .qf-checks li{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:500;line-height:24px}
 .qf-checks .icon{width:20px;height:20px;color:var(--color-primary)}
+/* ---------- Thẻ KPI tổng ủng hộ: dùng lại .pf-view-stat (thẻ số liệu hồ sơ), 2 thẻ cạnh nhau · icon đỏ (tiền) / xanh lá (lượt) ---------- */
+.qf-give-kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin:0;container-type:inline-size} /* đổi cỡ nội dung thẻ theo bề rộng khối KPI (@container bên dưới) */
+.qf-give-kpis .pf-view-stat{gap:20px;padding:24px;border:0;box-shadow:0 8px 24px rgba(36,39,44,.08)} /* bỏ viền, đổ bóng mềm */
+/* thẻ cao bằng khối chữ → phóng to icon, nhãn, số cho cân */
+.qf-give-kpis .pf-view-stat-icon{width:56px;height:56px;border-radius:14px}
+.qf-give-kpis .pf-view-stat-icon .icon{width:28px;height:28px}
+.qf-give-kpis .pf-view-stat-label{font-size:15px;line-height:22px}
+/* khối KPI hẹp (màn 1280–1600px): thu nhỏ vừa · hẹp hơn nữa: icon nằm trên chữ để số không bị cắt */
+@container (max-width:600px){
+  .qf-give-kpis .pf-view-stat{gap:16px;padding:20px}
+  .qf-give-kpis .pf-view-stat-icon{width:48px;height:48px;border-radius:12px}
+  .qf-give-kpis .pf-view-stat-icon .icon{width:24px;height:24px}
+  .qf-give-kpis .pf-view-stat-label{font-size:14px;line-height:20px}
+  .qf-give-kpis dd.pf-view-stat-value{font-size:24px;line-height:32px}
+}
+@container (max-width:460px){
+  .qf-give-kpis .pf-view-stat{flex-direction:column;align-items:flex-start;justify-content:center;gap:12px}
+}
+.qf-give-kpis dd{margin:0}
+.qf-give-kpis dd.pf-view-stat-value{margin-top:4px;font-size:28px;line-height:36px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pf-view-stat-icon.is-red{background:#fdecec;color:var(--color-primary)}
+.pf-view-stat-icon.is-green{background:#e7f5ee;color:#14824f}
+@media(max-width:600px){.qf-give-kpis{grid-template-columns:minmax(0,1fr)}} /* điện thoại: 2 thẻ xếp dọc */
 /* ---------- Hàng dưới: khung chuyển khoản (trái, tối đa 840px) · danh sách Ủng hộ trực tiếp (phải, cao bằng khung) ---------- */
 .qf-give-board{display:grid;grid-template-columns:minmax(0,840px) minmax(0,1fr);align-items:stretch;gap:24px;width:100%}
-/* ---------- Ủng hộ trực tiếp: nhãn .live-badge + thẻ .feed-item (trang chủ, styles.css) xếp dọc, tự cuộn lên; mờ dần mép trên/dưới ---------- */
+/* ---------- Ủng hộ trực tiếp: nhãn .live-badge + thẻ .feed-item (trang chủ, styles.css) xếp dọc, đứng yên — có tiền vào thì thẻ mới chèn lên đầu (quy-nhan-dao.js); mờ dần mép dưới ---------- */
 .qf-live{display:flex;flex-direction:column;gap:16px;min-width:0}
-.qf-live-viewport{position:relative;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(180deg,transparent,#000 8%,#000 92%,transparent)}
-.qf-live-track{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;animation:qf-live-up var(--qf-live-dur,25s) linear infinite} /* tuyệt đối → không đẩy cao hàng; JS đặt --qf-live-dur theo số thẻ */
-.qf-live-viewport:hover .qf-live-track,.qf-live-viewport:focus-within .qf-live-track{animation-play-state:paused}
-@keyframes qf-live-up{to{transform:translateY(-50%)}}
-.qf-live .feed-list{display:flex;flex-direction:column;gap:12px;padding-bottom:12px} /* đệm dưới = khe → 2 bản nối liền mạch */
+/* ---------- Nút Xem danh sách ủng hộ: cuối cột, căn phải (dùng lại .link-arrow) — bấm → tab Khoản ủng hộ ---------- */
+.qf-live-more{align-self:flex-end}
+.qf-docs-panel{scroll-margin-top:24px} /* cộng thêm scroll-padding-top (= header) của html → cách mép dưới header 24px */
+.qf-live-viewport{position:relative;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 85%,transparent);mask-image:linear-gradient(180deg,#000 85%,transparent)}
+.qf-live-track{position:absolute;top:0;left:0;right:0} /* tuyệt đối → không đẩy cao hàng; thẻ thừa bị che dưới đáy khung */
+.qf-live .feed-list{display:flex;flex-direction:column;gap:12px}
+.qf-live .feed-item.is-new{animation:live-in .6s ease-out,live-flash 2.4s ease-out} /* thẻ mới: trượt vào + nền xanh nhạt rồi trở lại (keyframes trang chủ, styles.css) */
 .qf-live .feed-avatar{overflow:hidden}
 .qf-live .feed-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.qf-live .feed-avatar.is-initials{font-size:16px;font-weight:700;line-height:24px} /* không có ảnh → chữ cái đầu họ + tên trên nền đỏ nhạt (.feed-avatar) */
 @media(max-width:1279px){ /* cột phải quá hẹp → danh sách xuống dưới khung chuyển khoản, rộng bằng khung, cao cố định */
   .qf-give-board{grid-template-columns:minmax(0,1fr);justify-items:center}
+  .qf-give-top{grid-template-columns:minmax(0,1fr);max-width:840px;margin-inline:auto} /* cùng bề rộng khung chuyển khoản; thẻ KPI xuống dưới text */
   .qf-live{width:100%;max-width:840px}
   .qf-live-viewport{flex:none;height:360px}
 }
 @media(prefers-reduced-motion:reduce){
-  .qf-live-viewport{overflow-y:auto}
-  .qf-live-track{animation:none}
-  .qf-live .feed-list[aria-hidden="true"]{display:none}
+  .qf-live .feed-item.is-new{animation:none}
 }
 /* ---------- Khung ủng hộ: dùng nguyên .pv-donate (popup ủng hộ trang chương trình, styles.css) — chỉ đổi từ popup sang khối nằm trong trang ---------- */
 .qf-donate{display:grid;grid-template-columns:minmax(0,1fr);width:100%;max-width:840px;margin:0 auto;max-height:none;border:0;box-shadow:0 2px 8px rgba(36,39,44,.06),0 24px 60px rgba(36,39,44,.16);overflow:hidden} /* không viền, chỉ bóng đổ 2 lớp */
 /* ---------- Khung QR gọn giữa trang (tối đa 840px): chia đôi — thẻ VietQR trái · thông tin chuyển khoản phải (rộng, cao bằng nhau) · lưu ý căn giữa dưới cùng ---------- */
 .qf-donate .pv-donate-pay{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-template-areas:"head head" "card transfer" "warn warn";align-content:center;gap:16px 24px;padding:32px} /* cột thông tin rộng hơn (1 : 1.3) để "QUY HOAT DONG CHU THAP DO" nằm 1 dòng */
-.qf-donate .pv-qr-frame{width:min(100%,240px)} /* mã QR to hơn (popup dùng chung 180px) */
+.qf-donate .pv-qr-frame{width:min(100%,180px)} /* bằng popup dùng chung — để cả section khít 1 màn hình (laptop 1536×864) */
 /* ---------- Tiêu đề khung: icon lá + tên + dòng phụ, chữ trắng trên nền ảnh xanh ---------- */
 .qf-donate-head{grid-area:head}
 .qf-donate .qf-donate-head .pv-donate-title{color:#fff;text-shadow:0 1px 4px rgba(10,40,20,.55)}

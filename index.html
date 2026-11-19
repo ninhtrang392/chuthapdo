@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-22" />
+    <link rel="stylesheet" href="styles.css?v=20261119-3" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -1284,12 +1284,12 @@
                     </div>
                 </div>
 
-                <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
+                <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · đơn vị phát triển hệ thống GTINX (phải, thay tổng số lượt) ---------- -->
                 <div class="container footer-bottom">
-                    <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái · tổng lượt tích lũy góc phải — visit-counter.js ---------- -->
+                    <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái — visit-counter.js ---------- -->
                     <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
                     <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
-                    <p class="footer-stat footer-stat-total">Tổng số lượt: <b data-stat="total">—</b></p>
+                    <p class="footer-dev"><span>Đơn vị phát triển hệ thống</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
                 </div>
             </footer>
         </div>
@@ -1297,7 +1297,6 @@
     <!-- ==================== END FLOW: khung ScrollSmoother ==================== -->
 
     <!-- ---------- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình — nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
-    <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển hệ thống</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
 
     <!-- ---------- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) — nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
     <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>

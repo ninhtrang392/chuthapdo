@@ -1128,7 +1128,7 @@ html.has-smoother{scroll-behavior:auto}
 .footer-contact-list .icon{flex-shrink:0;width:18px;height:18px;margin-top:1px;color:var(--color-primary)}
 .footer-contact-list span{overflow-wrap:break-word}
 
-/* ---------- Thanh cuối: lượt truy cập (trái) · dòng điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX ở nhãn ghim .dev-tag) ---------- */
+/* ---------- Thanh cuối: lượt truy cập (trái) · dòng điều phối (giữa) · đơn vị phát triển hệ thống GTINX (phải, .footer-dev) ---------- */
 .footer-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px 32px;margin-top:clamp(32px,4vw,56px);padding-block:18px 22px;border-top:1px solid #efe1dc}
 .footer-bottom p{margin:0;font-size:13px;color:var(--color-text-muted)}
 .footer-credit{text-align:center}
@@ -1136,6 +1136,9 @@ html.has-smoother{scroll-behavior:auto}
 .footer-stat{display:inline-flex;align-items:center;gap:6px}
 .footer-stat-online{justify-self:start}
 .footer-stat-total{justify-self:end}
+/* Đơn vị phát triển hệ thống + logo GTINX: góc phải thanh cuối (thay Tổng số lượt; trang Đăng nhập không có footer vẫn dùng nhãn ghim .dev-tag) */
+.footer-dev{display:inline-flex;align-items:center;justify-self:end;gap:8px}
+.footer-dev img{display:block;width:58px;height:14px;object-fit:contain}
 .footer-stat b{font-weight:600;color:var(--color-text);font-variant-numeric:tabular-nums}
 .footer-stat-dot{width:8px;height:8px;border-radius:50%;background:var(--color-green);box-shadow:0 0 0 3px rgba(0,108,69,.15)}
 /* ---------- Nút lên đầu trang: tròn kính mờ, chỉ icon, ghim góc phải dưới màn hình
@@ -1582,7 +1585,7 @@ html.has-smoother{scroll-behavior:auto}
 /* ==================== SECTION: HERO CHƯƠNG TRÌNH ==================== */
 /* ---------- Ảnh nền bàn tay nâng trái tim, phủ tối ấm để chữ trắng dễ đọc ---------- */
 .cp-hero{position:relative;z-index:2;isolation:isolate;display:flex;align-items:center;min-height:calc(300px + var(--header-h));padding:calc(var(--header-h) + 24px) 0 24px;background:#7a1d1f} /* không overflow:hidden (ảnh nền ::before đã inset 0) + z-index 2 → danh sách bộ lọc xổ xuống tràn ra ngoài banner, nằm trên lưới thẻ */
-.cp-hero::before{content:'';position:absolute;inset:0;z-index:-2;background:url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 80% 55% / cover no-repeat}
+.cp-hero::before{content:'';position:absolute;inset:0;z-index:-2;background:url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 80% 45% / cover no-repeat}
 .cp-hero::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(40,12,8,.55) 0%,rgba(60,18,10,.62) 100%)}
 .cp-hero-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
 /* ---------- Breadcrumb: góc trên trái banner, chữ trắng (dùng lại .breadcrumb của trang chi tiết) ---------- */

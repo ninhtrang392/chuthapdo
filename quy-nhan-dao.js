@@ -60,24 +60,84 @@ const showToast = (message, type = 'success') => {
 };
 $('.pf-toast-close', toast).addEventListener('click', hideToast);
 
-// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — Ủng hộ trực tiếp (cột phải khung chuyển khoản): thẻ tự cuộn lên, nhân bản danh sách để lặp liền mạch · nhãn thời gian ====================
-// DỮ LIỆU MINH HỌA: các thẻ trong HTML. Khi triển khai thật, dựng danh sách từ luồng giao dịch của Quỹ (WebSocket / polling).
-const liveTrack = $('.qf-live-track');
-if (liveTrack) {
-  const liveList = $('.feed-list', liveTrack);
+// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — Ủng hộ trực tiếp (cột phải khung chuyển khoản): danh sách đứng yên, CÓ TIỀN VÀO mới chèn thẻ lên đầu, các thẻ cũ trượt xuống · nhãn thời gian · cộng thẻ KPI ====================
+// DỮ LIỆU MINH HỌA: mỗi 5–9 giây lấy ngẫu nhiên 1 giao dịch mẫu (như trang chủ, script.js). Khi triển khai thật, thay setTimeout bằng luồng giao dịch
+// của Quỹ (WebSocket / polling) và gọi addLiveDonation(giao dịch) cho mỗi giao dịch mới.
+const liveList = $('.qf-live .feed-list');
+if (liveList) {
+  const LIVE_MAX = 8; // giữ tối đa 8 thẻ (khung hiện ~5), thẻ cũ nhất bị bỏ
+  // Người ủng hộ mẫu: có ảnh (Emages/avatar/) hoặc không (avatar rỗng → hiện chữ cái đầu của họ và tên)
+  const LIVE_SAMPLES = [
+    { name: 'Nguyễn Minh Anh', avatar: 'Emages/avatar/nguyen-minh-anh.jpg', amount: 500000 },
+    { name: 'Hoàng Mai Linh', avatar: 'Emages/avatar/hoang-mai-linh.jpg', amount: 1000000 },
+    { name: 'Phạm Gia Huy', avatar: 'Emages/avatar/pham-gia-huy.jpg', amount: 2000000 },
+    { name: 'Trần Thu Hà', avatar: 'Emages/avatar/tran-thu-ha.jpg', amount: 300000 },
+    { name: 'Lê Quốc Bảo', avatar: 'Emages/avatar/le-quoc-bao.jpg', amount: 4500000 },
+    { name: 'Đỗ Thanh Tùng', avatar: '', amount: 200000 },
+    { name: 'Vũ Ngọc Ánh', avatar: '', amount: 1500000 },
+    { name: 'Bùi Văn Nam', avatar: '', amount: 100000 },
+    { name: 'Ngô Thị Lan', avatar: '', amount: 700000 },
+  ];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const vnd = (value) => `${value.toLocaleString('vi-VN')} ₫`;
+  const ty = (value) => `${(Math.round(value / 1e7) / 100).toLocaleString('vi-VN', { maximumFractionDigits: 2 })} tỷ ₫`;
+  // Chữ cái đầu của họ và tên: Nguyễn Văn Nam → NN (tên 1 chữ → 1 chữ cái)
+  const initials = (name) => {
+    const words = name.trim().split(/\s+/);
+    return (words.length > 1 ? words[0][0] + words[words.length - 1][0] : words[0][0]).toLocaleUpperCase('vi-VN');
+  };
   const agoLabel = (ms) => {
     const minutes = Math.floor((Date.now() - ms) / 60000);
     return minutes < 1 ? 'Vừa xong' : `${minutes} phút trước`;
   };
-  // Mốc thời gian các giao dịch (data-ago = số phút trước)
+  // Thẻ KPI tổng ủng hộ (hàng trên section): giá trị gốc ở data-qf-total
+  const kpiMoney = $('[data-qf-total="money"]');
+  const kpiCount = $('[data-qf-total="count"]');
+  let totalMoney = Number(kpiMoney?.dataset.value || 0);
+  let totalCount = Number(kpiCount?.dataset.value || 0);
+
+  // Mốc thời gian các giao dịch có sẵn trong HTML (data-ago = số phút trước)
   $$('.feed-item', liveList).forEach((item) => { item.dataset.time = Date.now() - Number(item.dataset.ago || 0) * 60000; });
-  // Bản sao cho vòng lặp (track cuộn lên -50%), trình đọc màn hình bỏ qua
-  const clone = liveList.cloneNode(true);
-  clone.setAttribute('aria-hidden', 'true');
-  clone.removeAttribute('aria-label');
-  liveTrack.append(clone);
-  liveTrack.style.setProperty('--qf-live-dur', `${liveList.children.length * 5}s`); // ~5 giây / thẻ
-  const refreshTimes = () => $$('.feed-item', liveTrack).forEach((item) => { $('.feed-time span', item).textContent = agoLabel(Number(item.dataset.time)); });
+  const refreshTimes = () => $$('.feed-item', liveList).forEach((item) => { $('.feed-time span', item).textContent = agoLabel(Number(item.dataset.time)); });
+
+  const addLiveDonation = ({ name, avatar, amount }) => {
+    // Vị trí cũ các thẻ (FLIP) → sau khi chèn, cho các thẻ trượt từ chỗ cũ xuống chỗ mới
+    const before = new Map($$('.feed-item', liveList).map((el) => [el, el.getBoundingClientRect().top]));
+    const item = document.createElement('li');
+    item.className = 'feed-item is-new';
+    item.dataset.time = Date.now();
+    item.innerHTML = `<span class="feed-avatar" aria-hidden="true"></span>
+      <div class="feed-info"><p class="feed-name"></p><p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p></div>
+      <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+${vnd(amount)}</p>`;
+    $('.feed-name', item).textContent = name;
+    const face = $('.feed-avatar', item);
+    if (avatar) face.innerHTML = `<img src="${avatar}" alt="" width="160" height="160" decoding="async" />`;
+    else { face.classList.add('is-initials'); face.textContent = initials(name); }
+    liveList.prepend(item);
+    if (!reduceMotion.matches) {
+      before.forEach((top, el) => {
+        const dy = top - el.getBoundingClientRect().top;
+        if (dy) el.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 500, easing: 'cubic-bezier(.2,.7,.2,1)' });
+      });
+    }
+    while (liveList.children.length > LIVE_MAX) liveList.lastElementChild.remove();
+    totalMoney += amount;
+    totalCount += 1;
+    if (kpiMoney) kpiMoney.textContent = ty(totalMoney);
+    if (kpiCount) kpiCount.textContent = totalCount.toLocaleString('vi-VN');
+    refreshTimes();
+  };
+
+  // Tab ẩn thì không sinh giao dịch mới (tránh dồn hàng loạt khi quay lại); không lấy 2 người ở 2 thẻ trên cùng (tránh lặp liền nhau — chỉ có 5 người mẫu có ảnh)
+  const scheduleNext = () => setTimeout(() => {
+    if (!document.hidden) {
+      const recent = $$('.feed-name', liveList).slice(0, 2).map((el) => el.textContent);
+      const pool = LIVE_SAMPLES.filter((sample) => !recent.includes(sample.name));
+      addLiveDonation(pool[Math.floor(Math.random() * pool.length)]);
+    }
+    scheduleNext();
+  }, 5000 + Math.random() * 4000);
+  scheduleNext();
   setInterval(refreshTimes, 30000);
 }
 
@@ -168,6 +228,19 @@ docTabs.forEach((tab) => {
     docTabs.forEach((other) => other.toggleAttribute('aria-current', other === tab));
     tab.setAttribute('aria-current', 'page');
     $$('[data-doc-panel]').forEach((panel) => { panel.hidden = panel.dataset.docPanel !== tab.dataset.docTab; });
+  });
+});
+
+// ---------- Nút "Xem danh sách ủng hộ" (cột Ủng hộ trực tiếp): bật tab tương ứng (data-doc-open = data-doc-tab) rồi cuộn tới khung tab tài liệu ----------
+$$('[data-doc-open]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    const tab = $(`[data-doc-tab="${link.dataset.docOpen}"]`);
+    if (!tab) return;
+    event.preventDefault();
+    tab.click();
+    const target = $('.qf-docs-panel') || $('#minh-bach');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: reduce ? 'instant' : 'smooth', block: 'start' });
   });
 });
 
@@ -364,8 +437,22 @@ const QND_RULES = {
   '04': {
     title: 'Nội dung chi cho hoạt động quản lý Quỹ',
     content: [
-      ['1. Chi hoạt động quản lý Quỹ gồm: tiền lương, tiền công, phụ cấp và các khoản đóng góp theo quy định; thuê trụ sở (nếu có); mua sắm, sửa chữa trang thiết bị; văn phòng phẩm, dịch vụ công cộng, thông tin liên lạc; hội họp, công tác phí; kiểm toán; phát triển nền tảng số và các khoản chi cần thiết khác cho bộ máy.'],
-      ['2. Hội đồng quản lý Quỹ quyết định tỷ lệ chi cho hoạt động quản lý Quỹ nhưng không quá 10% tổng chi trong năm của Quỹ để tài trợ, hỗ trợ cho các chương trình, đề án theo Điều lệ này (không bao gồm các khoản: tài trợ bằng hiện vật; thực hiện nhiệm vụ do cơ quan nhà nước giao; tài trợ của Nhà nước để thực hiện dịch vụ công, đề tài nghiên cứu khoa học, chương trình mục tiêu, đề án do Nhà nước đặt hàng; các khoản tài trợ có số tiền, địa chỉ của người nhận). Quỹ phấn đấu duy trì tỷ lệ chi quản lý không quá 5%. Kinh phí quản lý chưa sử dụng hết trong năm được chuyển sang năm sau tiếp tục sử dụng.'],
+      ['1. Nội dung chi hoạt động quản lý Quỹ bao gồm:'],
+      [
+        'a) Chi tiền lương và các khoản phụ cấp cho bộ máy quản lý Quỹ;',
+        'b) Chi bảo hiểm xã hội, bảo hiểm thất nghiệp, bảo hiểm y tế và các khoản đóng góp theo quy định;',
+        'c) Chi thuê trụ sở làm việc (nếu có);',
+        'd) Chi mua sắm, sửa chữa vật tư văn phòng, tài sản phục vụ hoạt động của quỹ;',
+        'đ) Chi thanh toán dịch vụ công cộng phục vụ hoạt động của quỹ;',
+        'e) Chi dịch vụ công cộng, thông tin liên lạc; hội họp, công tác phí; kiểm toán; phát triển nền tảng số.',
+        'g) Các khoản chi khác có liên quan đến hoạt động của Quỹ.',
+      ],
+      ['2. Định mức chi hoạt động quản lý quỹ:'],
+      [
+        'a) Hội đồng quản lý quỹ quy định cụ thể tỷ lệ chi cho hoạt động quản lý Quỹ từ nguồn tài sản, tài chính của Quỹ nhưng không quá 10% tổng chi hàng năm của Quỹ để tài trợ, hỗ trợ cho các chương trình, đề án theo Điều lệ Quỹ và quy định của pháp luật (không bao gồm các khoản: Tài trợ bằng hiện vật, tài trợ của Nhà nước để thực hiện các dịch vụ công, đề tài nghiên cứu khoa học, các chương trình mục tiêu, đề án do Nhà nước đặt hàng và các khoản tài trợ có số tiền, địa chỉ của người nhận);',
+        'b) Quỹ phấn đấu duy trì tỷ lệ chi quản lý không quá 5%. Kinh phí quản lý chưa sử dụng hết trong năm được chuyển sang năm sau tiếp tục sử dụng.',
+        'c) Trường hợp chi phí quản lý của Quỹ đến cuối năm không sử dụng hết được chuyển sang năm sau tiếp tục sử dụng theo quy định.',
+      ],
       ['3. Tỷ lệ chi quản lý thực tế được công khai hằng năm cùng với báo cáo tài chính của Quỹ.'],
     ],
   },

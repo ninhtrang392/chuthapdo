@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-22" />
-    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261117-16" />
+    <link rel="stylesheet" href="styles.css?v=20261119-3" />
+    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261119-13" />
     <!-- Có chuyển động → ẩn hero tới khi GSAP dựng xong (quy-nhan-dao.js gỡ lớp; quá 4 giây chưa gỡ thì tự gỡ) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -135,13 +135,14 @@
       </section>
       <!-- ==================== END SECTION: HERO QUỸ NHÂN ĐẠO ==================== -->
 
-      <!-- ==================== SECTION: CÙNG QUỸ VUN ĐẮP NHỮNG ĐIỀU TỐT ĐẸP — trên = text căn giữa (tiêu đề · mô tả · 2 ý) | dưới = khung chuyển khoản (trái) · danh sách Ủng hộ trực tiếp (phải) (≤ 1023px xếp dọc, text trên)
+      <!-- ==================== SECTION: CÙNG QUỸ VUN ĐẮP NHỮNG ĐIỀU TỐT ĐẸP — trên = text căn trái (tiêu đề · mô tả · 2 ý) · 2 thẻ KPI tổng ủng hộ (phải, thẳng cột danh sách Ủng hộ trực tiếp) | dưới = khung chuyển khoản (trái) · danh sách Ủng hộ trực tiếp (phải) (≤ 1023px xếp dọc, text trên)
            · khung chuyển khoản ủng hộ (dùng nguyên giao diện popup ủng hộ .pv-donate của trang chương trình, đặt thẳng trong trang):
              chỉ gồm: thẻ VietQR (tải mã) | thông tin chuyển khoản (kèm Sao chép) · lưu ý — nền ảnh "hy vọng xanh"
              — quy-nhan-dao.js › CÙNG QUỸ VUN ĐẮP ==================== -->
       <section class="section qf-give" id="dong-hanh" aria-labelledby="qf-give-title">
         <div class="container qf-give-grid">
-          <!-- ---------- Text căn giữa (trên): tiêu đề · mô tả · 2 ý ---------- -->
+          <!-- ---------- Hàng trên: trái = text căn trái (tiêu đề · mô tả · 2 ý) · phải = 2 thẻ KPI (cột bằng cột danh sách Ủng hộ trực tiếp bên dưới) ---------- -->
+          <div class="qf-give-top">
           <div class="qf-give-copy">
             <h2 class="section-title" id="qf-give-title" data-split>Cùng Quỹ vun đắp những điều tốt đẹp</h2>
             <p class="section-lead">Đóng góp vào nguồn lực chung của Quỹ để đồng hành với các hoạt động nhân đạo thường xuyên, dài hạn và ứng phó khẩn cấp.</p>
@@ -151,6 +152,12 @@
                 <li><svg class="icon" aria-hidden="true"><use href="#check"/></svg>Theo dõi cách sử dụng nguồn lực</li>
               </ul>
             </div>
+          </div>
+          <!-- ---------- Thẻ KPI tổng ủng hộ Quỹ (dùng lại .pf-view-stats / .pf-view-stat): tổng tiền · tổng lượt — SỐ MINH HỌA, khi triển khai lấy từ hệ thống giao dịch đã đối soát ---------- -->
+          <dl class="pf-view-stats qf-give-kpis" aria-label="Tổng ủng hộ Quỹ">
+            <div class="pf-view-stat"><span class="pf-view-stat-icon is-red" aria-hidden="true"><svg class="icon"><use href="#coins"/></svg></span><div class="pf-view-stat-text"><dt class="pf-view-stat-label">Tổng tiền ủng hộ</dt><dd class="pf-view-stat-value" data-qf-total="money" data-value="12860000000">12,86 tỷ ₫</dd></div></div>
+            <div class="pf-view-stat"><span class="pf-view-stat-icon is-green" aria-hidden="true"><svg class="icon"><use href="#people"/></svg></span><div class="pf-view-stat-text"><dt class="pf-view-stat-label">Tổng lượt ủng hộ</dt><dd class="pf-view-stat-value" data-qf-total="count" data-value="4812">4.812</dd></div></div>
+          </dl>
           </div>
 
           <!-- ---------- Hàng dưới: trái = khung chuyển khoản · phải = danh sách Ủng hộ trực tiếp (cao bằng khung, tự cuộn lên) ---------- -->
@@ -189,8 +196,8 @@
             </div>
           </div>
 
-            <!-- ---------- Ủng hộ trực tiếp (phải): nhãn chấm nhấp nháy (như trang chủ) · thẻ .feed-item xếp dọc, tự cuộn lên liên tục; rê chuột → dừng; giảm chuyển động → cuộn tay
-                 (data-ago: số phút trước — quy-nhan-dao.js › ỦNG HỘ TRỰC TIẾP nhân bản danh sách để lặp liền mạch, cập nhật nhãn thời gian) ---------- -->
+            <!-- ---------- Ủng hộ trực tiếp (phải): nhãn chấm nhấp nháy (như trang chủ) · thẻ .feed-item (ảnh hoặc chữ cái đầu họ + tên · tên · thời gian, không ghi chương trình) xếp dọc, ĐỨNG YÊN — có khoản ủng hộ mới thì thẻ mới chèn lên đầu, các thẻ cũ trượt xuống (cộng luôn 2 thẻ KPI)
+                 (data-ago: số phút trước — quy-nhan-dao.js › Ủng hộ trực tiếp: chèn giao dịch mới, cập nhật nhãn thời gian) ---------- -->
             <aside class="qf-live" aria-labelledby="qf-live-title">
               <p class="eyebrow live-badge" id="qf-live-title"><span class="live-dot" aria-hidden="true"></span>Ủng hộ trực tiếp</p>
               <div class="qf-live-viewport">
@@ -200,7 +207,6 @@
                     <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/nguyen-minh-anh.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
                     <div class="feed-info">
                       <p class="feed-name">Nguyễn Minh Anh</p>
-                      <p class="feed-campaign">Tiếp sức đến trường vùng cao</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p>
                     </div>
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+150.000 ₫</p>
@@ -209,7 +215,6 @@
                     <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/hoang-mai-linh.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
                     <div class="feed-info">
                       <p class="feed-name">Hoàng Mai Linh</p>
-                      <p class="feed-campaign">Mái ấm nhân ái cho người cao tuổi</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p>
                     </div>
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+3.000.000 ₫</p>
@@ -218,7 +223,6 @@
                     <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/pham-gia-huy.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
                     <div class="feed-info">
                       <p class="feed-name">Phạm Gia Huy</p>
-                      <p class="feed-campaign">Khắc phục hậu quả lũ lụt miền Trung</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>1 phút trước</span></p>
                     </div>
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+5.000.000 ₫</p>
@@ -227,7 +231,6 @@
                     <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/tran-thu-ha.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
                     <div class="feed-info">
                       <p class="feed-name">Trần Thu Hà</p>
-                      <p class="feed-campaign">Mái ấm nhân ái cho người cao tuổi</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>3 phút trước</span></p>
                     </div>
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+200.000 ₫</p>
@@ -236,7 +239,6 @@
                     <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/le-quoc-bao.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
                     <div class="feed-info">
                       <p class="feed-name">Lê Quốc Bảo</p>
-                      <p class="feed-campaign">Tiếp sức đến trường vùng cao</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>6 phút trước</span></p>
                     </div>
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+1.500.000 ₫</p>
@@ -244,6 +246,8 @@
                   </ul>
                 </div>
               </div>
+              <!-- ---------- Xem danh sách ủng hộ: mở tab Khoản ủng hộ (section Minh bạch & trách nhiệm) rồi cuộn tới — quy-nhan-dao.js › data-doc-open ---------- -->
+              <a class="link-arrow qf-live-more" href="#minh-bach" data-doc-open="khoan-ung-ho">Xem danh sách ủng hộ<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
             </aside>
           </div>
         </div>
@@ -650,14 +654,12 @@
       </div>
 
 
-      <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
+      <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · đơn vị phát triển hệ thống GTINX (phải, thay tổng số lượt) ---------- -->
       <div class="container footer-bottom">
-        <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái · tổng lượt tích lũy góc phải — visit-counter.js ---------- -->
+        <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái — visit-counter.js ---------- -->
         <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
         <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
-        <p class="footer-stat footer-stat-total">Tổng số lượt: <b data-stat="total">—</b></p>
-        <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
-        <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển hệ thống</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
+        <p class="footer-dev"><span>Đơn vị phát triển hệ thống</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
         <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->
         <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
       </div>
@@ -694,6 +696,6 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="quy-nhan-dao.js?v=20261117-5" defer></script>
+    <script src="quy-nhan-dao.js?v=20261119-4" defer></script>
   </body>
 </html>
