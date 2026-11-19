@@ -8070,7 +8070,7 @@ html.has-smoother {
 }
 
 /* ==================== SECTION: HERO CHƯƠNG TRÌNH ==================== */
-/* ---------- Ảnh nền bàn tay nâng trái tim, phủ tối ấm để chữ trắng dễ đọc ---------- */
+/* ---------- Ảnh nền trái tim đỏ bóng trong đôi tay nâng niu, phủ tối ấm để chữ trắng dễ đọc ---------- */
 .cp-hero {
   position: relative;
   z-index: 2;
@@ -8088,7 +8088,7 @@ html.has-smoother {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: url('../Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.webp') 70% center / cover no-repeat
+  background: url('../Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 80% 55% / cover no-repeat
 }
 
 .cp-hero::after {
