@@ -4626,7 +4626,7 @@ html.pf-reg-lock{overflow:hidden}
 .gt-pillar .gt-icon{width:auto;height:auto;margin-bottom:16px;border-radius:0;background:none} /* icon trần, không nền tròn */
 .gt-pillar .gt-icon .icon{width:32px;height:32px}
 .gt-pillar-name{margin:0 0 10px;font-size:18px;font-weight:600;line-height:26px;color:var(--color-text)}
-.gt-pillar-desc{max-width:240px;margin:0;font-size:14px;line-height:22px;color:var(--color-text-muted)}
+.gt-pillar-desc{max-width:none;margin:0;font-size:14px;line-height:22px;color:var(--color-text-muted);text-wrap:balance} /* bỏ giới hạn 240px để "Tôn vinh những cống hiến thầm lặng," (ngắt cứng <br>) vừa 1 dòng; từ ghép nối &nbsp;; balance chia 2 dòng đều */
 
 
 /* ---------- Đối tượng tham gia: ảnh nền tràn toàn màn hình (rộng 100%, cao 1 màn hình trừ header), phủ tối bên trái để đọc chữ · chữ trắng · 3 thẻ kính mờ ở chân ---------- */
