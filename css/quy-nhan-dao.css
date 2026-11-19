@@ -26,6 +26,8 @@
 .qf-crumbs{margin-bottom:24px}
 /* ---------- 2 cột: chữ trái · cụm ảnh phải ---------- */
 .qf-hero-grid{flex:1;display:grid;grid-template-columns:minmax(448px,1fr) minmax(0,1.7fr);gap:48px 64px;align-items:center;align-content:center}
+@media(min-width:1280px){.qf-hero-grid{grid-template-columns:minmax(552px,1fr) minmax(0,1.5fr)}} /* cột chữ ≥ 552px: mô tả 3 dòng cố định (dài nhất ≈ 542px) không gãy */
+@media(max-width:1279px){.qf-hero-lead br{display:none}} /* cột chữ hẹp: bỏ ngắt dòng cố định, chữ tự chảy */
 /* ---------- Tiêu đề 2 dòng 48px (cỡ tiêu đề trang con), mặt nạ dòng cho chữ trượt lên ---------- */
 .qf-hero-title{font-size:64px;font-weight:700;line-height:72px;white-space:nowrap;color:var(--red)} /* 2 dòng "Quỹ Nhân đạo / Việt Nam", màu primary/base (#ed2429) */
 .qf-line{display:block;overflow:hidden;padding-block:4px}
@@ -42,9 +44,9 @@
 /* ---------- Cụm 3 ảnh so le: ảnh chính cao bên trái · 2 ảnh phải lệch tầng ---------- */
 .qf-hero-visual{position:relative;height:clamp(400px,calc(100svh - var(--header-h) - 120px),640px)} /* cao = màn hình − header − breadcrumb − lề → cả hero gói trong 1 màn hình */
 /* Khung chứa 3 ảnh (không nền): lưới 2 cột, khe 10px — mép trái cong vòng cung (ngang 20% · dọc 50%) làm khuôn cho dải đỏ */
-.qf-hero-frame{position:relative;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);grid-template-rows:repeat(12,minmax(0,1fr));gap:10px;height:100%;border-radius:20% 24px 24px 20% / 50% 24px 24px 50%}
-/* Dải đỏ dày 10px ôm ngoài góc trên-trái khung trắng (cùng dạng vòng cung, lệch ra ngoài 18px), mờ dần về phía dưới + phải */
-.qf-hero-arc{position:absolute;z-index:0;left:-18px;top:-18px;width:calc(100% + 36px);height:calc(100% + 36px);border:10px solid transparent;border-top-color:var(--red);border-left-color:var(--red);border-radius:20% 0 0 20% / 50% 0 0 50%;pointer-events:none;transform:skewX(-5deg);-webkit-mask-image:linear-gradient(150deg,#000 0%,#000 8%,rgba(0,0,0,.35) 20%,transparent 34%);mask-image:linear-gradient(150deg,#000 0%,#000 8%,rgba(0,0,0,.35) 20%,transparent 34%)}
+.qf-hero-frame{--qf-mw:calc((100cqw - 10px) * 2 / 3);container-type:inline-size;position:relative;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);grid-template-rows:repeat(12,minmax(0,1fr));gap:10px;height:100%;border-radius:20% 24px 24px 20% / 50% 24px 24px 50%}
+/* Dải đỏ dày 10px ôm ngoài mép cong ảnh lớn: bao quanh ảnh lớn cách đều 18px (--qf-mw = bề rộng ảnh lớn, đo theo khung qua 100cqw), bán kính = bán kính ảnh lớn + 18px → cong đồng tâm; mờ dần về phía dưới + phải */
+.qf-hero-arc{--qf-arc-r:calc(var(--qf-mw) * .28 + 18px);position:absolute;z-index:0;left:-18px;top:-18px;width:calc(var(--qf-mw) + 36px);height:calc(100% + 36px);border:10px solid transparent;border-top-color:var(--red);border-left-color:var(--red);border-radius:var(--qf-arc-r) 0 0 var(--qf-arc-r) / 50% 0 0 50%;pointer-events:none;transform:skewX(-5deg);-webkit-mask-image:linear-gradient(150deg,#000 0%,#000 8%,rgba(0,0,0,.35) 20%,transparent 34%);mask-image:linear-gradient(150deg,#000 0%,#000 8%,rgba(0,0,0,.35) 20%,transparent 34%)}
 /* Ảnh vát chéo: khung nghiêng skewX(-5deg) (cạnh đứng chéo kiểu “/”), ảnh bên trong nghiêng ngược lại để người vẫn đứng thẳng.
    Tâm nghiêng của mọi khung = tâm dọc của cả cụm (transform-origin) → các khe giữa ảnh song song, dải đỏ khớp mép cong ảnh lớn */
 .qf-shot{position:relative;z-index:1;overflow:hidden;border-radius:24px;background:var(--color-surface-alt);transform:skewX(-5deg);transform-origin:50% 50%}
@@ -115,7 +117,14 @@
 .qf-live .feed-item.is-new{animation:live-in .6s ease-out,live-flash 2.4s ease-out} /* thẻ mới: trượt vào + nền xanh nhạt rồi trở lại (keyframes trang chủ, styles.css) */
 .qf-live .feed-avatar{overflow:hidden}
 .qf-live .feed-avatar img{display:block;width:100%;height:100%;object-fit:cover}
-.qf-live .feed-avatar.is-initials{font-size:16px;font-weight:700;line-height:24px} /* không có ảnh → chữ cái đầu họ + tên trên nền đỏ nhạt (.feed-avatar) */
+/* Avatar Ủng hộ trực tiếp: trái tim (#heart-solid) trên nền tròn nhạt cùng tông — 6 màu xoay vòng (quy-nhan-dao.js › HEART_TONES) */
+.qf-live .feed-avatar.is-heart .icon{width:22px;height:22px}
+.qf-live .feed-avatar.tone-red{background:#fde8e8;color:#e5232f}
+.qf-live .feed-avatar.tone-orange{background:#fdeedd;color:#e8771b}
+.qf-live .feed-avatar.tone-green{background:#e3f4ea;color:#14824f}
+.qf-live .feed-avatar.tone-blue{background:#e4eefc;color:#2f6fe4}
+.qf-live .feed-avatar.tone-purple{background:#efe7fb;color:#7c4ddb}
+.qf-live .feed-avatar.tone-pink{background:#fce6f1;color:#d63384}
 @media(max-width:1279px){ /* cột phải quá hẹp → danh sách xuống dưới khung chuyển khoản, rộng bằng khung, cao cố định */
   .qf-give-board{grid-template-columns:minmax(0,1fr);justify-items:center}
   .qf-give-top{grid-template-columns:minmax(0,1fr);max-width:840px;margin-inline:auto} /* cùng bề rộng khung chuyển khoản; thẻ KPI xuống dưới text */
@@ -166,10 +175,6 @@
 .qf-about-side{position:sticky;top:calc(var(--header-h) + 40px);align-self:start}
 /* ---------- Đầu section căn giữa: mô tả rộng hơn để đoạn giới thiệu Quỹ gọn trong 3 dòng ---------- */
 .qf-about .section-lead{max-width:800px} /* dòng 2 "Hội Chữ thập đỏ Việt Nam sáng lập, … phạm vi toàn quốc." ≈ 779px → trọn 1 dòng */
-/* Nhãn Quyết định 1421/QĐ-BNV dưới mô tả: viên bo tròn nền đỏ rất nhạt, icon tài liệu đỏ, số quyết định đậm */
-.qf-about-decree{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 16px;border:1px solid #fadede;border-radius:999px;background:#fff7f7;font-size:14px;line-height:20px;color:var(--color-text)}
-.qf-about-decree .icon{flex:none;width:18px;height:18px;color:var(--red)}
-.qf-about-decree strong{font-weight:700;color:var(--red)}
 @media(max-width:899px){.qf-about .section-lead br{display:none}} /* màn hẹp: bỏ ngắt dòng cố định, chữ tự chảy (tránh rơi chữ "do") */
 .qf-about-photo{overflow:hidden;border-radius:20px;aspect-ratio:4/3;background:var(--color-surface-alt)}
 .qf-about-photo img{width:100%;height:100%;object-fit:cover}
@@ -338,7 +343,8 @@
 .qnd-rule-dialog .dialog-close .icon{width:20px;height:20px}
 /* ---------- Thân: chữ 16/28, đoạn cách 16px, cuộn riêng ---------- */
 .qnd-rule-dialog .qnd-rule-body{margin:0;padding:24px 32px}
-.qnd-rule-dialog .qnd-rule-body p,.qnd-rule-dialog .qnd-rule-sub li{font-size:16px;line-height:28px}
+.qnd-rule-dialog .qnd-rule-body p,.qnd-rule-dialog .qnd-rule-sub li{font-size:16px;line-height:28px;text-align:justify} /* căn đều 2 bên */
+.qnd-rule-dialog .qnd-rule-sub{padding-left:0} /* các ý con (Quản trị, a/b/c…) thẳng lề trái với tiêu đề + đoạn văn, không thụt vào */
 .qnd-rule-dialog .qnd-rule-body > * + *{margin-top:16px}
 /* ---------- Chân: nút Đóng nền trắng, viền, bên phải ---------- */
 .qnd-rule-foot{display:flex;justify-content:flex-end;padding:16px 32px;border-top:1px solid var(--color-border)}
@@ -406,3 +412,11 @@
 @media (prefers-reduced-motion:reduce){
   .qf-page *,.qf-page *::before,.qf-page *::after{transition-duration:0s!important}
 }
+
+/* ---------- Ngắt dòng cố định trong đoạn chữ (theo yêu cầu: cụm chữ trọn 1 dòng ở dòng 2) ---------- */
+.qf-about-more .qf-faq-body p{text-wrap:balance} /* "Tìm hiểu sứ mệnh…": phần trước chỗ ngắt chia đều dòng, không để 1–2 chữ rơi lẻ */
+@media(min-width:1440px){.qf-keep{white-space:nowrap}} /* cột chữ ≥ 813px: cụm "nhân đạo. Tư cách pháp nhân … độc lập." (≈797px) nằm trọn 1 dòng */
+@media(max-width:1439px){.qf-about-more .qf-faq-body p br{display:none}} /* cột hẹp: bỏ ngắt dòng cố định, chữ tự chảy */
+@media(min-width:1440px) and (max-width:1599px){.qf-field-body{left:20px;right:20px}.qf-field-body h3 + p{font-size:14px;line-height:22px}} /* thẻ hẹp (chữ ~398px): mô tả 14px để từng dòng cố định (dài nhất ≈ 394px) vẫn trọn 1 dòng */
+@media(max-width:1439px){.qf-field-body p br{display:none}} /* < 1440px: thẻ quá hẹp → bỏ ngắt dòng cố định trong mô tả thẻ lĩnh vực, chữ tự chảy */
+@media(max-width:767px){.qf-page .section-lead br{display:none}} /* điện thoại: bỏ ngắt dòng cố định trong các câu mô tả section */

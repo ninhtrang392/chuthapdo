@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20261119-20" />
-    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261119-36" />
+    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261119-45" />
     <!-- Có chuyển động → ẩn hero tới khi GSAP dựng xong (quy-nhan-dao.js gỡ lớp; quá 4 giây chưa gỡ thì tự gỡ) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -106,7 +106,7 @@
         <!-- ---------- Breadcrumb: luôn ở trên cùng, ngay dưới header (như các trang khác) ---------- -->
         <div class="container qf-crumbs">
           <nav class="breadcrumb qf-crumb" aria-label="Breadcrumb">
-            <a href="index.html">Trang chủ</a><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg><span class="breadcrumb-current" aria-current="page">Quỹ nhân đạo</span>
+            <a href="index.html">Trang chủ</a><svg class="icon" aria-hidden="true"><use href="#chevron-right"/></svg><span class="breadcrumb-current" aria-current="page">Quỹ Nhân đạo Việt Nam</span>
           </nav>
         </div>
 
@@ -118,9 +118,9 @@
               <span class="qf-line"><span class="qf-line-in">Quỹ Nhân đạo</span></span>
               <span class="qf-line"><span class="qf-line-in">Việt Nam</span></span>
             </h1>
-            <p class="qf-hero-en" lang="en">Viet Nam Humanitarian Foundation</p>
+            <p class="qf-hero-en" lang="en">Viet Nam Humanitarian Foundation – VNHF</p>
             <p class="qf-hero-slogan">Kết nối nguồn lực – Lan tỏa nhân ái</p>
-            <p class="section-lead qf-hero-lead">Chung tay kết nối những tấm lòng, nguồn lực và hành động nhân đạo để kịp thời trợ giúp những người có hoàn cảnh khó khăn, xây dựng cộng đồng an toàn, nhân ái và phát triển bền vững.</p>
+            <p class="section-lead qf-hero-lead">Chung tay kết nối những tấm lòng, nguồn lực và hành&nbsp;động<br />nhân đạo để kịp thời trợ giúp những người có hoàn cảnh khó&nbsp;khăn,<br />xây dựng cộng đồng an toàn, nhân ái và phát triển bền&nbsp;vững.</p>
             <div class="qf-hero-actions">
               <a class="button button-primary" href="#dong-hanh"><svg class="icon" aria-hidden="true"><use href="#heart-solid"/></svg>Đồng hành cùng Quỹ</a>
               <a class="button button-outline" href="#ve-quy">Tìm hiểu về Quỹ<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
@@ -202,7 +202,7 @@
             </div>
           </div>
 
-            <!-- ---------- Ủng hộ trực tiếp (phải): nhãn chấm nhấp nháy (như trang chủ) · thẻ .feed-item (ảnh hoặc chữ cái đầu họ + tên · tên · thời gian, không ghi chương trình) xếp dọc, ĐỨNG YÊN — có khoản ủng hộ mới thì thẻ mới chèn lên đầu, các thẻ cũ trượt xuống (cộng luôn 2 thẻ KPI)
+            <!-- ---------- Ủng hộ trực tiếp (phải): nhãn chấm nhấp nháy (như trang chủ) · thẻ .feed-item (avatar trái tim nhiều màu · tên · thời gian, không ghi chương trình) xếp dọc, ĐỨNG YÊN — có khoản ủng hộ mới thì thẻ mới chèn lên đầu, các thẻ cũ trượt xuống (cộng luôn 2 thẻ KPI)
                  (data-ago: số phút trước — quy-nhan-dao.js › Ủng hộ trực tiếp: chèn giao dịch mới, cập nhật nhãn thời gian) ---------- -->
             <aside class="qf-live" aria-labelledby="qf-live-title">
               <p class="eyebrow live-badge" id="qf-live-title"><span class="live-dot" aria-hidden="true"></span>Ủng hộ trực tiếp</p>
@@ -210,7 +210,7 @@
                 <div class="qf-live-track">
                   <ul class="feed-list" aria-label="Giao dịch ủng hộ mới nhất">
                   <li class="feed-item" data-ago="0">
-                    <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/nguyen-minh-anh.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
+                    <span class="feed-avatar is-heart tone-red" aria-hidden="true"><svg class="icon"><use href="#heart-solid"/></svg></span>
                     <div class="feed-info">
                       <p class="feed-name">Nguyễn Minh Anh</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p>
@@ -218,7 +218,7 @@
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+150.000 ₫</p>
                   </li>
                   <li class="feed-item" data-ago="0">
-                    <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/hoang-mai-linh.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
+                    <span class="feed-avatar is-heart tone-orange" aria-hidden="true"><svg class="icon"><use href="#heart-solid"/></svg></span>
                     <div class="feed-info">
                       <p class="feed-name">Hoàng Mai Linh</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p>
@@ -226,7 +226,7 @@
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+3.000.000 ₫</p>
                   </li>
                   <li class="feed-item" data-ago="1">
-                    <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/pham-gia-huy.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
+                    <span class="feed-avatar is-heart tone-green" aria-hidden="true"><svg class="icon"><use href="#heart-solid"/></svg></span>
                     <div class="feed-info">
                       <p class="feed-name">Phạm Gia Huy</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>1 phút trước</span></p>
@@ -234,15 +234,15 @@
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+5.000.000 ₫</p>
                   </li>
                   <li class="feed-item" data-ago="3">
-                    <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/tran-thu-ha.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
+                    <span class="feed-avatar is-heart tone-blue" aria-hidden="true"><svg class="icon"><use href="#heart-solid"/></svg></span>
                     <div class="feed-info">
-                      <p class="feed-name">Trần Thu Hà</p>
+                      <p class="feed-name">Nhà hảo tâm ẩn danh</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>3 phút trước</span></p>
                     </div>
                     <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+200.000 ₫</p>
                   </li>
                   <li class="feed-item" data-ago="6">
-                    <span class="feed-avatar" aria-hidden="true"><img src="Emages/avatar/le-quoc-bao.jpg" alt="" width="160" height="160" loading="lazy" decoding="async" /></span>
+                    <span class="feed-avatar is-heart tone-purple" aria-hidden="true"><svg class="icon"><use href="#heart-solid"/></svg></span>
                     <div class="feed-info">
                       <p class="feed-name">Lê Quốc Bảo</p>
                       <p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>6 phút trước</span></p>
@@ -267,8 +267,6 @@
           <div>
             <h2 class="section-title" id="qf-about-title" data-split>Một điểm kết nối, nhiều hành trình nhân ái</h2>
             <p class="section-lead">Quỹ Nhân đạo Việt Nam (Viet Nam Humanitarian Foundation – VNHF) là quỹ từ thiện do<br />Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam sáng lập, hoạt động không vì mục tiêu lợi nhuận, phạm vi toàn&nbsp;quốc.</p>
-            <!-- ---------- Văn bản pháp lý: Quyết định của Bộ Nội vụ (nhãn bo tròn, icon tài liệu) ---------- -->
-            <p class="qf-about-decree"><svg class="icon" aria-hidden="true"><use href="#document"/></svg>Quyết định số <strong>1421/QĐ-BNV</strong> ngày 19/11/2026 của Bộ Nội vụ</p>
           </div>
         </div>
 
@@ -287,7 +285,7 @@
             <ul class="qf-about-facts">
               <li class="qf-fact" data-reveal><span class="qf-fact-icon" aria-hidden="true"><svg class="icon"><use href="#hand-heart"/></svg></span><h3>Không vì lợi nhuận, không phân chia tài sản</h3></li>
               <li class="qf-fact" data-reveal><span class="qf-fact-icon" aria-hidden="true"><svg class="icon"><use href="#building"/></svg></span><h3>Tự tạo vốn, tự trang trải, tự chịu trách nhiệm bằng tài sản của Quỹ</h3></li>
-              <li class="qf-fact" data-reveal><span class="qf-fact-icon" aria-hidden="true"><svg class="icon"><use href="#shield"/></svg></span><h3>Công khai, minh bạch, số hóa</h3></li>
+              <li class="qf-fact" data-reveal><span class="qf-fact-icon" aria-hidden="true"><svg class="icon"><use href="#shield"/></svg></span><h3>Công khai, minh bạch,<br />số hóa</h3></li>
             </ul>
 
             <!-- ---------- Mục mở/đóng: Tìm hiểu sứ mệnh và quản trị Quỹ (dùng lại kiểu câu hỏi thường gặp .qf-faq-list) ---------- -->
@@ -295,7 +293,7 @@
               <details>
                 <summary>Tìm hiểu sứ mệnh và quản trị Quỹ</summary>
                 <div class="qf-faq-body">
-                  <p>Quỹ hướng tới kết nối nguồn lực trong nước và quốc tế, hình thành nguồn lực nền tảng và dự phòng cho hoạt động nhân đạo. Tư cách pháp nhân, tài sản, tài chính và trách nhiệm pháp lý của Quỹ được xác định độc lập.</p>
+                  <p>Quỹ hướng tới kết nối nguồn lực trong nước và quốc tế, hình thành nguồn lực nền tảng và dự phòng cho hoạt động<br /><span class="qf-keep">nhân đạo. Tư cách pháp nhân, tài sản, tài chính và trách nhiệm pháp lý của Quỹ được xác định độc lập.</span></p>
                   <p>Cơ cấu quản trị dự kiến trình bày gồm Hội đồng quản lý, Ban Kiểm soát, Ban Giám đốc và bộ máy chuyên môn. Hồ sơ, nhân sự và văn bản pháp lý chính thức sẽ được bổ sung khi công bố.</p>
                 </div>
               </details>
@@ -316,7 +314,7 @@
           <div class="container section-head qf-fields-head">
             <div>
               <h2 class="section-title" id="qf-fields-title" data-split>Nguồn lực được kết nối tới đâu?</h2>
-              <p class="section-lead">Từ trợ giúp khẩn cấp đến đồng hành dài hạn — 6 lĩnh vực nhân đạo Quỹ kết nối nguồn lực.</p>
+              <p class="section-lead">Từ trợ giúp khẩn cấp đến đồng hành dài hạn — 06 lĩnh vực nhân đạo Quỹ kết nối nguồn&nbsp;lực.</p>
             </div>
             <p class="section-head-aside qf-fields-count"><b>06</b> lĩnh vực</p>
           </div>
@@ -328,12 +326,12 @@
               <li class="qf-field" data-reveal>
                 <div class="qf-field-img"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Trao%20g%E1%BB%ADi%20y%C3%AAu%20th%C6%B0%C6%A1ng%20v%C3%B9ng%20cao.png" alt="Tình nguyện viên Chữ thập đỏ trao túi quà nhu yếu phẩm cho cụ bà dân tộc vùng cao" loading="lazy" /></div>
                 <!-- nhãn vàng + icon · tên trắng: dùng chung .event-card-place / .event-card-name (như thẻ hạng mục Giải thưởng) -->
-                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#alert"/></svg>Lĩnh vực 01</p><h3 class="event-card-name">Cứu trợ khẩn cấp</h3><p>Lương thực, nước uống, nơi ở tạm, nhu yếu phẩm cho người dân bị ảnh hưởng bởi thiên tai, thảm họa, dịch bệnh, sự cố nghiêm trọng</p></div>
+                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#alert"/></svg>Lĩnh vực 01</p><h3 class="event-card-name">Cứu trợ khẩn cấp</h3><p>Lương thực, nước uống, nơi ở tạm, nhu yếu phẩm cho<br />người dân bị ảnh hưởng bởi thiên tai, thảm họa, dịch&nbsp;bệnh,<br />sự cố nghiêm&nbsp;trọng</p></div>
               </li>
               <li class="qf-field" data-reveal>
                 <div class="qf-field-img"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Di%E1%BB%85n%20t%E1%BA%ADp%20ph%C3%B2ng%20ch%E1%BB%91ng%20thi%C3%AAn%20tai.png" alt="Diễn tập phòng chống thiên tai" loading="lazy" /></div>
                 <!-- nhãn vàng + icon · tên trắng: dùng chung .event-card-place / .event-card-name (như thẻ hạng mục Giải thưởng) -->
-                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#shield"/></svg>Lĩnh vực 02</p><h3 class="event-card-name">Phòng ngừa, ứng phó thảm họa</h3><p>Nguồn dự phòng, hàng cứu trợ sẵn sàng, nâng cao năng lực cộng đồng</p></div>
+                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#shield"/></svg>Lĩnh vực 02</p><h3 class="event-card-name">Phòng ngừa, ứng phó thảm họa</h3><p>Nguồn dự phòng, hàng cứu trợ sẵn sàng, nâng&nbsp;cao<br />năng lực cộng&nbsp;đồng</p></div>
               </li>
               <li class="qf-field" data-reveal>
                 <div class="qf-field-img"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/N%E1%BB%A5%20c%C6%B0%E1%BB%9Di%20gi%E1%BB%AFa%20v%C6%B0%E1%BB%9Dn%20tr%C3%A0%20xanh.png" alt="Người phụ nữ đội nón lá cười rạng rỡ giữa vườn trà xanh" loading="lazy" /></div>
@@ -343,17 +341,17 @@
               <li class="qf-field" data-reveal>
                 <div class="qf-field-img"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/T%C3%ACnh%20nguy%E1%BB%87n%20vi%C3%AAn%20kh%C3%A1m%20s%E1%BB%A9c%20kh%E1%BB%8Fe%20cho%20em%20nh%E1%BB%8F.png" alt="Tình nguyện viên khám sức khỏe cho em nhỏ" loading="lazy" /></div>
                 <!-- nhãn vàng + icon · tên trắng: dùng chung .event-card-place / .event-card-name (như thẻ hạng mục Giải thưởng) -->
-                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#pulse"/></svg>Lĩnh vực 04</p><h3 class="event-card-name">Chăm sóc sức khỏe</h3><p>Khám chữa bệnh nhân đạo, hỗ trợ người bệnh khó khăn, sơ cấp cứu</p></div>
+                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#pulse"/></svg>Lĩnh vực 04</p><h3 class="event-card-name">Chăm sóc sức khỏe</h3><p>Khám chữa bệnh nhân đạo, hỗ trợ người bệnh khó khăn,<br />sơ&nbsp;cấp&nbsp;cứu</p></div>
               </li>
               <li class="qf-field" data-reveal>
                 <div class="qf-field-img"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/C%C3%B4%20tr%C3%B2%20trao%20t%E1%BA%B7ng%20s%C3%A1ch%20v%E1%BB%9F%20v%E1%BB%81%20qu%C3%AA.png" alt="Tình nguyện viên Chữ thập đỏ trao sách vở và phong bì học bổng cho học sinh vùng quê" loading="lazy" /></div>
                 <!-- nhãn vàng + icon · tên trắng: dùng chung .event-card-place / .event-card-name (như thẻ hạng mục Giải thưởng) -->
-                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#hand-heart"/></svg>Lĩnh vực 05</p><h3 class="event-card-name">Học bổng và trợ giúp người dễ bị tổn thương</h3><p>Học bổng; hỗ trợ người nghèo, người khuyết tật, nạn nhân chất độc da cam/dioxin</p></div>
+                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#hand-heart"/></svg>Lĩnh vực 05</p><h3 class="event-card-name">Học bổng và trợ giúp người dễ bị tổn thương</h3><p>Học bổng; hỗ trợ người nghèo, người khuyết tật, nạn&nbsp;nhân<br />chất&nbsp;độc&nbsp;da&nbsp;cam/dioxin</p></div>
               </li>
               <li class="qf-field" data-reveal>
                 <div class="qf-field-img"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/B%E1%BB%91c%20d%E1%BB%A1%20h%C3%A0ng%20c%E1%BB%A9u%20tr%E1%BB%A3%20t%E1%BA%A1i%20s%C3%A2n%20bay.png" alt="Bốc dỡ hàng cứu trợ tại sân bay" loading="lazy" /></div>
                 <!-- nhãn vàng + icon · tên trắng: dùng chung .event-card-place / .event-card-name (như thẻ hạng mục Giải thưởng) -->
-                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#globe"/></svg>Lĩnh vực 06</p><h3 class="event-card-name">Tiếp nhận nguồn lực quốc tế cho hoạt động nhân đạo trong nước</h3><p>Tiếp nhận tài trợ, viện trợ của đối tác quốc tế và kiều bào theo quy định về viện trợ nước ngoài</p></div>
+                <div class="qf-field-body"><p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#globe"/></svg>Lĩnh vực 06</p><h3 class="event-card-name">Tiếp nhận nguồn lực quốc tế cho hoạt động nhân đạo trong nước</h3><p>Tiếp nhận tài trợ, viện trợ của đối tác quốc tế và kiều bào<br />theo quy định về viện trợ nước&nbsp;ngoài</p></div>
               </li>
             </ol>
           </div>
@@ -370,7 +368,7 @@
           <div class="section-head qf-trust-head">
             <div>
               <h2 class="section-title" id="qf-trust-title" data-split>Niềm tin từ sự rõ ràng.</h2>
-              <p class="section-lead">Từ nguồn lực được tiếp nhận đến những gì được trao đi — mỗi bước đều được ghi nhận, công khai và giải trình.</p>
+              <p class="section-lead">Từ nguồn lực được tiếp nhận đến những gì được trao đi — mỗi bước<br />đều được ghi nhận, công khai và giải&nbsp;trình.</p>
             </div>
           </div>
 
@@ -704,6 +702,6 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="quy-nhan-dao.js?v=20261119-9" defer></script>
+    <script src="quy-nhan-dao.js?v=20261119-11" defer></script>
   </body>
 </html>

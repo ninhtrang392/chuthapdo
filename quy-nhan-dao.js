@@ -66,26 +66,31 @@ $('.pf-toast-close', toast).addEventListener('click', hideToast);
 const liveList = $('.qf-live .feed-list');
 if (liveList) {
   const LIVE_MAX = 8; // giữ tối đa 8 thẻ (khung hiện ~5), thẻ cũ nhất bị bỏ
-  // Người ủng hộ mẫu: có ảnh (Emages/avatar/) hoặc không (avatar rỗng → hiện chữ cái đầu của họ và tên)
+  // Người ủng hộ mẫu (avatar luôn là trái tim, màu xoay vòng theo HEART_TONES) — có cả "Nhà hảo tâm ẩn danh" (người ủng hộ không công khai tên)
+  const ANONYMOUS = 'Nhà hảo tâm ẩn danh';
   const LIVE_SAMPLES = [
-    { name: 'Nguyễn Minh Anh', avatar: 'Emages/avatar/nguyen-minh-anh.jpg', amount: 500000 },
-    { name: 'Hoàng Mai Linh', avatar: 'Emages/avatar/hoang-mai-linh.jpg', amount: 1000000 },
-    { name: 'Phạm Gia Huy', avatar: 'Emages/avatar/pham-gia-huy.jpg', amount: 2000000 },
-    { name: 'Trần Thu Hà', avatar: 'Emages/avatar/tran-thu-ha.jpg', amount: 300000 },
-    { name: 'Lê Quốc Bảo', avatar: 'Emages/avatar/le-quoc-bao.jpg', amount: 4500000 },
-    { name: 'Đỗ Thanh Tùng', avatar: '', amount: 200000 },
-    { name: 'Vũ Ngọc Ánh', avatar: '', amount: 1500000 },
-    { name: 'Bùi Văn Nam', avatar: '', amount: 100000 },
-    { name: 'Ngô Thị Lan', avatar: '', amount: 700000 },
+    { name: 'Nguyễn Minh Anh', amount: 500000 },
+    { name: 'Hoàng Mai Linh', amount: 1000000 },
+    { name: ANONYMOUS, amount: 2000000 },
+    { name: 'Phạm Gia Huy', amount: 2000000 },
+    { name: 'Lê Quốc Bảo', amount: 4500000 },
+    { name: ANONYMOUS, amount: 500000 },
+    { name: 'Đỗ Thanh Tùng', amount: 200000 },
+    { name: 'Vũ Ngọc Ánh', amount: 1500000 },
+    { name: ANONYMOUS, amount: 10000000 },
+    { name: 'Bùi Văn Nam', amount: 100000 },
+    { name: 'Ngô Thị Lan', amount: 700000 },
   ];
+  // Màu trái tim avatar (.feed-avatar.tone-*): xoay vòng, tiếp nối sau thẻ trên cùng để 2 thẻ liền nhau luôn khác màu
+  const HEART_TONES = ['tone-red', 'tone-orange', 'tone-green', 'tone-blue', 'tone-purple', 'tone-pink'];
+  const nextTone = () => {
+    const top = $('.feed-avatar', liveList);
+    const cur = top ? HEART_TONES.findIndex((t) => top.classList.contains(t)) : -1;
+    return HEART_TONES[(cur + 1 + HEART_TONES.length) % HEART_TONES.length];
+  };
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const vnd = (value) => `${value.toLocaleString('vi-VN')} ₫`;
   const ty = (value) => `${(Math.round(value / 1e7) / 100).toLocaleString('vi-VN', { maximumFractionDigits: 2 })} tỷ ₫`;
-  // Chữ cái đầu của họ và tên: Nguyễn Văn Nam → NN (tên 1 chữ → 1 chữ cái)
-  const initials = (name) => {
-    const words = name.trim().split(/\s+/);
-    return (words.length > 1 ? words[0][0] + words[words.length - 1][0] : words[0][0]).toLocaleUpperCase('vi-VN');
-  };
   const agoLabel = (ms) => {
     const minutes = Math.floor((Date.now() - ms) / 60000);
     return minutes < 1 ? 'Vừa xong' : `${minutes} phút trước`;
@@ -100,19 +105,16 @@ if (liveList) {
   $$('.feed-item', liveList).forEach((item) => { item.dataset.time = Date.now() - Number(item.dataset.ago || 0) * 60000; });
   const refreshTimes = () => $$('.feed-item', liveList).forEach((item) => { $('.feed-time span', item).textContent = agoLabel(Number(item.dataset.time)); });
 
-  const addLiveDonation = ({ name, avatar, amount }) => {
+  const addLiveDonation = ({ name, amount }) => {
     // Vị trí cũ các thẻ (FLIP) → sau khi chèn, cho các thẻ trượt từ chỗ cũ xuống chỗ mới
     const before = new Map($$('.feed-item', liveList).map((el) => [el, el.getBoundingClientRect().top]));
     const item = document.createElement('li');
     item.className = 'feed-item is-new';
     item.dataset.time = Date.now();
-    item.innerHTML = `<span class="feed-avatar" aria-hidden="true"></span>
+    item.innerHTML = `<span class="feed-avatar is-heart ${nextTone()}" aria-hidden="true"><svg class="icon"><use href="#heart-solid"/></svg></span>
       <div class="feed-info"><p class="feed-name"></p><p class="feed-time"><svg class="icon" aria-hidden="true"><use href="#clock"/></svg><span>Vừa xong</span></p></div>
       <p class="feed-amount"><span class="visually-hidden">Đóng góp </span>+${vnd(amount)}</p>`;
     $('.feed-name', item).textContent = name;
-    const face = $('.feed-avatar', item);
-    if (avatar) face.innerHTML = `<img src="${avatar}" alt="" width="160" height="160" decoding="async" />`;
-    else { face.classList.add('is-initials'); face.textContent = initials(name); }
     liveList.prepend(item);
     if (!reduceMotion.matches) {
       before.forEach((top, el) => {
@@ -128,7 +130,7 @@ if (liveList) {
     refreshTimes();
   };
 
-  // Tab ẩn thì không sinh giao dịch mới (tránh dồn hàng loạt khi quay lại); không lấy 2 người ở 2 thẻ trên cùng (tránh lặp liền nhau — chỉ có 5 người mẫu có ảnh)
+  // Tab ẩn thì không sinh giao dịch mới (tránh dồn hàng loạt khi quay lại); không lấy 2 người ở 2 thẻ trên cùng (tránh lặp liền nhau, kể cả 2 nhà hảo tâm ẩn danh liền nhau)
   const scheduleNext = () => setTimeout(() => {
     if (!document.hidden) {
       const recent = $$('.feed-name', liveList).slice(0, 2).map((el) => el.textContent);
