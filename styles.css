@@ -4199,9 +4199,10 @@ html.pf-reg-lock{overflow:hidden}
 /* ==================== SECTION: KÊU GỌI ĐỒNG HÀNH ==================== */
 /* ---------- Thẻ đỏ CTA nền ảnh “Trái tim đỏ bóng trong đôi tay nâng niu” (như bên trang Giải thưởng), nở ra khi cuộn tới ---------- */
 .dh-cta{padding-top:var(--dh-space);padding-bottom:var(--dh-space);overflow:hidden}
-.dh-cta-card{min-height:0;padding:56px 64px;will-change:transform;background:linear-gradient(90deg,rgba(122,18,25,.3) 0%,rgba(122,18,25,.12) 45%,rgba(122,18,25,0) 70%),#c8141f url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 70% 45% / cover no-repeat}
-.dh-cta-card h2{margin:0;font-size:32px;font-weight:700;line-height:40px}
-.dh-cta-card .action-campaign-desc{max-width:560px;margin:12px 0 24px}
+.dh-cta-card{min-height:280px;justify-content:center;padding:clamp(44px,5vw,64px) clamp(28px,4vw,64px);will-change:transform;background:linear-gradient(90deg,rgba(122,18,25,.38) 0%,rgba(122,18,25,.18) 45%,rgba(122,18,25,0) 70%),#c8141f url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 70% 45% / cover no-repeat}
+.dh-cta-card h2{margin:0 0 16px;font-size:clamp(26px,2.4vw,34px);font-weight:700;line-height:1.25}
+.dh-cta-card .action-campaign-desc{max-width:620px;margin:0;font-size:clamp(15px,1.1vw,17px);line-height:1.65;color:rgba(255,255,255,.92)}
+.dh-cta-card .action-start{display:none!important}
 
 /* ---------- Responsive: trang đơn vị đồng hành ---------- */
 @media(max-width:1100px){
