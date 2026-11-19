@@ -4548,6 +4548,7 @@ html.pf-reg-lock{overflow:hidden}
 .gt-categories .event-card:nth-child(3) .event-card-photo img{object-position:58% 50%}
 .gt-categories .event-card:nth-child(4) .event-card-photo img{object-position:62% 50%}
 .gt-categories .event-card:nth-child(5) .event-card-photo img{object-position:45% 50%}
+.gt-categories .event-card-desc{text-wrap:pretty} /* tránh 1 chữ rớt lẻ dòng cuối (vd "đồng."); chỉ trang Giải thưởng, không đụng thẻ trang chủ */
 .gt-info-lead{max-width:none} /* Xét chọn và đề cử: mô tả 2 dòng, ngắt cứng trước "và thông tin…" (<br>) → bỏ giới hạn 580px để dòng 2 không bị gãy thêm */
 .gt-icon{display:grid;place-items:center;flex:none;width:56px;height:56px;border-radius:50%;background:#fdecec;color:var(--red)}
 .gt-icon .icon{width:26px;height:26px}
