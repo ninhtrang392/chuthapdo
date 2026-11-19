@@ -3893,6 +3893,11 @@ html.pf-reg-lock{overflow:hidden}
 .dh-stats-band .dh-showcase-stats{margin-top:0;background:none;color:var(--color-text)}
 .dh-stats-band .dh-showcase-stat-list > div + div{border-left-color:var(--color-border)}
 .dh-stats-band .dh-showcase-stat-list dt{color:var(--color-text-muted);text-wrap:balance} /* chia dòng cân: tránh lẻ "trợ" ở "Chương trình trọng điểm được hỗ trợ" */
+/* ---------- Nhãn số liệu 1 dòng (từ 768px): cột tự co theo nội dung, dàn đều 2 đầu; màn 1101–1279 giảm đệm ô, 1101–1199 chữ 13px để "Chương trình trọng điểm được hỗ trợ" không tràn. Điện thoại: ô quá hẹp → giữ 2 dòng chia cân ---------- */
+@media(min-width:768px){.dh-stats-band .dh-showcase-stat-list dt{white-space:nowrap}}
+@media(min-width:1101px){.dh-stats-band .dh-showcase-stat-list{grid-template-columns:repeat(4,auto);justify-content:space-between}}
+@media(min-width:1101px) and (max-width:1279px){.dh-stats-band .dh-showcase-stat-list > div{padding:0 12px}}
+@media(min-width:1101px) and (max-width:1199px){.dh-stats-band .dh-showcase-stat-list dt{font-size:13px}}
 .dh-stats-band .dh-showcase-stat-list dd span{color:var(--color-text)}
 .dh-stats-band .dh-showcase-stat-list .icon{border-color:rgba(237,36,41,.35);background:#fdecec;box-shadow:none;color:var(--red)}
 .dh-showcase-stat-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-block:0}
