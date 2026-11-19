@@ -717,6 +717,7 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
    Không ghim (màn ≤1100px / giảm chuyển động): 4 thẻ xếp dọc. ---------- */
 .awards{--edge:max(var(--gutter),calc((100vw - var(--container)) / 2));position:relative;overflow:hidden;overflow:clip;background:var(--color-bg)}
 .awards-head > .section-head{margin-bottom:var(--space-head)}
+.awards-brand .section-lead{max-width:680px} /* tên "Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái” — tôn vinh những tấm gương" ≈ 660px → dòng 1 trọn 1 dòng */
 .award-pin{display:flex;flex-direction:column;padding-inline:var(--edge)}
 .awards.is-pinned{padding:0}
 /* Desktop ghim: đầu section (trên) + chồng thẻ cao cố định; khối ghim cao theo nội dung (không kéo cả màn → không dư khoảng trắng với section trên);
@@ -4841,7 +4842,7 @@ html.pf-reg-lock{overflow:hidden}
 .qnd-rules-list{margin:0}
 .qnd-rules-list .ngn-item{align-items:center}
 .qnd-rules-list .ngn-item > div{flex:1;min-width:0}
-.qnd-rules-list .ngn-item:last-child{border-bottom:1px solid var(--color-border)}
+.qnd-rules-list .ngn-item:last-child{border-bottom:0} /* bỏ đường kẻ dưới mục cuối (04) */
 .qnd-rules-list .link-arrow{flex:none;font-size:14px}
 
 /* ---------- Popup Quy chế vận hành: dùng lại .info-dialog, bản rộng; nội dung dài cuộn trong khung ---------- */

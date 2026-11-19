@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261119-13" />
+    <link rel="stylesheet" href="styles.css?v=20261119-14" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -296,7 +296,7 @@
                                 <div class="event-card-box">
                                     <!-- ---------- Ảnh (hàng ảnh cuối): rê chuột → mô tả + nút Xem thêm trượt lên; cả ảnh bấm được ---------- -->
                                     <div class="event-card-photo">
-                                        <img src="Emages/ng%E1%BB%8Dn%20%C4%91%C3%A8n.png" alt="Biểu tượng Giải thưởng Ngọn đèn Nhân Ái: ngọn lửa trên trái tim ôm huy hiệu Chữ thập đỏ Việt Nam" loading="lazy" decoding="async" />
+                                        <img src="Emages/ng%E1%BB%8Dn%20%C4%91%C3%A8n.png" alt="Biểu tượng Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái”: ngọn lửa trên trái tim ôm huy hiệu Chữ thập đỏ Việt Nam" loading="lazy" decoding="async" />
                                         <div class="event-card-cover">
                                             <p class="event-card-place"><svg class="icon" aria-hidden="true"><use href="#crown"/></svg>Tôn vinh</p>
                                             <h3 class="event-card-name"><a class="stretched" href="giai-thuong.html">Giải thưởng Nhân đạo Việt Nam<br />Ngọn đèn Nhân Ái</a></h3>
@@ -446,7 +446,7 @@
                                 <div class="awards-brand">
                                     <div>
                                         <h2 class="section-title" id="giai-thuong-title">Những đóng góp xứng đáng được thắp sáng</h2>
-                                        <p class="section-lead">Giải thưởng Ngọn đèn Nhân Ái — tôn&nbsp;vinh những tấm gương<br />và hành động đẹp vì cộng&nbsp;đồng, do chính cộng&nbsp;đồng đề&nbsp;cử mỗi&nbsp;năm.</p>
+                                        <p class="section-lead">Giải thưởng Nhân đạo Việt&nbsp;Nam “Ngọn&nbsp;đèn&nbsp;Nhân&nbsp;ái” — tôn&nbsp;vinh những tấm gương<br />và hành động đẹp vì cộng&nbsp;đồng, do chính cộng&nbsp;đồng đề&nbsp;cử mỗi&nbsp;năm.</p>
                                     </div>
                                 </div>
                                 <div class="section-head-aside">
@@ -455,7 +455,7 @@
                             </div>
                         </div>
 
-                        <ol class="award-cards" aria-label="5 hạng mục giải thưởng Ngọn đèn Nhân Ái">
+                        <ol class="award-cards" aria-label="5 hạng mục Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái”">
                             <li class="award-card">
                                 <div class="award-card-text">
                                     <span class="award-num" aria-hidden="true">01</span>
@@ -1118,7 +1118,7 @@
                 <!-- ==================== END SECTION: ĐƠN VỊ ĐỒNG HÀNH ==================== -->
 
                 <!-- ==================== SECTION: ĐƠN VỊ ĐỒNG HÀNH & PHÁT TRIỂN HỆ THỐNG ==================== -->
-                <!-- 3 slide: GTINX & BIDV · GTINX & Vietjet · GTINX & Camel — ảnh chung: Emages/Homepage/Nền sóng đỏ và cái bắt tay mờ nhạt.png + logo GTINX | đối tác phủ lên (.sponsor-media-logos); nội dung Vietjet/Camel là DỮ LIỆU MINH HỌA.
+                <!-- 3 slide: GTINX & BIDV · GTINX & Vietjet · GTINX & Camel — ảnh: BIDV = lễ ký kết (Emages/Đơn vị đồng hành/picture6.avif); Vietjet, Camel = Emages/Homepage/Nền sóng đỏ và cái bắt tay mờ nhạt.png + logo GTINX | đối tác phủ lên (.sponsor-media-logos); nội dung Vietjet/Camel là DỮ LIỆU MINH HỌA.
            Dùng lại .partners-head (tiêu đề căn giữa), bố cục .sponsor-* (ảnh trái, chữ phải), ô logo .partner-logo (logo: Emages/Đối tác/) và dải trượt .pv-track của trang chương trình + chấm chỉ slide.
            Tự chuyển slide mỗi 6 giây, dừng khi rê chuột / focus (script.js). -->
                 <section class="section partners founders" id="phat-trien-he-thong" aria-labelledby="founders-title">
@@ -1133,10 +1133,8 @@
                         <div class="pv-track founders-track" id="founders-track" role="group" aria-roledescription="carousel" aria-label="Đơn vị đồng hành — tự chuyển mỗi 6 giây, dừng khi rê chuột">
                             <!-- ---------- Slide 1: GTINX & BIDV ---------- -->
                             <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="1 / 3: GTINX và BIDV">
-                                <figure class="sponsor-media media media-photo">
-                                    <img src="Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png" alt="" width="1672" height="941" loading="lazy" decoding="async" />
-                                    <!-- Logo trên nền ảnh: GTINX | đối tác (vạch đỏ ngăn giữa) -->
-                                    <div class="sponsor-media-logos" role="img" aria-label="GTINX và BIDV"><img class="is-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="" width="445" height="107" loading="lazy" decoding="async" /><span class="sponsor-media-sep" aria-hidden="true"></span><img class="is-partner" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/BIDV_RGB.png" alt="" width="960" height="445" loading="lazy" decoding="async" /></div>
+                                <figure class="sponsor-media media media-photo" style="--focus:50% 55%">
+                                    <img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/picture6.avif" alt="Lễ ký kết thỏa thuận hợp tác toàn diện giữa BIDV và GTEL" width="820" height="432" loading="lazy" />
                                 </figure>
                                 <div class="sponsor-content">
                                     <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
@@ -1213,7 +1211,7 @@
                     <!-- ---------- Tiêu đề căn giữa ---------- -->
                     <div class="container partners-head">
                         <h2 class="section-title" id="partners-title">Đồng hành cùng các chương trình nhân đạo</h2>
-                        <p class="section-lead" data-reveal>Cảm ơn các doanh nghiệp, tổ chức đã cùng Hội lan tỏa<br />những giá trị nhân đạo đến cộng&nbsp;đồng.</p>
+                        <p class="section-lead" data-reveal>Cảm ơn các doanh nghiệp, tổ chức đã cùng Hội lan tỏa<br />những giá&nbsp;trị&nbsp;nhân&nbsp;đạo&nbsp;đến&nbsp;cộng&nbsp;đồng.</p>
                     </div>
 
                     <!-- ---------- Băng logo: 2 hàng chạy ngược chiều, dừng khi rê chuột ---------- -->
