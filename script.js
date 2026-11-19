@@ -886,7 +886,7 @@ if (window.gsap && window.ScrollTrigger) {
     };
 
     // ---------- III · Giải thưởng — thẻ xếp chồng: đầu section cuộn qua bình thường (data-reveal) → chồng thẻ trồi lên khi đi vào màn →
-    // ghim .award-pin; mỗi nhịp cuộn: thẻ sau trượt từ dưới lên đè thẻ trước, các thẻ trước thu nhỏ · lùi lên · phủ đỏ nhạt dần (thẻ càng sâu càng nhỏ/đậm) ----------
+    // ghim .award-pin; mỗi nhịp cuộn: thẻ sau trượt từ dưới lên đè khít thẻ trước (các thẻ chồng trùng nhau, nhìn như 1 thẻ) ----------
     const setupAwards = (section) => {
       const pin = section.querySelector('.award-pin');
       const cards = gsap.utils.toArray(section.querySelectorAll('.award-card'));
@@ -897,28 +897,23 @@ if (window.gsap && window.ScrollTrigger) {
         autoAlpha: 1, y: 0, ease: 'power2.out',
         scrollTrigger: { trigger: pin, start: 'top 90%', end: 'top 30%', scrub: true },
       });
-      const lead = vh * 0.1; // nghỉ ở thẻ 01 ngay khi vừa ghim
-      const step = vh * 0.55; // mỗi thẻ ~0.55 màn cuộn (cuộn nhanh hơn)
-      const tail = vh * 0.2;  // nghỉ ở thẻ cuối trước khi nhả ghim
+      const lead = vh * 0.05; // nghỉ ngắn ở thẻ 01 ngay khi vừa ghim
+      const step = vh * 0.35; // mỗi thẻ ~0.35 màn cuộn (cuộn nhanh)
+      const tail = vh * 0.1;  // nghỉ ngắn ở thẻ cuối trước khi nhả ghim
       const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
       cards.forEach((card, i) => gsap.set(card, { zIndex: i + 1 }));
       gsap.set(cards.slice(1), { y: vh }); // thẻ chờ nằm hẳn dưới mép màn (thẻ thấp nên không dùng yPercent)
+      // Thẻ trước đứng yên đúng chỗ (không lùi, không thu nhỏ) → thẻ sau trượt lên đè khít, nhìn vào chỉ thấy 1 thẻ
       cards.slice(1).forEach((card, n) => {
-        const i = n + 1;
         const at = lead + step * n;
         tl.to(card, { y: 0, duration: step, ease: 'power2.out' }, at);
-        for (let k = 0; k < i; k++) {
-          const depth = i - k; // thẻ càng nằm sâu càng nhỏ, càng lùi lên, càng tối
-          tl.to(cards[k], { scale: 1 - depth * 0.05, y: -depth * 18, duration: step, ease: 'power2.out' }, at);
-          tl.to(cards[k].querySelector('.award-card-shade'), { opacity: Math.min(0.05 * depth, 0.15), duration: step }, at); // đỏ rất nhạt, thẻ càng sâu càng đậm hơn chút
-        }
       });
       tl.to({}, { duration: tail });
       // Ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header (header nổi phía trên) → cả cụm đầu section + chồng thẻ căn giữa màn
       const headerBottom = () => { const h = document.querySelector('.header'); return h ? h.offsetTop + h.offsetHeight : 0; };
       ScrollTrigger.create({
         trigger: pin, start: () => `center ${Math.round((window.innerHeight + headerBottom()) / 2)}px`, end: `+=${tl.duration()}`,
-        pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, invalidateOnRefresh: true, animation: tl,
+        pin: true, scrub: 0.5, anticipatePin: 1, refreshPriority: 1, invalidateOnRefresh: true, animation: tl, // scrub 0.5: bám cuộn nhanh hơn
       });
       panelHandlers.push(() => section.classList.remove('is-pinned'));
     };

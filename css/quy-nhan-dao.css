@@ -42,7 +42,7 @@
 .qf-shot{position:relative;overflow:hidden;border-radius:20px;background:var(--color-surface-alt)}
 .qf-shot img{width:100%;height:100%;object-fit:cover}
 .qf-shot--main{grid-column:1;grid-row:1 / span 12}
-.qf-shot--main img{object-position:56% 50%} /* ảnh ngang → khung đứng: giữ cả 2 tình nguyện viên và em nhỏ ở giữa khung */
+.qf-shot--main img{object-position:85% 50%} /* ảnh vuông "Sharing Compassion, One Heart at a Time" → khung đứng: lệch phải để giữ trọn mặt cụ bà, trái tim + đôi tay vẫn trong khung */
 .qf-shot--top{grid-column:2;grid-row:1 / span 6} /* 2 ảnh nhỏ (mỗi ảnh nửa chiều cao) xếp dọc, cao bằng ảnh lớn */
 .qf-shot--top img{object-position:45% 50%} /* khung gần vuông: giữ nhóm người quanh laptop ở giữa */
 .qf-shot--bottom{grid-column:2;grid-row:7 / span 6}

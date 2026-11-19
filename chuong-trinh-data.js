@@ -32,7 +32,6 @@ const PROGRAMS = [
   { id: 'lu-lut-mien-trung', owner: 'tran-thu-ha', title: 'Khắc phục hậu quả lũ lụt cho người dân miền Trung', place: 'Quảng Trị', priority: 'urgent', field: 'Cứu trợ thiên tai', img: PIMG + 'photo-3-16722031623611945449954.png', raised: 1.245e9, goal: 2e9, days: 18 },
   { id: 'nuoc-sach-han-man', title: 'Nước sạch cho người dân vùng hạn mặn', place: 'Vĩnh Long', priority: 'medium', field: 'Nước sạch & Vệ sinh', img: PIMG + 'Kho%E1%BA%A3nh%20Kh%E1%BA%AFc%20Trao%20G%E1%BB%ADi%20Y%C3%AAu%20Th%C6%B0%C6%A1ng.png', raised: 410e6, goal: 1.2e9, days: 25 },
   { id: 'tiep-suc-den-truong', title: 'Tiếp sức đến trường vùng cao', place: 'Cao Bằng', priority: 'medium', field: 'Giáo dục & Khuyến học', img: PIMG + '72ad1836-57d6-41e3-aad3-6638cbc4c87e.png', raised: 328.5e6, goal: 800e6, days: 34 },
-  { id: 'hien-mau-mua-he', title: 'Giọt hồng yêu thương — tiếp sức kho máu mùa hè', place: 'Hà Nội', priority: 'medium', field: 'Hiến máu nhân đạo', img: PIMG + 'image.png', raised: 3120, goal: 5000, unit: 'đơn vị máu', days: 12 },
   { id: 'mai-am-nhan-ai', title: 'Mái ấm nhân ái cho hộ nghèo, người cao tuổi neo đơn', place: 'Tuyên Quang', priority: 'low', field: 'Sinh kế & Nhà ở', img: PIMG + '5f7c45a6-e2a9-48f8-8a3f-8d3cbd503375.png', raised: 860e6, goal: 1.5e9, days: 40 },
   { id: 'so-cap-cuu-ven-bien', title: 'Sơ cấp cứu cộng đồng ven biển', place: 'Quảng Bình', priority: 'medium', field: 'Y tế - Sức khỏe', img: PIMG + 'photo-3-16722031623611945449954.png', raised: 60e6, goal: 150e6, days: 70 },
   { id: 'nuoc-sach-diem-truong', title: 'Nước sạch cho điểm trường vùng cao', place: 'Lào Cai', priority: 'medium', field: 'Nước sạch & Vệ sinh', img: PIMG + 'photo-1-1672203155158881380269.png', raised: 185e6, goal: 420e6, days: 26 },
@@ -43,7 +42,6 @@ const PROGRAMS = [
   { id: 'cau-dan-sinh-vung-lu', title: 'Cầu dân sinh cho bà con vùng lũ', place: 'Đà Nẵng', priority: 'low', field: 'Cứu trợ thiên tai', img: PIMG + '5f7c45a6-e2a9-48f8-8a3f-8d3cbd503375.png', raised: 720e6, goal: 1.8e9, days: 22 },
   { id: 'bep-an-0-dong', title: 'Bếp ăn 0 đồng tại bệnh viện tuyến tỉnh', place: 'Hà Tĩnh', priority: 'medium', field: 'Trợ giúp nhân đạo', img: PIMG + 'photo-3-16722031623611945449954.png', raised: 210e6, goal: 360e6, days: 28 },
   { id: 'trung-thu-vung-cao', title: 'Trung thu cho em vùng cao', place: 'Lai Châu', priority: 'low', field: 'Trẻ em - Biên giới', img: PIMG + '72ad1836-57d6-41e3-aad3-6638cbc4c87e.png', raised: 126e6, goal: 120e6, days: 0 },
-  { id: 'giot-mau-mua-thu', title: 'Giọt máu nghĩa tình mùa thu', place: 'Hà Nội', priority: 'medium', field: 'Hiến máu nhân đạo', img: PIMG + 'tr%E1%BA%BB-em-v%C3%B9ng-cao-%E1%BA%A3nh-b%C3%B9i-tu%E1%BA%A5n-h%E1%BA%A3i-copy.jpg', raised: 2640, goal: 3000, unit: 'đơn vị máu', days: 0 },
   { id: 'tet-nhan-ai-2027', title: 'Tết nhân ái 2027 cho hộ nghèo', place: 'Hà Tĩnh', priority: 'low', field: 'Trợ giúp nhân đạo', img: PIMG + 'photo-1-1672203155158881380269.png', startIn: 15, raised: 0, goal: 400e6, days: 85 },
 ];
 // ==================== DATA: người vận động (avatar góc phải ảnh thẻ) — MINH HỌA ====================
@@ -136,12 +134,6 @@ const DETAILS = {
     summary: 'Trao học bổng, sách vở và áo ấm cho học sinh có hoàn cảnh khó khăn.',
     story: ['Nhiều học sinh vùng cao phải vượt quãng đường dài tới trường trong điều kiện thiếu thốn. Một bộ sách vở, chiếc áo ấm giúp các em yên tâm học tập.'],
     updates: [['2026-09-22', 'Trao 300 suất học bổng đợt 1', 'Đợt 1 của chương trình đã trao 300 suất học bổng cho học sinh có hoàn cảnh đặc biệt khó khăn tại các trường vùng cao.']],
-  },
-  'hien-mau-mua-he': {
-    start: '2026-09-20', org: 'Ban Chỉ đạo vận động hiến máu', area: 'Các điểm hiến máu cố định và lưu động tại Hà Nội', people: 'Người bệnh tại các bệnh viện',
-    summary: 'Kêu gọi hiến máu tình nguyện, bổ sung lượng máu dự trữ cho các bệnh viện.',
-    story: ['Mùa hè là thời điểm lượng máu dự trữ thường giảm. Mỗi đơn vị máu có thể góp phần cứu sống người bệnh.'],
-    updates: [['2026-10-03', 'Ngày hội hiến máu tiếp nhận 820 đơn vị máu', 'Ngày hội hiến máu tại Hà Nội đã tiếp nhận 820 đơn vị máu từ người hiến tình nguyện, bổ sung kịp thời cho các bệnh viện.']],
   },
   'mai-am-nhan-ai': {
     start: '2026-09-20', area: 'Các xã có tỷ lệ hộ nghèo cao, tỉnh Tuyên Quang', people: '30 hộ nghèo, người cao tuổi neo đơn',

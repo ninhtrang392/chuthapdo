@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261119-5" />
+    <link rel="stylesheet" href="styles.css?v=20261119-13" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -98,7 +98,7 @@
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
             <a href="quy-nhan-dao.html">Quỹ Nhân đạo Việt Nam</a>
             <a href="nguoi-gan-nhat.html">Người gần nhất</a>
-            <a href="giai-thuong.html">Giải thưởng nhân đạo</a>
+            <a href="giai-thuong.html">Giải thưởng</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
             <!-- ---------- Khác: nút có mũi tên xổ danh mục trang con (account-menu.js › HEADER: menu Khác) ---------- -->
             <div class="nav-more">
@@ -120,7 +120,7 @@
     <!-- ==================== FLOW: khung ScrollSmoother (header, dialog nằm ngoài) ==================== -->
     <div id="smooth-wrapper">
         <div id="smooth-content">
-            <main id="main">
+            <main id="main" class="home-main">
                 <!-- ==================== SECTION: HERO ==================== -->
                 <!-- Chuyển động (script.js › HERO): preloader → các dòng tiêu đề trồi lên từ mặt nạ, 2 viên ảnh nở ngang, huy hiệu bật ra;
                      cuộn → các dòng trôi lệch nhau, huy hiệu quay nhanh theo tốc độ cuộn. -->
@@ -350,7 +350,7 @@
                         <div class="section-head chapter-head">
                             <div>
                                 <h2 class="section-title" id="tinh-nguyen-vien-title">Tình nguyện viên Chữ thập đỏ</h2>
-                                <p class="section-lead">Mạng lưới tình nguyện viên tại các đội, câu lạc bộ trên cả nước — luôn có mặt khi cộng đồng cần.</p>
+                                <p class="section-lead">Mạng lưới tình nguyện viên tại các đội, câu&nbsp;lạc&nbsp;bộ trên cả nước<br />luôn có mặt khi cộng đồng cần.</p>
                             </div>
                         </div>
 
@@ -418,7 +418,7 @@
                             <div class="ngn-content">
                                 <!-- ---------- 3 hoạt động: Đào tạo 5 trụ cột năng lực (danh sách 5 năng lực) · Nhận Huy hiệu · Tìm kiếm, tôn vinh, lan tỏa ---------- -->
                                 <ol class="ngn-list" aria-label="Chương trình Người Gần Nhất: Đào tạo 5 trụ cột năng lực, Nhận Huy hiệu Người Gần Nhất, Tìm kiếm, tôn vinh, lan tỏa">
-                                    <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Đào tạo 5 trụ cột năng lực</h3><ul class="ngn-points"><li>Năng lực sơ cấp cứu và ứng phó khẩn cấp</li><li>Năng lực trợ giúp nhân đạo</li><li>Năng lực phòng ngừa và ứng phó thảm họa</li><li>Năng lực tham gia hoạt động nhân đạo</li><li>Năng lực công dân nhân ái trong thời đại số</li></ul></div></li>
+                                    <li class="ngn-item"><span class="ngn-num">01</span><div><h3 class="ngn-name">Đào tạo 5 trụ cột năng lực</h3><ul class="ngn-points"><li>Năng lực sơ cấp cứu và ứng phó khẩn cấp</li><li>Năng lực trợ giúp nhân đạo</li><li>Năng lực phòng ngừa và ứng phó thảm họa</li><li>Năng lực tham gia hoạt động nhân đạo</li><li>Năng lực công dân nhân ái trong thời&nbsp;đại&nbsp;số</li></ul></div></li>
                                     <li class="ngn-item"><span class="ngn-num">02</span><div><h3 class="ngn-name">Nhận Huy hiệu Người Gần Nhất</h3><p class="ngn-desc">Ghi nhận hành trình từ hiểu biết đến hành động qua 4 cấp độ: Nhận thức, Kỹ năng, Hành động, Lan tỏa.</p></div></li>
                                     <li class="ngn-item"><span class="ngn-num">03</span><div><h3 class="ngn-name">Tìm kiếm, tôn vinh, lan tỏa</h3><p class="ngn-desc">Tôn vinh những hành động giúp người đúng lúc, đúng cách, lan tỏa câu chuyện nhân ái và kỹ năng hữu ích đến cộng đồng.</p></div></li>
                                 </ol>
@@ -446,7 +446,7 @@
                                 <div class="awards-brand">
                                     <div>
                                         <h2 class="section-title" id="giai-thuong-title">Những đóng góp xứng đáng được thắp sáng</h2>
-                                        <p class="section-lead">Giải thưởng Ngọn đèn Nhân Ái — tôn vinh những tấm gương và hành động đẹp vì cộng đồng, do chính cộng đồng đề cử mỗi năm.</p>
+                                        <p class="section-lead">Giải thưởng Ngọn đèn Nhân Ái — tôn&nbsp;vinh những tấm gương<br />và hành động đẹp vì cộng&nbsp;đồng, do chính cộng&nbsp;đồng đề&nbsp;cử mỗi&nbsp;năm.</p>
                                     </div>
                                 </div>
                                 <div class="section-head-aside">
@@ -503,7 +503,7 @@
                                     <h3 class="award-title">Hành động nhân đạo đặc biệt</h3>
                                     <p class="award-desc">Tôn vinh hành động dũng cảm, kịp thời, có ý nghĩa đặc biệt trong cứu giúp, bảo vệ tính mạng, sức khỏe, phẩm giá hoặc hỗ trợ con người trong tình huống khẩn cấp, thiên tai, thảm họa và hoàn cảnh đặc biệt khó khăn.</p>
                                 </div>
-                                <div class="award-card-media"><img src="Emages/tinh-nguyen-vien/tnv-cap-cuu-thang-cuon.webp" alt="Tình nguyện viên Chữ thập đỏ sơ cấp cứu người bị nạn bên thang cuốn" loading="lazy" decoding="async" /></div>
+                                <div class="award-card-media"><img src="Emages/Th%E1%BA%BB%205.png" alt="Tình nguyện viên Chữ thập đỏ cõng cụ ông vượt dòng nước lũ, đồng đội dìu đỡ bên cạnh" loading="lazy" decoding="async" /></div>
                                 <span class="award-card-shade" aria-hidden="true"></span>
                             </li>
                         </ol>
@@ -577,19 +577,19 @@
                             </article>
                             <article class="cp-card">
                                 <div class="cp-card-media">
-                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/image.png" alt="" loading="lazy" />
+                                    <img src="Emages/Ch%C6%B0%C6%A1ng%20tr%C3%ACnh/Kho%E1%BA%A3nh%20Kh%E1%BA%AFc%20Trao%20G%E1%BB%ADi%20Y%C3%AAu%20Th%C6%B0%C6%A1ng.png" alt="" loading="lazy" />
                                     <span class="cp-priority is-medium"><span class="cp-dot" aria-hidden="true"></span>Trung bình</span>
                                     <img class="cp-card-mark is-person" src="Emages/avatar/le-quoc-bao.jpg" alt="Người vận động: Lê Quốc Bảo" title="Người vận động: Lê Quốc Bảo" width="36" height="36" loading="lazy" />
                                 </div>
                                 <div class="cp-card-body">
-                                    <p class="cp-place"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Hà Nội</p>
-                                    <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=hien-mau-mua-he">Giọt hồng yêu thương — tiếp sức kho máu mùa hè</a></h3>
+                                    <p class="cp-place"><svg class="icon" aria-hidden="true"><use href="#pin"/></svg>Vĩnh Long</p>
+                                    <h3 class="cp-card-title"><a class="stretched" href="chuong-trinh.html?id=nuoc-sach-han-man">Nước sạch cho người dân vùng hạn mặn</a></h3>
                                     <div class="cp-figures">
-                                        <strong class="cp-raised" title="3.120 đơn vị máu">3.120 đơn vị máu</strong>
-                                        <span class="cp-goal" title="Mục tiêu 5.000 đơn vị máu">5.000 đơn vị máu</span>
+                                        <strong class="cp-raised" title="410.000.000 ₫">410 triệu ₫</strong>
+                                        <span class="cp-goal" title="Mục tiêu 1.200.000.000 ₫">1,2 tỷ ₫</span>
                                     </div>
-                                    <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="Đã đạt 62% mục tiêu"><span style="width:62%"></span></div>
-                                    <div class="cp-meta"><span>Đạt 62%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 12 ngày</span></div>
+                                    <div class="cp-bar" role="progressbar" aria-label="Tiến độ gây quỹ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="34" aria-valuetext="Đã đạt 34% mục tiêu"><span style="width:34%"></span></div>
+                                    <div class="cp-meta"><span>Đạt 34%</span><span><svg class="icon" aria-hidden="true"><use href="#clock"/></svg>Còn 25 ngày</span></div>
                                 </div>
                             </article>
                             <article class="cp-card">
@@ -1118,23 +1118,25 @@
                 <!-- ==================== END SECTION: ĐƠN VỊ ĐỒNG HÀNH ==================== -->
 
                 <!-- ==================== SECTION: ĐƠN VỊ ĐỒNG HÀNH & PHÁT TRIỂN HỆ THỐNG ==================== -->
-                <!-- 2 slide: GTINX & BIDV · GTINX & Vietjet — nội dung, ảnh Vietjet là DỮ LIỆU MINH HỌA (thay bằng nội dung chính thức).
+                <!-- 3 slide: GTINX & BIDV · GTINX & Vietjet · GTINX & Camel — ảnh chung: Emages/Homepage/Nền sóng đỏ và cái bắt tay mờ nhạt.png + logo GTINX | đối tác phủ lên (.sponsor-media-logos); nội dung Vietjet/Camel là DỮ LIỆU MINH HỌA.
            Dùng lại .partners-head (tiêu đề căn giữa), bố cục .sponsor-* (ảnh trái, chữ phải), ô logo .partner-logo (logo: Emages/Đối tác/) và dải trượt .pv-track của trang chương trình + chấm chỉ slide.
            Tự chuyển slide mỗi 6 giây, dừng khi rê chuột / focus (script.js). -->
                 <section class="section partners founders" id="phat-trien-he-thong" aria-labelledby="founders-title">
                     <!-- ---------- Tiêu đề căn giữa ---------- -->
                     <div class="container partners-head">
                         <h2 class="section-title" id="founders-title">Đơn vị đồng hành và phát triển hệ thống</h2>
-                        <p class="section-lead" data-reveal>Các đơn vị sáng lập, đồng hành cùng Hội Chữ thập đỏ Việt Nam xây dựng và vận hành nền tảng nhân đạo số.</p>
+                        <p class="section-lead" data-reveal>Các đơn vị sáng lập, đồng hành cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam<br />xây dựng và vận&nbsp;hành nền tảng nhân đạo số.</p>
                     </div>
 
                     <!-- ---------- Dải slide: mỗi slide ảnh trái, chữ phải ---------- -->
                     <div class="container founders-slider" data-reveal>
                         <div class="pv-track founders-track" id="founders-track" role="group" aria-roledescription="carousel" aria-label="Đơn vị đồng hành — tự chuyển mỗi 6 giây, dừng khi rê chuột">
                             <!-- ---------- Slide 1: GTINX & BIDV ---------- -->
-                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="1 / 2: GTINX và BIDV">
-                                <figure class="sponsor-media media media-photo" style="--focus:50% 55%">
-                                    <img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/picture6.avif" alt="Lễ ký kết thỏa thuận hợp tác toàn diện giữa BIDV và GTEL" width="820" height="432" loading="lazy" />
+                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="1 / 3: GTINX và BIDV">
+                                <figure class="sponsor-media media media-photo">
+                                    <img src="Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+                                    <!-- Logo trên nền ảnh: GTINX | đối tác (vạch đỏ ngăn giữa) -->
+                                    <div class="sponsor-media-logos" role="img" aria-label="GTINX và BIDV"><img class="is-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="" width="445" height="107" loading="lazy" decoding="async" /><span class="sponsor-media-sep" aria-hidden="true"></span><img class="is-partner" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/BIDV_RGB.png" alt="" width="960" height="445" loading="lazy" decoding="async" /></div>
                                 </figure>
                                 <div class="sponsor-content">
                                     <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
@@ -1142,7 +1144,7 @@
                                         <span
                                             class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/BIDV.jpg" alt="BIDV" width="947" height="366" loading="lazy" decoding="async" /></span>
                                     </h3>
-                                    <p class="sponsor-lead">BIDV đồng hành sáng lập, GTINX phát triển hệ thống — cùng Hội Chữ thập đỏ Việt Nam số hóa quy trình gây quỹ, minh bạch từng khoản đóng góp.</p>
+                                    <p class="sponsor-lead">BIDV đồng hành sáng lập, GTINX phát triển hệ thống — cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam<br />số hóa quy trình gây quỹ, minh bạch từng khoản đóng góp.</p>
                                     <p class="sponsor-meta">Phát triển hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đồng hành sáng lập: <strong>BIDV</strong></p>
                                     <blockquote class="sponsor-quote">
                                         <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
@@ -1152,9 +1154,11 @@
                             </article>
 
                             <!-- ---------- Slide 2: GTINX & Vietjet ---------- -->
-                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="2 / 2: GTINX và Vietjet">
-                                <figure class="sponsor-media media media-photo" style="--focus:50% 40%">
-                                    <img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-nhan-qua.jpg" alt="Trẻ em vùng cao nhận quà" loading="lazy" />
+                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="2 / 3: GTINX và Vietjet">
+                                <figure class="sponsor-media media media-photo">
+                                    <img src="Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+                                    <!-- Logo trên nền ảnh: GTINX | đối tác (vạch đỏ ngăn giữa) -->
+                                    <div class="sponsor-media-logos" role="img" aria-label="GTINX và Vietjet"><img class="is-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="" width="445" height="107" loading="lazy" decoding="async" /><span class="sponsor-media-sep" aria-hidden="true"></span><img class="is-partner is-vietjet" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Vietjet.png" alt="" width="3840" height="2160" loading="lazy" decoding="async" /></div>
                                 </figure>
                                 <div class="sponsor-content">
                                     <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
@@ -1162,8 +1166,29 @@
                                         <span
                                             class="partner-logo" style="--zoom:1.1"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Vietjet.png" alt="Vietjet Air" width="3840" height="2160" loading="lazy" decoding="async" /></span>
                                     </h3>
-                                    <p class="sponsor-lead">Vietjet đồng hành sáng lập nền tảng, cùng GTINX lan tỏa các chương trình nhân đạo tới cộng đồng trên khắp mọi miền.</p>
+                                    <p class="sponsor-lead">Vietjet đồng hành sáng lập hệ thống, cùng GTINX lan tỏa các chương trình nhân đạo tới cộng đồng trên khắp mọi miền.</p>
                                     <p class="sponsor-meta">Phát triển hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đồng hành sáng lập: <strong>Vietjet</strong></p>
+                                    <blockquote class="sponsor-quote">
+                                        <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
+                                        <cite>— Hội Chữ thập đỏ Việt Nam</cite>
+                                    </blockquote>
+                                </div>
+                            </article>
+                            <!-- ---------- Slide 3: GTINX & Camel ---------- -->
+                            <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="3 / 3: GTINX và Camel">
+                                <figure class="sponsor-media media media-photo">
+                                    <img src="Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png" alt="" width="1672" height="941" loading="lazy" decoding="async" />
+                                    <!-- Logo trên nền ảnh: GTINX | đối tác (vạch đỏ ngăn giữa) -->
+                                    <div class="sponsor-media-logos" role="img" aria-label="GTINX và Camel"><img class="is-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="" width="445" height="107" loading="lazy" decoding="async" /><span class="sponsor-media-sep" aria-hidden="true"></span><img class="is-partner" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="" width="733" height="448" loading="lazy" decoding="async" /></div>
+                                </figure>
+                                <div class="sponsor-content">
+                                    <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
+                                    <h3 class="founders-logos"><span class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Logo%20GTINX.webp" alt="GTINX" width="6713" height="3650" loading="lazy" decoding="async" /></span><span class="sponsor-amp">&amp;</span>
+                                        <span
+                                            class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="Camel Beer" width="733" height="448" loading="lazy" decoding="async" /></span>
+                                    </h3>
+                                    <p class="sponsor-lead">Camel đồng hành sáng lập hệ thống, cùng GTINX và Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam kết nối nguồn lực tới những hoàn cảnh cần giúp đỡ.</p>
+                                    <p class="sponsor-meta">Phát triển hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đồng hành sáng lập: <strong>Camel</strong></p>
                                     <blockquote class="sponsor-quote">
                                         <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
                                         <cite>— Hội Chữ thập đỏ Việt Nam</cite>
@@ -1176,6 +1201,7 @@
                         <div class="founders-dots">
                             <button class="founders-dot" type="button" data-founders-slide="0" aria-controls="founders-track" aria-label="Slide 1: GTINX và BIDV" aria-current="true"></button>
                             <button class="founders-dot" type="button" data-founders-slide="1" aria-controls="founders-track" aria-label="Slide 2: GTINX và Vietjet"></button>
+                            <button class="founders-dot" type="button" data-founders-slide="2" aria-controls="founders-track" aria-label="Slide 3: GTINX và Camel"></button>
                         </div>
                     </div>
                 </section>
@@ -1187,7 +1213,7 @@
                     <!-- ---------- Tiêu đề căn giữa ---------- -->
                     <div class="container partners-head">
                         <h2 class="section-title" id="partners-title">Đồng hành cùng các chương trình nhân đạo</h2>
-                        <p class="section-lead" data-reveal>Cảm ơn các doanh nghiệp, tổ chức đã cùng Hội lan tỏa những giá trị nhân đạo đến cộng đồng.</p>
+                        <p class="section-lead" data-reveal>Cảm ơn các doanh nghiệp, tổ chức đã cùng Hội lan tỏa<br />những giá trị nhân đạo đến cộng&nbsp;đồng.</p>
                     </div>
 
                     <!-- ---------- Băng logo: 2 hàng chạy ngược chiều, dừng khi rê chuột ---------- -->
@@ -1443,8 +1469,8 @@
     <script src="flow.js?v=20261106-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="script.js?v=20261116-1" defer></script>
-    <script src="chuong-trinh-data.js?v=20261112-2" defer></script>
+    <script src="script.js?v=20261119-2" defer></script>
+    <script src="chuong-trinh-data.js?v=20261119-1" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
     <script src="hero-3d.js?v=20261031-2" defer></script>
 </body>

@@ -713,21 +713,23 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .awards-brand{display:flex;align-items:center;gap:clamp(16px,2vw,28px)}
 
 /* ---------- III · Giải thưởng — thẻ xếp chồng (kiểu GSAP showcase "stacking cards"): màn ghim (.award-pin) gồm đầu section + 4 thẻ hạng mục.
-   .awards.is-pinned (script.js, desktop có chuyển động): thẻ chồng lên nhau tuyệt đối; GSAP đẩy thẻ sau từ dưới lên, thẻ trước thu nhỏ · lùi lên · tối đi (.award-card-shade).
+   .awards.is-pinned (script.js, desktop có chuyển động): thẻ chồng lên nhau tuyệt đối; GSAP đẩy thẻ sau từ dưới lên đè khít thẻ trước (các thẻ trùng nhau, nhìn như 1 thẻ).
    Không ghim (màn ≤1100px / giảm chuyển động): 4 thẻ xếp dọc. ---------- */
 .awards{--edge:max(var(--gutter),calc((100vw - var(--container)) / 2));position:relative;overflow:hidden;overflow:clip;background:var(--color-bg)}
 .awards-head > .section-head{margin-bottom:var(--space-head)}
 .award-pin{display:flex;flex-direction:column;padding-inline:var(--edge)}
 .awards.is-pinned{padding:0}
 /* Desktop ghim: đầu section (trên) + chồng thẻ cao cố định; khối ghim cao theo nội dung (không kéo cả màn → không dư khoảng trắng với section trên);
-   script.js ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header → cả cụm căn giữa màn. Khoảng dưới đầu section chừa chỗ cho mép các thẻ đã lùi lên */
+   script.js ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header → cả cụm căn giữa màn */
 .awards.is-pinned .award-pin{padding-block:48px 32px}
-.awards.is-pinned .awards-head > .section-head{margin-bottom:clamp(72px,10vh,96px)} /* mép các thẻ đã lùi lên chiếm ~54px → còn ~25–40px trống dưới mô tả */
+.awards.is-pinned .awards-head > .section-head{margin-bottom:32px} /* thẻ chồng khít (không còn mép lùi lên) → chỉ chừa 32px dưới mô tả */
 .award-cards{display:grid;gap:16px;margin:0;padding:0;list-style:none}
 .awards.is-pinned .award-cards{position:relative;display:block;flex:none;height:clamp(420px,52vh,520px)} /* thẻ thấp gọn; tối thiểu 420px để chữ + logo không bị cắt trên màn thấp */
 /* Thẻ: chữ trái · ảnh phải; nền ảnh dải ruy-băng hình tim (Emages/Nền trừu tượng dải ruy-băng hình tim.png, neo đáy), viền mảnh, bóng nhẹ để thẻ trên tách khỏi thẻ dưới */
 .award-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center;gap:clamp(24px,4vw,64px);overflow:hidden;padding:clamp(20px,2.4vw,32px);border:1px solid var(--color-border);border-radius:24px;background:#fff url('Emages/N%E1%BB%81n%20tr%E1%BB%ABu%20t%C6%B0%E1%BB%A3ng%20d%E1%BA%A3i%20ruy-b%C4%83ng%20h%C3%ACnh%20tim.png') center bottom / cover no-repeat;box-shadow:0 -12px 40px rgba(36,39,44,.08)}
 .awards.is-pinned .award-card{position:absolute;inset:0;transform-origin:50% 0;will-change:transform}
+.awards.is-pinned .award-card{box-shadow:none} /* 5 thẻ chồng khít → bóng cộng dồn rất đậm: chỉ giữ 1 bóng nhạt ở thẻ dưới cùng (luôn nằm đúng chỗ cụm thẻ) */
+.awards.is-pinned .award-card:first-child{box-shadow:0 8px 24px rgba(36,39,44,.06)}
 .award-card-text{position:relative;isolation:isolate;padding:clamp(8px,2vw,32px)}
 /* Số khổng lồ mờ ở góc trên bên phải khối chữ (sau chữ) */
 .award-num{position:absolute;top:0;right:0;z-index:-1;font-family:'Playfair Display',Georgia,serif;font-size:clamp(160px,17vw,280px);font-weight:400;line-height:1;color:rgba(237,36,41,.06);transform:translateY(-30%);pointer-events:none} /* đỏ rất nhạt (màu --red, độ đậm 6%) */
@@ -763,6 +765,7 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .ngn-name{margin:0;font-size:18px;font-weight:600;line-height:26px;color:var(--color-text)}
 .ngn-name{transition:color .25s}
 .ngn-item:hover .ngn-name{color:var(--red)} /* rê chuột vào mục → tên mục chuyển đỏ */
+.home-main .ngn-item:first-child{border-top:0;padding-top:0} /* trang chủ: bỏ đường kẻ trên mục 01 (chỉ giữ đường phân cách giữa các mục) */
 .ngn-desc{margin:2px 0 0;font-size:14px;line-height:22px;color:var(--color-text-muted)}
 .ngn-points{display:grid;gap:2px;margin:4px 0 0;padding:0 0 0 20px;list-style:disc;font-size:14px;line-height:22px;color:var(--color-text-muted)} /* danh sách 5 trụ cột năng lực dưới tên mục (chấm tròn xám) */
 .ngn-points li::marker{color:var(--color-text-muted)}
@@ -1030,10 +1033,17 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 /* Nền trắng nằm ngay sau section nền trắng (07 Tin tức) → bỏ đệm trên, như các section khác */
 .sponsor{padding-top:0;background:var(--color-bg)}
 /* ---------- Bố cục: ảnh trái, chữ phải ---------- */
-.sponsor-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:center}
+.sponsor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(min(730px,100%),1.25fr);gap:clamp(28px,4vw,64px);align-items:center} /* cột chữ tối thiểu 730px: dòng 1 mô tả ("BIDV đồng hành sáng lập… Hội Chữ thập đỏ Việt Nam", 17px ≈ 714px) nằm trọn 1 dòng */
 /* ---------- Ảnh lễ ký kết + chú thích (nhãn tối trên ảnh) ---------- */
 .sponsor-media{aspect-ratio:820 / 432;margin:0;border-radius:20px}
 .sponsor-caption{position:absolute;left:16px;bottom:16px;padding:7px 14px;border-radius:999px;background:rgba(20,14,10,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:13px;font-weight:600;color:#fff}
+/* ---------- Logo phủ trên ảnh nền slide (Emages/Homepage/Nền sóng đỏ và cái bắt tay mờ nhạt.png): GTINX | đối tác, vạch đỏ ngăn giữa — cụm logo hơi cao hơn tâm ảnh (chừa bắt tay mờ phía dưới) ---------- */
+.sponsor-media-logos{position:absolute;inset:0 0 16% 0;display:flex;align-items:center;justify-content:center;gap:5%;padding-inline:4%}
+.sponsor-media .sponsor-media-logos img{display:block;width:auto;height:auto;min-width:0;object-fit:contain;transform:none;transition:none}
+.sponsor-media .sponsor-media-logos .is-gtinx{width:36%}
+.sponsor-media-sep{flex:none;width:2px;height:22%;border-radius:2px;background:var(--red)}
+.sponsor-media .sponsor-media-logos .is-partner{width:30%;max-height:48%}
+.sponsor-media .sponsor-media-logos .is-vietjet{width:36%;max-height:60%} /* logo Vietjet 16:9 có lề trong → khung to hơn chút */
 /* ---------- Nội dung ---------- */
 .sponsor-kicker{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-primary)}
 .sponsor-kicker .icon{width:16px;height:16px}
@@ -1046,8 +1056,11 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .sponsor-quote p{margin:0;font-size:16px;font-weight:600;line-height:1.6;color:var(--color-text)}
 .sponsor-quote cite{display:block;margin-top:10px;font-size:13px;font-style:normal;font-weight:600;color:var(--color-primary)}
 /* ---------- Responsive: đơn vị đồng hành ---------- */
-@media(max-width:900px){
-  .sponsor-grid{grid-template-columns:1fr}
+@media(max-width:1199px){
+  .sponsor-grid{grid-template-columns:1fr} /* < 1200px: 2 cột thì ảnh quá hẹp (cột chữ cần ≥ 730px) → xếp 1 cột */
+}
+@media(max-width:767px){
+  .sponsor-lead br{display:none} /* màn hẹp: bỏ ngắt dòng cố định, chữ tự chảy */
 }
 @media(max-width:600px){
   .sponsor-caption{left:12px;right:12px;bottom:12px;font-size:12px;text-align:center}
@@ -4996,3 +5009,9 @@ html.pf-reg-lock{overflow:hidden}
 .dhc-hero + .dh-quote{padding-top:0}
 .dhc-hero + .dh-quote .breadcrumb{display:none} /* breadcrumb đã có ở banner kể chuyện */
 /* ==================== END SECTION: ĐỒNG HÀNH — BANNER KỂ CHUYỆN ==================== */
+
+/* ==================== SECTION: TRANG CHỦ — chống rơi chữ (không để 1 từ lẻ một mình ở dòng cuối) ==================== */
+/* Văn bản thường: pretty (trình duyệt dồn chữ để dòng cuối ≥ 2 từ) · tiêu đề, tên, nhãn ngắn: balance (chia đều các dòng). text-wrap kế thừa → đặt ở gốc main trang chủ + footer */
+.home-main,.footer{text-wrap:pretty}
+.home-main :is(h1,h2,h3,h4,dt,.rl-name,.rl-meta,.cp-card-title,.news-title,.spotlight-title,.ngn-name,.event-card-name),.footer :is(h3,h4,a,.footer-dev span){text-wrap:balance}
+@media(max-width:600px){.home-main .section-lead br{display:none}} /* điện thoại: bỏ ngắt dòng cố định trong mô tả section (chỉ để dòng 2 trọn 1 dòng trên màn rộng) → chữ tự chảy, không tạo dòng ngắn rời rạc */
