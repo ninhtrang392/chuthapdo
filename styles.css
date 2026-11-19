@@ -4184,7 +4184,7 @@ html.pf-reg-lock{overflow:hidden}
 .dh-coop-detail{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .6s cubic-bezier(.4,0,.2,1),opacity .45s ease}
 .dh-coop-detail > div{min-height:0;overflow:hidden}
 .dh-coop-row.is-open .dh-coop-detail{grid-template-rows:1fr;opacity:1}
-.dh-coop-detail p{max-width:760px;margin:12px 0 0;font-size:15px;line-height:24px;color:var(--color-text-muted)}
+.dh-coop-detail p{max-width:820px;margin:12px 0 0;font-size:15px;line-height:24px;color:var(--color-text-muted)}
 .dh-coop-detail p:first-child{margin-top:16px}
 /* ---------- Chia dòng cân: mô tả đầu section Đối tác / Con người + đoạn chi tiết hình thức hợp tác (tránh dòng cuối lẻ "vì / cộng đồng", "Quốc gia.", "người cần giúp đỡ.") ---------- */
 .dh-sponsors-head .sponsor-lead,.dh-people-intro .sponsor-lead,.dh-coop-detail p,.dh-showcase-copy.is-partners .sponsor-lead,.dh-cta-card .action-campaign-desc{text-wrap:balance} /* + mô tả GTINX / Đơn vị đồng hành, mô tả thẻ CTA đỏ */
