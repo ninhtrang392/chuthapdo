@@ -4613,7 +4613,9 @@ html.pf-reg-lock{overflow:hidden}
 
 /* ---------- Giới thiệu: câu dẫn đậm (tên giải thưởng tô đỏ) · gạch đỏ ngắn · mô tả ---------- */
 .gt-story-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
-.gt-story-text{max-width:860px;margin:0;font-size:28px;font-weight:600;line-height:40px;color:var(--color-text);text-wrap:balance}
+.gt-story-text{max-width:980px;margin:0;font-size:28px;font-weight:600;line-height:42px;color:var(--color-text)}
+@media(max-width:1024px){.gt-story-text{max-width:100%;font-size:clamp(20px,2.6vw,26px);line-height:1.45}}
+@media(max-width:768px){.gt-story-br{display:none}}
 .gt-story-hl{color:var(--red);white-space:nowrap} /* tên giải không bị tách xuống dòng giữa chừng */
 .gt-story-rule{display:block;width:48px;height:3px;margin:clamp(16px,2.6vh,24px) 0;border-radius:2px;background:var(--red)}
 .gt-story-lead{max-width:720px;margin:0;font-size:16px;line-height:28px;color:var(--color-text-muted);text-wrap:balance}
