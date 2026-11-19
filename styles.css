@@ -3892,7 +3892,7 @@ html.pf-reg-lock{overflow:hidden}
 .dh-stats-band{background:none} /* bỏ nền đỏ: số liệu nằm trên nền trắng của trang */
 .dh-stats-band .dh-showcase-stats{margin-top:0;background:none;color:var(--color-text)}
 .dh-stats-band .dh-showcase-stat-list > div + div{border-left-color:var(--color-border)}
-.dh-stats-band .dh-showcase-stat-list dt{color:var(--color-text-muted)}
+.dh-stats-band .dh-showcase-stat-list dt{color:var(--color-text-muted);text-wrap:balance} /* chia dòng cân: tránh lẻ "trợ" ở "Chương trình trọng điểm được hỗ trợ" */
 .dh-stats-band .dh-showcase-stat-list dd span{color:var(--color-text)}
 .dh-stats-band .dh-showcase-stat-list .icon{border-color:rgba(237,36,41,.35);background:#fdecec;box-shadow:none;color:var(--red)}
 .dh-showcase-stat-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-block:0}
