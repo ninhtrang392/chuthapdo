@@ -4635,7 +4635,7 @@ html.pf-reg-lock{overflow:hidden}
 .gt-audience-item .gt-icon .icon{width:22px;height:22px}
 .gt-audience-item .gt-org-label{color:#ffb4b8}
 .gt-audience-name{margin:0;font-size:18px;font-weight:600;line-height:26px;color:#fff}
-.gt-audience-desc{margin:4px 0 0;font-size:14px;line-height:22px;color:rgba(255,255,255,.82)}
+.gt-audience-desc{margin:4px 0 0;font-size:14px;line-height:22px;color:rgba(255,255,255,.82);text-wrap:pretty} /* pretty: tránh 1 từ rớt lẻ dòng cuối */
 .gt-tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;padding:0;list-style:none}
 .gt-tags li{padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.22);font-size:12px;line-height:20px;color:#fff}
 
