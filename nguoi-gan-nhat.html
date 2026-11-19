@@ -5843,6 +5843,98 @@
         grid-row: 3;
       }
     }
+  
+    /* ===== Cách xuống dòng các đoạn chữ (đồng bộ từ bản Test 1, 19/11/2026) ===== */
+    /* Hero: mô tả cân dòng, tránh dòng cuối chỉ 1–2 từ (từ ghép giữ dính bằng &nbsp; trong HTML) */
+    html body main#main#main#main .hero-desc {
+      text-wrap: pretty;
+    }
+
+    /* Các đoạn văn ngắn: cân dòng, tránh dòng cuối 1–2 từ (từ ghép giữ dính bằng &nbsp; trong HTML) */
+    html body main#main#main#main .overview-mission-lead,
+    html body main#main#main#main .overview-card-box p,
+    html body main#main#main#main .overview-quote-box p,
+    html body main#main#main#main .principle p {
+      text-wrap: pretty;
+    }
+
+    /* 5 trụ cột + hàng 3 ý: cân dòng mô tả (từ ghép giữ dính bằng &nbsp; trong HTML) */
+    html body main#main#main#main #buoc-dau .skill-topic p,
+    html body main#main#main#main #buoc-dau .skill-stats small {
+      text-wrap: pretty;
+    }
+
+    /* Huy hiệu · Hành trình · Hỏi đáp · CTA: cân dòng (từ ghép giữ dính bằng &nbsp; trong HTML); tiêu đề Hành trình chia dòng đều */
+    html body main#main#main#main .journey-lead,
+    html body main#main#main#main #huy-hieu .stage-body p,
+    html body main#main#main#main .roadmap-lead,
+    html body main#main#main#main .faq-list details p,
+    html body main#main#main#main .closing-desc {
+      text-wrap: pretty;
+    }
+
+    html body main#main#main#main #roadmap-title {
+      text-wrap: balance;
+    }
+
+    /* Ngắt dòng chủ đích: chỉ áp dụng màn rộng (≥1440); màn nhỏ hơn để tự xuống dòng */
+    .br-wide {
+      display: none;
+    }
+
+    @media (min-width: 1440px) {
+      .br-wide {
+        display: inline;
+      }
+
+      /* Huy hiệu: thu lề phải khung mô tả 32 → 16px để câu cấp 01 vừa 2 dòng */
+      html body main#main#main#main #huy-hieu .stage-body {
+        padding-right: 16px !important;
+      }
+    }
+
+    /* Hành trình (≥1440): tiêu đề 2 dòng — cột chữ vừa đủ dòng dài nhất (~612px), cột đường nối 96 → 72px để ảnh thu ít nhất */
+    @media (min-width: 1440px) {
+      html body main#main#main#main .rm-scroller {
+        grid-template-columns: minmax(612px, 4fr) 72px minmax(0, 7fr) !important;
+      }
+
+      html body main#main#main#main .rm-copy .roadmap-head {
+        max-width: none !important;
+      }
+
+      html body main#main#main#main #roadmap-title {
+        white-space: nowrap;
+      }
+
+      html body main#main#main#main #roadmap-title br.br-wide {
+        display: inline !important;
+      }
+    }
+
+    /* Câu trích dẫn: 2 dòng ở màn đủ rộng (≥1600) — xuống dòng sau "mỗi người", lề trong 32 → 24px để dòng 2 vừa khung; màn nhỏ hơn chia đều 3 dòng */
+    .br-quote {
+      display: none;
+    }
+
+    html body main#main#main#main .overview-quote-box p {
+      text-wrap: balance;
+    }
+
+    @media (min-width: 1600px) {
+      .br-quote {
+        display: inline;
+      }
+
+      html body main#main#main#main .overview-quote-box {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+      }
+
+      html body main#main#main#main .overview-quote-box p {
+        text-wrap: wrap;
+      }
+    }
   </style>
 </head>
 
@@ -5993,18 +6085,20 @@
           <div class="hero-copy">
             <p class="eyebrow hero-eyebrow">Chương trình xã hội quốc gia – Hội Chữ thập đỏ Việt Nam</p>
             <h1 id="page-title" class="hero-title-line">Biến lòng tốt thành <em class="accent">Người Gần Nhất</em></h1>
-            <p class="hero-desc">Người Gần Nhất là chương trình xã hội với tầm nhìn dài hạn do Hội Chữ thập đỏ Việt Nam
-              chủ trì, VCCorp và Báo Tuổi Trẻ là đơn vị khởi xướng, nhằm xây dựng một cộng đồng Việt Nam nhân ái, đủ
-              kiến thức và kỹ năng để biến lòng tốt thành hành động thiết thực, đúng lúc, đúng cách, trong đó người trẻ
-              là lực lượng nòng cốt.</p>
+            <p class="hero-desc">Người&nbsp;Gần&nbsp;Nhất là chương&nbsp;trình xã&nbsp;hội với tầm&nbsp;nhìn
+              dài&nbsp;hạn do Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam chủ&nbsp;trì, VCCorp và
+              Báo&nbsp;Tuổi&nbsp;Trẻ là đơn&nbsp;vị khởi&nbsp;xướng, nhằm xây&nbsp;dựng một cộng&nbsp;đồng Việt&nbsp;Nam
+              nhân&nbsp;ái, đủ kiến&nbsp;thức và kỹ&nbsp;năng để biến lòng&nbsp;tốt thành hành&nbsp;động
+              thiết&nbsp;thực, đúng&nbsp;lúc, đúng&nbsp;cách, trong đó người&nbsp;trẻ là lực&nbsp;lượng nòng&nbsp;cốt.
+            </p>
             <div class="hero-actions" hidden><a class="btn red" href="#buoc-dau">Khám phá Khóa học sơ cấp cứu<svg
                   class="arrow" aria-hidden="true">
                   <use href="#arrow" />
                 </svg></a></div>
           </div>
-          <figure class="hero-visual"><img class="hero-photo" src="Emages/nguoi-gan-nhat/hero-banner.webp"
-              alt="Chương trình Người Gần Nhất – Gần để thấu hiểu, Gọi để kết nối, Giúp để lan toả nhân ái" width="1600"
-              height="900" fetchpriority="high"></figure>
+          <figure class="hero-visual"><img class="hero-photo" src="Emages/nguoi-gan-nhat/hero-banner-2.webp"
+              alt="Chương trình Người Gần Nhất – Gần để thấu hiểu, Gọi để kết nối, Giúp để lan toả nhân ái" width="1920"
+              height="1080" fetchpriority="high"></figure>
         </div>
         <div class="hero-stats">
           <dl class="hero-stats-grid">
@@ -6039,33 +6133,34 @@
                 aria-hidden="true"></i>
               <h3 class="overview-mission-title">Sứ mệnh chương trình</h3>
             </div>
-            <p class="overview-mission-lead">
-              Người Việt giàu lòng nhân ái. Khi ai đó cần giúp, người có mặt đầu tiên thường là người thân, đồng nghiệp,
-              bạn học, hàng xóm. <strong>Người Gần Nhất</strong> ra đời nhằm biến lòng tốt thành hành động thiết thực,
-              đúng lúc, đúng cách. Giai đoạn đầu, chương trình tập trung phổ cập kỹ năng sơ cấp cứu cho người trẻ Việt
-              Nam.
-            </p>
+            <p class="overview-mission-lead"> Người&nbsp;Việt giàu lòng nhân&nbsp;ái. Khi ai&nbsp;đó cần&nbsp;giúp,
+              người có&nbsp;mặt đầu&nbsp;tiên thường là người&nbsp;thân, đồng&nbsp;nghiệp, bạn&nbsp;học, hàng&nbsp;xóm.
+              <strong>Người Gần Nhất</strong> ra&nbsp;đời nhằm biến lòng&nbsp;tốt thành hành&nbsp;động thiết&nbsp;thực,
+              đúng&nbsp;lúc, đúng&nbsp;cách. Giai&nbsp;đoạn&nbsp;đầu, chương&nbsp;trình tập&nbsp;trung phổ&nbsp;cập
+              kỹ&nbsp;năng sơ&nbsp;cấp&nbsp;cứu cho người&nbsp;trẻ Việt&nbsp;Nam. </p>
           </div>
 
           <div class="overview-cards-row">
             <div class="overview-card-box">
               <div class="overview-card-head"><i class="overview-card-icon"
                   style="--icon:url('Emages/icons/target.svg')" aria-hidden="true"></i><strong>Tầm nhìn</strong></div>
-              <p>Xây dựng cộng đồng nhân ái, đủ năng lực hành động vì sự an toàn của mọi người xung quanh.</p>
+              <p>Xây&nbsp;dựng cộng&nbsp;đồng nhân&nbsp;ái, đủ năng&nbsp;lực hành&nbsp;động vì sự an&nbsp;toàn của
+                mọi&nbsp;người xung&nbsp;quanh.</p>
             </div>
 
             <div class="overview-card-box">
               <div class="overview-card-head"><i class="overview-card-icon"
                   style="--icon:url('Emages/icons/people.svg')" aria-hidden="true"></i><strong>Lực lượng nòng
                   cốt</strong></div>
-              <p>Lấy người trẻ (học sinh, sinh viên) làm hạt nhân tiên phong lan tỏa đến toàn xã hội.</p>
+              <p>Lấy người&nbsp;trẻ (học&nbsp;sinh, sinh&nbsp;viên) làm hạt&nbsp;nhân tiên&nbsp;phong lan&nbsp;tỏa đến
+                toàn&nbsp;xã&nbsp;hội.</p>
             </div>
           </div>
 
           <figure class="overview-quote-box">
             <blockquote>
-              <p>“Biến lòng tốt thành năng lực hành động — để mỗi người đều có thể là <em>Người Gần Nhất</em>, là điểm
-                tựa nhân ái của cộng đồng.”</p>
+              <p>“Biến lòng&nbsp;tốt thành năng&nbsp;lực hành&nbsp;động — để mỗi&nbsp;người<br class="br-quote">
+                đều&nbsp;có&nbsp;thể là <em>Người Gần Nhất</em>, là điểm&nbsp;tựa nhân&nbsp;ái của cộng&nbsp;đồng.”</p>
             </blockquote>
           </figure>
         </div>
@@ -6079,8 +6174,7 @@
                 <span class="dh-founder-logo"><img class="logo-hctd" src="assets/logo-hctd.svg"
                     alt="Hội Chữ thập đỏ Việt Nam"></span>
                 <p class="dh-founder-role">Hội Chữ thập đỏ<span class="dh-founder-sub">Cơ quan chủ trì</span></p>
-                <span class="dh-founder-photo"><img src="Emages/nguoi-gan-nhat/founder-hctd-3.webp" alt=""
-                    loading="lazy"></span>
+                <span class="dh-founder-photo"><img src="Emages/nguoi-gan-nhat/founder-hctd-4.webp" alt="" width="1672" height="941" loading="lazy"></span>
               </div>
             </li>
 
@@ -6121,7 +6215,8 @@
                 </svg></span>
               <span><em class="accent">Gần</em> để thấu hiểu</span>
             </h3>
-            <p>Quan tâm những người xung quanh, biết nhận diện khi ai đó cần giúp đỡ và sẵn sàng có mặt đúng lúc.</p>
+            <p>Quan&nbsp;tâm những người xung&nbsp;quanh, biết nhận&nbsp;diện khi ai&nbsp;đó cần giúp&nbsp;đỡ và
+              sẵn&nbsp;sàng có&nbsp;mặt đúng&nbsp;lúc.</p>
           </article>
           <article class="principle">
             <h3 class="principle-title">
@@ -6130,7 +6225,8 @@
                 </svg></span>
               <span><em class="accent">Gọi</em> để kết nối</span>
             </h3>
-            <p>Kết nối con người, cộng đồng và các nguồn lực để sự giúp đỡ đến đúng lúc, đúng nơi cần thiết.</p>
+            <p>Kết&nbsp;nối con&nbsp;người, cộng&nbsp;đồng và các nguồn&nbsp;lực để sự giúp&nbsp;đỡ đến đúng&nbsp;lúc,
+              đúng&nbsp;nơi cần&nbsp;thiết.</p>
           </article>
           <article class="principle">
             <h3 class="principle-title">
@@ -6139,8 +6235,8 @@
                 </svg></span>
               <span><em class="accent">Giúp</em> để lan tỏa nhân ái</span>
             </h3>
-            <p>Biến lòng tốt thành hành động thiết thực, đúng lúc, đúng cách, góp phần lan tỏa tinh thần nhân ái trong
-              cộng đồng.</p>
+            <p>Biến lòng&nbsp;tốt thành hành&nbsp;động thiết&nbsp;thực, đúng&nbsp;lúc, đúng&nbsp;cách, góp&nbsp;phần
+              lan&nbsp;tỏa tinh&nbsp;thần nhân&nbsp;ái trong cộng&nbsp;đồng.</p>
           </article>
         </div>
       </div>
@@ -6156,40 +6252,46 @@
                 <span class="skill-num">01</span>
                 <div>
                   <h3>Năng lực sơ cấp cứu và ứng phó khẩn cấp</h3>
-                  <p>CPR, sử dụng AED, xử trí chảy máu, tai nạn, đuối nước, tai nạn giao thông, tai nạn sinh hoạt; biết
-                    gọi lực lượng chuyên môn và hỗ trợ an toàn trước khi lực lượng chuyên nghiệp đến.</p>
+                  <p>CPR, sử&nbsp;dụng AED, xử&nbsp;trí chảy&nbsp;máu, tai&nbsp;nạn, đuối&nbsp;nước,
+                    tai&nbsp;nạn&nbsp;giao&nbsp;thông, tai&nbsp;nạn&nbsp;sinh&nbsp;hoạt; biết gọi
+                    lực&nbsp;lượng&nbsp;chuyên&nbsp;môn và hỗ&nbsp;trợ an&nbsp;toàn trước khi
+                    lực&nbsp;lượng&nbsp;chuyên&nbsp;nghiệp đến.</p>
                 </div>
               </li>
               <li class="skill-topic">
                 <span class="skill-num">02</span>
                 <div>
                   <h3>Năng lực trợ giúp nhân đạo</h3>
-                  <p>Nhận diện người dễ bị tổn thương, hỗ trợ người già, trẻ em, người khuyết tật, người nghèo; biết
-                    cách tiếp cận, hỗ trợ có phẩm giá và không gây tổn thương.</p>
+                  <p>Nhận&nbsp;diện người dễ bị tổn&nbsp;thương, hỗ&nbsp;trợ người&nbsp;già, trẻ&nbsp;em,
+                    người&nbsp;khuyết&nbsp;tật, người&nbsp;nghèo; biết cách tiếp&nbsp;cận, hỗ&nbsp;trợ có phẩm&nbsp;giá
+                    và không gây tổn&nbsp;thương.</p>
                 </div>
               </li>
               <li class="skill-topic">
                 <span class="skill-num">03</span>
                 <div>
                   <h3>Năng lực phòng ngừa và ứng phó thảm họa</h3>
-                  <p>Kỹ năng phòng tránh thiên tai, sơ tán, cứu hộ trong phạm vi được đào tạo, thích ứng biến đổi khí
-                    hậu và bảo vệ bản thân khi tham gia cứu trợ.</p>
+                  <p>Kỹ&nbsp;năng phòng&nbsp;tránh thiên&nbsp;tai, sơ&nbsp;tán, cứu&nbsp;hộ trong phạm&nbsp;vi được
+                    đào&nbsp;tạo, thích&nbsp;ứng biến&nbsp;đổi&nbsp;khí&nbsp;hậu và bảo&nbsp;vệ bản&nbsp;thân khi
+                    tham&nbsp;gia cứu&nbsp;trợ.</p>
                 </div>
               </li>
               <li class="skill-topic">
                 <span class="skill-num">04</span>
                 <div>
                   <h3>Năng lực tham gia hoạt động nhân đạo</h3>
-                  <p>Hiến máu tình nguyện, vận động nguồn lực, tổ chức hoạt động cộng đồng, hỗ trợ tâm lý ban đầu và kết
-                    nối người cần trợ giúp với các nguồn lực phù hợp.</p>
+                  <p>Hiến&nbsp;máu tình&nbsp;nguyện, vận&nbsp;động nguồn&nbsp;lực, tổ&nbsp;chức hoạt&nbsp;động
+                    cộng&nbsp;đồng, hỗ&nbsp;trợ&nbsp;tâm&nbsp;lý ban&nbsp;đầu và kết&nbsp;nối người cần trợ&nbsp;giúp
+                    với các nguồn&nbsp;lực phù&nbsp;hợp.</p>
                 </div>
               </li>
               <li class="skill-topic">
                 <span class="skill-num">05</span>
                 <div>
                   <h3>Năng lực công dân nhân ái trong thời đại số</h3>
-                  <p>Nhận diện thông tin sai lệch trong tình huống khẩn cấp, sử dụng công nghệ kết nối cứu trợ, bảo vệ
-                    dữ liệu cá nhân, tôn trọng hình ảnh và quyền riêng tư của người được trợ giúp.</p>
+                  <p>Nhận&nbsp;diện thông&nbsp;tin sai&nbsp;lệch trong tình&nbsp;huống khẩn&nbsp;cấp, sử&nbsp;dụng
+                    công&nbsp;nghệ kết&nbsp;nối cứu&nbsp;trợ, bảo&nbsp;vệ dữ&nbsp;liệu cá&nbsp;nhân, tôn&nbsp;trọng
+                    hình&nbsp;ảnh và quyền&nbsp;riêng&nbsp;tư của người được trợ&nbsp;giúp.</p>
                 </div>
               </li>
             </ol>
@@ -6210,8 +6312,8 @@
             </span>
             <span>
               <b>Giáo trình chuẩn hóa</b>
-              <small>Nội dung được xây dựng trên giáo trình của Hội Chữ thập đỏ Việt Nam và các đối tác chuyên môn y
-                tế.</small>
+              <small>Nội&nbsp;dung được xây&nbsp;dựng trên giáo&nbsp;trình của
+                Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ&nbsp;Việt&nbsp;Nam và các đối&nbsp;tác chuyên&nbsp;môn y&nbsp;tế.</small>
             </span>
           </li>
           <li>
@@ -6222,8 +6324,8 @@
             </span>
             <span>
               <b>Thực hành cùng huấn luyện viên</b>
-              <small>Định hướng đào tạo kết hợp công nghệ tương tác, thực hành trực tiếp cùng huấn luyện viên chuyên
-                trách của Hội.</small>
+              <small>Định&nbsp;hướng đào&nbsp;tạo kết&nbsp;hợp công&nbsp;nghệ tương&nbsp;tác, thực&nbsp;hành
+                trực&nbsp;tiếp cùng huấn&nbsp;luyện&nbsp;viên chuyên&nbsp;trách của Hội.</small>
             </span>
           </li>
           <li>
@@ -6234,8 +6336,9 @@
             </span>
             <span>
               <b>Tìm kiếm, tôn vinh &amp; lan tỏa</b>
-              <small>Chương trình cùng Hội tìm kiếm, biểu dương những câu chuyện cứu người đời thường đúng cách và lan
-                tỏa hướng dẫn xử lý tình huống tương tự.</small>
+              <small>Chương&nbsp;trình cùng Hội tìm&nbsp;kiếm, biểu&nbsp;dương những câu&nbsp;chuyện cứu&nbsp;người
+                đời&nbsp;thường đúng&nbsp;cách và lan&nbsp;tỏa hướng&nbsp;dẫn xử&nbsp;lý tình&nbsp;huống
+                tương&nbsp;tự.</small>
             </span>
           </li>
         </ul>
@@ -6256,8 +6359,9 @@
 
           <div class="journey-stages">
             <h2 class="section-heading journey-heading">Huy hiệu Người Gần Nhất</h2>
-            <p class="journey-lead">Huy hiệu được cấp trên Cổng Nhân đạo số quốc gia, kèm bản vật lý dạng pin cài áo.
-              Mỗi cấp độ được xét duyệt theo tiêu chí chuyên môn của Hội Chữ thập đỏ Việt Nam.</p>
+            <p class="journey-lead">Huy&nbsp;hiệu được cấp trên Cổng&nbsp;Nhân&nbsp;đạo&nbsp;số&nbsp;quốc&nbsp;gia, kèm
+              bản vật&nbsp;lý dạng pin&nbsp;cài&nbsp;áo. Mỗi&nbsp;cấp&nbsp;độ được xét&nbsp;duyệt theo tiêu&nbsp;chí
+              chuyên&nbsp;môn của Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ&nbsp;Việt&nbsp;Nam.</p>
             <details name="journey" open data-img="Emages/nguoi-gan-nhat/huy-hieu-1b.webp"
               data-alt="Tình nguyện viên trao quà và thăm hỏi người cao tuổi" data-tag="Cấp độ 01 · Nhận thức"
               data-caption="Hiểu và tôn trọng<br>phẩm giá con người.">
@@ -6270,8 +6374,9 @@
                 <span class="stage-toggle" aria-hidden="true"></span>
               </summary>
               <div class="stage-body">
-                <p>Bắt đầu bằng việc hiểu các giá trị nhân đạo, biết tôn trọng phẩm giá con người, nhận diện nguy cơ và
-                  nuôi dưỡng tinh thần trách nhiệm với cộng đồng.</p>
+                <p>Bắt&nbsp;đầu bằng việc hiểu các giá&nbsp;trị nhân&nbsp;đạo, biết tôn&nbsp;trọng phẩm&nbsp;giá
+                  con&nbsp;người,<br class="br-wide"> nhận&nbsp;diện nguy&nbsp;cơ và nuôi&nbsp;dưỡng tinh&nbsp;thần
+                  trách&nbsp;nhiệm với cộng&nbsp;đồng.</p>
                 <div class="stage-tags">
                   <span>Hiểu giá trị nhân đạo</span>
                   <span>Tôn trọng phẩm giá</span>
@@ -6292,8 +6397,9 @@
                 <span class="stage-toggle" aria-hidden="true"></span>
               </summary>
               <div class="stage-body">
-                <p>Từ hiểu biết đến năng lực thực hành sơ cấp cứu, được đào tạo theo giáo trình của Hội và thực hành
-                  trực tiếp cùng huấn luyện viên chuyên môn.</p>
+                <p>Từ hiểu&nbsp;biết đến năng&nbsp;lực thực&nbsp;hành sơ&nbsp;cấp&nbsp;cứu, được đào&nbsp;tạo theo<br
+                    class="br-wide"> giáo&nbsp;trình của Hội và thực&nbsp;hành trực&nbsp;tiếp cùng
+                  huấn&nbsp;luyện&nbsp;viên chuyên&nbsp;môn.</p>
                 <div class="stage-tags">
                   <span>Giáo trình chuẩn của Hội</span>
                   <span>Thực hành cùng HLV</span>
@@ -6314,8 +6420,9 @@
                 <span class="stage-toggle" aria-hidden="true"></span>
               </summary>
               <div class="stage-body">
-                <p>Vận dụng kiến thức và kỹ năng vào thực tế: biết gọi 115, giữ an toàn và trực tiếp hỗ trợ nạn nhân
-                  đúng cách trong thời gian chờ lực lượng y tế.</p>
+                <p>Vận&nbsp;dụng kiến&nbsp;thức và kỹ&nbsp;năng vào thực&nbsp;tế: biết gọi 115, giữ an&nbsp;toàn và
+                  trực&nbsp;tiếp hỗ&nbsp;trợ nạn&nbsp;nhân đúng&nbsp;cách trong thời&nbsp;gian chờ
+                  lực&nbsp;lượng&nbsp;y&nbsp;tế.</p>
                 <div class="stage-tags">
                   <span>Biết gọi 115 đúng cách</span>
                   <span>Giữ an toàn hiện trường</span>
@@ -6336,8 +6443,9 @@
                 <span class="stage-toggle" aria-hidden="true"></span>
               </summary>
               <div class="stage-body">
-                <p>Trở thành người kết nối, đại sứ truyền thông, hướng dẫn kỹ năng nhân ái cho bạn bè, gia đình, nhà
-                  trường và tiếp nối hành trình cứu người.</p>
+                <p>Trở&nbsp;thành người kết&nbsp;nối, đại&nbsp;sứ truyền&nbsp;thông, hướng&nbsp;dẫn kỹ&nbsp;năng
+                  nhân&nbsp;ái cho bạn&nbsp;bè, gia&nbsp;đình, nhà&nbsp;trường và tiếp&nbsp;nối hành&nbsp;trình
+                  cứu&nbsp;người.</p>
                 <div class="stage-tags">
                   <span>Đại sứ truyền thông</span>
                   <span>Hướng dẫn gia đình &amp; bạn bè</span>
@@ -6461,10 +6569,11 @@
           <div class="rm-copy">
             <div class="rm-copy-inner">
               <div class="roadmap-head">
-                <h2 class="section-heading" id="roadmap-title">Khởi đầu từ kỹ năng sơ cấp cứu đến<br> mạng lưới nhân ái
-                  toàn cộng đồng</h2>
-                <p class="roadmap-lead">Người Gần Nhất hướng tới kết nối với các tổ chức nhân đạo quốc tế, để người trẻ
-                  Việt Nam mang năng lực và lòng nhân ái ra thế giới.</p>
+                <h2 class="section-heading" id="roadmap-title">Khởi&nbsp;đầu từ kỹ&nbsp;năng sơ&nbsp;cấp&nbsp;cứu<br
+                    class="br-wide"> đến mạng&nbsp;lưới nhân&nbsp;ái toàn cộng&nbsp;đồng</h2>
+                <p class="roadmap-lead">Người&nbsp;Gần&nbsp;Nhất hướng&nbsp;tới kết&nbsp;nối với các tổ&nbsp;chức
+                  nhân&nbsp;đạo quốc&nbsp;tế, để người&nbsp;trẻ Việt&nbsp;Nam mang năng&nbsp;lực và lòng nhân&nbsp;ái ra
+                  thế&nbsp;giới.</p>
               </div>
               <div class="rm-panels">
                 <article class="rm-panel is-active" style="--row:1">
@@ -6548,27 +6657,33 @@
         <div class="faq-list">
           <details>
             <summary>Chương trình “Người Gần Nhất” do đơn vị nào tổ chức?</summary>
-            <p>Người Gần Nhất là chương trình xã hội do Hội Chữ thập đỏ Việt Nam chủ trì, VCCorp và Báo Tuổi Trẻ là đơn
-              vị sáng lập. Tầm nhìn là xây dựng một cộng đồng Việt Nam nhân ái, đủ kiến thức và kỹ năng để biến lòng tốt
-              thành hành động thiết thực, đúng lúc, đúng cách, trong đó người trẻ là lực lượng nòng cốt.</p>
+            <p>Người&nbsp;Gần&nbsp;Nhất là chương&nbsp;trình xã&nbsp;hội do
+              Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ&nbsp;Việt&nbsp;Nam chủ&nbsp;trì, VCCorp và Báo&nbsp;Tuổi&nbsp;Trẻ là
+              đơn&nbsp;vị sáng&nbsp;lập. Tầm&nbsp;nhìn là xây&nbsp;dựng một cộng&nbsp;đồng Việt&nbsp;Nam nhân&nbsp;ái,
+              đủ kiến&nbsp;thức và kỹ&nbsp;năng để biến lòng&nbsp;tốt thành hành&nbsp;động thiết&nbsp;thực,
+              đúng&nbsp;lúc, đúng&nbsp;cách, trong đó người&nbsp;trẻ là lực&nbsp;lượng nòng&nbsp;cốt.</p>
           </details>
           <details>
             <summary>Chương trình ra mắt khi nào và hoạt động đào tạo triển khai ra sao?</summary>
-            <p>Chương trình chính thức ra mắt tại Hà Nội vào tháng 11/2026. Giai đoạn đầu kéo dài đến tháng 5/2027, với
-              hoạt động đào tạo kết hợp ứng dụng công nghệ, thực hành trực tiếp cùng huấn luyện viên của Hội và các buổi
-              trải nghiệm tại trường học.</p>
+            <p>Chương trình chính&nbsp;thức ra&nbsp;mắt tại Hà&nbsp;Nội vào tháng&nbsp;11/2026. Giai&nbsp;đoạn&nbsp;đầu
+              kéo&nbsp;dài đến tháng&nbsp;5/2027, với hoạt&nbsp;động đào&nbsp;tạo kết&nbsp;hợp ứng&nbsp;dụng
+              công&nbsp;nghệ, thực&nbsp;hành trực&nbsp;tiếp cùng huấn&nbsp;luyện&nbsp;viên của Hội và các buổi
+              trải&nbsp;nghiệm tại trường&nbsp;học.</p>
           </details>
           <details>
             <summary>Huy hiệu Người Gần Nhất được cấp dưới hình thức nào?</summary>
-            <p>Huy hiệu phát triển theo 4 cấp độ: Nhận thức, Kỹ năng, Hành động, Lan tỏa. Mỗi cấp độ được xét theo tiêu
-              chí chuyên môn của Hội. Huy hiệu được cấp trên Cổng Nhân đạo số quốc gia, kèm bản vật lý dạng pin cài áo.
+            <p>Huy&nbsp;hiệu phát&nbsp;triển theo 4&nbsp;cấp&nbsp;độ: Nhận&nbsp;thức, Kỹ năng, Hành&nbsp;động,
+              Lan&nbsp;tỏa. Mỗi cấp&nbsp;độ được xét theo tiêu&nbsp;chí chuyên&nbsp;môn của Hội. Huy&nbsp;hiệu được cấp
+              trên Cổng&nbsp;Nhân&nbsp;đạo&nbsp;số&nbsp;quốc&nbsp;gia, kèm bản vật&nbsp;lý dạng pin&nbsp;cài&nbsp;áo.
             </p>
           </details>
           <details>
             <summary>Định hướng mở rộng dài hạn của chương trình như thế nào?</summary>
-            <p>Từ nền tảng sơ cấp cứu, chương trình từng bước mở rộng sang phòng chống đuối nước, nhận biết đột quỵ, ứng
-              phó thiên tai, cùng các hoạt động nhân đạo như hiến máu, cứu trợ, đồng thời xây dựng Mạng lưới Người Gần
-              Nhất toàn quốc và kết nối với các tổ chức nhân đạo quốc tế.</p>
+            <p>Từ nền&nbsp;tảng sơ&nbsp;cấp&nbsp;cứu, chương&nbsp;trình từng&nbsp;bước mở&nbsp;rộng sang
+              phòng&nbsp;chống đuối&nbsp;nước, nhận&nbsp;biết đột&nbsp;quỵ, ứng&nbsp;phó thiên&nbsp;tai, cùng các
+              hoạt&nbsp;động nhân&nbsp;đạo như hiến&nbsp;máu, cứu&nbsp;trợ, đồng&nbsp;thời xây&nbsp;dựng
+              Mạng&nbsp;lưới&nbsp;Người&nbsp;Gần&nbsp;Nhất toàn&nbsp;quốc và kết&nbsp;nối với các tổ&nbsp;chức
+              nhân&nbsp;đạo quốc&nbsp;tế.</p>
           </details>
         </div>
       </div>
@@ -6582,8 +6697,9 @@
       <div class="wrap closing-center">
         <span class="closing-badge">Điểm tựa nhân ái · Hội Chữ thập đỏ Việt Nam</span>
         <h2 class="closing-title">Ai cũng có thể là<br><em class="accent">Người Gần Nhất</em></h2>
-        <p class="closing-desc">Dù mở rộng đến đâu, chương trình vẫn giữ một mục tiêu: biến lòng tốt thành năng lực hành
-          động. Ai cũng có thể là Người Gần Nhất. Mỗi người là một điểm tựa nhân ái của cộng đồng.</p>
+        <p class="closing-desc">Dù mở&nbsp;rộng đến đâu, chương&nbsp;trình vẫn giữ một mục&nbsp;tiêu: biến lòng&nbsp;tốt
+          thành năng&nbsp;lực hành&nbsp;động. Ai&nbsp;cũng có&nbsp;thể là Người&nbsp;Gần&nbsp;Nhất. Mỗi&nbsp;người là
+          một điểm&nbsp;tựa nhân&nbsp;ái của cộng&nbsp;đồng.</p>
         <div class="closing-btns" hidden>
           <a class="btn red" href="#principles-title">Khám phá thêm<svg class="arrow" aria-hidden="true">
               <use href="#arrow" />
