@@ -36,6 +36,56 @@ document.querySelectorAll('.dialog-close, .dialog-done').forEach((button) => {
   button.addEventListener('click', () => dialog.close());
 });
 
+// ==================== HERO: huy chương nằm giữa (cuối chữ ↔ mép phải màn hình) ====================
+// Bề rộng chữ đổi theo màn (tên giải co theo cột) nên đo thực tế rồi dịch huy chương bằng biến --medal-x (chỉ màn > 900px).
+(() => {
+  const medal = document.querySelector('.gt-hero-medal');
+  const img = medal && medal.querySelector('img');
+  const copy = document.querySelector('.gt-hero-copy');
+  if (!medal || !img || !copy) return;
+  const wide = window.matchMedia('(min-width: 901px)');
+  const textRight = () => {
+    let right = 0;
+    copy.querySelectorAll('.gt-hero-eyebrow, .gt-hero-name-line, .gt-hero-lead, .gt-hero-facts').forEach((el) => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      right = Math.max(right, range.getBoundingClientRect().right);
+    });
+    return right;
+  };
+  let frame = 0;
+  const place = () => {
+    frame = 0;
+    medal.style.setProperty('--medal-x', '0px');
+    if (!wide.matches) return;
+    const box = img.getBoundingClientRect();
+    const target = (textRight() + document.documentElement.clientWidth) / 2;
+    medal.style.setProperty('--medal-x', `${Math.round(target - (box.left + box.width / 2))}px`);
+  };
+  const queue = () => { if (!frame) frame = requestAnimationFrame(place); };
+  if (img.complete) queue(); else img.addEventListener('load', queue, { once: true });
+  if (document.fonts) document.fonts.ready.then(queue);
+  window.addEventListener('resize', queue);
+})();
+
+// ==================== Ý NGHĨA BIỂU TƯỢNG: slide thẻ trái (biểu trưng ↔ giấy chứng nhận) ====================
+// Ý 1–2 → slide 0 (biểu trưng), ý 3–4 → slide 1 (giấy chứng nhận); bấm vào ý bên phải cũng đổi slide theo.
+const meaningSlides = [...document.querySelectorAll('.gt-meaning-slide')];
+let meaningSlideIdx = 0;
+const setMeaningSlide = (idx) => {
+  if (idx === meaningSlideIdx || !meaningSlides[idx]) return;
+  meaningSlideIdx = idx;
+  meaningSlides.forEach((s, i) => {
+    s.classList.toggle('is-current', i === idx);
+    s.setAttribute('aria-hidden', String(i !== idx));
+  });
+};
+const slideForStep = (step, total) => (step >= Math.ceil(total / 2) ? 1 : 0);
+// Dự phòng khi giảm chuyển động / không GSAP (không có cuộn ghim): bấm ý nào thì thẻ trái đổi theo ý đó
+document.querySelectorAll('.gt-meaning-item').forEach((item, i, all) => {
+  item.addEventListener('click', () => setMeaningSlide(slideForStep(i, all.length)));
+});
+
 // ==================== CHUYỂN ĐỘNG (GSAP + ScrollTrigger) ====================
 if (window.gsap && window.ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
@@ -48,14 +98,13 @@ if (window.gsap && window.ScrollTrigger) {
   if (document.fonts) document.fonts.ready.then(() => ScrollTrigger.refresh());
 
   mm.add('(prefers-reduced-motion: no-preference)', () => {
-    // ==================== HERO: vào trang — "NGỌN ĐÈN NHÂN ÁI" trồi lên, 3 ảnh trồi lên lần lượt ====================
-    // Cuộn: tên giải và cụm ảnh đứng yên đúng vị trí, luôn hiển thị.
+    // ==================== HERO: vào trang — huy chương hiện dần, tên giải + khẩu hiệu + nút trồi lên lần lượt ====================
     const hero = document.querySelector('.gt-hero');
     if (hero) {
       gsap.timeline({ defaults: { ease: 'expo.out' } })
-        .from('.gt-hero-name', { yPercent: 18, autoAlpha: 0, duration: 1.3 }, 0.1)
-        .from('.gt-shot', { y: 60, autoAlpha: 0, duration: 1.3, stagger: 0.12 }, 0.3)
-        .from('.gt-hero-side > *', { y: 32, autoAlpha: 0, duration: 1, stagger: 0.1 }, 0.9);
+        .from('.gt-hero-medal img', { y: 60, scale: 0.92, autoAlpha: 0, duration: 1.5 }, 0)
+        .from('.gt-hero-eyebrow, .gt-hero-name', { yPercent: 24, autoAlpha: 0, duration: 1.2, stagger: 0.12 }, 0.15)
+        .from('.gt-hero-side > *', { y: 24, autoAlpha: 0, duration: 1, stagger: 0.1 }, 0.6);
     }
 
     // ==================== ĐỐI TƯỢNG · HẠNG MỤC: khối trồi lên lần lượt ====================
@@ -226,6 +275,8 @@ if (window.gsap && window.ScrollTrigger) {
         }
       });
 
+      setMeaningSlide(slideForStep(idx, items.length));
+
       if (railBar) {
         const pct = items.length > 1 ? idx / (items.length - 1) : 0;
         gsap.to(railBar, { scaleY: pct, transformOrigin: 'top', duration: smooth ? MOTION.base : 0, ease: 'power2.out' });
@@ -262,7 +313,8 @@ if (window.gsap && window.ScrollTrigger) {
 
     lightTl
       .fromTo(halo, { scale: 0.55, autoAlpha: 0.35 }, { scale: 1, autoAlpha: 1, duration: 0.7, ease: 'none' }) // tỏa tới vừa khít thẻ, không bị cắt
-      .to('.gt-meaning-mark img.is-lit', { autoAlpha: 1, duration: 0.7, ease: 'none' }, '<');
+      .to('.gt-meaning-mark img.is-lit', { autoAlpha: 1, duration: 0.7, ease: 'none' }, '<')
+      .to({}, { duration: 0.7 }); // quầng sáng tỏa xong trong nửa đầu (ý 1–2, slide biểu trưng); nửa sau là slide giấy chứng nhận
 
     const st = lightTl.scrollTrigger;
 
@@ -313,6 +365,7 @@ if (window.gsap && window.ScrollTrigger) {
           else btn.removeAttribute('aria-current');
         }
       });
+      setMeaningSlide(slideForStep(idx, items.length));
       if (railBar && items.length > 1) {
         railBar.style.transform = `scaleY(${idx / (items.length - 1)})`;
       }
