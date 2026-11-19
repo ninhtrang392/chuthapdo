@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261112-22" />
+    <link rel="stylesheet" href="styles.css?v=20261119-4" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -57,9 +57,9 @@
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
         <a href="ban-do-so.html">Bản đồ số</a>
         <a href="chuong-trinh-thien-nguyen.html" aria-current="page">Ủng hộ</a>
-        <a href="quy-nhan-dao.html">Quỹ nhân đạo</a>
+        <a href="quy-nhan-dao.html">Quỹ Nhân đạo Việt Nam</a>
         <a href="nguoi-gan-nhat.html">Người gần nhất</a>
-        <a href="giai-thuong.html">Giải thưởng nhân đạo</a>
+        <a href="giai-thuong.html">Giải thưởng</a>
         <a href="don-vi-dong-hanh.html">Đồng hành</a>
         <!-- ---------- Khác: nút có mũi tên xổ danh mục trang con (account-menu.js › HEADER: menu Khác) ---------- -->
         <div class="nav-more">
@@ -165,14 +165,12 @@
       </div>
 
 
-      <!-- ---------- Thanh cuối: lượt truy cập (trái) · điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX nằm ở nhãn ghim góc trái màn hình) ---------- -->
+      <!-- ---------- Thanh cuối: đơn vị phát triển hệ thống GTINX (trái) · điều phối (giữa) · lượt truy cập (phải) ---------- -->
       <div class="container footer-bottom">
-        <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc trái · tổng lượt tích lũy góc phải — visit-counter.js ---------- -->
-        <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
+        <!-- ---------- Lượt truy cập (đang trực tuyến, phiên hoạt động trong 15 phút) góc phải — visit-counter.js ---------- -->
+        <p class="footer-dev"><span>Đơn vị phát triển hệ thống</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
         <p class="footer-credit">Được điều phối bởi Hội Chữ thập đỏ Việt Nam</p>
-        <p class="footer-stat footer-stat-total">Tổng số lượt: <b data-stat="total">—</b></p>
-        <!-- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình -->
-        <p class="dev-tag" tabindex="0"><span>Đơn vị phát triển nền tảng</span><img class="logo-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" /></p>
+        <p class="footer-stat footer-stat-online"><span class="footer-stat-dot" aria-hidden="true"></span>Lượt truy cập: <b data-stat="online">—</b></p>
         <!-- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) -->
         <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
       </div>
@@ -191,7 +189,7 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="chuong-trinh-data.js?v=20261112-2" defer></script>
+    <script src="chuong-trinh-data.js?v=20261119-1" defer></script>
     <script src="chuong-trinh-thien-nguyen.js?v=20261112-2" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
   </body>

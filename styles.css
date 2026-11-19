@@ -105,9 +105,9 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 .avatar-button .icon{width:22px;height:22px;stroke-width:1.9}
 .nav-cta{display:none}
 /* --header-h = chiều cao header (các trang dùng để chừa chỗ phía trên) */
-@media(max-width:1440px){:root{--header-h:80px}.header{}.brand img{width:186px;height:44px}.navigation a,.nav-more-toggle{padding:12px 12px}}
-@media(max-width:1360px){.navigation a,.nav-more-toggle{padding:12px 8px}} /* menu có thêm "Khác" → thu khoảng cách để nút Đăng ký không tràn */
-@media(max-width:1240px){:root{--header-h:72px}.header{gap:8px}.brand img{width:152px;height:36px}.navigation a,.nav-more-toggle{padding:12px 5px;font-size:13px}}
+@media(max-width:1440px){:root{--header-h:80px}.header{}.brand img{width:186px;height:44px}.navigation a,.nav-more-toggle{padding:12px 10px}}
+@media(max-width:1360px){.navigation a,.nav-more-toggle{padding:12px 6px}} /* menu có thêm "Khác" + tên dài "Quỹ Nhân đạo Việt Nam" → thu khoảng cách để nút Đăng ký không tràn */
+@media(max-width:1300px){:root{--header-h:72px}.header{gap:8px}.brand img{width:152px;height:36px}.navigation a,.nav-more-toggle{padding:12px 4px;font-size:13px}} /* mốc 1300 (trước 1240) + đệm 4px: chừa chỗ cho tên dài "Quỹ Nhân đạo Việt Nam" */
 @media(max-width:1120px){:root{--header-h:64px}.header{gap:4px;padding:0 8px 0 14px;}.brand img{width:170px;height:40px}.header-actions{margin-left:auto;gap:0}.icon-button,.search-button{width:40px;height:40px}.notify-dot{top:8px;right:9px}.avatar-button{width:36px;height:36px;margin:0 4px}.avatar-button .icon{width:19px;height:19px}
 .menu-toggle{display:flex;order:3;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;border:0;border-radius:50%;background:transparent;padding:0;transition:background .2s}.menu-toggle:hover{background:rgba(0,0,0,.06)}.menu-toggle span{width:20px;height:2px;border-radius:2px;background:var(--header-text);transition:transform .25s,opacity .2s}
 .menu-toggle[aria-expanded=true] span:nth-child(1){transform:translateY(7px) rotate(45deg)}.menu-toggle[aria-expanded=true] span:nth-child(2){opacity:0}.menu-toggle[aria-expanded=true] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
@@ -210,6 +210,8 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .hero-intro .preloader{display:grid}
 /* ---------- Logo: trái tim trắng nền trong suốt, hiện dần (ảnh có sẵn lề trống nên khung lớn hơn chữ thập cũ) ---------- */
 .preloader-logo{display:block;width:clamp(120px,16vw,200px);height:auto}
+/* ---------- Tên cổng "Cổng nhân đạo số quốc gia": in hoa, đậm, trên logo ---------- */
+.preloader-title{margin:0 0 calc(clamp(28px,4vh,48px) * -1 + 20px);font-size:clamp(20px,2.6vw,36px);font-weight:700;line-height:1.3;text-align:center;text-transform:uppercase;letter-spacing:0} /* lề âm: sát logo hơn khoảng cách logo – trích dẫn (còn 20px) */
 /* ---------- Khối giữa: logo + câu trích dẫn xếp dọc, cả cụm căn giữa màn hình (preloader là grid place-items:center) ---------- */
 .preloader-center{display:flex;flex-direction:column;align-items:center;gap:clamp(28px,4vh,48px);width:min(960px,calc(100% - 2 * var(--gutter)))}
 /* ---------- Câu trích dẫn: chữ nghiêng Playfair, dòng tác giả nhỏ ---------- */
@@ -408,6 +410,8 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .event-card-reveal{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1)}
 .event-card-reveal > div{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:0;overflow:hidden;opacity:0;transition:opacity .35s}
 .event-card-desc{margin:10px 0 0;font-size:15px;line-height:24px;color:rgba(255,255,255,.95)}
+#hanh-trinh .event-card-name{font-size:18px;line-height:26px} /* trang chủ: 18/26 để "Giải thưởng Nhân đạo Việt Nam" vừa 1 dòng ở thẻ hẹp nhất (~288px) — 4 thẻ đồng đều; trang Giải thưởng giữ 20/28 */
+@media(min-width:1101px) and (max-width:1429px){#hanh-trinh .event-card-name{font-size:16px;line-height:24px}} /* 4 thẻ 1 hàng nhưng thẻ hẹp (218–288px) → 16/24, dòng 1 vừa từ ~1300px (laptop 1366) */
 .event-card-name a{color:inherit}
 .event-card-name a:focus-visible{outline:none}
 .event-card-photo:has(a:focus-visible){outline:3px solid #fff;outline-offset:-6px} /* focus bàn phím: viền trắng trong thẻ */
@@ -709,21 +713,23 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .awards-brand{display:flex;align-items:center;gap:clamp(16px,2vw,28px)}
 
 /* ---------- III · Giải thưởng — thẻ xếp chồng (kiểu GSAP showcase "stacking cards"): màn ghim (.award-pin) gồm đầu section + 4 thẻ hạng mục.
-   .awards.is-pinned (script.js, desktop có chuyển động): thẻ chồng lên nhau tuyệt đối; GSAP đẩy thẻ sau từ dưới lên, thẻ trước thu nhỏ · lùi lên · tối đi (.award-card-shade).
+   .awards.is-pinned (script.js, desktop có chuyển động): thẻ chồng lên nhau tuyệt đối; GSAP đẩy thẻ sau từ dưới lên đè khít thẻ trước (các thẻ trùng nhau, nhìn như 1 thẻ).
    Không ghim (màn ≤1100px / giảm chuyển động): 4 thẻ xếp dọc. ---------- */
 .awards{--edge:max(var(--gutter),calc((100vw - var(--container)) / 2));position:relative;overflow:hidden;overflow:clip;background:var(--color-bg)}
 .awards-head > .section-head{margin-bottom:var(--space-head)}
 .award-pin{display:flex;flex-direction:column;padding-inline:var(--edge)}
 .awards.is-pinned{padding:0}
 /* Desktop ghim: đầu section (trên) + chồng thẻ cao cố định; khối ghim cao theo nội dung (không kéo cả màn → không dư khoảng trắng với section trên);
-   script.js ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header → cả cụm căn giữa màn. Khoảng dưới đầu section chừa chỗ cho mép các thẻ đã lùi lên */
+   script.js ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header → cả cụm căn giữa màn */
 .awards.is-pinned .award-pin{padding-block:48px 32px}
-.awards.is-pinned .awards-head > .section-head{margin-bottom:clamp(72px,10vh,96px)} /* mép các thẻ đã lùi lên chiếm ~54px → còn ~25–40px trống dưới mô tả */
+.awards.is-pinned .awards-head > .section-head{margin-bottom:32px} /* thẻ chồng khít (không còn mép lùi lên) → chỉ chừa 32px dưới mô tả */
 .award-cards{display:grid;gap:16px;margin:0;padding:0;list-style:none}
 .awards.is-pinned .award-cards{position:relative;display:block;flex:none;height:clamp(420px,52vh,520px)} /* thẻ thấp gọn; tối thiểu 420px để chữ + logo không bị cắt trên màn thấp */
 /* Thẻ: chữ trái · ảnh phải; nền ảnh dải ruy-băng hình tim (Emages/Nền trừu tượng dải ruy-băng hình tim.png, neo đáy), viền mảnh, bóng nhẹ để thẻ trên tách khỏi thẻ dưới */
 .award-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center;gap:clamp(24px,4vw,64px);overflow:hidden;padding:clamp(20px,2.4vw,32px);border:1px solid var(--color-border);border-radius:24px;background:#fff url('Emages/N%E1%BB%81n%20tr%E1%BB%ABu%20t%C6%B0%E1%BB%A3ng%20d%E1%BA%A3i%20ruy-b%C4%83ng%20h%C3%ACnh%20tim.png') center bottom / cover no-repeat;box-shadow:0 -12px 40px rgba(36,39,44,.08)}
 .awards.is-pinned .award-card{position:absolute;inset:0;transform-origin:50% 0;will-change:transform}
+.awards.is-pinned .award-card{box-shadow:none} /* 5 thẻ chồng khít → bóng cộng dồn rất đậm: chỉ giữ 1 bóng nhạt ở thẻ dưới cùng (luôn nằm đúng chỗ cụm thẻ) */
+.awards.is-pinned .award-card:first-child{box-shadow:0 8px 24px rgba(36,39,44,.06)}
 .award-card-text{position:relative;isolation:isolate;padding:clamp(8px,2vw,32px)}
 /* Số khổng lồ mờ ở góc trên bên phải khối chữ (sau chữ) */
 .award-num{position:absolute;top:0;right:0;z-index:-1;font-family:'Playfair Display',Georgia,serif;font-size:clamp(160px,17vw,280px);font-weight:400;line-height:1;color:rgba(237,36,41,.06);transform:translateY(-30%);pointer-events:none} /* đỏ rất nhạt (màu --red, độ đậm 6%) */
@@ -750,7 +756,8 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .ngn-media img{display:block;width:100%;height:auto;aspect-ratio:16 / 9;object-fit:cover}
 .ngn-intro .eyebrow{letter-spacing:0}
 .ngn-intro .section-lead strong{font-weight:600;color:var(--color-text)}
-.ngn-intro .section-lead{max-width:none;text-align:justify;text-wrap:pretty} /* mô tả chương trình dàn hết bề ngang cột (thẳng mép phải danh sách), căn đều 2 bên */
+.ngn-intro{display:block;max-width:960px;margin:0 auto var(--space-head);text-align:center} /* đầu section căn giữa, nằm trên banner + danh sách */
+.ngn-intro .section-lead{max-width:none;margin-inline:auto;text-wrap:balance} /* chia đều các dòng, không để 1–2 chữ rớt dòng cuối */
 .ngn-phase{margin:12px 0 0;font-size:14px;font-style:italic;line-height:22px;color:var(--color-text-muted)}
 .ngn-list{display:grid;margin:24px 0 28px;padding:0;list-style:none}
 .ngn-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-top:1px solid var(--color-border)}
@@ -758,7 +765,10 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .ngn-name{margin:0;font-size:18px;font-weight:600;line-height:26px;color:var(--color-text)}
 .ngn-name{transition:color .25s}
 .ngn-item:hover .ngn-name{color:var(--red)} /* rê chuột vào mục → tên mục chuyển đỏ */
+.home-main .ngn-item:first-child{border-top:0;padding-top:0} /* trang chủ: bỏ đường kẻ trên mục 01 (chỉ giữ đường phân cách giữa các mục) */
 .ngn-desc{margin:2px 0 0;font-size:14px;line-height:22px;color:var(--color-text-muted)}
+.ngn-points{display:grid;gap:2px;margin:4px 0 0;padding:0 0 0 20px;list-style:disc;font-size:14px;line-height:22px;color:var(--color-text-muted)} /* danh sách 5 trụ cột năng lực dưới tên mục (chấm tròn xám) */
+.ngn-points li::marker{color:var(--color-text-muted)}
 .ngn-content > .button{min-height:50px;padding:0 26px}
 
 /* ---------- Responsive: Người Gần Nhất ---------- */
@@ -1023,10 +1033,17 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 /* Nền trắng nằm ngay sau section nền trắng (07 Tin tức) → bỏ đệm trên, như các section khác */
 .sponsor{padding-top:0;background:var(--color-bg)}
 /* ---------- Bố cục: ảnh trái, chữ phải ---------- */
-.sponsor-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:center}
+.sponsor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(min(730px,100%),1.25fr);gap:clamp(28px,4vw,64px);align-items:center} /* cột chữ tối thiểu 730px: dòng 1 mô tả ("BIDV đồng hành sáng lập… Hội Chữ thập đỏ Việt Nam", 17px ≈ 714px) nằm trọn 1 dòng */
 /* ---------- Ảnh lễ ký kết + chú thích (nhãn tối trên ảnh) ---------- */
 .sponsor-media{aspect-ratio:820 / 432;margin:0;border-radius:20px}
 .sponsor-caption{position:absolute;left:16px;bottom:16px;padding:7px 14px;border-radius:999px;background:rgba(20,14,10,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:13px;font-weight:600;color:#fff}
+/* ---------- Logo phủ trên ảnh nền slide (Emages/Homepage/Nền sóng đỏ và cái bắt tay mờ nhạt.png): GTINX | đối tác, vạch đỏ ngăn giữa — cụm logo hơi cao hơn tâm ảnh (chừa bắt tay mờ phía dưới) ---------- */
+.sponsor-media-logos{position:absolute;inset:0 0 16% 0;display:flex;align-items:center;justify-content:center;gap:5%;padding-inline:4%}
+.sponsor-media .sponsor-media-logos img{display:block;width:auto;height:auto;min-width:0;object-fit:contain;transform:none;transition:none}
+.sponsor-media .sponsor-media-logos .is-gtinx{width:36%}
+.sponsor-media-sep{flex:none;width:2px;height:22%;border-radius:2px;background:var(--red)}
+.sponsor-media .sponsor-media-logos .is-partner{width:30%;max-height:48%}
+.sponsor-media .sponsor-media-logos .is-vietjet{width:36%;max-height:60%} /* logo Vietjet 16:9 có lề trong → khung to hơn chút */
 /* ---------- Nội dung ---------- */
 .sponsor-kicker{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-primary)}
 .sponsor-kicker .icon{width:16px;height:16px}
@@ -1039,8 +1056,11 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 .sponsor-quote p{margin:0;font-size:16px;font-weight:600;line-height:1.6;color:var(--color-text)}
 .sponsor-quote cite{display:block;margin-top:10px;font-size:13px;font-style:normal;font-weight:600;color:var(--color-primary)}
 /* ---------- Responsive: đơn vị đồng hành ---------- */
-@media(max-width:900px){
-  .sponsor-grid{grid-template-columns:1fr}
+@media(max-width:1199px){
+  .sponsor-grid{grid-template-columns:1fr} /* < 1200px: 2 cột thì ảnh quá hẹp (cột chữ cần ≥ 730px) → xếp 1 cột */
+}
+@media(max-width:767px){
+  .sponsor-lead br{display:none} /* màn hẹp: bỏ ngắt dòng cố định, chữ tự chảy */
 }
 @media(max-width:600px){
   .sponsor-caption{left:12px;right:12px;bottom:12px;font-size:12px;text-align:center}
@@ -1123,14 +1143,17 @@ html.has-smoother{scroll-behavior:auto}
 .footer-contact-list .icon{flex-shrink:0;width:18px;height:18px;margin-top:1px;color:var(--color-primary)}
 .footer-contact-list span{overflow-wrap:break-word}
 
-/* ---------- Thanh cuối: lượt truy cập (trái) · dòng điều phối (giữa) · tổng số lượt (phải) (đơn vị phát triển GTINX ở nhãn ghim .dev-tag) ---------- */
+/* ---------- Thanh cuối: đơn vị phát triển hệ thống GTINX (trái, .footer-dev) · dòng điều phối (giữa) · lượt truy cập (phải) ---------- */
 .footer-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px 32px;margin-top:clamp(32px,4vw,56px);padding-block:18px 22px;border-top:1px solid #efe1dc}
 .footer-bottom p{margin:0;font-size:13px;color:var(--color-text-muted)}
 .footer-credit{text-align:center}
 /* Lượt truy cập: chấm xanh = đang trực tuyến; số đậm màu chữ chính */
 .footer-stat{display:inline-flex;align-items:center;gap:6px}
-.footer-stat-online{justify-self:start}
+.footer-stat-online{justify-self:end}
 .footer-stat-total{justify-self:end}
+/* Đơn vị phát triển hệ thống + logo GTINX: góc trái thanh cuối (lượt truy cập sang phải; trang Đăng nhập không có footer vẫn dùng nhãn ghim .dev-tag) */
+.footer-dev{display:inline-flex;align-items:center;justify-self:start;gap:8px}
+.footer-dev img{display:block;width:58px;height:14px;object-fit:contain}
 .footer-stat b{font-weight:600;color:var(--color-text);font-variant-numeric:tabular-nums}
 .footer-stat-dot{width:8px;height:8px;border-radius:50%;background:var(--color-green);box-shadow:0 0 0 3px rgba(0,108,69,.15)}
 /* ---------- Nút lên đầu trang: tròn kính mờ, chỉ icon, ghim góc phải dưới màn hình
@@ -1144,7 +1167,7 @@ html.has-smoother{scroll-behavior:auto}
 .footer-top:hover span{border-color:var(--red);background:var(--red);color:#fff}
 .footer-top:hover .icon{transform:translateX(2px)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.footer-top span,.dev-tag{background:rgba(255,255,255,.95)}}
-/* ---------- Nhãn "Đơn vị phát triển nền tảng GTINX": viên kính mờ ghim góc trái dưới màn hình, cân giữa với nút lên đầu trang.
+/* ---------- Nhãn "Đơn vị phát triển hệ thống GTINX": viên kính mờ ghim góc trái dưới màn hình, cân giữa với nút lên đầu trang.
    Thu gọn chỉ còn logo để ít che nội dung; rê chuột / chạm (focus) thì trượt mở dòng chữ ---------- */
 .dev-tag{position:fixed;left:max(16px,calc(var(--gutter) - 8px));bottom:30px;z-index:90;display:inline-flex;align-items:center;margin:0;padding:9px 14px;cursor:default;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(30px) saturate(110%);backdrop-filter:blur(30px) saturate(110%);box-shadow:0 12px 32px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.9);font-size:12px;font-weight:500;line-height:16px;color:var(--color-text-muted);white-space:nowrap}
 /* Logo GTINX (Emages/Đối tác/Logo GTINX.webp, 6713×3650) có nhiều lề trong suốt: chữ chỉ chiếm ~97% ngang × 42% dọc (tỉ lệ ~4,2:1)
@@ -1577,7 +1600,7 @@ html.has-smoother{scroll-behavior:auto}
 /* ==================== SECTION: HERO CHƯƠNG TRÌNH ==================== */
 /* ---------- Ảnh nền bàn tay nâng trái tim, phủ tối ấm để chữ trắng dễ đọc ---------- */
 .cp-hero{position:relative;z-index:2;isolation:isolate;display:flex;align-items:center;min-height:calc(300px + var(--header-h));padding:calc(var(--header-h) + 24px) 0 24px;background:#7a1d1f} /* không overflow:hidden (ảnh nền ::before đã inset 0) + z-index 2 → danh sách bộ lọc xổ xuống tràn ra ngoài banner, nằm trên lưới thẻ */
-.cp-hero::before{content:'';position:absolute;inset:0;z-index:-2;background:url('Emages/B%C3%A0n%20tay%20n%C3%A2ng%20tr%C3%A1i%20tim%20y%20t%E1%BA%BF.png') 70% center / cover no-repeat}
+.cp-hero::before{content:'';position:absolute;inset:0;z-index:-2;background:url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 80% 45% / cover no-repeat}
 .cp-hero::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(40,12,8,.55) 0%,rgba(60,18,10,.62) 100%)}
 .cp-hero-inner{display:flex;flex-direction:column;align-items:center;text-align:center}
 /* ---------- Breadcrumb: góc trên trái banner, chữ trắng (dùng lại .breadcrumb của trang chi tiết) ---------- */
@@ -4799,38 +4822,16 @@ html.pf-reg-lock{overflow:hidden}
 
 /* ==================== SECTION: TRANG QUỸ NHÂN ĐẠO (quy-nhan-dao.html) ==================== */
 /* Header, footer, section chương trình (trang chủ), bảng quyên góp (trang chi tiết chương trình) dùng lại style sẵn có; dưới đây chỉ phần riêng của trang. */
-.qnd-page{background:#fff;color:var(--color-text)}
-
-/* ---------- Hero: banner .cp-hero, đổi ảnh nền + phủ tối bên trái, chữ căn trái, chừa chân cho 4 số liệu đè lên ---------- */
-.qnd-hero{min-height:calc(380px + var(--header-h));padding-bottom:88px}
-.qnd-hero::before{background-image:url('Emages/quy-nhan-dao/banner.png');background-position:center 30%}
-.qnd-hero::after{background:linear-gradient(90deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.55) 50%,rgba(0,0,0,0) 100%),linear-gradient(0deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,.2) 100%)}
-.qnd-hero-inner{align-items:flex-start;text-align:left}
-.qnd-title{font-size:48px;line-height:58px}
-.qnd-hero-lead{max-width:560px;margin:16px 0 0;font-size:18px;line-height:28px;color:rgba(255,255,255,.9)}
-
-/* ---------- 4 số liệu: thẻ trắng nổi đè chân banner ---------- */
-.qnd-stats-wrap{position:relative;z-index:3;margin-top:-56px}
-.qnd-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:20px 8px;border-radius:16px;background:#fff;box-shadow:0 16px 40px rgba(20,30,50,.1)}
-.qnd-stat{display:flex;align-items:center;gap:14px;padding:0 20px}
-.qnd-stat + .qnd-stat{border-left:1px solid var(--color-border)}
-.qnd-stat-icon{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:#fdecec;color:var(--red)}
-.qnd-stat-icon .icon{width:20px;height:20px}
-.qnd-stat dd{margin:0;font-size:22px;font-weight:700;line-height:30px;color:var(--color-text);font-variant-numeric:tabular-nums}
-.qnd-stat dt{font-size:13px;line-height:20px;color:var(--color-text)}
-.qnd-stat-note{margin:0;font-size:12px;line-height:18px;color:var(--color-text-muted)}
 
 /* ---------- Danh sách quyên góp: tiêu đề căn giữa · thanh lọc 4 ô · bảng · ghi chú bảo mật ---------- */
 .qnd-head-center{justify-content:center;text-align:center}
 .qnd-head-center .section-lead{margin-inline:auto}
-.qnd-donations{padding-top:0}
 /* Thanh công cụ nằm trong thẻ bảng (UI kit .pf-section-head / .pf-head-tools / .pf-input / .pf-btn-ghost): đệm 16px, ô tìm kiếm giãn hết chỗ, ô ngày (biểu tượng đỏ) · ô chương trình · nút Tìm kiếm viền */
 .qnd-donor-head{flex-wrap:nowrap;margin:0;padding:16px}
 .qnd-donor-tools{flex:1;flex-wrap:nowrap;gap:12px;min-width:0}
 .qnd-donor-head .pf-input{height:42px;border-radius:10px}
 .pf-head-tools .pf-input.qnd-donor-q{flex:1.6;width:auto;min-width:0}
 .pf-head-tools .pf-input.qnd-donor-date{flex:1;width:auto;min-width:0}
-.pf-head-tools .pf-input.qnd-donor-program{flex:1;width:auto;min-width:0}
 .pf-input.is-search.qnd-donor-date > .icon{color:var(--red)}
 .qnd-donor-head .pf-btn-ghost{height:42px;padding:0 20px;border-radius:10px;font-weight:600}
 /* Bảng (UI kit .pf-table): chỉ kẻ ngang giữa các dòng (bỏ kẻ dọc), tiêu đề nền xám; ô 1 dòng, dài thì … (rê chuột xem đủ); số tiền đỏ đậm + thời gian căn phải */
@@ -4856,20 +4857,7 @@ html.pf-reg-lock{overflow:hidden}
 .qnd-donor-card .pf-page-btn{min-width:28px;height:28px;border-radius:6px;font-size:13px;font-weight:600}
 .qnd-donor-card .pf-page-btn[aria-current="page"]{background:var(--red);color:#fff}
 .qnd-donor-card .pf-page-btn.is-chev.is-prev .icon{transform:rotate(180deg)}
-.qnd-privacy{display:flex;align-items:center;gap:8px;margin:12px 0 0;font-size:13px;line-height:20px;color:var(--color-text-muted)}
-.qnd-privacy .icon{flex:none;width:16px;height:16px}
-
-/* ---------- Giới thiệu về Quỹ: dải đỏ ảnh nền · chữ trắng · 2 thẻ trắng ---------- */
-.qnd-about{background:var(--color-primary) url('Emages/quy-nhan-dao/gioi-thieu-bg.png') center / cover no-repeat;color:#fff}
-.qnd-about .section-title{color:#fff}
-.qnd-about .section-lead{max-width:860px;color:rgba(255,255,255,.88)}
-.qnd-about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;max-width:860px;margin:0 auto;padding:0;list-style:none}
-.qnd-about-card{padding:28px 32px;border-radius:16px;background:#fff;color:var(--color-text);box-shadow:0 16px 40px rgba(60,0,8,.25)}
-.qnd-about-card h3{margin:0 0 10px;font-size:20px;font-weight:600;line-height:28px;color:var(--color-text)}
-.qnd-about-card p{margin:0;font-size:15px;line-height:24px;color:var(--color-text-muted)}
-
 /* ---------- Quy chế vận hành: trái tiêu đề · phải 4 mục đánh số (.ngn-list) + Xem chi tiết ---------- */
-.qnd-rules-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);align-items:start;gap:clamp(32px,5vw,80px)}
 .qnd-rules-list{margin:0}
 .qnd-rules-list .ngn-item{align-items:center}
 .qnd-rules-list .ngn-item > div{flex:1;min-width:0}
@@ -4892,19 +4880,11 @@ html.pf-reg-lock{overflow:hidden}
 
 /* ---------- Responsive: trang Quỹ nhân đạo ---------- */
 @media(max-width:1100px){
-  .qnd-stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:20px}
   .qnd-donor-head,.qnd-donor-tools{flex-wrap:wrap}
   .pf-head-tools .pf-input.qnd-donor-q{flex:1 1 100%}
-  .pf-head-tools .pf-input.qnd-donor-date,.pf-head-tools .pf-input.qnd-donor-program{flex:1 1 200px;width:auto}
-  .qnd-stat:nth-child(3){border-left:0}
-  .qnd-rules-layout{grid-template-columns:1fr}
+  .pf-head-tools .pf-input.qnd-donor-date{flex:1 1 200px;width:auto}
 }
 @media(max-width:600px){
-  .qnd-title{font-size:34px;line-height:42px}
-  .qnd-hero-lead{font-size:16px;line-height:26px}
-  .qnd-stats{grid-template-columns:1fr}
-  .qnd-stat + .qnd-stat{border-left:0}
-  .qnd-about-grid{grid-template-columns:1fr}
   .qnd-rules-list .ngn-item{flex-wrap:wrap}
 }
 /* ==================== END SECTION: TRANG QUỸ NHÂN ĐẠO ==================== */
@@ -5049,3 +5029,9 @@ html.pf-reg-lock{overflow:hidden}
 .dhc-hero + .dh-quote{padding-top:0}
 .dhc-hero + .dh-quote .breadcrumb{display:none} /* breadcrumb đã có ở banner kể chuyện */
 /* ==================== END SECTION: ĐỒNG HÀNH — BANNER KỂ CHUYỆN ==================== */
+
+/* ==================== SECTION: TRANG CHỦ — chống rơi chữ (không để 1 từ lẻ một mình ở dòng cuối) ==================== */
+/* Văn bản thường: pretty (trình duyệt dồn chữ để dòng cuối ≥ 2 từ) · tiêu đề, tên, nhãn ngắn: balance (chia đều các dòng). text-wrap kế thừa → đặt ở gốc main trang chủ + footer */
+.home-main,.footer{text-wrap:pretty}
+.home-main :is(h1,h2,h3,h4,dt,.rl-name,.rl-meta,.cp-card-title,.news-title,.spotlight-title,.ngn-name,.event-card-name),.footer :is(h3,h4,a,.footer-dev span){text-wrap:balance}
+@media(max-width:600px){.home-main .section-lead br{display:none}} /* điện thoại: bỏ ngắt dòng cố định trong mô tả section (chỉ để dòng 2 trọn 1 dòng trên màn rộng) → chữ tự chảy, không tạo dòng ngắn rời rạc */
