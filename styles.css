@@ -3849,7 +3849,7 @@ html.pf-reg-lock{overflow:hidden}
 .dh-showcase .dh-gx-card.dh-gx-card{width:100%;max-width:600px;margin-inline:auto;padding:24px 16px;border:0;border-radius:0;background:none;box-shadow:none} /* không nền, không khung: huy hiệu + logo nằm thẳng trên nền section */
 .dh-showcase .dh-gx-card.dh-gx-card::before{content:none}
 .dh-gx-org{display:flex;flex-direction:column;align-items:center;margin-bottom:8px;text-align:center}
-.dh-showcase-copy.is-gtinx .sponsor-lead{text-align:justify} /* mô tả cột trái căn đều 2 bên */
+.dh-showcase-copy.is-gtinx .sponsor-lead{text-wrap:balance} /* căn trái + chia dòng cân (bỏ căn đều 2 bên: khối hẹp + từ ghép tiếng Việt → hở chữ lộ) */
 /* Chỉ section này: chữ cột trái to hơn một chút (tiêu đề 36 · mô tả 19), cột chữ rộng 480 cho vừa */
 @media(min-width:1101px){.dh-showcase > .container.container{grid-template-columns:minmax(0,500px) minmax(0,1fr)}}
 .dh-showcase .dh-showcase-copy .dh-section-title{font-size:36px;line-height:46px}
@@ -4162,7 +4162,7 @@ html.pf-reg-lock{overflow:hidden}
 .dh-person-follow:hover{background:var(--color-green);color:#fff;box-shadow:0 5px 18px rgba(0,108,69,.2)}
 .dh-person-quote{position:relative;align-self:stretch;margin:20px 0 0;padding:20px 0 0 36px;border-top:1px solid var(--dh-line);text-align:left}
 .dh-person-quote::before{content:'\201C';position:absolute;top:16px;left:0;font-family:Georgia,'Times New Roman',serif;font-size:52px;font-weight:700;line-height:1;color:var(--color-green)} /* dấu ngoặc kép xanh, cùng màu nút */
-.dh-person-quote p{margin:0;font-size:15px;font-style:italic;line-height:24px;color:var(--color-text)}
+.dh-person-quote p{margin:0;font-size:15px;font-style:italic;line-height:24px;color:var(--color-text);text-wrap:balance} /* chia dòng cân: tránh rớt lẻ "ta.", "tốt đẹp." */
 
 /* ==================== SECTION: HÌNH THỨC HỢP TÁC & ĐỒNG HÀNH ==================== */
 /* ---------- Tiêu đề (trái) · mô tả (phải) · danh sách 5 dòng accordion kẻ mảnh (rê chuột / focus / bấm để mở chi tiết) ---------- */
@@ -4187,7 +4187,7 @@ html.pf-reg-lock{overflow:hidden}
 .dh-coop-detail p{max-width:760px;margin:12px 0 0;font-size:15px;line-height:24px;color:var(--color-text-muted)}
 .dh-coop-detail p:first-child{margin-top:16px}
 /* ---------- Chia dòng cân: mô tả đầu section Đối tác / Con người + đoạn chi tiết hình thức hợp tác (tránh dòng cuối lẻ "vì / cộng đồng", "Quốc gia.", "người cần giúp đỡ.") ---------- */
-.dh-sponsors-head .sponsor-lead,.dh-people-intro .sponsor-lead,.dh-coop-detail p,.dh-showcase-copy .sponsor-lead,.dh-cta-card .action-campaign-desc{text-wrap:balance} /* + mô tả GTINX / Đơn vị đồng hành, mô tả thẻ CTA đỏ */
+.dh-sponsors-head .sponsor-lead,.dh-people-intro .sponsor-lead,.dh-coop-detail p,.dh-showcase-copy.is-partners .sponsor-lead,.dh-cta-card .action-campaign-desc{text-wrap:balance} /* + mô tả GTINX / Đơn vị đồng hành, mô tả thẻ CTA đỏ */
 .dh-coop-icon{display:grid;place-items:center;align-self:center;width:44px;height:44px;border:1px solid var(--color-border);border-radius:50%;color:var(--color-text-muted);transition:color .3s ease,border-color .3s ease,background-color .3s ease,opacity .3s ease,visibility .3s} /* vòng tròn viền mảnh ở cột trái (thay số /0x) */
 .dh-coop-icon .icon{width:20px;height:20px}
 .dh-coop-row:hover .dh-coop-icon{border-color:#f3c3c6;background-color:#fdf3f3;color:var(--color-primary)} /* rê chuột: chỉ đổi màu, không xoay / phóng */

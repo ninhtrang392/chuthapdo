@@ -296,10 +296,10 @@ document.querySelectorAll('.dh-founders').forEach((list, listIndex) => {
 // Thẻ (nền ảnh hồng mờ): ảnh chân dung tròn viền trắng · tên chữ đen · danh xưng · đường kẻ (đã ẩn nút "Theo dõi") · trích dẫn nghiêng có dấu ngoặc xanh.
 // pos (tuỳ chọn): object-position riêng để đầu các thẻ ngang nhau; zoom (tuỳ chọn): phóng ảnh đứng xa cho khuôn mặt cân với thẻ khác. Ảnh chân dung dùng ảnh gốc có nền (không tách nền), cắt tròn bằng CSS .dh-person-avatar. Ảnh lỗi → ảnh đại diện mặc định (chữ cái đầu). Không có người → TB03.
 const PEOPLE = [
-  { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/b4f3cc87d25f00c95859daf33b3c5e40.jpg', quote: 'Lan tỏa yêu thương không chỉ là hành động, mà là trách nhiệm của mỗi chúng ta.' },
-  { name: 'Phạm Gia Huy', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/0cbea7d214cc6acf1054334e41d9d945.jpg', pos: '50% 6%', zoom: 1.2, quote: 'Dù là điều nhỏ bé nhất, chúng ta vẫn có thể tạo nên thay đổi lớn lao.' },
-  { name: 'Hoàng Mai Linh', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/2b175da1066d5f3ef635d4980e47f6a4.jpg', zoom: 1.4, quote: 'Sẻ chia là một hành trình dài, và tôi mong được cùng mọi người lan tỏa điều tốt đẹp.' },
-  { name: 'Lê Quốc Bảo', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/396c741c3d37ad0199ac220d16169e3e.jpg', pos: '50% 12%', zoom: 1.45, quote: 'Hạnh phúc thật sự là khi mình có thể giúp đỡ người khác vượt qua khó khăn.' },
+  { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/b4f3cc87d25f00c95859daf33b3c5e40.jpg', quote: 'Lan tỏa yêu\u00A0thương không chỉ là hành\u00A0động, mà là trách\u00A0nhiệm của mỗi chúng\u00A0ta.' },
+  { name: 'Phạm Gia Huy', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/0cbea7d214cc6acf1054334e41d9d945.jpg', pos: '50% 6%', zoom: 1.2, quote: 'Dù là điều nhỏ\u00A0bé nhất, chúng\u00A0ta vẫn có\u00A0thể tạo nên thay\u00A0đổi lớn\u00A0lao.' },
+  { name: 'Hoàng Mai Linh', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/2b175da1066d5f3ef635d4980e47f6a4.jpg', zoom: 1.4, quote: 'Sẻ chia là một hành\u00A0trình dài, và tôi mong được cùng mọi\u00A0người lan\u00A0tỏa điều tốt\u00A0đẹp.' },
+  { name: 'Lê Quốc Bảo', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/396c741c3d37ad0199ac220d16169e3e.jpg', pos: '50% 12%', zoom: 1.45, quote: 'Hạnh\u00A0phúc thật\u00A0sự là khi mình có\u00A0thể giúp\u00A0đỡ người\u00A0khác vượt\u00A0qua khó\u00A0khăn.' },
 ];
 const initials = (name) => { const w = name.trim().split(/\s+/); return (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(); };
 const peopleGrid = $('#dh-people-grid');
