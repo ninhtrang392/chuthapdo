@@ -30,7 +30,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 /* ---------- Màn đầu: tiêu đề 4 dòng ---------- */
 .hero-screen{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:100vh;min-height:100svh;padding:var(--hero-pad) 0 var(--hero-pad-b)}
 /* Chữ đậm 900, khít (như bản v02). Mỗi dòng là một mặt nạ (overflow hidden) để chữ trồi lên; đệm trên/dưới chừa chỗ cho dấu tiếng Việt */
-.hero .hero-title{margin-block:0;font-size:var(--fs-hero);font-weight:900;line-height:.86;letter-spacing:-.065em;white-space:nowrap;color:var(--color-text);text-shadow:none} /* Neutral-800 */
+.hero .hero-title{margin-block:0;font-size:var(--fs-hero);font-weight:900;line-height:.86;letter-spacing:-.065em;white-space:nowrap;color:var(--color-green);text-shadow:none} /* "Chung tay", "Việt Nam": xanh lá logo #006C45 */
 .hero-line{display:block;overflow:hidden;padding:.06em 0 .24em;margin-bottom:-.12em}
 .hero-line-inner{display:inline-flex;align-items:center;gap:.18em;white-space:nowrap;will-change:transform}
 .hero-line--indent{padding-left:var(--indent)}
@@ -49,7 +49,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 /* ---------- Huy hiệu: giữa mép phải, ngang dòng 2–3 ---------- */
 .hero-badge{position:absolute;right:calc(var(--content-edge) + 2vw);top:calc(50% + (var(--hero-pad) - var(--hero-pad-b)) / 2 - var(--badge) / 2);display:grid;place-items:center;width:var(--badge);aspect-ratio:1}
 .hero-badge-text{position:absolute;inset:0;width:100%;height:100%}
-.hero-badge-text text{font-size:15px;font-weight:600;text-transform:uppercase;fill:var(--color-text)}
+.hero-badge-text text{font-size:15px;font-weight:600;text-transform:uppercase;fill:var(--color-green)}
 /* Logo trái tim đỏ ở giữa vòng chữ: ảnh nền trong suốt, hình tim chỉ chiếm ~44% khung ảnh nên đặt khung 72% để tim to ~32% huy hiệu */
 .hero-badge-logo{position:relative;display:block;width:72%;height:auto;pointer-events:none}
 
