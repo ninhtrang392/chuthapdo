@@ -2533,6 +2533,11 @@ html.pf-reg-lock{overflow:hidden}
 /* Sàng lọc sức khỏe: Có / Không không có khung viền — chỉ nút tròn + chữ (cả khi xem hồ sơ) */
 .pf-reg-fieldset [data-screen-q] .pf-radio-group{gap:8px 32px}
 .pf-reg-fieldset [data-screen-q] .pf-radio{min-height:24px;padding:0;border:0;background:none}
+/* Đợt hiến máu: Tỉnh/Thành phố (210px) · Chương trình · Thời gian và địa điểm cùng 1 hàng (ô Thời gian và địa điểm rộng nhất); màn hẹp: Tỉnh | Chương trình rồi Thời gian và địa điểm cả hàng · điện thoại 1 cột */
+.bd-event-row{display:grid;grid-column:1 / -1;grid-template-columns:210px minmax(0,1fr) minmax(0,1.2fr);gap:16px 20px}
+.bd-event-row select{text-overflow:ellipsis} /* chữ quá dài: "…" (đủ nội dung ở title — ho-so.js) */
+@media(max-width:1023px){.bd-event-row{grid-template-columns:repeat(2,minmax(0,1fr))}.bd-event-row > :last-child{grid-column:1 / -1}}
+@media(max-width:767px){.bd-event-row{grid-template-columns:minmax(0,1fr)}}
 /* Khung giờ sáng / chiều: 8 ô bằng nhau, thẳng cột giữa 2 buổi (lưới 4 cột, khoảng cách cột như .pf-team-row4); màn hẹp 2 cột, điện thoại 1 cột */
 .pf-radio-group.bd-slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 20px} /* 2 class: thắng .pf-radio-group{display:flex} khai báo phía sau */
 @media(max-width:1023px){.pf-radio-group.bd-slot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
