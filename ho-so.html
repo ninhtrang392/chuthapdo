@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261120-3" />
+    <link rel="stylesheet" href="styles.css?v=20261120-23" />
 </head>
 
 <body class="pf-page">
@@ -140,7 +140,7 @@
                     <a href="#nguoi-yeu-the" data-route="nguoi-yeu-the"><svg class="icon" aria-hidden="true"><use href="#people"/></svg><span>Hồ sơ người yếu thế</span><span class="pf-count" data-count="vulnerable"></span></a>
                     <a href="#chi-hoi" data-route="chi-hoi"><svg class="icon" aria-hidden="true"><use href="#layers"/></svg><span>Chi hội của tôi</span><span class="pf-count" data-count="branch"></span></a>
                     <a href="#doi-clb" data-route="doi-clb"><svg class="icon" aria-hidden="true"><use href="#building"/></svg><span>Đội, câu lạc bộ của tôi</span><span class="pf-count" data-count="clubs"></span></a>
-                    <!-- ---------- Nhóm Đăng ký hồ sơ: menu cấp 2 theo 4 loại hồ sơ, tự mở khi đang xem 1 loại (ho-so.js: ĐIỀU HƯỚNG) ---------- -->
+                    <!-- ---------- Nhóm Đăng ký hồ sơ: menu cấp 2 theo 5 loại hồ sơ (thêm Đăng ký hiến máu), tự mở khi đang xem 1 loại (ho-so.js: ĐIỀU HƯỚNG) ---------- -->
                     <div class="pf-nav-group">
                         <button class="pf-nav-toggle" type="button" aria-expanded="false" aria-controls="pf-nav-sub"><svg class="icon" aria-hidden="true"><use href="#hand-heart"/></svg><span>Đăng ký hồ sơ</span><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></button>
                         <div class="pf-nav-sub" id="pf-nav-sub" hidden>
@@ -148,11 +148,12 @@
                             <a href="#gia-nhap-chi-hoi" data-route="gia-nhap-chi-hoi"><span>Đăng ký gia nhập chi hội</span><span class="pf-count" data-count="gia-nhap-chi-hoi"></span></a>
                             <a href="#thanh-lap-doi" data-route="thanh-lap-doi"><span>Đăng ký thành lập đội, câu lạc bộ tình nguyện viên</span><span class="pf-count" data-count="thanh-lap-doi"></span></a>
                             <a href="#gia-nhap-doi" data-route="gia-nhap-doi"><span>Đăng ký gia nhập đội, câu lạc bộ tình nguyện viên</span><span class="pf-count" data-count="gia-nhap-doi"></span></a>
+                            <a href="#dang-ky-hien-mau" data-route="dang-ky-hien-mau"><span>Đăng ký hiến máu</span><span class="pf-count" data-count="dang-ky-hien-mau"></span></a>
                         </div>
                     </div>
                 </nav>
-                <!-- ---------- Thẻ xác thực tổ chức ---------- -->
-                <div class="pf-verify">
+                <!-- ---------- Thẻ xác thực tổ chức (đang ẩn theo yêu cầu — bỏ thuộc tính hidden để hiện lại) ---------- -->
+                <div class="pf-verify" hidden>
                     <span class="pf-verify-icon" aria-hidden="true"><svg class="icon"><use href="#shield"/></svg></span>
                     <p class="pf-verify-title">Xác thực tư cách tổ chức</p>
                     <p class="pf-verify-text">Gửi giấy tờ pháp lý để tạo chương trình dưới danh nghĩa tổ chức và nhận huy hiệu minh bạch.</p>
@@ -433,8 +434,8 @@
                 </section>
                 <!-- ==================== END SECTION: ĐỘI, CÂU LẠC BỘ CỦA TÔI ==================== -->
 
-                <!-- ==================== SECTION: ĐĂNG KÝ HỒ SƠ — danh sách hồ sơ theo 1 trong 4 loại: thành lập / gia nhập chi hội, thành lập / gia nhập đội, CLB (đặc tả CD-00) ==================== -->
-                <!-- Một màn dùng chung cho 4 loại: ho-so.js đổi tiêu đề, gợi ý tìm kiếm, tên cột, nút Thêm mới theo loại đang mở -->
+                <!-- ==================== SECTION: ĐĂNG KÝ HỒ SƠ — danh sách hồ sơ theo 1 trong 5 loại: thành lập / gia nhập chi hội, thành lập / gia nhập đội, CLB (đặc tả CD-00) · đăng ký hiến máu ==================== -->
+                <!-- Một màn dùng chung cho 5 loại: ho-so.js đổi tiêu đề, gợi ý tìm kiếm, tên cột (tên · nơi xử lý), nút Thêm mới theo loại đang mở -->
                 <section class="pf-screen" id="screen-tinh-nguyen-vien" data-screen="tinh-nguyen-vien" aria-labelledby="vol-heading" hidden>
                     <h2 class="visually-hidden" id="vol-heading">Đăng ký hồ sơ</h2>
                     <!-- ---------- Thanh công cụ: tìm kiếm + bộ lọc (trái) · thêm mới hồ sơ loại đang mở (phải) ---------- -->
@@ -448,7 +449,8 @@
                             <button class="pf-btn pf-btn-ghost pf-adv-toggle" type="button" aria-expanded="false" aria-controls="vol-filters"><svg class="icon" aria-hidden="true"><use href="#filter"/></svg>Bộ lọc<span class="pf-filter-count" hidden></span></button>
                         </div>
                         <div class="pf-head-tools">
-                            <button class="pf-btn pf-btn-primary" type="button" id="vol-add" data-panel="Đăng ký thành lập đội, câu lạc bộ tình nguyện viên"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg>Thêm mới</button>
+                            <!-- Nút chính: Thêm mới / Đăng ký hiến máu theo loại (ho-so.js: setVolKind) -->
+                            <button class="pf-btn pf-btn-primary" type="button" id="vol-add" data-panel="Đăng ký thành lập đội, câu lạc bộ tình nguyện viên"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg><span id="vol-add-label">Thêm mới</span></button>
                         </div>
                     </div>
                     <!-- ---------- Bộ lọc: thời gian tạo (bấm nút Bộ lọc để mở; loại hồ sơ chọn ở menu trái) ---------- -->
@@ -472,10 +474,12 @@
                                     <tr>
                                         <th scope="col" class="pf-col-index">STT</th>
                                         <th scope="col" id="vol-name-col">Tên đội, CLB và mã hồ sơ</th>
-                                        <th scope="col">Nơi xử lý hồ sơ</th>
+                                        <th scope="col" class="pf-col-place" id="vol-place-col">Nơi xử lý hồ sơ</th>
+                                        <!-- Thời gian hiến máu: chỉ hiện ở Đăng ký hiến máu (bảng có class is-blood — ho-so.js: applyVolFilter) -->
+                                        <th scope="col" class="pf-col-blood-time">Thời gian hiến máu</th>
                                         <th scope="col" class="pf-col-status">Trạng thái</th>
-                                        <th scope="col">Ngày tạo</th>
-                                        <th scope="col">Ngày nộp</th>
+                                        <th scope="col" class="pf-col-date" id="vol-created-col">Ngày tạo</th>
+                                        <th scope="col" class="pf-col-date pf-col-submitted">Ngày nộp</th>
                                         <th scope="col" class="pf-col-actions"><span class="visually-hidden">Thao tác</span></th>
                                     </tr>
                                 </thead>
@@ -1586,6 +1590,250 @@
     </div>
     <!-- ==================== END SECTION: ĐĂNG KÝ GIA NHẬP CHI HỘI ==================== -->
 
+    <!-- ==================== SECTION: ĐĂNG KÝ HIẾN MÁU — drawer phải cùng khung & bố cục Đăng ký gia nhập đội, CLB (ho-so.js: ĐĂNG KÝ HIẾN MÁU) ==================== -->
+    <!-- Nội dung theo PHIẾU ĐĂNG KÝ HIẾN MÁU TÌNH NGUYỆN (khách hàng gửi): Thông tin đợt hiến máu · Thông tin cá nhân · Tiền sử hiến máu · Sàng lọc sức khỏe sơ bộ · Đăng ký thời gian hiến máu (khung 1 tiếng) · Cam kết.
+         Mở từ nút Đăng ký hiến máu của danh sách #dang-ky-hien-mau (form trống) · Xem (mọi hồ sơ, kể cả bản nháp: cùng drawer, chỉ đọc — khóa cả fieldset, chân chỉ còn nút Đóng; danh sách không có Sửa / Xóa).
+         Họ tên, Ngày sinh, Giới tính, Số định danh lấy từ tài khoản định danh (khóa). Đợt hiến máu là DỮ LIỆU MINH HỌA (ho-so.js: BLOOD_EVENTS). -->
+    <div class="pf-reg" id="pf-blood" hidden>
+        <div class="pf-reg-overlay" data-close-blood></div>
+        <section class="pf-reg-panel" role="dialog" aria-modal="true" aria-labelledby="pf-blood-title">
+            <!-- ---------- Đầu drawer: tiêu đề (đổi khi xem hồ sơ đã nộp), nút đóng ---------- -->
+            <header class="pf-reg-head">
+                <div class="pf-reg-head-top">
+                    <div>
+                        <h2 class="pf-title" id="pf-blood-title">Đăng ký hiến máu</h2>
+                        <p class="pf-lead" id="pf-blood-lead">Các trường có dấu <span class="pf-req">*</span> là bắt buộc.</p>
+                    </div>
+                    <button class="pf-icon-btn pf-reg-close" type="button" aria-label="Đóng biểu mẫu" data-close-blood><svg class="icon" aria-hidden="true"><use href="#close"/></svg></button>
+                </div>
+            </header>
+
+            <form class="pf-reg-form" id="pf-blood-form" novalidate>
+                <div class="pf-reg-body">
+                    <!-- Xem hồ sơ đã nộp: khóa toàn bộ trường bằng fieldset disabled (fieldset không tạo khung, giữ nguyên bố cục) -->
+                    <fieldset class="pf-reg-fieldset" id="pf-blood-fields">
+                        <!-- ---------- Phần 1: Thông tin đợt hiến máu — chọn Chương trình hiến máu (bắt buộc, chỉ chương trình sắp diễn ra) → Thời gian · Địa điểm · Mô tả chương trình tự điền (khóa) (ho-so.js: BLOOD_EVENTS) ---------- -->
+                        <section class="pf-reg-section" aria-labelledby="pf-blood-s1-title">
+                            <div class="pf-reg-section-head">
+                                <h3 id="pf-blood-s1-title">1. Thông tin đợt hiến máu</h3>
+                            </div>
+                            <div class="pf-fields">
+                                <div class="pf-field is-wide">
+                                    <label for="bd-event">Chương trình hiến máu<span class="pf-req" aria-hidden="true">*</span></label>
+                                    <div class="pf-control is-select"><select id="bd-event" required><option value="">Chọn chương trình hiến máu</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                </div>
+                                <div class="pf-field">
+                                    <label for="bd-event-time">Thời gian</label>
+                                    <div class="pf-control is-locked"><input id="bd-event-time" type="text" placeholder="Chọn chương trình hiến máu trước" readonly /></div>
+                                </div>
+                                <div class="pf-field">
+                                    <label for="bd-event-place">Địa điểm</label>
+                                    <div class="pf-control is-locked"><input id="bd-event-place" type="text" placeholder="Chọn chương trình hiến máu trước" readonly /></div>
+                                </div>
+                                <div class="pf-field is-wide">
+                                    <label for="bd-event-desc">Mô tả chương trình</label>
+                                    <div class="pf-control is-locked"><textarea id="bd-event-desc" rows="3" placeholder="Chọn chương trình hiến máu trước" readonly></textarea></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ---------- Phần 2: Thông tin cá nhân — Họ tên, Ngày sinh, Giới tính, Số định danh lấy từ tài khoản định danh (khóa); tích "Đăng ký hộ" thì mở khóa 4 trường này
+                             để nhập người được đăng ký hộ (như "đăng ký thay" ở form Thành lập đội, CLB); Điện thoại, Địa chỉ liên lạc tự nhập; Cơ quan / đơn vị không bắt buộc ---------- -->
+                        <section class="pf-reg-section" aria-labelledby="pf-blood-s2-title">
+                            <div class="pf-reg-section-head">
+                                <h3 id="pf-blood-s2-title">2. Thông tin cá nhân</h3><span class="pf-reg-badge" id="bd-account-badge"><svg class="icon" aria-hidden="true"><use href="#shield"/></svg>Lấy từ tài khoản định danh</span></div>
+                            <div class="pf-fields" data-blood-person>
+                                <!-- Đăng ký hộ: đầu mục, trên hàng Họ và tên -->
+                                <label class="pf-reg-check is-wide"><input class="pf-check" type="checkbox" id="bd-proxy" />Đăng ký hiến máu hộ</label>
+                                <!-- Họ và tên · Giới tính · Ngày sinh · Số CCCD: 1 hàng 4 cột (dùng hàng 4 cột của form thành lập; màn hẹp 2 cột, điện thoại 1 cột) -->
+                                <div class="pf-team-row4">
+                                    <div class="pf-field">
+                                        <label for="bd-name">Họ và tên<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-locked"><input id="bd-name" type="text" value="Nguyễn Ngọc Trâm" placeholder="Nhập họ và tên" maxlength="100" readonly data-account="Nguyễn Ngọc Trâm" /></div>
+                                    </div>
+                                    <div class="pf-field">
+                                        <span class="pf-label" id="bd-gender-label">Giới tính<span class="pf-req" aria-hidden="true">*</span></span>
+                                        <div class="pf-radio-group is-locked" id="bd-gender" role="radiogroup" aria-labelledby="bd-gender-label" data-account="Nữ">
+                                            <label class="pf-radio"><input type="radio" name="bd-gender" value="Nữ" checked disabled />Nữ</label>
+                                            <label class="pf-radio"><input type="radio" name="bd-gender" value="Nam" disabled />Nam</label>
+                                        </div>
+                                    </div>
+                                    <div class="pf-field">
+                                        <label for="bd-dob">Ngày/Tháng/Năm sinh<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-locked"><input id="bd-dob" type="text" inputmode="numeric" maxlength="10" value="12/05/1996" placeholder="dd/mm/yyyy" readonly data-account="12/05/1996" /></div>
+                                    </div>
+                                    <div class="pf-field">
+                                        <label for="bd-identity">Số CCCD/Số định danh cá nhân<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-locked"><input id="bd-identity" type="text" inputmode="numeric" maxlength="12" value="040196012345" placeholder="12 chữ số" readonly data-account="040196012345" /></div>
+                                    </div>
+                                </div>
+                                <div class="pf-field">
+                                    <label for="bd-phone">Số điện thoại liên hệ<span class="pf-req" aria-hidden="true">*</span></label>
+                                    <div class="pf-control"><input id="bd-phone" type="tel" placeholder="Nhập số điện thoại" autocomplete="tel" maxlength="10" required /></div>
+                                </div>
+                                <div class="pf-field">
+                                    <label for="bd-work">Cơ quan/Đơn vị công tác/Học tập</label>
+                                    <div class="pf-control"><input id="bd-work" type="text" placeholder="Nhập cơ quan, đơn vị công tác hoặc trường học" maxlength="255" /></div>
+                                </div>
+                                <!-- ---------- Địa chỉ liên lạc hiện tại: Tỉnh/Thành phố → Phường/xã (theo tỉnh, danh mục ban-do-so-locations.js) · Số nhà, tên đường ---------- -->
+                                <div class="pf-reg-group">
+                                    <h4>Địa chỉ liên lạc hiện tại</h4>
+                                </div>
+                                <!-- Tỉnh · Phường/xã · Số nhà (chiếm 2 cột): 1 hàng 4 cột (dùng hàng 4 cột của form thành lập; màn hẹp 2 cột, điện thoại 1 cột) -->
+                                <div class="pf-team-row4">
+                                    <div class="pf-field">
+                                        <label for="bd-addr-province">Tỉnh/Thành phố<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-select"><select id="bd-addr-province" required><option value="">Chọn tỉnh/thành phố</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                    </div>
+                                    <div class="pf-field">
+                                        <label for="bd-addr-ward">Phường/xã<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-select"><select id="bd-addr-ward" required disabled><option value="">Chọn tỉnh/thành phố trước</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                    </div>
+                                    <div class="pf-field is-span-2">
+                                        <label for="bd-address">Số nhà, tên đường</label>
+                                        <div class="pf-control"><input id="bd-address" type="text" placeholder="Nhập số nhà, tên đường (thôn, xóm, tổ dân phố)" autocomplete="street-address" maxlength="255" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ---------- Phần 3: Tiền sử hiến máu — đã từng hiến chưa (bắt buộc) · số lần · ngày hiến gần nhất (chỉ mở khi Đã từng; cách ngày hiến đợt này ≥ 12 tuần) ---------- -->
+                        <section class="pf-reg-section" aria-labelledby="pf-blood-s3-title">
+                            <div class="pf-reg-section-head">
+                                <h3 id="pf-blood-s3-title">3. Tiền sử hiến máu</h3>
+                            </div>
+                            <div class="pf-fields">
+                                <!-- Đã từng hiến chưa · Số lần · Ngày gần nhất: hàng 4 cột như mục Thông tin cá nhân → Số lần dóng cột Phường/xã, Ngày gần nhất chiếm 2 cột, rộng bằng ô Số nhà, tên đường -->
+                                <div class="pf-team-row4">
+                                    <div class="pf-field">
+                                        <span class="pf-label" id="bd-ever-label">Anh/chị đã từng hiến máu chưa?<span class="pf-req" aria-hidden="true">*</span></span>
+                                        <div class="pf-radio-group" id="bd-ever" role="radiogroup" aria-labelledby="bd-ever-label">
+                                            <label class="pf-radio"><input type="radio" name="bd-ever" value="Đã từng" />Đã từng</label>
+                                            <label class="pf-radio"><input type="radio" name="bd-ever" value="Chưa từng" />Chưa từng</label>
+                                        </div>
+                                    </div>
+                                    <div class="pf-field">
+                                        <label for="bd-times">Số lần đã hiến máu</label>
+                                        <div class="pf-control"><input id="bd-times" type="text" inputmode="numeric" maxlength="3" placeholder="Nhập số lần" disabled /></div>
+                                    </div>
+                                    <div class="pf-field is-span-2">
+                                        <label for="bd-last-text">Ngày hiến máu gần nhất (nếu có)</label>
+                                        <div class="pf-control pf-date" data-vi-date><input type="text" id="bd-last-text" inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" autocomplete="off" disabled /><input class="pf-date-native" type="date" id="bd-last" tabindex="-1" aria-hidden="true" disabled /><button class="pf-date-btn" type="button" aria-label="Chọn ngày — ngày hiến máu gần nhất" disabled><svg class="icon" aria-hidden="true"><use href="#calendar"/></svg></button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ---------- Phần 4: Sàng lọc sức khỏe sơ bộ — 5 câu Có / Không (2 câu cuối chỉ hiện với nữ); trả lời chưa đạt → hiện lưu ý (vẫn nộp được, nhân viên y tế khám sàng lọc tại điểm hiến) ---------- -->
+                        <section class="pf-reg-section" aria-labelledby="pf-blood-s4-title">
+                            <div class="pf-reg-section-head">
+                                <h3 id="pf-blood-s4-title">4. Sàng lọc sức khỏe sơ bộ</h3>
+                            </div>
+                            <div class="pf-fields">
+                                <!-- data-ok: câu trả lời đạt điều kiện hiến máu -->
+                                <div class="pf-field is-wide" data-screen-q data-ok="Có">
+                                    <span class="pf-label" id="bd-q1-label">Hiện tại, anh/chị có đang thấy khỏe mạnh không?<span class="pf-req" aria-hidden="true">*</span></span>
+                                    <div class="pf-radio-group" role="radiogroup" aria-labelledby="bd-q1-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-q1" value="Có" />Có</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-q1" value="Không" />Không</label>
+                                    </div>
+                                </div>
+                                <div class="pf-field is-wide" data-screen-q data-ok="Không">
+                                    <span class="pf-label" id="bd-q2-label">Trong vòng 48 giờ qua, anh/chị có bị sốt, ho, đau họng hay dùng thuốc kháng sinh không?<span class="pf-req" aria-hidden="true">*</span></span>
+                                    <div class="pf-radio-group" role="radiogroup" aria-labelledby="bd-q2-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-q2" value="Có" />Có</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-q2" value="Không" />Không</label>
+                                    </div>
+                                </div>
+                                <div class="pf-field is-wide" data-screen-q data-ok="Không">
+                                    <span class="pf-label" id="bd-q3-label">Trong vòng 6 tháng qua, anh/chị có xăm mình, xỏ lỗ tai hay phẫu thuật không?<span class="pf-req" aria-hidden="true">*</span></span>
+                                    <div class="pf-radio-group" role="radiogroup" aria-labelledby="bd-q3-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-q3" value="Có" />Có</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-q3" value="Không" />Không</label>
+                                    </div>
+                                </div>
+                                <div class="pf-field is-wide" data-screen-q data-ok="Không" data-female>
+                                    <span class="pf-label" id="bd-q4-label">(Câu hỏi dành cho phụ nữ) Chị hiện tại có đang mang thai hoặc nuôi con dưới 12 tháng tuổi không?<span class="pf-req" aria-hidden="true">*</span></span>
+                                    <div class="pf-radio-group" role="radiogroup" aria-labelledby="bd-q4-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-q4" value="Có" />Có</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-q4" value="Không" />Không</label>
+                                    </div>
+                                </div>
+                                <div class="pf-field is-wide" data-screen-q data-ok="Không" data-female>
+                                    <span class="pf-label" id="bd-q5-label">(Câu hỏi dành cho phụ nữ) Chị hiện tại có đang trong kỳ kinh nguyệt hay không?<span class="pf-req" aria-hidden="true">*</span></span>
+                                    <div class="pf-radio-group" role="radiogroup" aria-labelledby="bd-q5-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-q5" value="Có" />Có</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-q5" value="Không" />Không</label>
+                                    </div>
+                                </div>
+                                <p class="pf-notice is-wide" id="bd-screen-note" hidden><svg class="icon" aria-hidden="true"><use href="#alert"/></svg><span>Theo câu trả lời, có thể anh/chị chưa đủ điều kiện hiến máu đợt này. Anh/chị vẫn có thể nộp đăng ký — nhân viên y tế sẽ khám sàng lọc và tư vấn tại điểm hiến máu.</span></p>
+                            </div>
+                        </section>
+
+                        <!-- ---------- Phần 5: Đăng ký thời gian hiến máu — chia khung 1 tiếng: sáng 7h30 – 11h30 · chiều 13h30 – 17h30 (chọn 1) ---------- -->
+                        <section class="pf-reg-section" aria-labelledby="pf-blood-s5-title">
+                            <div class="pf-reg-section-head">
+                                <h3 id="pf-blood-s5-title">5. Đăng ký thời gian hiến máu</h3>
+                            </div>
+                            <div class="pf-fields">
+                                <div class="pf-field is-wide">
+                                    <span class="pf-label" id="bd-slot-am-label">Buổi sáng</span>
+                                    <div class="pf-radio-group bd-slot-grid" role="radiogroup" aria-labelledby="bd-slot-am-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="7h30 – 8h30" />7h30 – 8h30</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="8h30 – 9h30" />8h30 – 9h30</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="9h30 – 10h30" />9h30 – 10h30</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="10h30 – 11h30" />10h30 – 11h30</label>
+                                    </div>
+                                </div>
+                                <div class="pf-field is-wide" id="bd-slot-field">
+                                    <span class="pf-label" id="bd-slot-pm-label">Buổi chiều</span>
+                                    <div class="pf-radio-group bd-slot-grid" role="radiogroup" aria-labelledby="bd-slot-pm-label">
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="13h30 – 14h30" />13h30 – 14h30</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="14h30 – 15h30" />14h30 – 15h30</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="15h30 – 16h30" />15h30 – 16h30</label>
+                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="16h30 – 17h30" />16h30 – 17h30</label>
+                                    </div>
+                                </div>
+                                <!-- Khác (ô tích): tích → khóa các khung giờ sáng / chiều, mở ô tự nhập thời gian (bắt buộc); bỏ tích → mở lại khung giờ (ho-so.js: syncBloodSlotOther) -->
+                                <div class="pf-field is-wide" id="bd-slot-other-field">
+                                    <span class="pf-label" id="bd-slot-other-label">Thời gian khác</span>
+                                    <div class="pf-radio-group bd-slot-grid" role="group" aria-labelledby="bd-slot-other-label">
+                                        <label class="pf-radio"><input class="pf-check" type="checkbox" id="bd-slot-other-check" />Khác</label>
+                                        <div class="pf-control"><input id="bd-slot-other" type="text" maxlength="100" placeholder="Nhập thời gian, ví dụ: 11h30 – 12h00" aria-label="Thời gian hiến máu khác" disabled /></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ---------- Phần 6: Cam kết (như form gia nhập, đổi sang hiến máu) ---------- -->
+                        <section class="pf-reg-section" aria-labelledby="pf-blood-s6-title">
+                            <div class="pf-reg-section-head">
+                                <h3 id="pf-blood-s6-title">6. Cam kết</h3>
+                            </div>
+                            <div class="pf-fields">
+                                <div class="pf-field is-wide pf-team-commit">
+                                    <p>Tôi tự nguyện đăng ký hiến máu cứu người, cam kết khai báo trung thực tình trạng sức khỏe, đến đúng khung giờ đã đăng ký và tuân thủ hướng dẫn của nhân viên y tế tại điểm hiến máu.</p>
+                                    <p class="pf-team-links"><a href="#" data-panel="Tiêu chuẩn sức khỏe người hiến máu">Đọc tiêu chuẩn sức khỏe người hiến máu</a></p>
+                                    <label class="pf-reg-check"><input class="pf-check" type="checkbox" id="bd-agree" required />Tôi đã đọc tiêu chuẩn sức khỏe và đồng ý với cam kết trên<span class="pf-req" aria-hidden="true">*</span></label>
+                                    <label class="pf-reg-check"><input class="pf-check" type="checkbox" id="bd-privacy" required />Tôi đồng ý để Hội xử lý dữ liệu cá nhân trong hồ sơ cho mục đích tổ chức hiến máu và liên hệ khi cần máu khẩn cấp<span class="pf-req" aria-hidden="true">*</span></label>
+                                    <p class="pf-error" id="bd-commit-error" hidden>Vui lòng đọc và đồng ý với cam kết</p>
+                                </div>
+                            </div>
+                        </section>
+                    </fieldset>
+                </div>
+
+                <!-- ---------- Chân drawer: Hủy · Gửi đăng ký (không có Lưu nháp; xem phiếu đã gửi: chỉ nút Đóng) ---------- -->
+                <footer class="pf-reg-foot">
+                    <p class="pf-hint" id="pf-blood-status" aria-live="polite"></p>
+                    <button class="pf-btn pf-btn-ghost" type="button" data-close-blood id="pf-blood-cancel">Hủy</button>
+                    <button class="pf-btn pf-btn-primary" type="submit">Gửi đăng ký</button>
+                </footer>
+            </form>
+        </section>
+    </div>
+    <!-- ==================== END SECTION: ĐĂNG KÝ HIẾN MÁU ==================== -->
+
     <!-- ==================== SECTION: XEM TRƯỚC PHIẾU ĐĂNG KÝ ĐỘI, CLB (PDF) ==================== -->
     <!-- Mở từ nút "Xem trước phiếu PDF" ở chân drawer, kiểu trình xem PDF: thanh công cụ tối · các trang A4 trên nền xám (ho-so.js: XEM TRƯỚC PHIẾU ĐĂNG KÝ ĐỘI, CLB).
          Trang 1+ (dọc): phần 1, 2, 4 + ký; trang danh sách thành viên (ngang) đủ cột. Nội dung tự chia trang; In / Tải về in riêng các trang qua khung ẩn. -->
@@ -1753,7 +2001,9 @@
     <script src="visit-counter.js?v=20261109-1" defer></script>
     <script src="vendor/xlsx.full.min.js" defer></script>
     <script src="team-members.js?v=20261023-1" defer></script>
-    <script src="ho-so.js?v=20261119-1" defer></script>
+    <!-- Danh mục hành chính 34 tỉnh/thành · 3.321 phường/xã (dùng chung với Bản đồ số) — Địa chỉ liên lạc trong form Đăng ký hiến máu -->
+    <script src="ban-do-so-locations.js" defer></script>
+    <script src="ho-so.js?v=20261120-15" defer></script>
 </body>
 
 </html>

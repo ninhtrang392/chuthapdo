@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261120-3" />
+    <link rel="stylesheet" href="styles.css?v=20261120-6" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -36,7 +36,7 @@
             <img class="preloader-logo" src="Emages/logo-demo/Embracing Hearts Logo.png" alt="" width="1288" height="1221" decoding="async" />
             <!-- ---------- Câu trích dẫn (theo bộ giới thiệu Đề án Người Gần Nhất) ---------- -->
             <figure class="preloader-quote">
-                <blockquote>“Một Việt Nam hùng cường phải đồng thời là một Việt Nam nhân ái.”</blockquote>
+                <blockquote>“Một Việt Nam hùng cường<br /> phải đồng thời là một Việt Nam nhân ái.”</blockquote>
                 <figcaption>Tổng Bí thư, Chủ tịch nước Tô Lâm — Chủ tịch danh dự Hội Chữ thập đỏ Việt Nam</figcaption>
             </figure>
         </div>
@@ -136,7 +136,7 @@
                             <span class="hero-line"><span class="hero-line-inner">Chung tay</span></span>
                             <span class="hero-line hero-line--indent">
                                 <span class="hero-line-inner">
-                                    <span class="hero-pill" aria-hidden="true"><img src="Emages/%E1%BA%A3nh%20minh%20h%E1%BB%8Da/tre-em-vung-cao-nu-cuoi.jpg" alt="" width="750" height="500" /></span>
+                                    <span class="hero-pill" aria-hidden="true"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Sharing%20Compassion%2C%20One%20Heart%20at%20a%20Time.png" alt="" width="1254" height="1254" style="object-position:50% 68%" /></span>
                                     <span class="hero-accent">vì một</span>
                                 </span>
                             </span>
@@ -335,11 +335,11 @@
                 </section>
                 <!-- ==================== END SECTION: HÀNH TRÌNH NHÂN ÁI ==================== -->
 
-                <!-- ==================== SECTION: TÌNH NGUYỆN VIÊN — CHƯƠNG I (dải thẻ chạy ngang) ==================== -->
-                <!-- Chương I của mạch "hành trình" (I → II → III → Chương trình). Bố cục dải trượt ngang (tham khảo philos.site, giữ style web):
-           2 câu dẫn chung một màn (câu chuyển cảnh từ Hành trình nhân ái + câu dẫn chương), hiện hết 1 lần khi cuộn tới → đầu section (tiêu đề · mô tả) + dải gồm khối giới thiệu (ảnh 01 + tiêu đề · mô tả + chữ) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
-           Desktop (script.js › SECTION: CHƯƠNG): ghim section, cuộn dọc → dải trượt ngang. Màn ≤1100px / giảm chuyển động: vuốt ngang (scroll-snap).
-           Đăng ký → form gia nhập đội, CLB ở hồ sơ (ho-so.html#gia-nhap-doi). DỮ LIỆU MINH HỌA: số tình nguyện viên lấy từ hệ thống khi triển khai; ảnh: Emages/tinh-nguyen-vien/tnv-trao-di-thoi-gian · tnv-cap-cuu-thang-cuon · tnv-hoat-dong-gan-noi-song (từ Emages/Ảnh News, đổi sang webp 1400px) · tnv-04.webp. -->
+                <!-- ==================== SECTION: TÌNH NGUYỆN VIÊN — CHƯƠNG I (dải slide tự chạy) ==================== -->
+                <!-- Chương I của mạch "hành trình" (I → II → III → Chương trình). Bố cục dải ngang (tham khảo philos.site, giữ style web):
+           2 câu dẫn chung một màn (câu chuyển cảnh từ Hành trình nhân ái + câu dẫn chương), hiện hết 1 lần khi cuộn tới → đầu section (tiêu đề · mô tả) + dải gồm 2 khối giới thiệu (Trao đi thời gian · Hiến máu cứu người: ảnh + tiêu đề · mô tả + nút) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
+           Không ghim / không cuộn ngang theo cuộn dọc nữa: dải là slide tự chuyển mỗi 6 giây như section Đơn vị đồng hành (script.js › SECTION: TÌNH NGUYỆN VIÊN), dừng khi rê chuột / focus; chấm chỉ slide (JS dựng, dùng lại .founders-dot); vuốt tay được (scroll-snap).
+           Đăng ký → form gia nhập đội, CLB ở hồ sơ (ho-so.html#gia-nhap-doi). Đăng ký hiến máu: chưa có trang riêng → tạm mở hộp thoại xem trước (data-panel). DỮ LIỆU MINH HỌA: số tình nguyện viên lấy từ hệ thống khi triển khai; ảnh hiến máu: Emages/QUỹ nhân đạo/Nụ cười trao giọt máu hồng.png. -->
                 <section class="section chapter chapter-gallery volunteer" id="tinh-nguyen-vien" aria-labelledby="tinh-nguyen-vien-title">
                     <div class="chapter-stage">
                         <!-- ---------- Câu dẫn chuyện: 2 câu chung một màn, cuộn tới là hiện hết cả 2 (script.js › SECTION: CHƯƠNG) ---------- -->
@@ -348,7 +348,7 @@
                             <p class="chapter-story-text">Bắt đầu bằng một chút thời gian trao đi để những ngày bình thường bỗng trở nên <em>ý nghĩa</em>.</p>
                         </div>
 
-                        <!-- ---------- Đầu section: tiêu đề · mô tả (như chương Giải thưởng); desktop hiện cùng dải trượt sau khi câu dẫn trôi đi ---------- -->
+                        <!-- ---------- Đầu section: tiêu đề · mô tả (như chương Giải thưởng) ---------- -->
                         <div class="section-head chapter-head">
                             <div>
                                 <h2 class="section-title" id="tinh-nguyen-vien-title">Tình nguyện viên Chữ thập đỏ</h2>
@@ -356,8 +356,8 @@
                             </div>
                         </div>
 
-                        <!-- ---------- Dải trượt ngang: giới thiệu (ảnh 01 · tiêu đề · mô tả · số tình nguyện viên · nút) + 3 lợi ích ---------- -->
-                        <div class="chapter-viewport">
+                        <!-- ---------- Dải slide: giới thiệu (ảnh · tiêu đề · mô tả · số tình nguyện viên · nút) · Hiến máu (ảnh · tiêu đề · mô tả · nút) + 3 lợi ích ---------- -->
+                        <div class="chapter-viewport" id="volunteer-viewport" role="group" aria-roledescription="carousel" aria-label="Tình nguyện viên — tự chuyển mỗi 6 giây, dừng khi rê chuột">
                             <ul class="chapter-track" aria-label="Lợi ích khi trở thành tình nguyện viên">
                             <li class="chapter-intro has-figure">
                                 <div class="chapter-figure"><img src="Emages/Homepage/Humanitarian%20Volunteers%20Delivering%20Aid.png" alt="Tình nguyện viên Chữ thập đỏ trao thùng quà tận tay cụ bà, tươi cười trò chuyện" width="1672" height="941" loading="lazy" decoding="async" /></div>
@@ -368,6 +368,17 @@
                                     <div class="chapter-actions">
                                         <a class="button button-primary" href="ho-so.html#gia-nhap-doi" data-magnetic>Đăng ký tình nguyện viên</a>
                                         <a class="button button-outline" href="ban-do-so.html">Tìm đội, CLB gần bạn</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- ---------- Thẻ Hiến máu: cạnh thẻ Trao đi thời gian, cùng bố cục (ảnh trái · chữ phải) ---------- -->
+                            <li class="chapter-intro has-figure">
+                                <div class="chapter-figure"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/N%E1%BB%A5%20c%C6%B0%E1%BB%9Di%20trao%20gi%E1%BB%8Dt%20m%C3%A1u%20h%E1%BB%93ng.png" alt="Người hiến máu tươi cười trên ghế hiến máu, tình nguyện viên Chữ thập đỏ ngồi bên cạnh" width="1672" height="941" loading="lazy" decoding="async" /></div>
+                                <div class="chapter-intro-text">
+                                    <h3 class="section-title">Hiến máu cứu người, một nghĩa cử cao đẹp</h3>
+                                    <p class="section-lead">Mỗi giọt máu cho đi là một cuộc đời ở lại. Đăng ký tham gia hiến máu tình nguyện cùng Hội Chữ thập đỏ tại các điểm hiến máu gần nơi bạn sống.</p>
+                                    <div class="chapter-actions">
+                                        <a class="button button-primary" href="#" data-panel="Đăng ký hiến máu" data-magnetic>Đăng ký hiến máu</a>
                                     </div>
                                 </div>
                             </li>
@@ -397,6 +408,9 @@
                             </li>
                             </ul>
                         </div>
+
+                        <!-- ---------- Chấm chỉ slide: script.js dựng theo số điểm dừng của dải (dùng lại .founders-dots / .founders-dot) ---------- -->
+                        <div class="founders-dots chapter-dots" data-volunteer-dots></div>
                     </div>
                 </section>
                 <!-- ==================== END SECTION: TÌNH NGUYỆN VIÊN ==================== -->
@@ -1469,7 +1483,7 @@
     <script src="flow.js?v=20261106-1" defer></script>
     <script src="account-menu.js?v=20261112-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="script.js?v=20261119-2" defer></script>
+    <script src="script.js?v=20261120-3" defer></script>
     <script src="chuong-trinh-data.js?v=20261119-1" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
     <script src="hero-3d.js?v=20261031-2" defer></script>

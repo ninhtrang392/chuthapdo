@@ -1808,12 +1808,55 @@ const renderVulnerableDetail = (code) => {
 // Tìm theo mã hồ sơ, tên đơn vị · panel Bộ lọc: Thời gian tạo. Sắp xếp: bản nháp (chưa nộp) lên đầu, sau đó theo Ngày nộp giảm dần; phân trang 12 / 20 / 50 / 100 dòng (mặc định 50).
 // Thao tác (hiện thẳng trên dòng): Bản nháp → Xem, Sửa, Xóa · trạng thái khác → Xem.
 // Chưa có dữ liệu minh họa cho loại thành lập chi hội: danh sách trống. Gia nhập chi hội (đặc tả UC-GN-01, UC-GN-03) có dữ liệu, biểu mẫu, màn xem & thao tác như gia nhập đội, CLB.
+// Đăng ký hiến máu (HM): trạng thái riêng (statuses, ẩn — chỉ tab Tất cả), cột Địa điểm (placeCol) · Thời gian hiến máu, nút chính Đăng ký hiến máu (addLabel) — biểu mẫu ở SECTION: ĐĂNG KÝ HIẾN MÁU.
 const VOL_KINDS = {
   'thanh-lap-chi-hoi': { type: 'TC', label: 'Đăng ký thành lập chi hội', unit: 'chi hội', found: true },
   'gia-nhap-chi-hoi': { type: 'GN', label: 'Đăng ký gia nhập chi hội', unit: 'chi hội', found: false },
   'thanh-lap-doi': { type: 'DC', label: 'Đăng ký thành lập đội, câu lạc bộ tình nguyện viên', unit: 'đội, CLB', found: true },
   'gia-nhap-doi': { type: 'GC', label: 'Đăng ký gia nhập đội, câu lạc bộ tình nguyện viên', unit: 'đội, CLB', found: false },
+  // Đăng ký hiến máu: không có Bản nháp (đăng ký xong là gửi) · chỉ tab Tất cả · không Bộ lọc, không Kết xuất
+  'dang-ky-hien-mau': { type: 'HM', label: 'Đăng ký hiến máu', unit: 'chương trình hiến máu', found: false, statuses: ['new', 'scheduled', 'donated', 'deferred'], allOnly: true, noFilter: true, placeCol: 'Địa điểm', createdCol: 'Ngày đăng ký', codeLabel: 'mã phiếu đăng ký', addLabel: 'Đăng ký hiến máu' },
 };
+// ---------- Chương trình hiến máu (DỮ LIỆU MINH HỌA): 4 chương trình sắp diễn ra (chọn được trong form — chương trình đầu theo phiếu khách hàng gửi), 3 chương trình đã diễn ra ----------
+const BLOOD_EVENTS = [
+  { name: 'Hiến máu tình nguyện tại Cung Thanh niên Hà Nội', place: 'Cung Thanh niên Hà Nội (37 Trần Bình Trọng, Hà Nội)', date: '2026-11-22', time: 'Từ 7h30 ngày 22/11/2026 (Chủ nhật)',
+    desc: 'Ngày hội hiến máu tình nguyện dành cho đoàn viên, sinh viên và người dân Thủ đô, góp phần bổ sung nguồn máu dự trữ cho các bệnh viện dịp cuối năm. Người hiến máu được khám sàng lọc, tư vấn sức khỏe miễn phí và nhận giấy chứng nhận hiến máu tình nguyện.' },
+  { name: 'Ngày hội hiến máu tình nguyện Hà Tĩnh cuối năm 2026', place: 'Hội Chữ thập đỏ tỉnh Hà Tĩnh (Số 2 Phan Đình Phùng, Hà Tĩnh)', date: '2026-12-06', time: 'Từ 7h30 ngày 06/12/2026 (Chủ nhật)',
+    desc: 'Ngày hội do Hội Chữ thập đỏ tỉnh Hà Tĩnh phối hợp Bệnh viện Đa khoa tỉnh tổ chức, tiếp nhận máu cho dịp cao điểm cuối năm. Có khu tư vấn sức khỏe, khám sàng lọc và hướng dẫn chăm sóc sau hiến máu.' },
+  { name: 'Hiến máu tình nguyện khối cơ quan Hà Nội', place: 'Nhà văn hóa phường Cửa Nam (Số 82 Nguyễn Du, Hà Nội)', date: '2026-12-13', time: 'Từ 7h30 ngày 13/12/2026 (Chủ nhật)',
+    desc: 'Chương trình dành cho cán bộ, công chức, người lao động các cơ quan, doanh nghiệp trên địa bàn, khuyến khích đăng ký theo đơn vị. Đơn vị có nhiều người tham gia được Hội ghi nhận và cấp giấy khen.' },
+  { name: 'Lễ hội Xuân hồng 2027', place: 'Bệnh viện Đa khoa tỉnh Hà Tĩnh', date: '2027-01-17', time: 'Từ 7h30 ngày 17/01/2027 (Chủ nhật)',
+    desc: 'Lễ hội hiến máu dịp trước Tết Nguyên đán, bảo đảm đủ máu cho người bệnh trong và sau Tết. Mỗi người hiến máu nhận quà Tết, giấy chứng nhận và được ưu tiên khi cần truyền máu.' },
+  { name: 'Hiến máu tình nguyện đợt 2 năm 2026', place: 'Hội Chữ thập đỏ tỉnh Hà Tĩnh (Số 2 Phan Đình Phùng, Hà Tĩnh)', date: '2026-08-16', time: 'Từ 7h30 ngày 16/08/2026 (Chủ nhật)',
+    desc: 'Đợt hiến máu tình nguyện thứ hai trong năm của Hội Chữ thập đỏ tỉnh Hà Tĩnh, bổ sung nguồn máu dịp hè.' },
+  { name: 'Lễ hội Xuân hồng 2026', place: 'Bệnh viện Đa khoa tỉnh Hà Tĩnh', date: '2026-02-01', time: 'Từ 7h30 ngày 01/02/2026 (Chủ nhật)',
+    desc: 'Lễ hội hiến máu dịp trước Tết Nguyên đán 2026, bảo đảm đủ máu cho người bệnh trong và sau Tết.' },
+  { name: 'Ngày hội hiến máu mùa hè 2025', place: 'Trung tâm Văn hóa – Điện ảnh tỉnh Hà Tĩnh', date: '2025-07-06', time: 'Từ 7h30 ngày 06/07/2025 (Chủ nhật)',
+    desc: 'Ngày hội hiến máu mùa hè dành cho học sinh, sinh viên và người dân trên địa bàn tỉnh.' },
+];
+const BLOOD_NO_EVENT = { name: '', place: '', date: '', time: '', desc: '' }; // bản nháp chưa chọn chương trình
+const bloodEvent = (name) => BLOOD_EVENTS.find((e) => e.name === name) || BLOOD_NO_EVENT;
+// ---------- Dữ liệu phiếu đã lưu / đã nộp: bloodRegCache (từ biểu mẫu) · còn lại suy từ đợt hiến máu (MINH HỌA) ----------
+const bloodRegCache = new Map();
+const BLOOD_OK = { q1: 'Có', q2: 'Không', q3: 'Không', q4: 'Không', q5: 'Không' }; // câu trả lời đạt điều kiện
+const BLOOD_DEMO = {
+  'Hiến máu tình nguyện đợt 2 năm 2026': { ever: 'Đã từng', times: '1', last: '2026-02-01', q: BLOOD_OK, slot: '8h30 – 9h30', agree: true, privacy: true },
+  'Lễ hội Xuân hồng 2026': { ever: 'Đã từng', times: '', last: '', q: BLOOD_OK, slot: '9h30 – 10h30', agree: true, privacy: true },
+  'Ngày hội hiến máu mùa hè 2025': { ever: 'Chưa từng', times: '', last: '', q: { ...BLOOD_OK, q5: 'Có' }, slot: '14h30 – 15h30', agree: true, privacy: true },
+};
+function bloodRegData(r) {
+  if (bloodRegCache.has(r.id)) return bloodRegCache.get(r.id);
+  const demo = BLOOD_DEMO[r.name] || { ever: '', times: '', last: '', q: {}, slot: '', agree: false, privacy: false };
+  return { event: r.name, phone: '0912345678', addrProvince: 'Tỉnh Hà Tĩnh', addrWard: 'Phường Thành Sen', address: 'Số 25 đường Hà Huy Tập', work: 'Trường THPT Phan Đình Phùng', ...demo };
+}
+// Cột Thời gian hiến máu: ngày hiến (dòng trên) · khung giờ đã đăng ký (dòng dưới, chưa chọn thì ghi rõ)
+// Khung giờ hiển thị: khung có sẵn · chọn Khác thì lấy thời gian người dùng tự nhập
+function bloodSlotText(d) {
+  return d.slot === 'Khác' ? (d.slotOther || 'Khác') : d.slot;
+}
+function bloodTimeCell(r) {
+  return `<div class="pf-cell-stack"><span>${viDate(bloodEvent(r.name).date)}</span><span class="pf-cell-line is-muted">${escapeHtml(bloodSlotText(bloodRegData(r)))}</span></div>`;
+}
 const VOL_PLACE = { DC: 'Hội Chữ thập đỏ phường Thành Sen', GC: 'Chủ nhiệm, phó chủ nhiệm', GN: 'Chi hội trưởng, chi hội phó' };
 // Hồ sơ gia nhập (đội, CLB · chi hội): bản nháp chỉ có Tiếp tục điền · Xóa nháp, có trạng thái Đã kết nạp
 const VOL_JOIN_TYPES = ['GC', 'GN'];
@@ -1830,6 +1873,10 @@ const VOL_STATUS = {
   admitted: { label: 'Đã kết nạp', tone: 'green', slug: 'da-ket-nap', only: 'join' },
   returned: { label: 'Đã trả hồ sơ', tone: 'orange', slug: 'da-tra-ho-so' },
   rejected: { label: 'Đã từ chối', tone: 'red', slug: 'da-tu-choi' },
+  // Đăng ký hiến máu: Mới → Đã xác nhận lịch hiến → Đã hiến máu / Tạm hoãn (không đủ điều kiện khi khám sàng lọc)
+  scheduled: { label: 'Đã xác nhận lịch hiến', tab: 'Đã xác nhận', tone: 'blue', slug: 'da-xac-nhan', only: 'blood' },
+  donated: { label: 'Đã hiến máu', tone: 'green', slug: 'da-hien-mau', only: 'blood' },
+  deferred: { label: 'Tạm hoãn hiến máu', tab: 'Tạm hoãn', tone: 'orange', slug: 'tam-hoan', only: 'blood' },
 };
 // [mã hồ sơ (null = bản nháp), loại, tên đội/CLB, trạng thái, ngày tạo, ngày nộp]
 const VOL_REGS = [
@@ -1901,6 +1948,10 @@ const VOL_REGS = [
   ['42.18073.GN.2026.0004', 'GN', 'Chi hội Trường Tiểu học Trần Phú', 'returned', '2026-06-27', '2026-06-28'],
   ['42.18073.GN.2026.0002', 'GN', 'Chi hội Tổ dân phố Đại Đồng phường Hà Huy Tập', 'rejected', '2026-05-09', '2026-05-09'],
   ['42.18073.GN.2025.0016', 'GN', 'Chi hội Khối doanh nghiệp phường Thành Sen', 'rejected', '2025-11-04', '2025-11-05'],
+  // Đăng ký hiến máu (tên = chương trình hiến máu — BLOOD_EVENTS; không có bản nháp)
+  ['42.18073.HM.2026.0019', 'HM', 'Hiến máu tình nguyện đợt 2 năm 2026', 'donated', '2026-08-10', '2026-08-10'],
+  ['42.18073.HM.2026.0004', 'HM', 'Lễ hội Xuân hồng 2026', 'donated', '2026-01-20', '2026-01-20'],
+  ['42.18073.HM.2025.0022', 'HM', 'Ngày hội hiến máu mùa hè 2025', 'deferred', '2025-06-28', '2025-06-28'],
 ].map(([code, type, name, status, created, submitted], i) => ({ id: code || `NHAP-${i + 1}`, code, type, name, status, created, submitted }));
 // Bản nháp (chưa nộp) lên đầu, sau đó theo ngày nộp giảm dần — dùng lại khi thêm hồ sơ từ biểu mẫu
 const volSort = (a, b) => (Boolean(a.submitted) - Boolean(b.submitted)) || (b.submitted || b.created).localeCompare(a.submitted || a.created);
@@ -1917,6 +1968,8 @@ const volFilters = [volf.time, volf.statusSel];
 const countVolFilters = setupFilterPanel('vol-filters', volFilters);
 // Trạng thái áp dụng cho loại đang mở · hồ sơ của loại đang mở
 const volStatuses = () => {
+  const { statuses } = VOL_KINDS[volf.kind];
+  if (statuses) return Object.fromEntries(statuses.map((key) => [key, VOL_STATUS[key]])); // loại có bộ trạng thái riêng (Đăng ký hiến máu)
   const only = VOL_KINDS[volf.kind].found ? 'found' : 'join';
   return Object.fromEntries(Object.entries(VOL_STATUS).filter(([, s]) => !s.only || s.only === only));
 };
@@ -1926,12 +1979,27 @@ const setVolKind = (kind) => {
   volf.kind = kind;
   const k = VOL_KINDS[kind];
   document.querySelector('#vol-heading').textContent = k.label;
-  volf.search.placeholder = `Tìm mã hồ sơ, tên ${k.unit}`;
-  document.querySelector('#vol-name-col').textContent = `Tên ${k.unit} và mã hồ sơ`;
-  // Thêm mới: thành lập đội, CLB / gia nhập đội, CLB / gia nhập chi hội mở biểu mẫu đăng ký; thành lập chi hội chưa có biểu mẫu → hộp thông báo xem trước
+  // Đăng ký hiến máu: "mã hồ sơ" → "mã phiếu đăng ký" (codeLabel)
+  const codeLabel = k.codeLabel || 'mã hồ sơ';
+  volf.search.placeholder = `Tìm ${codeLabel}, tên ${k.unit}`;
+  document.querySelector('#vol-name-col').textContent = `Tên ${k.unit} và ${codeLabel}`;
+  document.querySelector('#vol-place-col').textContent = k.placeCol || 'Nơi xử lý hồ sơ';
+  // Đăng ký hiến máu: Ngày tạo → Ngày đăng ký
+  document.querySelector('#vol-created-col').textContent = k.createdCol || 'Ngày tạo';
+  // Không Bộ lọc (Đăng ký hiến máu): ẩn nút, đóng panel, xóa giá trị lọc đang có để không lọc ngầm
+  const filterToggle = document.querySelector('.pf-adv-toggle[aria-controls="vol-filters"]');
+  filterToggle.hidden = Boolean(k.noFilter);
+  if (k.noFilter) {
+    document.querySelector('#vol-filters').hidden = true;
+    filterToggle.setAttribute('aria-expanded', 'false');
+    volFilters.forEach((el) => { el.value = ''; });
+  }
+  // Nhãn nút chính: Thêm mới / Đăng ký hiến máu
+  document.querySelector('#vol-add-label').textContent = k.addLabel || 'Thêm mới';
+  // Thêm mới: thành lập đội, CLB / gia nhập đội, CLB / gia nhập chi hội / hiến máu mở biểu mẫu đăng ký; thành lập chi hội chưa có biểu mẫu → hộp thông báo xem trước
   const add = document.querySelector('#vol-add');
-  const form = { 'thanh-lap-doi': 'data-open-team', 'gia-nhap-doi': 'data-open-join', 'gia-nhap-chi-hoi': 'data-open-branch' }[kind];
-  ['data-open-team', 'data-open-join', 'data-open-branch'].forEach((attr) => add.removeAttribute(attr));
+  const form = { 'thanh-lap-doi': 'data-open-team', 'gia-nhap-doi': 'data-open-join', 'gia-nhap-chi-hoi': 'data-open-branch', 'dang-ky-hien-mau': 'data-open-blood' }[kind];
+  ['data-open-team', 'data-open-join', 'data-open-branch', 'data-open-blood'].forEach((attr) => add.removeAttribute(attr));
   if (form) add.setAttribute(form, '');
   add.setAttribute('aria-haspopup', form ? 'dialog' : 'false');
   if (form) delete add.dataset.panel; else add.dataset.panel = k.label;
@@ -1944,23 +2012,26 @@ const volRow = (r, index) => {
   // Bản nháp: Xem · Sửa · Xóa hiện thẳng trên dòng; trạng thái khác: chỉ Xem
   // Hồ sơ thành lập / gia nhập đội, CLB, gia nhập chi hội: Xem / tên hồ sơ mở modal chi tiết (#<loại>/xem/<mã>); thành lập chi hội chưa có màn chi tiết → hộp thông báo xem trước
   // Hồ sơ gia nhập đội, CLB · chi hội (đặc tả CD-00): Bản nháp → Tiếp tục điền · Xóa nháp (không có màn xem); Đã trả hồ sơ → Xem hồ sơ · Tạo hồ sơ mới từ hồ sơ này
+  // Đăng ký hiến máu (HM): mọi dòng chỉ có nút Xem (drawer biểu mẫu ở chế độ chỉ đọc) — không có Sửa / Xóa
   const name = escapeHtml(r.name);
+  const isBlood = r.type === 'HM';
   const joinDraft = VOL_JOIN_TYPES.includes(r.type) && r.status === 'draft';
   const view = VOL_VIEW_KIND[r.type] && !joinDraft ? `#${VOL_VIEW_KIND[r.type]}/xem/${encodeURIComponent(r.id)}` : '';
   const viewLabel = r.status === 'draft' ? `Xem bản nháp ${name}` : `Xem hồ sơ ${r.code}`;
   const viewBtn = view
     ? `<a class="pf-icon-btn" href="${view}" aria-label="${viewLabel}">${icon('eye')}</a>`
+    : isBlood ? `<button class="pf-icon-btn" type="button" data-blood-view="${r.id}" aria-haspopup="dialog" aria-label="${viewLabel}" title="Xem hồ sơ">${icon('eye')}</button>`
     : `<button class="pf-icon-btn" type="button" data-panel="${viewLabel}" aria-label="${viewLabel}">${icon('eye')}</button>`;
   // Đã trả hồ sơ: thêm nút Tạo hồ sơ mới từ hồ sơ này (sao chép thông tin sang biểu mẫu Thêm mới để sửa và nộp lại)
   const copyBtn = `<button class="pf-icon-btn" type="button" ${['DC', 'GC', 'GN'].includes(r.type) ? `data-vol-copy="${r.id}"` : `data-panel="Tạo hồ sơ mới từ hồ sơ ${r.code}"`} aria-label="Tạo hồ sơ mới từ hồ sơ ${r.code}" title="Tạo hồ sơ mới từ hồ sơ này">${icon('plus-square')}</button>`;
-  const actions = joinDraft
+  const actions = isBlood ? viewBtn : joinDraft
     ? `<button class="pf-icon-btn" type="button" data-vol-edit="${r.id}" aria-label="Tiếp tục điền ${name}" title="Tiếp tục điền">${icon('pencil')}</button><button class="pf-icon-btn is-danger" type="button" data-vol-delete="${r.id}" aria-label="Xóa nháp ${name}" title="Xóa nháp">${icon('trash')}</button>`
     : r.status === 'returned' ? `${viewBtn}${copyBtn}` : r.status === 'draft'
     ? `${viewBtn}<button class="pf-icon-btn" type="button" data-panel="Sửa bản nháp ${name}" aria-label="Sửa bản nháp ${name}">${icon('pencil')}</button><button class="pf-icon-btn is-danger" type="button" data-vol-delete="${r.id}" aria-label="Xóa bản nháp ${name}">${icon('trash')}</button>`
     : viewBtn;
   const title = `<span class="pf-clamp-1" data-tip>${name}</span>`;
-  // Nơi xử lý: hồ sơ thành lập đội, CLB lấy theo Đơn vị quản lý của hồ sơ
-  const place = r.type === 'DC' ? teamRegData(r).unit : VOL_PLACE[r.type];
+  // Nơi xử lý: hồ sơ thành lập đội, CLB lấy theo Đơn vị quản lý của hồ sơ · hiến máu: địa điểm của đợt hiến máu
+  const place = r.type === 'DC' ? teamRegData(r).unit : isBlood ? bloodEvent(r.name).place : VOL_PLACE[r.type];
   // Trạng thái: nhãn ngắn như tên tab (Chờ xác nhận), tên đầy đủ khi rê chuột
   const st = VOL_STATUS[r.status];
   return `<tr>
@@ -1968,13 +2039,14 @@ const volRow = (r, index) => {
     <td>
       <div class="pf-cell-stack">
         ${view ? `<a class="pf-cell-title" href="${view}">${title}</a>` : `<span class="pf-cell-title">${title}</span>`}
-        <span class="pf-cell-line is-muted">Mã: ${r.code || 'Chưa có mã'}</span>
+        <span class="pf-cell-line is-muted">Mã: ${r.code || 'Chưa có mã'}${isBlood && bloodRegData(r).proxy ? ` · Đăng ký hộ: ${escapeHtml(bloodRegData(r).person.name)}` : ''}</span>
       </div>
     </td>
-    <td><span class="pf-clamp-2" data-tip>${escapeHtml(place || '')}</span></td>
+    <td class="pf-col-place"><span class="pf-clamp-2" data-tip>${escapeHtml(place || '')}</span></td>
+    <td class="pf-col-blood-time">${isBlood ? bloodTimeCell(r) : ''}</td>
     <td class="pf-col-status"><span class="pf-badge is-${st.tone}" title="${st.label}"><span class="pf-dot" aria-hidden="true"></span>${st.tab || st.label}</span></td>
     <td class="pf-col-date">${viDate(r.created)}</td>
-    <td class="pf-col-date">${r.submitted ? viDate(r.submitted) : '<span class="pf-muted">Chưa nộp</span>'}</td>
+    <td class="pf-col-date pf-col-submitted">${r.submitted ? viDate(r.submitted) : '<span class="pf-muted">Chưa nộp</span>'}</td>
     <td class="pf-col-actions"><div class="pf-row-actions">${actions}</div></td>
   </tr>`;
 };
@@ -2003,12 +2075,15 @@ const syncVolStatusFilter = () => {
   const keep = volf.status ? '' : (map[volf.statusSel.value] ? volf.statusSel.value : '');
   volf.statusSel.innerHTML = '<option value="">Tất cả trạng thái</option>' + Object.entries(map).map(([key, st]) => `<option value="${key}">${st.tab || st.label}</option>`).join('');
   volf.statusSel.value = keep;
-  document.querySelector('#vol-status-field').hidden = Boolean(volf.status);
+  document.querySelector('#vol-status-field').hidden = Boolean(volf.status) || Boolean(VOL_KINDS[volf.kind].allOnly); // Đăng ký hiến máu: không lọc trạng thái
 };
 const applyVolFilter = () => {
   syncVolStatusFilter();
   // Tab trạng thái (Bản nháp … Đã từ chối): ẩn cột Trạng thái — chỉ tab Tất cả hiện cột này
-  document.querySelector('.pf-table.is-volunteer').classList.toggle('is-status-tab', Boolean(volf.status));
+  // Đăng ký hiến máu (allOnly): cũng ẩn cột Trạng thái · hiện cột Thời gian hiến máu (is-blood)
+  const volTableEl = document.querySelector('.pf-table.is-volunteer');
+  volTableEl.classList.toggle('is-status-tab', Boolean(volf.status) || Boolean(VOL_KINDS[volf.kind].allOnly));
+  volTableEl.classList.toggle('is-blood', VOL_KINDS[volf.kind].type === 'HM');
   const query = fold(volf.search.value.trim());
   volTable.setFilter((r) => (!query || fold(`${r.code || ''} ${r.name}`).includes(query))
     && r.type === VOL_KINDS[volf.kind].type
@@ -2030,6 +2105,8 @@ document.querySelector('#vol-rows').addEventListener('click', (event) => {
   if (copy) copyVolReg(findVolReg(copy.dataset.volCopy), copy);
   const edit = event.target.closest('[data-vol-edit]');
   if (edit) { const r = findVolReg(edit.dataset.volEdit); if (r.type === 'GN') editBranchDraft(r, edit); else editJoinDraft(r, edit); }
+  const bloodView = event.target.closest('[data-blood-view]');
+  if (bloodView) viewBlood(findVolReg(bloodView.dataset.bloodView), bloodView);
 });
 // Tạo hồ sơ mới từ hồ sơ đã trả: thành lập / gia nhập đội, CLB, gia nhập chi hội mở biểu mẫu Thêm mới đã điền sẵn (prefillTeam, prefillJoin, prefillBranch); thành lập chi hội chưa có biểu mẫu → hộp thông báo xem trước
 const copyVolReg = (r, trigger) => {
@@ -2039,7 +2116,7 @@ const copyVolReg = (r, trigger) => {
 // Xóa nháp: hỏi xác nhận bằng hộp xác nhận dùng chung (window.confirmAction), đồng ý mới xóa thật (bản nháp chưa có mã)
 const deleteVolDraft = async (r) => {
   // Hồ sơ gia nhập (đội, CLB · chi hội) dùng câu hỏi theo đặc tả (Xóa nháp – xác nhận)
-  const yes = await window.confirmAction(VOL_JOIN_TYPES.includes(r.type)
+  const yes = await window.confirmAction(VOL_JOIN_TYPES.includes(r.type) || r.type === 'HM'
     ? { title: 'Xóa nháp', text: 'Bạn có chắc chắn muốn xóa bản nháp này?', ok: 'Xóa' }
     : { title: 'Xóa bản ghi', text: 'Bạn có chắc chắn muốn xóa bản ghi này không?', ok: 'Xóa' });
   if (!yes) return;
@@ -3374,7 +3451,7 @@ const renderSideStats = () => {
     ['Tổng đã gây quỹ', money],
     ['Lượt ủng hộ', '1.126'],
     ['Hồ sơ người yếu thế', VULNERABLE.length],
-    ['Giờ tình nguyện', '128 giờ'],
+    // Giờ tình nguyện: đang ẩn theo yêu cầu
   ];
   document.querySelector('#pf-stats').innerHTML = STATS.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('');
   document.querySelector('[data-count="programs"]').textContent = PROGRAMS.length;
@@ -3403,7 +3480,8 @@ const TAB_SOURCES = {
   // Đội, CLB / Chi hội của tôi: Danh sách thành viên / hội viên [số] · 5 trạng thái hồ sơ gia nhập (count: số trên tab); đường dẫn theo chế độ
   'doi-clb': () => ({ map: unitJoinTabs(), rows: unitJoins(), href: unitMode().route, all: `Danh sách ${unitMode().person}`, count: (key, n) => (key ? n : unitMembers().length) }),
   // Đăng ký hồ sơ: tab đầu “Tất cả” (mặc định khi mở từ menu), sau đó các trạng thái; tab và số đếm theo loại hồ sơ đang mở
-  'tinh-nguyen-vien': () => ({ map: volStatuses(), rows: volKindRows(), href: volf.kind, all: 'Tất cả' }),
+  // allOnly (Đăng ký hiến máu): chỉ tab Tất cả, ẩn các tab trạng thái — lọc trạng thái ở Bộ lọc
+  'tinh-nguyen-vien': () => ({ map: VOL_KINDS[volf.kind].allOnly ? {} : volStatuses(), rows: volKindRows(), href: volf.kind, all: 'Tất cả' }),
 };
 const tabs = document.querySelector('#pf-tabs');
 // ---------- Mũi tên cuộn tab: hiện khi tab tràn khung; tab đang chọn luôn được cuộn vào khung nhìn ----------
@@ -3494,7 +3572,7 @@ const showRoute = () => {
     // Mở modal xem hồ sơ: giữ tab & bảng đang xem (giữ nút vừa bấm để trả focus khi đóng); mở thẳng link chi tiết thì hiện tab theo trạng thái hồ sơ
     const sameKind = volf.kind === volKind;
     setVolKind(volKind);
-    if (!isTeamView) volf.status = findStatus(volStatuses(), sub);
+    if (!isTeamView) volf.status = VOL_KINDS[volKind].allOnly ? '' : findStatus(volStatuses(), sub); // chỉ tab Tất cả: bỏ qua /<trạng thái> trên đường dẫn
     else if (!sameKind || (volf.status && !volStatuses()[volf.status])) volf.status = (findVolReg(decodeURIComponent(code)) || {}).status || 'draft';
     if (!isTeamView || !sameKind || !document.querySelector('#vol-rows').children.length) applyVolFilter();
   }
@@ -5707,6 +5785,378 @@ branchForm.addEventListener('submit', (event) => {
   });
 });
 // ==================== END SECTION: ĐĂNG KÝ GIA NHẬP CHI HỘI ====================
+
+// ==================== SECTION: ĐĂNG KÝ HIẾN MÁU — drawer cùng khung Đăng ký gia nhập đội, CLB (theo Phiếu đăng ký hiến máu tình nguyện) ====================
+// Mở từ: Đăng ký hiến máu (form trống — chọn chương trình hiến máu trước, Thời gian · Địa điểm tự điền) · Xem (mọi hồ sơ kể cả bản nháp — cùng drawer, fieldset disabled, chỉ còn nút Đóng; danh sách không có Sửa / Xóa).
+// Tiền sử: Đã từng → mở Số lần, Ngày hiến gần nhất (phải cách ngày hiến đợt này ≥ 12 tuần). Sàng lọc: 2 câu cuối chỉ hỏi nữ; trả lời chưa đạt → hiện lưu ý, vẫn nộp được.
+// Lưu nháp → dòng Bản nháp trên danh sách; Nộp hồ sơ → cấp mã [Mã tỉnh].[Mã xã].HM.[Năm].[STT 4 số], trạng thái Mới. Mỗi đợt chỉ 1 hồ sơ đang chờ (Mới / Đã xác nhận).
+const blood = document.querySelector('#pf-blood');
+const bloodPanel = blood.querySelector('.pf-reg-panel');
+const bloodBody = blood.querySelector('.pf-reg-body');
+const bloodForm = document.querySelector('#pf-blood-form');
+const bloodFields = document.querySelector('#pf-blood-fields');
+const bloodStatus = document.querySelector('#pf-blood-status');
+const bloodSubmit = bloodForm.querySelector('[type="submit"]');
+const bloodCancel = document.querySelector('#pf-blood-cancel');
+const bloodTitle = document.querySelector('#pf-blood-title');
+const bloodLead = document.querySelector('#pf-blood-lead');
+const bloodLeadHtml = bloodLead.innerHTML;
+const bdTimes = document.querySelector('#bd-times');
+const bdLastText = document.querySelector('#bd-last-text');
+const bdLast = document.querySelector('#bd-last');
+const bdLastBtn = bdLastText.closest('[data-vi-date]').querySelector('.pf-date-btn');
+const bdNote = document.querySelector('#bd-screen-note');
+let bloodTrigger = null;
+let bloodSaved = ''; // dữ liệu lúc mở / lưu gần nhất — khác thì hỏi trước khi rời form
+let bloodViewing = false; // đang xem hồ sơ đã nộp (chỉ đọc)
+// ---------- Chương trình hiến máu (bắt buộc): chỉ chương trình sắp diễn ra (từ hôm nay), sớm nhất lên đầu; chọn → Thời gian, Địa điểm, Mô tả chương trình tự điền (khóa)
+// Xem hồ sơ cũ: chương trình đã diễn ra vẫn hiện (thêm riêng vào danh sách) ----------
+const bdEvent = document.querySelector('#bd-event');
+const syncBloodEventInfo = () => {
+  const e = bloodEvent(bdEvent.value);
+  document.querySelector('#bd-event-time').value = e.time;
+  document.querySelector('#bd-event-place').value = e.place;
+  document.querySelector('#bd-event-desc').value = e.desc;
+};
+const fillBloodEvents = (selected = '') => {
+  const upcoming = BLOOD_EVENTS.filter((e) => e.date >= isoToday()).sort((a, b) => a.date.localeCompare(b.date)).map((e) => e.name);
+  if (selected && !upcoming.includes(selected)) upcoming.unshift(selected);
+  bdEvent.innerHTML = '<option value="">Chọn chương trình hiến máu</option>';
+  fillOptions(bdEvent, upcoming);
+  bdEvent.value = selected;
+  syncBloodEventInfo();
+};
+bdEvent.addEventListener('change', () => {
+  syncBloodEventInfo();
+  bdEvent.closest('.pf-field').classList.remove('is-invalid');
+  // Đổi chương trình: kiểm tra lại khoảng cách 12 tuần của ngày hiến gần nhất ở lần Nộp kế tiếp
+  bdLastText.closest('.pf-field').classList.remove('is-invalid');
+});
+bloodPanel.tabIndex = -1;
+
+// ---------- Nhóm nút chọn (radio): đọc / đặt giá trị theo name ----------
+const bdPick = (name) => (bloodForm.querySelector(`input[name="${name}"]:checked`) || {}).value || '';
+const bdSetPick = (name, value) => bloodForm.querySelectorAll(`input[name="${name}"]`).forEach((input) => { input.checked = input.value === value; });
+const BD_QUESTIONS = ['q1', 'q2', 'q3', 'q4', 'q5'];
+const bdQuestionFields = () => [...bloodForm.querySelectorAll('[data-screen-q]')].filter((field) => !field.hidden);
+
+// ---------- Đăng ký hộ: mặc định Họ tên, Ngày sinh, Giới tính, Số CCCD lấy từ tài khoản định danh (khóa);
+// tích "Đăng ký hộ" thì mở khóa, xóa trắng để nhập người được đăng ký hộ (như "đăng ký thay" ở form Thành lập đội, CLB) ----------
+const bdProxy = document.querySelector('#bd-proxy');
+const bdPerson = bloodForm.querySelector('[data-blood-person]');
+const bdPersonInputs = [...bdPerson.querySelectorAll('input[data-account]')]; // bd-name · bd-dob · bd-identity
+const bdGender = document.querySelector('#bd-gender');
+const bdGenderRadios = [...bdGender.querySelectorAll('input')];
+// Câu hỏi dành cho phụ nữ: chỉ hiện khi giới tính đang chọn là Nữ (ẩn thì xóa câu trả lời)
+const syncBloodFemale = () => {
+  const female = bdPick('bd-gender') === 'Nữ';
+  bloodForm.querySelectorAll('[data-female]').forEach((field) => {
+    field.hidden = !female;
+    if (!female) field.querySelectorAll('input').forEach((input) => { input.checked = false; });
+  });
+  syncBloodNote();
+};
+// person: thông tin người được đăng ký hộ khi mở lại hồ sơ ({ name, dob, gender, identity }); không có thì để trống
+const setBloodProxy = (on, person = {}) => {
+  bdProxy.checked = on;
+  bdPersonInputs.forEach((input) => {
+    input.readOnly = !on;
+    input.required = on;
+    input.value = on ? (person[input.id.slice(3)] || '') : input.dataset.account;
+    input.closest('.pf-control').classList.toggle('is-locked', !on);
+    input.closest('.pf-field').classList.remove('is-invalid');
+  });
+  bdGender.classList.toggle('is-locked', !on);
+  bdGenderRadios.forEach((radio) => {
+    radio.disabled = !on;
+    radio.checked = on ? radio.value === person.gender : radio.value === bdGender.dataset.account;
+  });
+  bdGender.closest('.pf-field').classList.remove('is-invalid');
+  document.querySelector('#bd-account-badge').hidden = on;
+  syncBloodFemale();
+};
+bdProxy.addEventListener('change', () => {
+  setBloodProxy(bdProxy.checked);
+  // Điện thoại: đăng ký hộ → nhập số của người được đăng ký hộ; bỏ tích → lấy lại số của tài khoản
+  document.querySelector('#bd-phone').value = bdProxy.checked ? '' : TEAM_ACCOUNT.phone;
+  if (bdProxy.checked) bdPersonInputs[0].focus();
+});
+bdPerson.addEventListener('input', (event) => {
+  if (event.target.id === 'bd-identity') event.target.value = event.target.value.replace(/\D/g, '');
+  if (event.target.id === 'bd-dob') event.target.value = maskVi(event.target.value);
+});
+// ---------- Địa chỉ liên lạc: Tỉnh/Thành phố → Phường/xã theo tỉnh (danh mục hành chính dùng chung với Bản đồ số — window.DigitalMapLocations;
+// chưa nạp được thì dùng danh sách tỉnh REG_PROVINCES, không có phường/xã) · Số nhà, tên đường ----------
+const BD_LOCATIONS = window.DigitalMapLocations || REG_PROVINCES.map((name) => ({ name, wards: [] }));
+const bdAddrProvince = document.querySelector('#bd-addr-province');
+const bdAddrWard = document.querySelector('#bd-addr-ward');
+fillOptions(bdAddrProvince, BD_LOCATIONS.map((p) => p.name));
+const fillBloodWards = (ward = '') => {
+  const province = BD_LOCATIONS.find((p) => p.name === bdAddrProvince.value);
+  bdAddrWard.disabled = !province;
+  bdAddrWard.innerHTML = `<option value="">${province ? 'Chọn phường/xã' : 'Chọn tỉnh/thành phố trước'}</option>`;
+  if (province) fillOptions(bdAddrWard, province.wards.map((w) => w.name));
+  bdAddrWard.value = ward;
+};
+bdAddrProvince.addEventListener('change', () => {
+  fillBloodWards();
+  bdAddrWard.closest('.pf-field').classList.remove('is-invalid');
+});
+// Người hiến máu của hồ sơ: người được đăng ký hộ hoặc chủ tài khoản
+const bloodDonor = (d) => (d.proxy ? d.person : { name: TEAM_ACCOUNT.name, identity: TEAM_ACCOUNT.identity });
+
+// ---------- Tiền sử: Đã từng hiến → mở Số lần, Ngày hiến gần nhất; Chưa từng → khóa và xóa 2 ô ----------
+const syncBloodEver = () => {
+  const on = bdPick('bd-ever') === 'Đã từng';
+  [bdTimes, bdLastText, bdLast, bdLastBtn].forEach((el) => { el.disabled = !on; });
+  if (on) return;
+  bdTimes.value = '';
+  bdLastText.value = '';
+  bdLast.value = '';
+  [bdTimes, bdLastText].forEach((el) => el.closest('.pf-field').classList.remove('is-invalid'));
+};
+// ---------- Sàng lọc: có câu trả lời chưa đạt điều kiện → hiện lưu ý ----------
+const syncBloodNote = () => {
+  bdNote.hidden = !bdQuestionFields().some((field) => {
+    const value = bdPick(`bd-${field.querySelector('input').name.slice(3)}`);
+    return value && value !== field.dataset.ok;
+  });
+};
+// ---------- Thời gian khác (ô tích Khác): tích → bỏ chọn & khóa khung giờ sáng / chiều, mở ô tự nhập thời gian (bắt buộc);
+// bỏ tích → mở lại khung giờ, khóa và xóa ô tự nhập ----------
+const bdSlotOther = document.querySelector('#bd-slot-other');
+const bdSlotOtherCheck = document.querySelector('#bd-slot-other-check');
+const bdSlotRadios = [...bloodForm.querySelectorAll('input[name="bd-slot"]')];
+const bdSlotValue = () => (bdSlotOtherCheck.checked ? 'Khác' : bdPick('bd-slot'));
+const syncBloodSlotOther = (focus = false) => {
+  const other = bdSlotOtherCheck.checked;
+  bdSlotRadios.forEach((radio) => { radio.disabled = other; if (other) radio.checked = false; });
+  bdSlotOther.disabled = !other;
+  if (!other) { bdSlotOther.value = ''; bdSlotOther.closest('.pf-field').classList.remove('is-invalid'); }
+  else if (focus) bdSlotOther.focus();
+};
+bdTimes.addEventListener('input', () => { bdTimes.value = bdTimes.value.replace(/\D/g, ''); });
+document.querySelector('#bd-phone').addEventListener('input', (event) => { event.target.value = event.target.value.replace(/\D/g, ''); });
+
+// ---------- Đọc / điền dữ liệu biểu mẫu ----------
+const bloodFormData = () => ({
+  event: bdEvent.value,
+  proxy: bdProxy.checked,
+  person: bdProxy.checked ? {
+    name: document.querySelector('#bd-name').value.trim(),
+    dob: document.querySelector('#bd-dob').value.trim(),
+    gender: bdPick('bd-gender'),
+    identity: document.querySelector('#bd-identity').value.trim(),
+  } : null,
+  phone: document.querySelector('#bd-phone').value.trim(),
+  addrProvince: bdAddrProvince.value,
+  addrWard: bdAddrWard.value,
+  address: document.querySelector('#bd-address').value.trim(),
+  work: document.querySelector('#bd-work').value.trim(),
+  ever: bdPick('bd-ever'),
+  times: bdTimes.value.trim(),
+  last: bdLast.value,
+  q: Object.fromEntries(BD_QUESTIONS.map((q) => [q, bdPick(`bd-${q}`)])),
+  slot: bdSlotValue(),
+  slotOther: bdSlotOther.value.trim(),
+  agree: document.querySelector('#bd-agree').checked,
+  privacy: document.querySelector('#bd-privacy').checked,
+});
+const loadBlood = (d) => {
+  bloodForm.querySelectorAll('.pf-field.is-invalid').forEach((field) => field.classList.remove('is-invalid'));
+  document.querySelector('#bd-commit-error').hidden = true;
+  fillBloodEvents(d.event);
+  setBloodProxy(Boolean(d.proxy), d.person || {});
+  document.querySelector('#bd-phone').value = d.phone;
+  bdAddrProvince.value = d.addrProvince || '';
+  fillBloodWards(d.addrWard || '');
+  document.querySelector('#bd-address').value = d.address;
+  document.querySelector('#bd-work').value = d.work;
+  bdSetPick('bd-ever', d.ever);
+  syncBloodEver();
+  bdTimes.value = d.times;
+  bdLast.value = d.last;
+  bdLastText.value = isoToVi(d.last);
+  BD_QUESTIONS.forEach((q) => bdSetPick(`bd-${q}`, (d.q || {})[q] || ''));
+  syncBloodFemale();
+  bdSlotOtherCheck.checked = d.slot === 'Khác';
+  syncBloodSlotOther();
+  if (d.slot !== 'Khác') bdSetPick('bd-slot', d.slot);
+  bdSlotOther.value = d.slotOther || '';
+  document.querySelector('#bd-agree').checked = d.agree;
+  document.querySelector('#bd-privacy').checked = d.privacy;
+};
+// Đăng ký mới: form trống (chọn chương trình trước); điện thoại lấy từ tài khoản
+const resetBlood = () => {
+  loadBlood({ event: '', proxy: false, person: null, phone: TEAM_ACCOUNT.phone, addrProvince: '', addrWard: '', address: '', work: '', ever: '', times: '', last: '', q: {}, slot: '', agree: false, privacy: false });
+  bloodStatus.textContent = '';
+};
+// Chế độ: điền biểu mẫu · xem phiếu đã gửi (khóa toàn bộ, tiêu đề kèm mã phiếu, chân chỉ còn nút Đóng)
+const setBloodMode = (viewing, r) => {
+  bloodViewing = viewing;
+  bloodFields.disabled = viewing;
+  bloodSubmit.hidden = viewing;
+  bloodCancel.textContent = viewing ? 'Đóng' : 'Hủy';
+  bloodTitle.textContent = viewing ? `Phiếu đăng ký hiến máu ${r.code || ''}`.trim() : 'Đăng ký hiến máu';
+  if (viewing) bloodLead.textContent = `Ngày đăng ký: ${viDate(r.submitted || r.created)}`;
+  else bloodLead.innerHTML = bloodLeadHtml;
+};
+// Xem phiếu: chỉ đọc — danh sách hiến máu chỉ có nút Xem
+const viewBlood = (r, trigger) => {
+  setBloodMode(true, r);
+  loadBlood(bloodRegData(r));
+  bloodStatus.textContent = '';
+  openBlood(trigger);
+};
+
+// ---------- Mở / đóng: như drawer Gia nhập đội, CLB; rời form khi còn dữ liệu chưa lưu thì hỏi xác nhận ----------
+const openBlood = (trigger) => {
+  bloodTrigger = trigger;
+  bloodSaved = JSON.stringify(bloodFormData());
+  blood.hidden = false;
+  document.documentElement.classList.add('pf-reg-lock');
+  bloodBody.scrollTop = 0;
+  requestAnimationFrame(() => {
+    blood.classList.add('is-open');
+    bloodPanel.focus({ preventScroll: true });
+  });
+};
+const closeBlood = () => {
+  blood.classList.remove('is-open');
+  document.documentElement.classList.remove('pf-reg-lock');
+  setTimeout(() => { blood.hidden = true; }, regReduced() ? 0 : 300);
+  if (bloodTrigger && document.contains(bloodTrigger)) bloodTrigger.focus();
+};
+const requestCloseBlood = async () => {
+  if (!bloodViewing && JSON.stringify(bloodFormData()) !== bloodSaved) {
+    const yes = await confirmAction({ title: 'Rời khỏi biểu mẫu', text: 'Dữ liệu chưa được lưu. Bạn có muốn rời khỏi trang?', ok: 'Đồng ý' });
+    if (!yes) return;
+  }
+  closeBlood();
+};
+document.addEventListener('click', (event) => {
+  const trigger = event.target.closest('[data-open-blood]');
+  if (trigger) { setBloodMode(false); resetBlood(); openBlood(trigger); }
+});
+blood.querySelectorAll('[data-close-blood]').forEach((button) => button.addEventListener('click', requestCloseBlood));
+document.addEventListener('keydown', (event) => {
+  if (blood.hidden || dialog.open || teamConfirm.open) return;
+  if (event.key === 'Escape') { requestCloseBlood(); return; }
+  if (event.key !== 'Tab') return;
+  const items = [...bloodPanel.querySelectorAll('a[href], button:not([disabled]), input:not([readonly]):not([disabled]), select:not([disabled])')].filter((el) => el.offsetParent !== null);
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (event.shiftKey && (document.activeElement === first || document.activeElement === bloodPanel)) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
+
+// ---------- Ghi phiếu vào danh sách: Gửi đăng ký → cấp mã phiếu HM, trạng thái Mới (không có Lưu nháp) ----------
+const nextBloodCode = () => {
+  const prefix = `42.18073.HM.${new Date().getFullYear()}.`;
+  const last = Math.max(0, ...VOL_REGS.filter((r) => r.code && r.code.startsWith(prefix)).map((r) => Number(r.code.slice(prefix.length))));
+  return `${prefix}${String(last + 1).padStart(4, '0')}`;
+};
+bloodForm.addEventListener('input', (event) => {
+  const field = event.target.closest('.pf-field');
+  if (field && event.target.value && event.target.value.trim()) field.classList.remove('is-invalid');
+});
+bloodForm.addEventListener('change', (event) => {
+  const { target } = event;
+  if (target.type === 'radio') {
+    // Khung giờ: câu báo lỗi nằm ở ô Buổi chiều → bỏ tô đỏ cả 2 ô khi đã chọn
+    if (target.name === 'bd-slot') {
+      document.querySelector('#bd-slot-field').classList.remove('is-invalid');
+      document.querySelector('#bd-slot-field').previousElementSibling.classList.remove('is-invalid');
+    }
+    target.closest('.pf-field').classList.remove('is-invalid');
+    if (target.name === 'bd-ever') syncBloodEver();
+    if (target.name === 'bd-gender') syncBloodFemale();
+    if (/^bd-q\d$/.test(target.name)) syncBloodNote();
+  }
+  if (target === bdSlotOtherCheck) {
+    // Tích / bỏ tích Khác: bỏ báo lỗi "chưa chọn khung giờ" ở 2 buổi, khóa / mở khung giờ
+    document.querySelector('#bd-slot-field').classList.remove('is-invalid');
+    document.querySelector('#bd-slot-field').previousElementSibling.classList.remove('is-invalid');
+    syncBloodSlotOther(true);
+  }
+  if (target.matches('#bd-agree, #bd-privacy') && document.querySelector('#bd-agree').checked && document.querySelector('#bd-privacy').checked) {
+    document.querySelector('#bd-commit-error').hidden = true;
+    target.closest('.pf-field').classList.remove('is-invalid');
+  }
+});
+// Kiểm tra bắt buộc / định dạng · ngày hiến gần nhất (≥ 12 tuần trước ngày hiến đợt này) · đã có hồ sơ đang chờ cho đợt này · cam kết
+const validateBlood = () => {
+  const invalid = new Map();
+  const bad = (field, msg) => { if (field && !invalid.has(field)) invalid.set(field, msg); };
+  bloodForm.querySelectorAll('input[required]:not([type="checkbox"]):not([type="radio"]), select[required]').forEach((el) => {
+    if (!el.value.trim()) bad(el.closest('.pf-field'), `Vui lòng ${el.tagName === 'SELECT' ? 'chọn' : 'nhập'} ${fieldName(el.closest('.pf-field'))}.`);
+  });
+  const phone = document.querySelector('#bd-phone');
+  if (phone.value && !/^0\d{9}$/.test(phone.value)) bad(phone.closest('.pf-field'), 'Số điện thoại không hợp lệ');
+  // Đăng ký hộ: số định danh 12 chữ số · ngày sinh dd/mm/yyyy, không sau hôm nay · giới tính bắt buộc
+  if (bdProxy.checked) {
+    const id = document.querySelector('#bd-identity');
+    if (id.value && !/^\d{12}$/.test(id.value)) bad(id.closest('.pf-field'), 'Số định danh cá nhân phải có đúng 12 chữ số.');
+    const dob = document.querySelector('#bd-dob');
+    const dobIso = viToIso(dob.value);
+    if (dob.value && !dobIso) bad(dob.closest('.pf-field'), 'Ngày sinh không hợp lệ (dd/mm/yyyy).');
+    else if (dobIso && dobIso > isoToday()) bad(dob.closest('.pf-field'), 'Ngày sinh không được sau ngày hôm nay.');
+    if (!bdPick('bd-gender')) bad(bdGender.closest('.pf-field'), 'Vui lòng chọn giới tính.');
+  }
+  if (!bdPick('bd-ever')) bad(bloodForm.querySelector('[name="bd-ever"]').closest('.pf-field'), 'Vui lòng chọn câu trả lời.');
+  if (bdPick('bd-ever') === 'Đã từng') {
+    if (bdTimes.value && Number(bdTimes.value) < 1) bad(bdTimes.closest('.pf-field'), 'Số lần đã hiến máu phải lớn hơn 0');
+    if (bdLastText.value) {
+      const eventDate = new Date(`${bloodEvent(bdEvent.value).date || isoToday()}T00:00:00`); // chưa chọn chương trình: tạm so với hôm nay
+      const lastDate = bdLast.value ? new Date(`${bdLast.value}T00:00:00`) : null;
+      if (!lastDate) bad(bdLastText.closest('.pf-field'), 'Ngày không hợp lệ (dd/mm/yyyy)');
+      else if (lastDate > new Date()) bad(bdLastText.closest('.pf-field'), 'Ngày hiến máu gần nhất không được sau ngày hôm nay');
+      else if ((eventDate - lastDate) / 86400000 < 84) bad(bdLastText.closest('.pf-field'), 'Lần hiến máu gần nhất phải cách ngày hiến đợt này ít nhất 12 tuần');
+    }
+  }
+  bdQuestionFields().forEach((field) => { if (!bdPick(field.querySelector('input').name)) bad(field, 'Vui lòng chọn câu trả lời.'); });
+  const slotField = document.querySelector('#bd-slot-field');
+  if (!bdSlotValue()) bad(slotField, 'Vui lòng chọn khung giờ hiến máu.');
+  else if (bdSlotValue() === 'Khác' && !bdSlotOther.value.trim()) bad(bdSlotOther.closest('.pf-field'), 'Vui lòng nhập thời gian hiến máu.');
+  // Mỗi người chỉ 1 hồ sơ đang chờ cho 1 đợt (so theo số định danh của người hiến — đăng ký hộ người khác vẫn được)
+  const identity = bloodDonor(bloodFormData()).identity;
+  const pending = bdEvent.value && VOL_REGS.find((r) => r.type === 'HM' && r.name === bdEvent.value && ['new', 'scheduled'].includes(r.status) && bloodDonor(bloodRegData(r)).identity === identity);
+  if (pending) bad(bdEvent.closest('.pf-field'), `${bdProxy.checked ? 'Người này' : 'Bạn'} đã có hồ sơ ${pending.code} đăng ký đợt hiến máu này`);
+  const agreed = document.querySelector('#bd-agree').checked && document.querySelector('#bd-privacy').checked;
+  document.querySelector('#bd-commit-error').hidden = agreed;
+  if (!agreed) bad(document.querySelector('#bd-agree').closest('.pf-field'));
+  bloodForm.querySelectorAll('.pf-field').forEach((field) => field.classList.toggle('is-invalid', invalid.has(field)));
+  // Khung giờ: tô đỏ cả ô Buổi sáng (câu báo lỗi nằm dưới ô Buổi chiều)
+  slotField.previousElementSibling.classList.toggle('is-invalid', invalid.has(slotField));
+  syncFieldErrors(bloodForm, invalid);
+  return [...bloodForm.querySelectorAll('.pf-field')].filter((field) => invalid.has(field)); // theo thứ tự trên form để cuộn tới ô lỗi đầu tiên
+};
+bloodForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (bloodViewing) return;
+  const invalid = validateBlood();
+  if (invalid.length) {
+    invalid[0].scrollIntoView({ behavior: regReduced() ? 'auto' : 'smooth', block: 'center' });
+    const focusable = invalid[0].querySelector('input:not([readonly]):not([disabled]), button:not([disabled])');
+    if (focusable) focusable.focus({ preventScroll: true });
+    showToast(`Còn ${invalid.length} trường cần kiểm tra lại.`, 'error');
+    return;
+  }
+  confirmAction({ title: 'Xác nhận gửi đăng ký', text: 'Bạn có chắc chắn muốn gửi phiếu đăng ký hiến máu không?', ok: 'Gửi đăng ký' }).then((yes) => {
+    if (!yes) return;
+    // Không có bản nháp: gửi là thêm phiếu mới (ngày đăng ký = ngày gửi)
+    const d = bloodFormData();
+    const code = nextBloodCode();
+    VOL_REGS.push({ id: code, code, type: 'HM', name: d.event, status: 'new', created: isoToday(), submitted: isoToday() });
+    bloodRegCache.set(code, d);
+    refreshVolList();
+    closeBlood();
+    showToast(`Gửi đăng ký thành công. Mã phiếu đăng ký: ${code}`);
+    // Về danh sách Đăng ký hiến máu (tab Tất cả — phiếu vừa gửi nằm đầu danh sách)
+    window.location.hash = '#dang-ky-hien-mau';
+  });
+});
+// ==================== END SECTION: ĐĂNG KÝ HIẾN MÁU ====================
 
 // ==================== XÁC NHẬN NỘP HỒ SƠ ĐỘI, CLB ====================
 // Hộp xác nhận dùng chung: confirmAction({ title, text, ok }) → Promise<boolean> (true khi bấm nút đồng ý).

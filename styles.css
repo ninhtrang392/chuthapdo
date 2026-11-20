@@ -640,35 +640,37 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 @media(prefers-reduced-motion:reduce){.podium-card:hover,.rl-item:hover{transform:none}}
 
 /* ==================== SECTION: CHƯƠNG — dùng chung Tình nguyện viên (I) · Người Gần Nhất (II) · Giải thưởng Ngọn đèn Nhân Ái (III) ==================== */
-/* Bố cục tham khảo philos.site, style giữ theo web (font, màu, nút, tiêu đề chung). Mặc định: vuốt ngang (scroll-snap).
-   Desktop có chuyển động: .chapter.is-pinned (script.js) → section cao 1 màn hình, ghim, cuộn dọc → dải trượt ngang. */
+/* Bố cục tham khảo philos.site, style giữ theo web (font, màu, nút, tiêu đề chung).
+   Dải ngang là slide tự chuyển (script.js › SECTION: TÌNH NGUYỆN VIÊN) như section Đơn vị đồng hành, vuốt tay được (scroll-snap).
+   Desktop có chuyển động: .chapter.is-pinned (script.js) → section cao 1 màn hình, ghim trong lúc chạy hiệu ứng mở đầu (câu dẫn → đầu section + dải trượt vào), rồi nhả ghim. */
 .chapter{--edge:max(var(--gutter),calc((100vw - var(--container)) / 2));--fig-h:clamp(260px,46vh,440px);position:relative;overflow:hidden;overflow:clip;background:var(--color-bg)}
 .chapter + .chapter{border-top:1px solid var(--color-border)}
 .chapter-stage{display:flex;flex-direction:column;gap:clamp(24px,3vh,40px)}
 .chapter.is-pinned{height:100vh;height:100svh;padding:0}
-.chapter.is-pinned .chapter-stage{height:100%;padding:calc(var(--header-h) + 20px) 0 32px}
+.chapter.is-pinned .chapter-stage{position:relative;height:100%;padding:calc(var(--header-h) + 20px) 0 32px}
 
 
-/* ---------- Câu dẫn chuyện: câu lớn căn giữa, từ khóa nghiêng đỏ (như băng chữ chạy); JS tách từng chữ (.chapter-word) cho sáng dần.
-   Desktop ghim: câu nằm giữa màn hình, đọc xong thì trôi lên nhường chỗ dải trượt ngang. Màn nhỏ: câu nằm trên dải vuốt. ---------- */
+/* ---------- Câu dẫn chuyện: câu lớn căn giữa, từ khóa nghiêng đỏ (như băng chữ chạy); JS tách từng chữ (.chapter-word) cho sáng dần; nằm trên dải slide ---------- */
 .chapter-story{padding-inline:var(--edge)}
 .chapter-story-text{max-width:20em;margin:0 auto;font-size:clamp(26px,3.2vw,48px);font-weight:600;line-height:1.3;letter-spacing:0;color:var(--color-text);text-align:center;text-wrap:balance}
 .chapter-story-text em{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:400;color:var(--red)}
 .chapter-word{display:inline-block;white-space:pre}
-.chapter.is-pinned .chapter-stage{position:relative}
+/* Desktop ghim: câu nằm giữa màn hình, đọc xong thì trôi lên nhường chỗ đầu section + dải slide */
 .chapter.is-pinned .chapter-story{position:absolute;inset:calc(var(--header-h) + 60px) 0 60px;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
 /* Nhiều câu dẫn chung một màn (Chương I: câu chuyển cảnh + câu dẫn chương) */
 .chapter-story-text + .chapter-story-text{margin-top:clamp(20px,3vh,40px)}
 /* Chương I (2 câu chung một màn): chữ nhỏ hơn câu dẫn thường để cả cụm gọn trong màn */
 .chapter-story--instant .chapter-story-text{max-width:24em;font-size:clamp(20px,2.2vw,34px)}.chapter-story--instant .chapter-story-text + .chapter-story-text{margin-top:clamp(12px,2vh,24px)}
-.chapter:not(.is-pinned) .chapter-story{margin-bottom:24px} /* màn nhỏ: tách câu dẫn khỏi khối giới thiệu */
+.chapter:not(.is-pinned) .chapter-story{margin-bottom:24px} /* màn nhỏ: tách câu dẫn khỏi đầu section */
 
-/* ---------- Dải trượt ngang: khối giới thiệu + các mục (ảnh dọc so le cao thấp) ---------- */
+/* ---------- Dải slide: 2 khối giới thiệu (Trao đi thời gian · Hiến máu) + các mục (ảnh so le cao thấp); tự chuyển, vuốt tay bắt theo từng thẻ ---------- */
 .chapter-viewport{overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--edge);scrollbar-width:none}
 .chapter-viewport::-webkit-scrollbar{display:none}
-.chapter.is-pinned .chapter-viewport{display:flex;flex:1;align-items:center;overflow:hidden;scroll-snap-type:none}
+.chapter.is-pinned .chapter-viewport{display:flex;flex:1;align-items:center;min-height:0;overflow-y:hidden} /* ghim: dải căn giữa phần còn lại của màn, vẫn cuộn ngang được cho slide */
 .chapter-track{display:flex;align-items:flex-start;gap:clamp(40px,5vw,96px);width:max-content;margin:0;padding:0 var(--edge);list-style:none}
-.chapter.is-pinned .chapter-track{will-change:transform}
+/* ---------- Chấm chỉ slide (dùng lại .founders-dots / .founders-dot của Đơn vị đồng hành); bớt khoảng cách do .chapter-stage đã có gap ---------- */
+.chapter-dots{margin-top:0}
+.chapter-dots:empty{display:none}
 .chapter-intro{flex:none;align-self:center;width:clamp(300px,30vw,440px);scroll-snap-align:start}
 .chapter .eyebrow,.awards .eyebrow{letter-spacing:0}
 /* Khối giới thiệu có ảnh (Tình nguyện viên): ảnh bên trái · chữ bên phải, như một mục */
@@ -2272,12 +2274,16 @@ html.has-smoother{scroll-behavior:auto}
 .pf-table.is-vulnerable{min-width:880px}
 /* ---------- Đăng ký hồ sơ: hồ sơ đăng ký thành lập / gia nhập chi hội, đội, CLB ---------- */
 .pf-table.is-volunteer{min-width:900px}
-/* Nơi xử lý 232px · Trạng thái 140px · Ngày tạo 104px · Ngày nộp 104px · cột tên + mã nhận phần còn lại */
-.pf-table.is-volunteer th:nth-child(3){width:232px}
-.pf-table.is-volunteer th:nth-child(4){width:140px}
-.pf-table.is-volunteer th:nth-child(5),.pf-table.is-volunteer th:nth-child(6){width:104px}
-.pf-table.is-volunteer td:nth-child(4) .pf-badge{gap:6px;white-space:nowrap}
+/* Nơi xử lý / Địa điểm 232px · Thời gian hiến máu 152px · Trạng thái 140px · Ngày tạo 104px · Ngày nộp 104px · cột tên + mã nhận phần còn lại (gắn theo class cột, không theo thứ tự) */
+.pf-table.is-volunteer th.pf-col-place{width:232px}
+.pf-table.is-volunteer th.pf-col-blood-time{width:152px}
+.pf-table.is-volunteer th.pf-col-status{width:140px}
+.pf-table.is-volunteer th.pf-col-date{width:104px}
+.pf-table.is-volunteer .pf-col-status .pf-badge{gap:6px;white-space:nowrap}
 .pf-table.is-volunteer .pf-col-actions{width:108px}
+/* Cột Thời gian hiến máu: chỉ ở Đăng ký hiến máu · Đăng ký hiến máu không có cột Ngày nộp */
+.pf-table.is-volunteer:not(.is-blood) .pf-col-blood-time{display:none}
+.pf-table.is-volunteer.is-blood .pf-col-submitted{display:none}
 /* Tab trạng thái (Bản nháp … Đã từ chối): ẩn cột Trạng thái, chỉ tab Tất cả hiện */
 .pf-table.is-volunteer.is-status-tab .pf-col-status{display:none}
 /* Chương trình: dòng Bản nháp có thêm nút Chỉnh sửa (Xem · Sửa · ⋮) */
@@ -2427,6 +2433,10 @@ html.has-smoother{scroll-behavior:auto}
 .pf-control input:focus,.pf-control select:focus{outline:none;border-color:#2f6fe4;box-shadow:0 0 0 3px rgba(47,111,228,.2)}
 .pf-control.is-locked input{padding-right:40px;background:var(--color-surface-alt);color:#474d54;cursor:default}
 .pf-control.is-locked input:hover{border-color:var(--color-border)}
+/* Ô nhiều dòng khóa (Mô tả chương trình — form Đăng ký hiến máu): cùng kiểu ô khóa, không kéo giãn;
+   tự cao theo nội dung (tối thiểu 3 dòng như rows="3"), tối đa ~8 dòng — dài hơn (vd. 1.000 ký tự) thì cuộn trong ô. Trình duyệt chưa hỗ trợ field-sizing: giữ 3 dòng, cuộn trong ô */
+.pf-control.is-locked textarea{background:var(--color-surface-alt);color:#474d54;cursor:default;resize:none;field-sizing:content;min-height:calc(3lh + 22px);max-height:calc(8lh + 22px);overflow-y:auto}
+.pf-control.is-locked textarea:hover,.pf-control.is-locked textarea:focus{border-color:var(--color-border)}
 .pf-field.is-invalid input{border-color:var(--red)}
 .pf-error{margin:0;font-size:13px;line-height:18px;color:var(--color-primary)}
 .pf-help{display:flex;align-items:center;gap:6px;margin:0;font-size:13px;line-height:18px;color:var(--color-text-muted)}
@@ -2505,6 +2515,34 @@ html.pf-reg-lock{overflow:hidden}
 .pf-reg-form{display:flex;flex:1;flex-direction:column;min-height:0}
 .pf-reg-body{display:flex;flex:1;flex-direction:column;gap:16px;padding:20px 24px 24px;overflow-y:auto;overscroll-behavior:contain}
 .pf-reg-section{border:1px solid var(--color-border);border-radius:12px;background:#fff;scroll-margin-top:20px}
+/* ---------- Đăng ký hiến máu: fieldset bọc 4 phần, không tạo khung (giữ khoảng cách giữa các phần); xem hồ sơ đã nộp → fieldset disabled, chữ giữ màu thường cho dễ đọc ---------- */
+.pf-reg-fieldset{display:contents;min-width:0;margin:0;padding:0;border:0}
+.pf-reg-fieldset:disabled :is(input,select){opacity:1;color:var(--color-text);-webkit-text-fill-color:var(--color-text);cursor:default}
+.pf-reg-fieldset:disabled .pf-control:not(.is-locked){background:#f7f8f9}
+.pf-reg-fieldset:disabled .pf-caret{display:none}
+/* Nhóm nút chọn khi xem: như .pf-radio-group.is-locked — chỉ hiện đáp án đã chọn, nền xám */
+.pf-reg-fieldset:disabled .pf-radio{background:var(--color-surface-alt);cursor:default}
+.pf-reg-fieldset:disabled .pf-radio:not(:has(input:checked)){display:none}
+.pf-reg-fieldset:disabled .pf-fields:has(input[name="bd-slot"]:checked, #bd-slot-other-check:checked) > .pf-field:not(:has(input:checked)){display:none} /* khung giờ đã chọn (hoặc Khác): ẩn các buổi còn lại */
+.pf-fields > .pf-notice{grid-column:1 / -1} /* lưu ý sàng lọc sức khỏe: trải hết hàng */
+#bd-gender .pf-radio{flex:1 1 0} /* Giới tính: giãn hết cột như các ô bên cạnh (như .pf-team-leader); đăng ký hộ → Nữ / Nam chia đôi */
+/* Đã từng / Chưa từng: không khung viền (như câu Có / Không ở Sàng lọc); giữ cao 40px để thẳng hàng ô Số lần, Ngày gần nhất bên cạnh */
+.pf-reg-fieldset #bd-ever{gap:8px 32px}
+.pf-reg-fieldset #bd-ever .pf-radio{padding:0;border:0;background:none}
+[data-blood-person] .pf-reg-group{padding-top:0;border-top:0} /* tiêu đề Địa chỉ liên lạc hiện tại: không kẻ đường ngăn phía trên */
+/* Sàng lọc sức khỏe: Có / Không không có khung viền — chỉ nút tròn + chữ (cả khi xem hồ sơ) */
+.pf-reg-fieldset [data-screen-q] .pf-radio-group{gap:8px 32px}
+.pf-reg-fieldset [data-screen-q] .pf-radio{min-height:24px;padding:0;border:0;background:none}
+/* Khung giờ sáng / chiều: 8 ô bằng nhau, thẳng cột giữa 2 buổi (lưới 4 cột, khoảng cách cột như .pf-team-row4); màn hẹp 2 cột, điện thoại 1 cột */
+.pf-radio-group.bd-slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 20px} /* 2 class: thắng .pf-radio-group{display:flex} khai báo phía sau */
+@media(max-width:1023px){.pf-radio-group.bd-slot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){.pf-radio-group.bd-slot-grid{grid-template-columns:minmax(0,1fr)}}
+/* Tích Khác → khung giờ sáng / chiều bị khóa: làm mờ (không áp khi xem hồ sơ — fieldset disabled) */
+.pf-reg-fieldset:not(:disabled) .bd-slot-grid .pf-radio:has(input[type="radio"]:disabled){opacity:.45;cursor:not-allowed}
+/* Thời gian khác: nút Khác (bằng 1 ô khung giờ) + ô tự nhập thời gian kéo hết các cột còn lại; điện thoại xếp dưới */
+#bd-slot-other-field .pf-control{grid-column:2 / -1}
+@media(max-width:767px){#bd-slot-other-field .pf-control{grid-column:auto}}
+.pf-reg-fieldset:disabled #bd-slot-other-field:not(:has(input:checked)){display:none} /* xem hồ sơ: chỉ hiện khi đã chọn Khác */
 .pf-reg-section-head{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--color-border);border-radius:12px 12px 0 0;background:#f7f8f9}
 .pf-reg-section-head h3{margin:0;font-size:14px;font-weight:600;line-height:20px;color:var(--color-text)}
 .pf-reg-section .pf-fields{gap:16px 20px;padding:20px}
@@ -4562,9 +4600,9 @@ html.pf-reg-lock{overflow:hidden}
 .gt-icon.is-small{width:40px;height:40px}
 .gt-icon.is-small .icon{width:20px;height:20px}
 
-/* ---------- Hero: nền sóng đỏ + ngôi sao (Glossy Red Waves and Glowing Star.png → giai-thuong-hero-bg-2.webp) · trái chữ · phải huy chương ---------- */
+/* ---------- Hero: nền hồng nhạt + dải ruy băng đỏ (Giải thưởng/Nền trừu tượng hồng nhạt với dải ruy băng đỏ.png → giai-thuong-hero-bg-3.webp) · trái chữ · phải huy chương ---------- */
 /* --u: hệ số co giãn chữ theo màn (1px ở màn rộng 1672px, co theo cả chiều cao) */
-.gt-hero{--u:min(100vw / 1672,(100svh - var(--header-h) / 2) / 941);position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;min-height:100svh;overflow:hidden;padding:calc(var(--header-h) + 16px) 0 clamp(24px,4vh,48px);background:#fdf2f4 url('Emages/giai-thuong-hero-bg-2.webp') center bottom / cover no-repeat;text-align:left}
+.gt-hero{--u:min(100vw / 1672,(100svh - var(--header-h) / 2) / 941);position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;min-height:100svh;overflow:hidden;padding:calc(var(--header-h) + 16px) 0 clamp(24px,4vh,48px);background:#fdf2f4 url('Emages/giai-thuong-hero-bg-3.webp') center bottom / cover no-repeat;text-align:left}
 /* Chuyển tiếp: đáy hero mờ dần sang trắng (nền section kế tiếp) → không lộ đường cắt; nằm trên ảnh nền, dưới chữ + huy chương; giữ nguyên khi đổi ảnh nền */
 .gt-hero::after{content:"";position:absolute;inset:auto 0 0;z-index:-1;height:clamp(72px,14vh,160px);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.6) 55%,#fff 100%);pointer-events:none}
 .gt-crumbs{margin-bottom:8px} /* breadcrumb trên cùng hero (như bản Vercel): Trang chủ › Giải thưởng nhân đạo */
