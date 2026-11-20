@@ -123,18 +123,32 @@
   });
 })();
 
-// ==================== HEADER: menu "Khác" (danh mục trang con, dùng chung mọi trang) ====================
-// Bấm nút → xổ / thu danh mục; bấm ra ngoài, nhấn Esc hoặc chọn 1 mục → đóng. Màn ≤1120px: danh mục mở ngay trong menu mobile (CSS).
+// ==================== HEADER: menu xổ cấp 2 — "Trợ giúp" (Đăng ký trợ giúp · tình nguyện viên · hiến máu) · "Khác" (dùng chung mọi trang) ====================
+// Mỗi .nav-more: bấm nút → xổ / thu danh mục (mở menu này thì đóng menu kia); bấm ra ngoài, nhấn Esc hoặc chọn 1 mục → đóng.
+// Màn ≤1120px: danh mục mở ngay trong menu mobile (CSS).
 (() => {
-  const toggle = document.querySelector('.nav-more-toggle');
-  const menu = document.getElementById('nav-more-menu');
-  if (!toggle || !menu) return;
-  const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
-  const setOpen = (open) => { toggle.setAttribute('aria-expanded', String(open)); menu.hidden = !open; };
-  toggle.addEventListener('click', (event) => { event.stopPropagation(); setOpen(!isOpen()); });
-  menu.addEventListener('click', (event) => { if (event.target.closest('a')) setOpen(false); });
-  document.addEventListener('click', (event) => { if (isOpen() && !event.target.closest('.nav-more')) setOpen(false); });
+  const groups = [...document.querySelectorAll('.nav-more')].map((root) => {
+    const toggle = root.querySelector('.nav-more-toggle');
+    const menu = toggle && document.getElementById(toggle.getAttribute('aria-controls'));
+    return toggle && menu ? { root, toggle, menu } : null;
+  }).filter(Boolean);
+  if (!groups.length) return;
+  const isOpen = (g) => g.toggle.getAttribute('aria-expanded') === 'true';
+  const setOpen = (g, open) => { g.toggle.setAttribute('aria-expanded', String(open)); g.menu.hidden = !open; };
+  groups.forEach((g) => {
+    g.toggle.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const open = !isOpen(g);
+      groups.forEach((other) => { if (other !== g) setOpen(other, false); });
+      setOpen(g, open);
+    });
+    g.menu.addEventListener('click', (event) => { if (event.target.closest('a')) setOpen(g, false); });
+  });
+  document.addEventListener('click', (event) => {
+    groups.forEach((g) => { if (isOpen(g) && !g.root.contains(event.target)) setOpen(g, false); });
+  });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && isOpen()) { setOpen(false); toggle.focus(); }
+    if (event.key !== 'Escape') return;
+    groups.forEach((g) => { if (isOpen(g)) { setOpen(g, false); g.toggle.focus(); } });
   });
 })();

@@ -1818,14 +1818,21 @@ const VOL_KINDS = {
   'dang-ky-hien-mau': { type: 'HM', label: 'Đăng ký hiến máu', unit: 'chương trình hiến máu', found: false, statuses: ['new', 'scheduled', 'donated', 'deferred'], allOnly: true, noFilter: true, placeCol: 'Địa điểm', createdCol: 'Ngày đăng ký', codeLabel: 'mã phiếu đăng ký', addLabel: 'Đăng ký hiến máu' },
 };
 // ---------- Chương trình hiến máu (DỮ LIỆU MINH HỌA): 4 chương trình sắp diễn ra (chọn được trong form — chương trình đầu theo phiếu khách hàng gửi), 3 chương trình đã diễn ra ----------
+// Chương trình sắp diễn ra có nhiều buổi hiến (sessions: ngày + địa điểm cụ thể) → form cho người dùng chọn 1 buổi sau khi chọn chương trình.
+// date / place: buổi đầu tiên (mặc định; chương trình đã diễn ra chỉ có 1 buổi).
 const BLOOD_EVENTS = [
-  { name: 'Hiến máu tình nguyện tại Cung Thanh niên Hà Nội', place: 'Cung Thanh niên Hà Nội (37 Trần Bình Trọng, Hà Nội)', date: '2026-11-22', time: 'Từ 7h30 ngày 22/11/2026 (Chủ nhật)',
+  { name: 'Hiến máu tình nguyện tại Cung Thanh niên Hà Nội', place: 'Cung Thanh niên Hà Nội (37 Trần Bình Trọng, Hà Nội)', date: '2026-11-22',
+    sessions: [{ date: '2026-11-22', place: 'Cung Thanh niên Hà Nội (37 Trần Bình Trọng, Hà Nội)' }, { date: '2026-11-23', place: 'phường Cửa Nam (Số 82 Nguyễn Du, Hà Nội)' }],
     desc: 'Ngày hội hiến máu tình nguyện dành cho đoàn viên, sinh viên và người dân Thủ đô, góp phần bổ sung nguồn máu dự trữ cho các bệnh viện dịp cuối năm. Người hiến máu được khám sàng lọc, tư vấn sức khỏe miễn phí và nhận giấy chứng nhận hiến máu tình nguyện.' },
-  { name: 'Ngày hội hiến máu tình nguyện Hà Tĩnh cuối năm 2026', place: 'Hội Chữ thập đỏ tỉnh Hà Tĩnh (Số 2 Phan Đình Phùng, Hà Tĩnh)', date: '2026-12-06', time: 'Từ 7h30 ngày 06/12/2026 (Chủ nhật)',
-    desc: 'Ngày hội do Hội Chữ thập đỏ tỉnh Hà Tĩnh phối hợp Bệnh viện Đa khoa tỉnh tổ chức, tiếp nhận máu cho dịp cao điểm cuối năm. Có khu tư vấn sức khỏe, khám sàng lọc và hướng dẫn chăm sóc sau hiến máu.' },
-  { name: 'Hiến máu tình nguyện khối cơ quan Hà Nội', place: 'Nhà văn hóa phường Cửa Nam (Số 82 Nguyễn Du, Hà Nội)', date: '2026-12-13', time: 'Từ 7h30 ngày 13/12/2026 (Chủ nhật)',
+  // Các buổi theo mẫu khách hàng gửi (Thanh Hóa)
+  { name: 'Hiến máu tình nguyện tỉnh Thanh Hóa cuối năm 2026', place: 'phường Bỉm Sơn', date: '2026-12-01',
+    sessions: [{ date: '2026-12-01', place: 'phường Bỉm Sơn' }, { date: '2026-12-03', place: 'phường Nam Sầm Sơn' }, { date: '2026-12-06', place: 'xã Cẩm Thạch' }, { date: '2026-12-08', place: 'phường Quang Trung' }, { date: '2026-12-10', place: 'Cty Lọc hóa dầu Nghi Sơn' }],
+    desc: 'Chuỗi ngày hội hiến máu lưu động tại các phường, xã và doanh nghiệp trên địa bàn tỉnh Thanh Hóa, tiếp nhận máu cho dịp cao điểm cuối năm. Mỗi điểm có khu tư vấn sức khỏe, khám sàng lọc và hướng dẫn chăm sóc sau hiến máu.' },
+  { name: 'Hiến máu tình nguyện khối cơ quan Hà Nội', place: 'Nhà văn hóa phường Cửa Nam (Số 82 Nguyễn Du, Hà Nội)', date: '2026-12-13',
+    sessions: [{ date: '2026-12-13', place: 'Nhà văn hóa phường Cửa Nam (Số 82 Nguyễn Du, Hà Nội)' }, { date: '2026-12-13', place: 'Viện Huyết học – Truyền máu Trung ương (26 Phạm Văn Bạch, Hà Nội)' }],
     desc: 'Chương trình dành cho cán bộ, công chức, người lao động các cơ quan, doanh nghiệp trên địa bàn, khuyến khích đăng ký theo đơn vị. Đơn vị có nhiều người tham gia được Hội ghi nhận và cấp giấy khen.' },
-  { name: 'Lễ hội Xuân hồng 2027', place: 'Bệnh viện Đa khoa tỉnh Hà Tĩnh', date: '2027-01-17', time: 'Từ 7h30 ngày 17/01/2027 (Chủ nhật)',
+  { name: 'Lễ hội Xuân hồng 2027', place: 'Bệnh viện Đa khoa tỉnh Hà Tĩnh', date: '2027-01-17',
+    sessions: [{ date: '2027-01-17', place: 'Bệnh viện Đa khoa tỉnh Hà Tĩnh' }, { date: '2027-01-18', place: 'Trung tâm Văn hóa – Điện ảnh tỉnh Hà Tĩnh' }, { date: '2027-01-19', place: 'Bệnh viện Đa khoa tỉnh Hà Tĩnh' }],
     desc: 'Lễ hội hiến máu dịp trước Tết Nguyên đán, bảo đảm đủ máu cho người bệnh trong và sau Tết. Mỗi người hiến máu nhận quà Tết, giấy chứng nhận và được ưu tiên khi cần truyền máu.' },
   { name: 'Hiến máu tình nguyện đợt 2 năm 2026', place: 'Hội Chữ thập đỏ tỉnh Hà Tĩnh (Số 2 Phan Đình Phùng, Hà Tĩnh)', date: '2026-08-16', time: 'Từ 7h30 ngày 16/08/2026 (Chủ nhật)',
     desc: 'Đợt hiến máu tình nguyện thứ hai trong năm của Hội Chữ thập đỏ tỉnh Hà Tĩnh, bổ sung nguồn máu dịp hè.' },
@@ -1834,8 +1841,14 @@ const BLOOD_EVENTS = [
   { name: 'Ngày hội hiến máu mùa hè 2025', place: 'Trung tâm Văn hóa – Điện ảnh tỉnh Hà Tĩnh', date: '2025-07-06', time: 'Từ 7h30 ngày 06/07/2025 (Chủ nhật)',
     desc: 'Ngày hội hiến máu mùa hè dành cho học sinh, sinh viên và người dân trên địa bàn tỉnh.' },
 ];
-const BLOOD_NO_EVENT = { name: '', place: '', date: '', time: '', desc: '' }; // bản nháp chưa chọn chương trình
+const BLOOD_NO_EVENT = { name: '', place: '', date: '', desc: '' }; // chưa chọn chương trình
 const bloodEvent = (name) => BLOOD_EVENTS.find((e) => e.name === name) || BLOOD_NO_EVENT;
+// Các buổi hiến của chương trình (chương trình 1 buổi: lấy date/place) · nhãn lựa chọn "Ngày: dd/mm/yyyy – địa điểm" (như mẫu)
+const bloodSessions = (e) => e.sessions || (e.date ? [{ date: e.date, place: e.place }] : []);
+const bloodSessionLabel = (s) => `Ngày: ${viDate(s.date)} – ${s.place}`;
+// Phiếu: ngày hiến (ISO) và địa điểm đã chọn; phiếu cũ chưa có thì lấy mặc định của chương trình
+const bloodPickedDate = (d) => d.time || bloodEvent(d.event).date;
+const bloodPickedPlace = (d) => d.place || bloodEvent(d.event).place;
 // ---------- Dữ liệu phiếu đã lưu / đã nộp: bloodRegCache (từ biểu mẫu) · còn lại suy từ đợt hiến máu (MINH HỌA) ----------
 const bloodRegCache = new Map();
 const BLOOD_OK = { q1: 'Có', q2: 'Không', q3: 'Không', q4: 'Không', q5: 'Không' }; // câu trả lời đạt điều kiện
@@ -1855,7 +1868,8 @@ function bloodSlotText(d) {
   return d.slot === 'Khác' ? (d.slotOther || 'Khác') : d.slot;
 }
 function bloodTimeCell(r) {
-  return `<div class="pf-cell-stack"><span>${viDate(bloodEvent(r.name).date)}</span><span class="pf-cell-line is-muted">${escapeHtml(bloodSlotText(bloodRegData(r)))}</span></div>`;
+  const d = bloodRegData(r);
+  return `<div class="pf-cell-stack"><span>${viDate(bloodPickedDate(d))}</span><span class="pf-cell-line is-muted">${escapeHtml(bloodSlotText(d))}</span></div>`;
 }
 const VOL_PLACE = { DC: 'Hội Chữ thập đỏ phường Thành Sen', GC: 'Chủ nhiệm, phó chủ nhiệm', GN: 'Chi hội trưởng, chi hội phó' };
 // Hồ sơ gia nhập (đội, CLB · chi hội): bản nháp chỉ có Tiếp tục điền · Xóa nháp, có trạng thái Đã kết nạp
@@ -2031,7 +2045,7 @@ const volRow = (r, index) => {
     : viewBtn;
   const title = `<span class="pf-clamp-1" data-tip>${name}</span>`;
   // Nơi xử lý: hồ sơ thành lập đội, CLB lấy theo Đơn vị quản lý của hồ sơ · hiến máu: địa điểm của đợt hiến máu
-  const place = r.type === 'DC' ? teamRegData(r).unit : isBlood ? bloodEvent(r.name).place : VOL_PLACE[r.type];
+  const place = r.type === 'DC' ? teamRegData(r).unit : isBlood ? bloodPickedPlace(bloodRegData(r)) : VOL_PLACE[r.type];
   // Trạng thái: nhãn ngắn như tên tab (Chờ xác nhận), tên đầy đủ khi rê chuột
   const st = VOL_STATUS[r.status];
   return `<tr>
@@ -5809,29 +5823,40 @@ const bdNote = document.querySelector('#bd-screen-note');
 let bloodTrigger = null;
 let bloodSaved = ''; // dữ liệu lúc mở / lưu gần nhất — khác thì hỏi trước khi rời form
 let bloodViewing = false; // đang xem hồ sơ đã nộp (chỉ đọc)
-// ---------- Chương trình hiến máu (bắt buộc): chỉ chương trình sắp diễn ra (từ hôm nay), sớm nhất lên đầu; chọn → Thời gian, Địa điểm, Mô tả chương trình tự điền (khóa)
-// Xem hồ sơ cũ: chương trình đã diễn ra vẫn hiện (thêm riêng vào danh sách) ----------
+// ---------- Chương trình hiến máu (bắt buộc): chỉ chương trình còn mốc sắp diễn ra (từ hôm nay), sớm nhất lên đầu;
+// chọn → nạp danh sách buổi hiến "Ngày: dd/mm/yyyy – địa điểm" để chọn 1 (chỉ 1 buổi thì chọn sẵn), Mô tả chương trình tự điền (khóa).
+// Xem hồ sơ cũ: chương trình / buổi đã diễn ra vẫn hiện ----------
 const bdEvent = document.querySelector('#bd-event');
-const syncBloodEventInfo = () => {
+const bdSession = document.querySelector('#bd-event-session');
+const sessionKey = (date, place) => (date ? `${date}|${place}` : '');
+const pickedSession = () => { const [date = '', place = ''] = bdSession.value.split('|'); return { date, place }; };
+const fillBloodSessions = (time = '', place = '') => {
   const e = bloodEvent(bdEvent.value);
-  document.querySelector('#bd-event-time').value = e.time;
-  document.querySelector('#bd-event-place').value = e.place;
+  const on = Boolean(bdEvent.value);
+  const keep = sessionKey(time, place);
+  const list = bloodSessions(e).filter((s) => s.date >= isoToday() || sessionKey(s.date, s.place) === keep); // buổi đã qua chỉ hiện khi xem phiếu cũ
+  bdSession.innerHTML = `<option value="">${on ? 'Chọn thời gian và địa điểm' : 'Chọn chương trình trước'}</option>`
+    + list.map((s) => `<option value="${escapeHtml(sessionKey(s.date, s.place))}">${escapeHtml(bloodSessionLabel(s))}</option>`).join('');
+  bdSession.disabled = !on;
+  bdSession.value = keep || (list.length === 1 ? sessionKey(list[0].date, list[0].place) : '');
   document.querySelector('#bd-event-desc').value = e.desc;
 };
-const fillBloodEvents = (selected = '') => {
-  const upcoming = BLOOD_EVENTS.filter((e) => e.date >= isoToday()).sort((a, b) => a.date.localeCompare(b.date)).map((e) => e.name);
+const fillBloodEvents = (selected = '', time = '', place = '') => {
+  const lastDate = (e) => bloodSessions(e).reduce((m, s) => (s.date > m ? s.date : m), '');
+  const upcoming = BLOOD_EVENTS.filter((e) => lastDate(e) >= isoToday()).sort((a, b) => a.date.localeCompare(b.date)).map((e) => e.name);
   if (selected && !upcoming.includes(selected)) upcoming.unshift(selected);
   bdEvent.innerHTML = '<option value="">Chọn chương trình hiến máu</option>';
   fillOptions(bdEvent, upcoming);
   bdEvent.value = selected;
-  syncBloodEventInfo();
+  fillBloodSessions(time, place);
 };
 bdEvent.addEventListener('change', () => {
-  syncBloodEventInfo();
-  bdEvent.closest('.pf-field').classList.remove('is-invalid');
-  // Đổi chương trình: kiểm tra lại khoảng cách 12 tuần của ngày hiến gần nhất ở lần Nộp kế tiếp
+  fillBloodSessions();
+  [bdEvent, bdSession].forEach((el) => el.closest('.pf-field').classList.remove('is-invalid'));
+  // Đổi chương trình: kiểm tra lại khoảng cách 12 tuần của ngày hiến gần nhất ở lần Gửi kế tiếp
   bdLastText.closest('.pf-field').classList.remove('is-invalid');
 });
+bdSession.addEventListener('change', () => bdLastText.closest('.pf-field').classList.remove('is-invalid'));
 bloodPanel.tabIndex = -1;
 
 // ---------- Nhóm nút chọn (radio): đọc / đặt giá trị theo name ----------
@@ -5941,6 +5966,8 @@ document.querySelector('#bd-phone').addEventListener('input', (event) => { event
 // ---------- Đọc / điền dữ liệu biểu mẫu ----------
 const bloodFormData = () => ({
   event: bdEvent.value,
+  time: pickedSession().date, // buổi hiến đã chọn: ngày (ISO) · địa điểm
+  place: pickedSession().place,
   proxy: bdProxy.checked,
   person: bdProxy.checked ? {
     name: document.querySelector('#bd-name').value.trim(),
@@ -5965,7 +5992,7 @@ const bloodFormData = () => ({
 const loadBlood = (d) => {
   bloodForm.querySelectorAll('.pf-field.is-invalid').forEach((field) => field.classList.remove('is-invalid'));
   document.querySelector('#bd-commit-error').hidden = true;
-  fillBloodEvents(d.event);
+  fillBloodEvents(d.event, d.event ? bloodPickedDate(d) : '', d.event ? bloodPickedPlace(d) : '');
   setBloodProxy(Boolean(d.proxy), d.person || {});
   document.querySelector('#bd-phone').value = d.phone;
   bdAddrProvince.value = d.addrProvince || '';
@@ -5988,7 +6015,7 @@ const loadBlood = (d) => {
 };
 // Đăng ký mới: form trống (chọn chương trình trước); điện thoại lấy từ tài khoản
 const resetBlood = () => {
-  loadBlood({ event: '', proxy: false, person: null, phone: TEAM_ACCOUNT.phone, addrProvince: '', addrWard: '', address: '', work: '', ever: '', times: '', last: '', q: {}, slot: '', agree: false, privacy: false });
+  loadBlood({ event: '', time: '', place: '', proxy: false, person: null, phone: TEAM_ACCOUNT.phone, addrProvince: '', addrWard: '', address: '', work: '', ever: '', times: '', last: '', q: {}, slot: '', agree: false, privacy: false });
   bloodStatus.textContent = '';
 };
 // Chế độ: điền biểu mẫu · xem phiếu đã gửi (khóa toàn bộ, tiêu đề kèm mã phiếu, chân chỉ còn nút Đóng)
@@ -6107,7 +6134,7 @@ const validateBlood = () => {
   if (bdPick('bd-ever') === 'Đã từng') {
     if (bdTimes.value && Number(bdTimes.value) < 1) bad(bdTimes.closest('.pf-field'), 'Số lần đã hiến máu phải lớn hơn 0');
     if (bdLastText.value) {
-      const eventDate = new Date(`${bloodEvent(bdEvent.value).date || isoToday()}T00:00:00`); // chưa chọn chương trình: tạm so với hôm nay
+      const eventDate = new Date(`${pickedSession().date || bloodEvent(bdEvent.value).date || isoToday()}T00:00:00`); // so với buổi đã chọn; chưa chọn: ngày đầu của chương trình / hôm nay
       const lastDate = bdLast.value ? new Date(`${bdLast.value}T00:00:00`) : null;
       if (!lastDate) bad(bdLastText.closest('.pf-field'), 'Ngày không hợp lệ (dd/mm/yyyy)');
       else if (lastDate > new Date()) bad(bdLastText.closest('.pf-field'), 'Ngày hiến máu gần nhất không được sau ngày hôm nay');

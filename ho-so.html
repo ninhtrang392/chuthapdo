@@ -77,7 +77,15 @@
         <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
             <a href="ban-do-so.html">Bản đồ số</a>
-            <a href="#" data-panel="Trợ giúp">Trợ giúp</a>
+            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+            <div class="nav-more">
+                <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+                <div class="nav-more-menu" id="nav-help-menu" hidden>
+                    <a href="ho-so.html#nguoi-yeu-the">Đăng ký trợ giúp</a>
+                    <a href="ho-so.html#gia-nhap-doi">Đăng ký tình nguyện viên</a>
+                    <a href="ho-so.html#dang-ky-hien-mau">Đăng ký hiến máu</a>
+                </div>
+            </div>
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
             <a href="nguoi-gan-nhat.html">Người gần nhất</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
@@ -144,11 +152,12 @@
                     <div class="pf-nav-group">
                         <button class="pf-nav-toggle" type="button" aria-expanded="false" aria-controls="pf-nav-sub"><svg class="icon" aria-hidden="true"><use href="#hand-heart"/></svg><span>Đăng ký hồ sơ</span><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></button>
                         <div class="pf-nav-sub" id="pf-nav-sub" hidden>
+                            <!-- Đăng ký hiến máu: đầu nhóm -->
+                            <a href="#dang-ky-hien-mau" data-route="dang-ky-hien-mau"><span>Đăng ký hiến máu</span><span class="pf-count" data-count="dang-ky-hien-mau"></span></a>
                             <a href="#thanh-lap-chi-hoi" data-route="thanh-lap-chi-hoi"><span>Đăng ký thành lập chi hội</span><span class="pf-count" data-count="thanh-lap-chi-hoi"></span></a>
                             <a href="#gia-nhap-chi-hoi" data-route="gia-nhap-chi-hoi"><span>Đăng ký gia nhập chi hội</span><span class="pf-count" data-count="gia-nhap-chi-hoi"></span></a>
                             <a href="#thanh-lap-doi" data-route="thanh-lap-doi"><span>Đăng ký thành lập đội, câu lạc bộ tình nguyện viên</span><span class="pf-count" data-count="thanh-lap-doi"></span></a>
                             <a href="#gia-nhap-doi" data-route="gia-nhap-doi"><span>Đăng ký gia nhập đội, câu lạc bộ tình nguyện viên</span><span class="pf-count" data-count="gia-nhap-doi"></span></a>
-                            <a href="#dang-ky-hien-mau" data-route="dang-ky-hien-mau"><span>Đăng ký hiến máu</span><span class="pf-count" data-count="dang-ky-hien-mau"></span></a>
                         </div>
                     </div>
                 </nav>
@@ -1612,23 +1621,22 @@
                 <div class="pf-reg-body">
                     <!-- Xem hồ sơ đã nộp: khóa toàn bộ trường bằng fieldset disabled (fieldset không tạo khung, giữ nguyên bố cục) -->
                     <fieldset class="pf-reg-fieldset" id="pf-blood-fields">
-                        <!-- ---------- Phần 1: Thông tin đợt hiến máu — chọn Chương trình hiến máu (bắt buộc, chỉ chương trình sắp diễn ra) → Thời gian · Địa điểm · Mô tả chương trình tự điền (khóa) (ho-so.js: BLOOD_EVENTS) ---------- -->
+                        <!-- ---------- Phần 1: Thông tin đợt hiến máu — chọn Chương trình hiến máu (bắt buộc, chỉ chương trình sắp diễn ra) → nạp danh sách buổi hiến "Ngày – địa điểm" của chương trình để chọn (bắt buộc), Mô tả chương trình tự điền (khóa) (ho-so.js: BLOOD_EVENTS) ---------- -->
                         <section class="pf-reg-section" aria-labelledby="pf-blood-s1-title">
                             <div class="pf-reg-section-head">
                                 <h3 id="pf-blood-s1-title">1. Thông tin đợt hiến máu</h3>
                             </div>
                             <div class="pf-fields">
-                                <div class="pf-field is-wide">
-                                    <label for="bd-event">Chương trình hiến máu<span class="pf-req" aria-hidden="true">*</span></label>
-                                    <div class="pf-control is-select"><select id="bd-event" required><option value="">Chọn chương trình hiến máu</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
-                                </div>
-                                <div class="pf-field">
-                                    <label for="bd-event-time">Thời gian</label>
-                                    <div class="pf-control is-locked"><input id="bd-event-time" type="text" placeholder="Chọn chương trình hiến máu trước" readonly /></div>
-                                </div>
-                                <div class="pf-field">
-                                    <label for="bd-event-place">Địa điểm</label>
-                                    <div class="pf-control is-locked"><input id="bd-event-place" type="text" placeholder="Chọn chương trình hiến máu trước" readonly /></div>
+                                <!-- Chương trình · Thời gian và địa điểm (mỗi ô 2 cột) cùng 1 hàng; Thời gian và địa điểm = 1 ô chọn "Ngày: dd/mm/yyyy – địa điểm", nạp theo chương trình đã chọn (ho-so.js: fillBloodSessions) -->
+                                <div class="pf-team-row4">
+                                    <div class="pf-field is-span-2">
+                                        <label for="bd-event">Chương trình hiến máu<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-select"><select id="bd-event" required><option value="">Chọn chương trình hiến máu</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                    </div>
+                                    <div class="pf-field is-span-2">
+                                        <label for="bd-event-session">Thời gian và địa điểm<span class="pf-req" aria-hidden="true">*</span></label>
+                                        <div class="pf-control is-select"><select id="bd-event-session" required disabled><option value="">Chọn chương trình trước</option></select><svg class="icon pf-caret" aria-hidden="true"><use href="#chevron-down"/></svg></div>
+                                    </div>
                                 </div>
                                 <div class="pf-field is-wide">
                                     <label for="bd-event-desc">Mô tả chương trình</label>
@@ -1997,13 +2005,13 @@
     <!-- ==================== SCRIPTS ==================== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
     <script src="flow.js?v=20261102-1" defer></script>
-    <script src="account-menu.js?v=20261112-1" defer></script>
+    <script src="account-menu.js?v=20261120-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
     <script src="vendor/xlsx.full.min.js" defer></script>
     <script src="team-members.js?v=20261023-1" defer></script>
     <!-- Danh mục hành chính 34 tỉnh/thành · 3.321 phường/xã (dùng chung với Bản đồ số) — Địa chỉ liên lạc trong form Đăng ký hiến máu -->
     <script src="ban-do-so-locations.js" defer></script>
-    <script src="ho-so.js?v=20261120-15" defer></script>
+    <script src="ho-so.js?v=20261120-17" defer></script>
 </body>
 
 </html>

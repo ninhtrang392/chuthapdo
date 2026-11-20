@@ -95,7 +95,15 @@
         <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
             <a href="ban-do-so.html">Bản đồ số</a>
-            <a href="#" data-panel="Trợ giúp">Trợ giúp</a>
+            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+            <div class="nav-more">
+                <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+                <div class="nav-more-menu" id="nav-help-menu" hidden>
+                    <a href="ho-so.html#nguoi-yeu-the">Đăng ký trợ giúp</a>
+                    <a href="ho-so.html#gia-nhap-doi">Đăng ký tình nguyện viên</a>
+                    <a href="ho-so.html#dang-ky-hien-mau">Đăng ký hiến máu</a>
+                </div>
+            </div>
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
             <a href="nguoi-gan-nhat.html">Người gần nhất</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
@@ -197,7 +205,7 @@
                 <!-- id="cong-khai": đích của menu "Công khai" (header, footer mọi trang) -->
                 <section class="section live-feed" id="cong-khai" aria-labelledby="live-title">
                     <div class="container">
-                        <!-- ---------- Đầu section: nhãn Ủng hộ mới nhất, tiêu đề · tổng tiền hôm nay, link xem tất cả ---------- -->
+                        <!-- ---------- Đầu section: nhãn Ủng hộ mới nhất, tiêu đề · tổng tiền hôm nay, link xem tất cả (ẩn) · link Danh sách chương trình thiện nguyện ---------- -->
                         <div class="section-head live-head" data-reveal>
                             <div>
                                 <p class="eyebrow live-badge"><span class="live-dot" aria-hidden="true"></span>Ủng hộ mới nhất</p>
@@ -209,6 +217,8 @@
                                 <p class="live-total">Hôm nay đã nhận <strong data-live-total="1286450000">1.286.450.000 ₫</strong></p>
                                 <a class="link-arrow" href="#" data-panel="Tất cả giao dịch">Xem tất cả giao dịch<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                             </div>
+                            <!-- ---------- Link Danh sách chương trình thiện nguyện: cùng hàng nhãn Ủng hộ mới nhất, cuộn xuống section Chương trình (#chuong-trinh) ---------- -->
+                            <a class="link-arrow" href="#chuong-trinh">Danh sách chương trình thiện nguyện<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                         </div>
 
                         <!-- ---------- 3 giao dịch mới nhất (data-ago: số phút trước, script.js cập nhật nhãn thời gian) ---------- -->
@@ -1481,7 +1491,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js" defer></script>
     <script src="flow.js?v=20261106-1" defer></script>
-    <script src="account-menu.js?v=20261112-1" defer></script>
+    <script src="account-menu.js?v=20261120-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
     <script src="script.js?v=20261120-3" defer></script>
     <script src="chuong-trinh-data.js?v=20261119-1" defer></script>

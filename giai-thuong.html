@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261120-4" />
+    <link rel="stylesheet" href="styles.css?v=20261120-24" />
   </head>
   <body>
     <!-- ==================== ICON DEFINITIONS (SVG sprite) ==================== -->
@@ -59,7 +59,15 @@
       <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
         <a href="ban-do-so.html">Bản đồ số</a>
-        <a href="#" data-panel="Trợ giúp">Trợ giúp</a>
+        <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+        <div class="nav-more">
+            <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+            <div class="nav-more-menu" id="nav-help-menu" hidden>
+                <a href="ho-so.html#nguoi-yeu-the">Đăng ký trợ giúp</a>
+                <a href="ho-so.html#gia-nhap-doi">Đăng ký tình nguyện viên</a>
+                <a href="ho-so.html#dang-ky-hien-mau">Đăng ký hiến máu</a>
+            </div>
+        </div>
         <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
         <a href="nguoi-gan-nhat.html">Người gần nhất</a>
         <a href="don-vi-dong-hanh.html">Đồng hành</a>
@@ -492,7 +500,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
     <script src="flow.js?v=20261102-1" defer></script>
-    <script src="account-menu.js?v=20261112-1" defer></script>
+    <script src="account-menu.js?v=20261120-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
     <script src="giai-thuong.js?v=20261119-11" defer></script>
   </body>

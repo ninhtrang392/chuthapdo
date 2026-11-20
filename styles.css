@@ -4602,7 +4602,9 @@ html.pf-reg-lock{overflow:hidden}
 
 /* ---------- Hero: nền hồng nhạt + dải ruy băng đỏ (Giải thưởng/Nền trừu tượng hồng nhạt với dải ruy băng đỏ.png → giai-thuong-hero-bg-3.webp) · trái chữ · phải huy chương ---------- */
 /* --u: hệ số co giãn chữ theo màn (1px ở màn rộng 1672px, co theo cả chiều cao) */
-.gt-hero{--u:min(100vw / 1672,(100svh - var(--header-h) / 2) / 941);position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;min-height:100svh;overflow:hidden;padding:calc(var(--header-h) + 16px) 0 clamp(24px,4vh,48px);background:#fdf2f4 url('Emages/giai-thuong-hero-bg-3.webp') center bottom / cover no-repeat;text-align:left}
+.gt-hero{--u:min(100vw / 1672,(100svh - var(--header-h) / 2) / 941);position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;min-height:100svh;overflow:hidden;padding:calc(var(--header-h) + 16px) 0 clamp(24px,4vh,48px);background:#fdf2f4 url('Emages/giai-thuong-hero-bg-3.webp') center top / max(100%,205svh) auto no-repeat;text-align:left}
+/* Ảnh nền phóng to ~115% chiều cao màn (ảnh 1672×941 → rộng 1.15 × 1.777 ≈ 205svh; màn rất rộng thì theo 100% bề ngang), neo mép trên
+   → dải ruy băng đỏ dịch xuống dưới hàng số liệu (05 · Toàn quốc · Thường niên), không che chữ; phần đáy ảnh bị cắt nằm trong vùng mờ trắng (::after) */
 /* Chuyển tiếp: đáy hero mờ dần sang trắng (nền section kế tiếp) → không lộ đường cắt; nằm trên ảnh nền, dưới chữ + huy chương; giữ nguyên khi đổi ảnh nền */
 .gt-hero::after{content:"";position:absolute;inset:auto 0 0;z-index:-1;height:clamp(72px,14vh,160px);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.6) 55%,#fff 100%);pointer-events:none}
 .gt-crumbs{margin-bottom:8px} /* breadcrumb trên cùng hero (như bản Vercel): Trang chủ › Giải thưởng nhân đạo */
