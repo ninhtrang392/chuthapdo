@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261121-37" />
+    <link rel="stylesheet" href="styles.css?v=20261121-68" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -1126,10 +1126,6 @@
                 <section class="section sponsor" id="dong-hanh" aria-labelledby="sponsor-title" hidden>
                     <div class="container sponsor-grid">
                         <!-- ---------- Ảnh lễ ký kết + chú thích ---------- -->
-                        <figure class="sponsor-media media media-photo" style="--focus:50% 55%" data-reveal>
-                            <img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/picture6.avif" alt="Lễ ký kết thỏa thuận hợp tác toàn diện giữa BIDV và GTEL" width="820" height="432" loading="lazy" />
-                            <figcaption class="sponsor-caption">Lễ ký kết hợp tác toàn diện · BIDV &amp; GTEL</figcaption>
-                        </figure>
 
                         <!-- ---------- Nội dung: tiêu đề, lời cảm ơn, đồng phát triển, trích dẫn ---------- -->
                         <div class="sponsor-content" data-reveal>
@@ -1153,90 +1149,58 @@
                 <section class="section partners founders" id="phat-trien-he-thong" aria-labelledby="founders-title">
                     <!-- ---------- Tiêu đề căn giữa ---------- -->
                     <div class="container partners-head">
-                        <h2 class="section-title" id="founders-title">Đơn vị đồng hành và phát triển hệ thống</h2>
-                        <p class="section-lead" data-reveal>Các đơn vị sáng lập, đồng hành cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam<br />xây dựng và vận&nbsp;hành nền tảng nhân đạo số.</p>
+                        <h2 class="section-title" id="founders-title">Đơn vị chủ trì xây dựng hệ thống và đơn vị đồng hành</h2>
                     </div>
 
-                    <!-- ---------- Đơn vị phát triển hệ thống: GTINX — khối cố định phía trên dải slide (luôn hiện, không chuyển theo slide).
-                         Nền công nghệ xanh (Emages/Page đơn vị/nen-cong-nghe-xanh-dai.webp — cắt từ "Nền công nghệ xanh ngọc phát sáng.png") · trái: nhãn đỏ chéo đè lên ô logo trắng ·
-                         vạch đỏ dọc · phải: mô tả (GTINX in đậm) + dòng "Phát triển hệ thống:" kèm logo nhỏ ---------- -->
-                    <div class="container" data-reveal><!-- hiện khi cuộn tới đặt ở lớp ngoài: GSAP tween y không đè lên skew của khung hình bình hành -->
+                    <!-- ---------- Bố cục 2 cột bằng nhau (.founders-layout): trái = khối GTINX đứng yên · phải = dải slide 3 đơn vị đồng hành (BIDV · Vietjet · Camel); ≤ 1100px xếp dọc (GTINX trên) ---------- -->
+                    <div class="container founders-layout">
+                    <!-- ---------- Đơn vị phát triển hệ thống: GTINX — khối cố định cột trái (luôn hiện, không chuyển theo slide).
+                         Nền công nghệ xanh (Emages/Page đơn vị/nen-cong-nghe-xanh-dai.webp), khung chữ nhật · nhãn đỏ chéo góc trên · huy hiệu Bộ Công an + tên ·
+                         logo GTINX kèm khẩu hiệu ---------- -->
+                    <div class="founders-dev-col" data-reveal><!-- hiện khi cuộn tới đặt ở lớp ngoài: GSAP tween y không đè lên skew của khung hình bình hành -->
                         <div class="founders-dev">
-                            <div class="founders-dev-brand">
-                                <p class="founders-dev-label">Đơn vị phát triển hệ thống</p>
-                                <span class="founders-dev-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" loading="lazy" decoding="async" /></span>
+                            <p class="founders-dev-label">Đơn vị chủ trì xây dựng hệ thống</p>
+                            <!-- Cụm logo (như thẻ GTINX trang Đồng hành): huy hiệu Bộ Công an (Emages/BCA.png) · tên đỏ · logo GTINX kèm khẩu hiệu (Emages/logo-gtinx-02-1200.webp) -->
+                            <div class="founders-dev-org">
+                                <img class="founders-dev-bca" src="Emages/BCA.png" alt="" width="164" height="147" loading="lazy" decoding="async" />
+                                <p class="founders-dev-org-name">Bộ Công an</p>
                             </div>
-                            <span class="founders-dev-sep" aria-hidden="true"></span>
-                            <div class="founders-dev-text">
-                                <p class="founders-dev-lead"><strong>GTINX</strong> phát triển hệ thống, cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam <br />lan tỏa các chương trình nhân đạo tới cộng đồng trên khắp mọi miền.</p>
-                                <p class="founders-dev-meta">Phát triển hệ thống: <img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="GTINX" width="445" height="107" loading="lazy" decoding="async" /></p>
-                            </div>
+                            <img class="founders-dev-mark" src="Emages/logo-gtinx-02-1200.webp" alt="GTINX — Tự tin, Tự chủ, Tự cường" width="1200" height="523" loading="lazy" decoding="async" />
                         </div>
                     </div>
 
-                    <!-- ---------- Dải slide: mỗi slide ảnh trái, chữ phải ---------- -->
-                    <div class="container founders-slider" data-reveal>
+                    <!-- ---------- Dải slide (cột phải): mỗi slide = thẻ giống thẻ GTINX cột trái (nền công nghệ xanh, nhãn đỏ "Đơn vị đồng hành" tràn mép trên) · chỉ logo đối tác (đã bỏ ảnh, mô tả, dòng đơn vị, trích dẫn) ---------- -->
+                    <div class="founders-slider" data-reveal>
                         <div class="pv-track founders-track" id="founders-track" role="group" aria-roledescription="carousel" aria-label="Đơn vị đồng hành — tự chuyển mỗi 6 giây, dừng khi rê chuột">
                             <!-- ---------- Slide 1: GTINX & BIDV ---------- -->
                             <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="1 / 3: GTINX và BIDV">
-                                <figure class="sponsor-media media media-photo" style="--focus:50% 55%">
-                                    <img src="Emages/%C4%90%C6%A1n%20v%E1%BB%8B%20%C4%91%E1%BB%93ng%20h%C3%A0nh/picture6.avif" alt="Lễ ký kết thỏa thuận hợp tác toàn diện giữa BIDV và GTEL" width="820" height="432" loading="lazy" />
-                                </figure>
-                                <div class="sponsor-content">
-                                    <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
+                                <div class="founders-dev founders-partner"><!-- thẻ như thẻ GTINX cột trái: nhãn đỏ tràn mép trên · chỉ logo đối tác · nền sóng đỏ + cái bắt tay mờ -->
+                                    <p class="founders-dev-label">Đơn vị đồng hành</p>
                                     <h3 class="founders-logos"><span class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Logo%20GTINX.webp" alt="GTINX" width="6713" height="3650" loading="lazy" decoding="async" /></span><span class="sponsor-amp">&amp;</span>
                                         <span
-                                            class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/bidv-trim.png" alt="BIDV" width="400" height="130" loading="lazy" decoding="async" /></span>
+                                            class="partner-logo is-bidv"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/bidv-trim.png" alt="BIDV" width="400" height="130" loading="lazy" decoding="async" /></span>
                                     </h3>
-                                    <p class="sponsor-lead">BIDV tự hào đồng hành và tài trợ cho hệ thống do GTINX sáng lập, góp phần cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam kết nối và lan tỏa nguồn lực nhân ái, mang sự hỗ trợ thiết thực đến đúng người, đúng nơi cần giúp đỡ.</p>
-                                    <p class="sponsor-meta">Đơn vị chủ trì xây dựng hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đơn vị đồng hành: <strong>BIDV</strong></p>
-                                    <blockquote class="sponsor-quote">
-                                        <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
-                                        <cite>— Hội Chữ thập đỏ Việt Nam</cite>
-                                    </blockquote>
                                 </div>
                             </article>
 
                             <!-- ---------- Slide 2: GTINX & Vietjet ---------- -->
                             <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="2 / 3: GTINX và Vietjet">
-                                <figure class="sponsor-media media media-photo">
-                                    <img src="Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png" alt="" width="1672" height="941" loading="lazy" decoding="async" />
-                                    <!-- Logo trên nền ảnh: GTINX | đối tác (vạch đỏ ngăn giữa) -->
-                                    <div class="sponsor-media-logos" role="img" aria-label="GTINX và Vietjet"><img class="is-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="" width="445" height="107" loading="lazy" decoding="async" /><span class="sponsor-media-sep" aria-hidden="true"></span><img class="is-partner is-vietjet" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Vietjet.png" alt="" width="3840" height="2160" loading="lazy" decoding="async" /></div>
-                                </figure>
-                                <div class="sponsor-content">
-                                    <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
+                                <div class="founders-dev founders-partner"><!-- thẻ như thẻ GTINX cột trái: nhãn đỏ tràn mép trên · chỉ logo đối tác · nền sóng đỏ + cái bắt tay mờ -->
+                                    <p class="founders-dev-label">Đơn vị đồng hành</p>
                                     <h3 class="founders-logos"><span class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Logo%20GTINX.webp" alt="GTINX" width="6713" height="3650" loading="lazy" decoding="async" /></span><span class="sponsor-amp">&amp;</span>
                                         <span
-                                            class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/vietjet-trim.png" alt="Vietjet Air" width="400" height="96" loading="lazy" decoding="async" /></span>
+                                            class="partner-logo is-vietjet"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/vietjet-trim.png" alt="Vietjet Air" width="400" height="96" loading="lazy" decoding="async" /></span>
                                     </h3>
-                                    <p class="sponsor-lead">Vietjet tự hào đồng hành và tài trợ cho hệ thống do GTINX sáng lập, góp phần cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam kết nối và lan tỏa nguồn lực nhân ái, mang sự hỗ trợ thiết thực đến đúng người, đúng nơi cần giúp đỡ.</p>
-                                    <p class="sponsor-meta">Đơn vị chủ trì xây dựng hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đơn vị đồng hành: <strong>Vietjet</strong></p>
-                                    <blockquote class="sponsor-quote">
-                                        <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
-                                        <cite>— Hội Chữ thập đỏ Việt Nam</cite>
-                                    </blockquote>
                                 </div>
                             </article>
                             <!-- ---------- Slide 3: GTINX & Camel ---------- -->
                             <article class="sponsor-grid founders-slide" aria-roledescription="slide" aria-label="3 / 3: GTINX và Camel">
-                                <figure class="sponsor-media media media-photo">
-                                    <img src="Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png" alt="" width="1672" height="941" loading="lazy" decoding="async" />
-                                    <!-- Logo trên nền ảnh: GTINX | đối tác (vạch đỏ ngăn giữa) -->
-                                    <div class="sponsor-media-logos" role="img" aria-label="GTINX và Camel"><img class="is-gtinx" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/gtinx.png" alt="" width="445" height="107" loading="lazy" decoding="async" /><span class="sponsor-media-sep" aria-hidden="true"></span><img class="is-partner" src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Camel.png" alt="" width="733" height="448" loading="lazy" decoding="async" /></div>
-                                </figure>
-                                <div class="sponsor-content">
-                                    <p class="sponsor-kicker"><svg class="icon" aria-hidden="true"><use href="#people"/></svg>Đơn vị đồng hành</p>
+                                <div class="founders-dev founders-partner"><!-- thẻ như thẻ GTINX cột trái: nhãn đỏ tràn mép trên · chỉ logo đối tác · nền sóng đỏ + cái bắt tay mờ -->
+                                    <p class="founders-dev-label">Đơn vị đồng hành</p>
                                     <h3 class="founders-logos"><span class="partner-logo"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/Logo%20GTINX.webp" alt="GTINX" width="6713" height="3650" loading="lazy" decoding="async" /></span><span class="sponsor-amp">&amp;</span>
                                         <span
-                                            class="partner-logo is-tall"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/camel-trim.png" alt="Camel Beer" width="300" height="259" loading="lazy" decoding="async" /></span>
+                                            class="partner-logo is-tall is-camel"><img src="Emages/%C4%90%E1%BB%91i%20t%C3%A1c/camel-trim.png" alt="Camel Beer" width="300" height="259" loading="lazy" decoding="async" /></span>
                                     </h3>
-                                    <p class="sponsor-lead">Camel tự hào đồng hành và tài trợ cho hệ thống do GTINX sáng lập, góp phần cùng Hội&nbsp;Chữ&nbsp;thập&nbsp;đỏ Việt&nbsp;Nam kết nối và lan tỏa nguồn lực nhân ái, mang sự hỗ trợ thiết thực đến đúng người, đúng nơi cần giúp đỡ.</p>
-                                    <p class="sponsor-meta">Đơn vị chủ trì xây dựng hệ thống: <strong>GTINX</strong><span class="sponsor-sep" aria-hidden="true"></span>Đơn vị đồng hành: <strong>Camel</strong></p>
-                                    <blockquote class="sponsor-quote">
-                                        <p>“Sự chung tay của cộng đồng chính là sức mạnh để không ai bị bỏ lại phía sau.”</p>
-                                        <cite>— Hội Chữ thập đỏ Việt Nam</cite>
-                                    </blockquote>
                                 </div>
                             </article>
                         </div>
@@ -1248,6 +1212,8 @@
                             <button class="founders-dot" type="button" data-founders-slide="2" aria-controls="founders-track" aria-label="Slide 3: GTINX và Camel"></button>
                         </div>
                     </div>
+                    </div>
+                    <!-- ---------- END .founders-layout ---------- -->
                 </section>
                 <!-- ==================== END SECTION: ĐƠN VỊ ĐỒNG HÀNH & PHÁT TRIỂN HỆ THỐNG ==================== -->
 

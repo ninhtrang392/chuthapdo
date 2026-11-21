@@ -77,15 +77,18 @@
 .avatar-button:hover{transform:translateY(-1px);box-shadow:0 0 0 2px var(--color-primary),0 4px 12px rgba(185,28,43,.2)}
 .avatar-button .icon{width:22px;height:22px;stroke-width:1.9}
 .nav-cta{display:none}
+/* 1441–1600px (vd. 1920 phóng 125% ≈ 1536px): thu đệm menu để nút Đăng ký không tràn mép phải */
+@media(max-width:1600px){.navigation a,.nav-more-toggle{padding:12px 10px}}
 @media(max-width:1440px){
 .header{}
 .brand img{width:186px;height:44px}
-.navigation a,.nav-more-toggle{padding:12px 10px}
+.navigation a,.nav-more-toggle{padding:12px 6px}
 }
 @media(max-width:1360px){
 .navigation a,.nav-more-toggle{padding:12px 6px}
 }
 /* mốc 1300 (trước 1240) + đệm 4px: chừa chỗ cho tên dài "Quỹ Nhân đạo Việt Nam" (cùng styles.css) */
+@media(min-width:1301px) and (max-width:1400px){.brand img{width:152px;height:36px}.navigation a,.nav-more-toggle{padding:12px 4px}} /* 1301–1400px (vd. 1366 / 1707 phóng 125%): menu chật → logo nhỏ lại, đệm mục 4px để nút Đăng ký không tràn */
 @media(max-width:1300px){
 .header{gap:8px}
 .brand img{width:152px;height:36px}

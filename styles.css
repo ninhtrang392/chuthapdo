@@ -31,6 +31,9 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 .hero-screen{position:relative;display:flex;flex-direction:column;justify-content:center;min-height:100vh;min-height:100svh;padding:var(--hero-pad) 0 var(--hero-pad-b)}
 /* Chữ đậm 900, khít (như bản v02). Mỗi dòng là một mặt nạ (overflow hidden) để chữ trồi lên; đệm trên/dưới chừa chỗ cho dấu tiếng Việt */
 .hero .hero-title{margin-block:0;font-size:var(--fs-hero);font-weight:900;line-height:.86;letter-spacing:-.065em;white-space:nowrap;color:var(--color-green);text-shadow:none} /* "Chung tay", "Việt Nam": xanh lá logo #006C45 */
+/* Màn thấp so với bề ngang (vd. laptop 1920×1080 phóng 125% → khung nhìn ~1536×730): cỡ chữ bị giới hạn theo chiều cao nên khối chữ hẹp (≈ thụt lề + 6,2em),
+   thừa chỗ bên phải → đẩy khối chữ vào giữa phần trống (đã trừ chỗ huy hiệu bên phải); màn đủ cao thì phần trống ≤ chỗ huy hiệu → đệm 0, giữ nguyên */
+@media(min-width:901px){.hero .hero-title{padding-left:max(0px,calc((min(100vw - 2 * var(--gutter),var(--container)) - var(--indent) - var(--fs-hero) * 6.2 - var(--badge) - 2vw) / 2))}}
 .hero-line{display:block;overflow:hidden;padding:.06em 0 .24em;margin-bottom:-.12em}
 .hero-line-inner{display:inline-flex;align-items:center;gap:.18em;white-space:nowrap;will-change:transform}
 .hero-line--indent{padding-left:var(--indent)}
@@ -112,8 +115,10 @@ button:focus-visible,a:focus-visible{outline:3px solid #9b0722;outline-offset:5p
 .avatar-button .icon{width:22px;height:22px;stroke-width:1.9}
 .nav-cta{display:none}
 /* --header-h = chiều cao header (các trang dùng để chừa chỗ phía trên) */
-@media(max-width:1440px){:root{--header-h:80px}.header{}.brand img{width:186px;height:44px}.navigation a,.nav-more-toggle{padding:12px 10px}}
+@media(max-width:1600px){.navigation a,.nav-more-toggle{padding:12px 10px}} /* 1441–1600px (vd. 1920 phóng 125% ≈ 1536px): thu đệm menu để nút Đăng ký không tràn mép phải */
+@media(max-width:1440px){:root{--header-h:80px}.header{}.brand img{width:186px;height:44px}.navigation a,.nav-more-toggle{padding:12px 6px}}
 @media(max-width:1360px){.navigation a,.nav-more-toggle{padding:12px 6px}} /* menu có thêm "Khác" + tên dài "Quỹ Nhân đạo Việt Nam" → thu khoảng cách để nút Đăng ký không tràn */
+@media(min-width:1301px) and (max-width:1400px){.brand img{width:152px;height:36px}.navigation a,.nav-more-toggle{padding:12px 4px}} /* 1301–1400px (vd. 1366 / 1707 phóng 125%): menu chật → logo nhỏ lại, đệm mục 4px để nút Đăng ký không tràn */
 @media(max-width:1300px){:root{--header-h:72px}.header{gap:8px}.brand img{width:152px;height:36px}.navigation a,.nav-more-toggle{padding:12px 4px;font-size:13px}} /* mốc 1300 (trước 1240) + đệm 4px: chừa chỗ cho tên dài "Quỹ Nhân đạo Việt Nam" */
 @media(max-width:1200px){.navigation{gap:2px}.navigation a,.nav-more-toggle{padding:12px 3px}} /* menu 8 mục + Khác (thêm Trợ giúp, Hỏi Đáp) → thu khoảng cách để nút Đăng ký không tràn ở 1121–1200px (thu thêm: xem "Header 1121–1200px" sau khối .header-auth) */
 @media(max-width:1120px){:root{--header-h:64px}.header{gap:4px;padding:0 8px 0 14px;}.brand img{width:170px;height:40px}.header-actions{margin-left:auto;gap:0}.icon-button,.search-button{width:40px;height:40px}.notify-dot{top:8px;right:9px}.avatar-button{width:36px;height:36px;margin:0 4px}.avatar-button .icon{width:19px;height:19px}
@@ -1116,7 +1121,7 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 /* ---------- Tiêu đề slide: 2 ô logo + dấu & (--zoom bù lề trắng của file logo) ---------- */
 .founders-logos{display:flex;align-items:center;gap:16px;margin:0;font-size:28px;font-weight:700}
 .founders-logos .partner-logo img{transform:scale(var(--zoom,1))}
-.founders-slide .sponsor-kicker,.founders-slide .founders-logos > .partner-logo:first-child,.founders-slide .founders-logos > .sponsor-amp{display:none} /* đang ẩn: nhãn "Đơn vị đồng hành" + logo GTINX + "&" trong từng slide (GTINX đã có khối "Đơn vị phát triển hệ thống" phía trên) — bỏ dòng này để hiện lại */
+.founders-slide .founders-logos > .partner-logo:first-child,.founders-slide .founders-logos > .sponsor-amp{display:none} /* đang ẩn: logo GTINX + "&" trong từng slide (GTINX đã có thẻ riêng cột trái) — bỏ dòng này để hiện lại; nhãn "Đơn vị đồng hành" (.sponsor-kicker) đã hiện lại trên logo đối tác */
 .founders-slide .founders-logos .partner-logo{width:auto;height:auto;padding:0;border:0;border-radius:0;background:none} /* logo đối tác (bản cắt sát *-trim.png): không viền, không khung, mép trái thẳng hàng với chữ */
 .founders-slide .founders-logos .partner-logo img{width:auto;height:56px;transform:none}
 .founders-slide .founders-logos .partner-logo.is-tall img{height:80px} /* logo gần vuông (Camel) cao hơn để cân thị giác */
@@ -1138,6 +1143,43 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
   .founders-dev{--dev-skew:0deg;grid-template-columns:minmax(0,1fr);padding:24px 20px;background:linear-gradient(rgba(255,255,255,.78),rgba(255,255,255,.78)),url("Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/nen-cong-nghe-xanh-dai.webp") center / cover no-repeat #4cb860} /* xếp dọc: khung chữ nhật, phủ trắng đều để chữ dễ đọc */
   .founders-dev-brand{justify-self:start;margin-left:14px}
   .founders-dev-sep,.founders-dev-lead br{display:none}
+}
+/* ---------- Bố cục 2 cột bằng nhau (.founders-layout, như ảnh | chữ ban đầu): trái = thẻ GTINX đứng yên · phải = dải slide 3 đơn vị đồng hành (đã bỏ ảnh, chỉ còn logo · mô tả · trích dẫn) ---------- */
+.founders-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:clamp(28px,4vw,64px)}
+/* Thẻ GTINX dựng dọc: nền công nghệ xanh (nen-cong-nghe-xanh-dai.webp), khung chữ nhật · nhãn đỏ góc trên · huy hiệu Bộ Công an + tên đỏ · logo GTINX kèm khẩu hiệu · mô tả */
+.founders-layout .founders-dev{--dev-skew:0deg;display:flex;flex-direction:column;align-items:center;gap:0;width:auto;margin:0;padding:72px 40px 56px;text-align:center;background:radial-gradient(ellipse 62% 58% at 50% 54%,rgba(255,255,255,.95) 0%,rgba(255,255,255,.88) 55%,rgba(255,255,255,.35) 85%,rgba(255,255,255,0) 100%),url("Emages/Page%20%C4%91%C6%A1n%20v%E1%BB%8B/nen-cong-nghe-xanh-dai.webp") center / cover no-repeat #4cb860;box-shadow:0 14px 34px rgba(0,108,69,.16)} /* khung chữ nhật (không nghiêng) · nền công nghệ xanh lộ ở viền, quầng trắng giữa sau logo + chữ */
+.founders-layout .founders-dev{position:relative;box-shadow:none} /* bỏ bóng đổ cả 2 thẻ (GTINX · đối tác) */
+.founders-layout .founders-dev-label{top:-14px;left:-10px} /* nhãn đỏ tràn lên mép trên thẻ (nửa trên nằm ngoài khung) */
+.founders-dev-org{display:flex;flex-direction:column;align-items:center}
+.founders-dev-bca{display:block;width:auto;height:68px;filter:drop-shadow(0 4px 10px rgba(150,100,0,.3))}
+.founders-dev-org-name{margin:6px 0 0;font-size:20px;font-weight:700;line-height:28px;text-transform:uppercase;color:var(--red)}
+.founders-dev-mark{display:block;width:min(100%,320px);height:auto;margin-top:6px}
+.founders-layout .founders-dev-lead{max-width:440px;margin-top:8px;font-size:15px;line-height:24px;text-wrap:balance}
+/* Hai thẻ (GTINX trái · đối tác phải) cùng chiều cao, nội dung căn giữa; chừa đệm quanh thẻ để nhãn đỏ tràn mép không bị dải trượt (overflow) cắt, 2 cột thẳng mép trên */
+.founders-layout{align-items:start}
+.founders-layout .founders-dev{min-height:380px;justify-content:center}
+.founders-layout .founders-dev-col,.founders-layout .founders-slide{padding:18px 14px 30px 12px}
+/* Slide đối tác: 1 thẻ chỉ có logo đối tác to ở giữa (logo GTINX + "&" trong slide vẫn ẩn) */
+.founders-layout .founders-slide.sponsor-grid{grid-template-columns:minmax(0,1fr);gap:0}
+.founders-partner .founders-logos{justify-content:center}
+.founders-layout .founders-dev > *{transform:none} /* khung không nghiêng → bỏ transform con (transform tạo lớp riêng làm mix-blend-mode bên dưới mất tác dụng) */
+/* Nền thẻ đối tác: ảnh sóng đỏ + cái bắt tay mờ (Emages/Homepage/Nền sóng đỏ và cái bắt tay mờ nhạt.png) · logo đối tác căn giữa vùng sáng, trên cái bắt tay */
+.founders-layout .founders-dev.founders-partner{justify-content:center;padding-bottom:96px;background:url("Emages/Homepage/N%E1%BB%81n%20s%C3%B3ng%20%C4%91%E1%BB%8F%20v%C3%A0%20c%C3%A1i%20b%E1%BA%AFt%20tay%20m%E1%BB%9D%20nh%E1%BA%A1t.png") center / cover no-repeat #fbf3f3}
+.founders-partner .founders-logos,.founders-partner .founders-logos .partner-logo{max-width:100%}
+.founders-slide .founders-partner .founders-logos .partner-logo img{width:auto;max-width:100%;height:auto;max-height:96px;mix-blend-mode:multiply} /* multiply: nền trắng sẵn có của logo (BIDV.jpg) hòa vào quầng trắng, không lộ ô vuông */
+.founders-layout .founders-track{padding-top:0} /* bỏ 4px đệm trên của dải trượt → thẻ phải thẳng mép trên với thẻ GTINX */
+/* Chấm chỉ slide: nằm trong thẻ đối tác, căn giữa sát đáy thẻ (đáy thẻ cách đáy dải = 8px đệm dải + 30px đệm slide) */
+.founders-layout .founders-slider{position:relative}
+.founders-layout .founders-dots{position:absolute;right:0;bottom:58px;left:0;z-index:2;margin:0}
+.founders-slide .founders-partner .founders-logos .partner-logo.is-tall img{max-height:150px}
+/* Cân cỡ logo đối tác cho bằng nhau về thị giác: 2 logo chữ (BIDV, Vietjet) cùng rộng ~240px · Camel (biểu tượng tròn, nhiều khoảng trống) cao hơn */
+.founders-slide .founders-partner .founders-logos .partner-logo.is-bidv img{max-height:84px}
+.founders-slide .founders-partner .founders-logos .partner-logo.is-vietjet img{max-height:66px}
+.founders-slide .founders-partner .founders-logos .partner-logo.is-camel img{max-height:172px}
+@media(max-width:1100px){
+  .founders-layout{grid-template-columns:minmax(0,1fr);gap:8px}
+  .founders-layout .founders-dev-col{justify-self:center;width:100%;max-width:560px}
+  .founders-layout .founders-dev{--dev-skew:0deg;min-height:300px} /* xếp dọc: khung chữ nhật cho gọn */
 }
 /* ---------- Chấm chỉ slide: căn giữa dưới dải, chấm đang xem kéo dài màu đỏ ---------- */
 .founders-dots{display:flex;justify-content:center;gap:8px;margin-top:24px}
@@ -4255,6 +4297,9 @@ html.pf-reg-lock{overflow:hidden}
 .dh-person-avatar{position:relative;display:grid;place-items:center;flex:none;width:184px;height:184px;overflow:hidden;border:4px solid #fff;border-radius:50%;background:#fdecec;box-shadow:0 8px 24px rgba(150,20,30,.14);font-size:40px;font-weight:700;color:var(--color-green)} /* ảnh gốc có nền phủ kín khung tròn; ảnh lỗi → chữ cái đầu trên nền hồng nhạt */
 .dh-person-avatar img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%;transform:scale(var(--zoom,1));transform-origin:50% 12%;transition:transform 1.2s cubic-bezier(.22,1,.36,1)} /* absolute phủ kín khung → object-fit/object-position có tác dụng; --zoom (dữ liệu) phóng ảnh đứng xa */
 .dh-person:hover .dh-person-avatar img{transform:scale(calc(var(--zoom,1) * 1.08))}
+/* Ảnh chân dung tròn, to hơn bản cũ (đã bỏ trích dẫn → thẻ ngắn lại): khung tròn viền trắng tối đa 240px, co theo bề ngang thẻ; ảnh phóng theo --zoom dữ liệu như cũ */
+.dh-person{padding:48px 20px 52px} /* thẻ cao hơn (đệm trên / dưới rộng) */
+.dh-person-avatar{width:min(100%,240px);height:auto;aspect-ratio:1}
 .dh-person-info{display:flex;flex:1;flex-direction:column;align-items:center;width:100%}
 .dh-person-name{max-width:100%;margin:16px 0 0;overflow:hidden;font-size:22px;font-weight:700;line-height:30px;color:var(--color-text);text-overflow:ellipsis;white-space:nowrap}
 .dh-person-role{margin:2px 0 0;font-size:15px;line-height:22px;color:var(--color-text-muted)}
@@ -4372,9 +4417,12 @@ html.pf-reg-lock{overflow:hidden}
   .dh-banner .dh-mini-stats > div{padding:14px 16px}
   .dh-banner .dh-mini-stats dd span{font-size:20px;line-height:28px}
   .dh-section-head{margin-bottom:28px}
-  .dh-people-grid{grid-template-columns:1fr}
+  .dh-people-grid{grid-template-columns:repeat(2,minmax(0,1fr))} /* ảnh chân dung lớn → điện thoại vẫn 2 thẻ / hàng cho gọn */
+  .dh-person{padding:12px 12px 18px}
+  .dh-person-name{margin-top:12px;font-size:16px;line-height:22px}
+  .dh-person-role{font-size:13px;line-height:18px}
   .dh-cta-card{padding:180px 20px 28px;background:linear-gradient(180deg,rgba(122,18,25,.78) 0%,rgba(122,18,25,.5) 100%),#c8141f url('Emages/Tr%C3%A1i%20tim%20%C4%91%E1%BB%8F%20b%C3%B3ng%20trong%20%C4%91%C3%B4i%20tay%20n%C3%A2ng%20niu.png') 80% 50% / cover no-repeat}
-  .dh-people-grid{gap:20px}
+  .dh-people-grid{gap:12px}
   .dh-quote-card{min-height:0;padding:72px 0 280px}
   .dh-quote-portrait{left:50%;height:240px;transform:translateX(-50%)}
   .dh-quote-ribbon{transform:translate(-50%,20%)}

@@ -293,13 +293,13 @@ document.querySelectorAll('.dh-founders').forEach((list, listIndex) => {
 });
 
 // ==================== SECTION: NGƯỜI ĐỒNG HÀNH NỔI BẬT — tối đa 4 thẻ (BR-04, NL02, NL03) ====================
-// Thẻ (nền ảnh hồng mờ): ảnh chân dung tròn viền trắng · tên chữ đen · danh xưng · đường kẻ (đã ẩn nút "Theo dõi") · trích dẫn nghiêng có dấu ngoặc xanh.
+// Thẻ (nền ảnh hồng mờ): ảnh chân dung lớn (khung chữ nhật bo góc phủ ngang thẻ) · tên chữ đen · danh xưng (đã bỏ trích dẫn, đã ẩn nút "Theo dõi").
 // pos (tuỳ chọn): object-position riêng để đầu các thẻ ngang nhau; zoom (tuỳ chọn): phóng ảnh đứng xa cho khuôn mặt cân với thẻ khác. Ảnh chân dung dùng ảnh gốc có nền (không tách nền), cắt tròn bằng CSS .dh-person-avatar. Ảnh lỗi → ảnh đại diện mặc định (chữ cái đầu). Không có người → TB03.
 const PEOPLE = [
-  { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/b4f3cc87d25f00c95859daf33b3c5e40.jpg', quote: 'Lan tỏa yêu\u00A0thương không chỉ là\nhành\u00A0động, mà là trách\u00A0nhiệm\ncủa mỗi chúng\u00A0ta.' },
-  { name: 'Phạm Gia Huy', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/0cbea7d214cc6acf1054334e41d9d945.jpg', pos: '50% 6%', zoom: 1.2, quote: 'Dù là điều nhỏ\u00A0bé nhất, chúng\u00A0ta vẫn có\u00A0thể tạo nên thay\u00A0đổi lớn\u00A0lao.' },
-  { name: 'Hoàng Mai Linh', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/2b175da1066d5f3ef635d4980e47f6a4.jpg', zoom: 1.4, quote: 'Sẻ chia là một hành\u00A0trình dài,\nvà tôi mong được cùng\nmọi\u00A0người lan\u00A0tỏa điều tốt\u00A0đẹp.' },
-  { name: 'Lê Quốc Bảo', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/396c741c3d37ad0199ac220d16169e3e.jpg', pos: '50% 12%', zoom: 1.45, quote: 'Hạnh\u00A0phúc thật\u00A0sự là khi mình có\u00A0thể giúp\u00A0đỡ người\u00A0khác vượt\u00A0qua khó\u00A0khăn.' },
+  { name: 'Trần Thu Hà', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/b4f3cc87d25f00c95859daf33b3c5e40.jpg' },
+  { name: 'Phạm Gia Huy', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/0cbea7d214cc6acf1054334e41d9d945.jpg', pos: '50% 6%', zoom: 1.2 },
+  { name: 'Hoàng Mai Linh', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/2b175da1066d5f3ef635d4980e47f6a4.jpg', zoom: 1.4 },
+  { name: 'Lê Quốc Bảo', role: 'Đại sứ nhân ái', avatar: 'Emages/avatar/396c741c3d37ad0199ac220d16169e3e.jpg', pos: '50% 12%', zoom: 1.45 },
 ];
 const initials = (name) => { const w = name.trim().split(/\s+/); return (w[0][0] + (w.length > 1 ? w[w.length - 1][0] : '')).toUpperCase(); };
 const peopleGrid = $('#dh-people-grid');
@@ -311,7 +311,6 @@ peopleGrid.innerHTML = people.map((p) => `<li class="cp-card dh-person">
     <div class="dh-person-info">
       <h3 class="dh-person-name">${escapeHtml(p.name)}</h3>
       <p class="dh-person-role">${escapeHtml(p.role)}</p>
-      <blockquote class="dh-person-quote"><p>${escapeHtml(p.quote).replace(/\n/g, '<br>')}</p></blockquote>
     </div>
   </li>`).join('');
 peopleGrid.querySelectorAll('.dh-person-avatar img').forEach((img) => img.addEventListener('error', () => {
