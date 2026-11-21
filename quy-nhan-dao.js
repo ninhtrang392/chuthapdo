@@ -143,18 +143,17 @@ if (liveList) {
   setInterval(refreshTimes, 30000);
 }
 
-// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: chỉ hiển thị thẻ VietQR + thông tin chuyển khoản (ngân hàng MB · STK 1999 · QUỸ NHÂN ĐẠO VIỆT NAM; số tiền nhập trên ứng dụng ngân hàng) ====================
+// ==================== SECTION: CÙNG QUỸ VUN ĐẮP — khung ủng hộ: thẻ VietQR + thông tin chuyển khoản; 2 logo ngân hàng góc phải trên (Vietcombank · MB) — bấm logo đổi tài khoản + nền khung (số tiền nhập trên ứng dụng ngân hàng) ====================
 // Tài khoản nhận ủng hộ của Quỹ (mã QR vẫn là hình minh họa — khi triển khai lấy VietQR do ngân hàng cung cấp)
 const QF_BANKS = {
-  MB: 'Ngân hàng TMCP Quân đội (MB)',
+  VCB: { name: 'Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)', account: '1066202555', holder: 'QUY HOAT DONG CHU THAP DO' },
+  MB: { name: 'Ngân hàng TMCP Quân đội (MB)', account: '1999', holder: 'QUY HOAT DONG CHU THAP DO' },
 };
-const QF_ACCOUNT = '1999'; // số tài khoản
-const QF_HOLDER = 'QUỸ NHÂN ĐẠO VIỆT NAM'; // tên chủ tài khoản
 const seededRandom = (text) => {
   let seed = [...text].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 233280, 7);
   return () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
 };
-const bankShort = (bank) => QF_BANKS[bank].match(/\((.+)\)/)[1];
+const bankShort = (bank) => QF_BANKS[bank].name.match(/\((.+)\)/)[1];
 // Hình mã QR minh họa: lưới 25 × 25 ô, 3 ô định vị ở góc, phần còn lại sinh cố định theo nội dung
 const qrSvg = (text) => {
   const n = 25;
@@ -192,18 +191,60 @@ const copyText = async (text) => {
 };
 const qf = { memo: qfMemo(), amount: 0 }; // amount = 0 → QR không kèm số tiền, người ủng hộ nhập trên ứng dụng ngân hàng
 const qrBox = $('#qf-qr');
-const QF_BANK = 'MB'; // ngân hàng thụ hưởng hiển thị trên thẻ QR (khóa trong QF_BANKS)
-// Vẽ QR + thông tin chuyển khoản theo ngân hàng QF_BANK và mã ủng hộ
+// Ngân hàng đang chọn: nút logo có aria-pressed="true" trong HTML (trang không có nút chọn ngân hàng → MB)
+const bankBtns = $$('[data-qf-bank]');
+qf.bank = bankBtns.find((btn) => btn.getAttribute('aria-pressed') === 'true')?.dataset.qfBank || 'MB';
+// Vẽ QR + thông tin chuyển khoản theo ngân hàng đang chọn và mã ủng hộ; nền khung đổi theo ngân hàng (lớp .is-bank-<mã> trên .qf-donate)
 const renderQr = () => {
-  const bank = QF_BANK;
-  const account = QF_ACCOUNT;
+  const { bank } = qf;
+  const { account, holder } = QF_BANKS[bank];
   $('#qf-qr-account').textContent = account;
-  $('#qf-qr-holder').textContent = QF_HOLDER;
+  $('#qf-qr-holder').textContent = holder;
   $('#qf-qr-bank-short').textContent = bankShort(bank);
   $('#qf-qr-bank-name').textContent = bankShort(bank);
   $('#qf-qr-image').innerHTML = qrSvg(`${bank}|${account}|${qf.amount}|${qf.memo}`);
+  Object.keys(QF_BANKS).forEach((key) => qrBox.classList.toggle(`is-bank-${key.toLowerCase()}`, key === bank));
+  bankBtns.forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.qfBank === bank)));
+  // Nút dropdown hiện logo ngân hàng đang chọn
+  const current = $('[data-qf-bank-current]');
+  const picked = bankBtns.find((btn) => btn.dataset.qfBank === bank);
+  if (current && picked) {
+    current.src = $('img', picked).src;
+    current.alt = bankShort(bank);
+  }
 };
 renderQr();
+// ---------- Chọn ngân hàng (dropdown): bấm nút → xổ danh sách · chọn 1 ngân hàng → hiện tài khoản ngân hàng đó, đóng danh sách · bấm ra ngoài / Esc → đóng ----------
+const bankToggle = $('.qf-bank-toggle');
+const bankMenu = $('#qf-bank-menu');
+const setBankMenu = (open) => {
+  if (!bankToggle || !bankMenu) return;
+  bankMenu.hidden = !open;
+  bankToggle.setAttribute('aria-expanded', String(open));
+};
+bankToggle?.addEventListener('click', () => {
+  setBankMenu(bankMenu.hidden);
+  if (!bankMenu.hidden) ($('[aria-pressed="true"]', bankMenu) || bankBtns[0]).focus();
+});
+bankBtns.forEach((btn) => btn.addEventListener('click', () => {
+  setBankMenu(false);
+  bankToggle?.focus();
+  if (qf.bank === btn.dataset.qfBank) return;
+  qf.bank = btn.dataset.qfBank;
+  renderQr();
+}));
+document.addEventListener('click', (event) => {
+  if (bankMenu && !bankMenu.hidden && !event.target.closest('.qf-bank-select')) setBankMenu(false);
+});
+document.addEventListener('keydown', (event) => {
+  if (!bankMenu || bankMenu.hidden) return;
+  if (event.key === 'Escape') { setBankMenu(false); bankToggle.focus(); return; }
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { // mũi tên lên/xuống: chuyển giữa các ngân hàng trong danh sách
+    event.preventDefault();
+    const i = bankBtns.indexOf(document.activeElement);
+    bankBtns[(i + (event.key === 'ArrowDown' ? 1 : -1) + bankBtns.length) % bankBtns.length].focus();
+  }
+});
 // Tải mã QR · sao chép thông tin chuyển khoản
 qrBox.addEventListener('click', async (event) => {
   if (event.target.closest('[data-qr-download]')) {

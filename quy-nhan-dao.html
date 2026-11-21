@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261121-1" />
-    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261121-1" />
+    <link rel="stylesheet" href="styles.css?v=20261121-25" />
+    <link rel="stylesheet" href="css/quy-nhan-dao.css?v=20261121-5" />
     <!-- Có chuyển động → ẩn hero tới khi GSAP dựng xong (quy-nhan-dao.js gỡ lớp; quá 4 giây chưa gỡ thì tự gỡ) -->
     <script>
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -75,9 +75,9 @@
       <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
       <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
         <a href="ban-do-so.html">Bản đồ số</a>
-        <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+        <!-- ---------- Trợ giúp: chữ "Trợ giúp" trên ảnh bắt tay đỏ (.nav-help-heart, máy tính) + mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
         <div class="nav-more">
-            <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+            <button class="nav-more-toggle nav-help-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu"><span class="nav-help-heart">Trợ giúp</span><svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
             <div class="nav-more-menu" id="nav-help-menu" hidden>
                 <a href="ho-so.html#nguoi-yeu-the/them-moi">Đăng ký nhận trợ giúp</a>
                 <a href="ho-so.html#gia-nhap-doi/them-moi">Đăng ký tình nguyện viên</a>
@@ -88,7 +88,7 @@
         <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
         <a href="nguoi-gan-nhat.html">Người gần nhất</a>
         <a href="don-vi-dong-hanh.html">Đồng hành</a>
-        <a href="quy-nhan-dao.html" aria-current="page">Quỹ Nhân đạo</a>
+        <a href="quy-nhan-dao.html" aria-current="page">Quỹ Nhân đạo Việt Nam</a>
         <a href="giai-thuong.html">Giải thưởng</a>
         <a href="#" data-panel="Hỏi đáp">Hỏi Đáp</a>
         <!-- ---------- Khác: nút có mũi tên xổ danh mục trang con (account-menu.js › HEADER: menu Khác) ---------- -->
@@ -97,6 +97,7 @@
             <div class="nav-more-menu" id="nav-more-menu" hidden>
                 <a href="tin-tuc.html">Tin tức</a>
                 <a href="index.html#cong-khai">Công khai – Minh bạch</a>
+                <a href="tet-nhan-ai.html">Tết Nhân ái</a>
             </div>
         </div>
         <a class="button button-primary nav-cta" href="chuong-trinh-thien-nguyen.html"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
@@ -181,14 +182,23 @@
           <div class="qf-give-board">
           <!-- ---------- Khung chuyển khoản ủng hộ Quỹ (trái; .pv-donate dùng chung) ---------- -->
           <div class="pv-donate qf-donate" id="qf-qr">
-            <!-- ---------- Tiêu đề (icon lá) · thẻ VietQR · thông tin chuyển khoản · lưu ý (ngân hàng thụ hưởng cố định: QF_BANK trong quy-nhan-dao.js) ---------- -->
+            <!-- ---------- Tiêu đề (icon lá) · chọn ngân hàng · thẻ VietQR · thông tin chuyển khoản · lưu ý (tài khoản từng ngân hàng: QF_BANKS trong quy-nhan-dao.js) ---------- -->
             <div class="pv-donate-pay">
-              <!-- Tiêu đề: icon lá hy vọng · Ủng hộ Quỹ Nhân đạo Việt Nam · dòng phụ (chữ trắng trên nền ảnh xanh) -->
+              <!-- Tiêu đề: icon lá hy vọng · Ủng hộ Quỹ Nhân đạo Việt Nam · dòng phụ (chữ trắng trên nền ảnh) -->
               <header class="pv-donate-head qf-donate-head">
                 <span class="pv-donate-icon qf-donate-leaf" aria-hidden="true"><img src="Emages/L%C3%A1%20hy%20v%E1%BB%8Dng.png" alt="" width="28" height="28" /></span>
                 <div>
                   <h3 class="pv-donate-title">Ủng hộ Quỹ Nhân đạo Việt Nam</h3>
                   <p class="pv-donate-sub">Chung tay vì cộng đồng, lan tỏa yêu thương</p>
+                </div>
+                <!-- ---------- Chọn ngân hàng (góc phải trên): dropdown — nút hiện logo ngân hàng đang chọn + mũi tên; danh sách xổ xuống: logo (tên ngân hàng chỉ cho trình đọc màn hình) · dấu tích mục đang chọn.
+                     Chọn ngân hàng → đổi tài khoản + nền khung (Vietcombank: nền xanh lá hy vọng · MB: nền ngân hàng số xanh dương) — quy-nhan-dao.js › CÙNG QUỸ VUN ĐẮP ---------- -->
+                <div class="qf-bank-select">
+                  <button class="qf-bank-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="qf-bank-menu" aria-label="Chọn ngân hàng nhận ủng hộ"><img data-qf-bank-current src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Icon-Vietcombank.webp" alt="Vietcombank" width="365" height="124" /><svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+                  <ul class="qf-bank-menu" id="qf-bank-menu" hidden>
+                    <li><button class="qf-bank-option" type="button" data-qf-bank="VCB" aria-pressed="true"><span class="qf-bank-logo"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Icon-Vietcombank.webp" alt="" width="365" height="124" /></span><span class="visually-hidden">Vietcombank</span><svg class="icon" aria-hidden="true"><use href="#check"/></svg></button></li>
+                    <li><button class="qf-bank-option" type="button" data-qf-bank="MB" aria-pressed="false"><span class="qf-bank-logo"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Logo-MB-Bank-MBB.webp" alt="" width="1200" height="540" /></span><span class="visually-hidden">MB</span><svg class="icon" aria-hidden="true"><use href="#check"/></svg></button></li>
+                  </ul>
                 </div>
               </header>
               <!-- Mã VietQR · nút tải mã QR -->
@@ -713,6 +723,6 @@
     <script src="flow.js?v=20261102-1" defer></script>
     <script src="account-menu.js?v=20261120-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="quy-nhan-dao.js?v=20261119-11" defer></script>
+    <script src="quy-nhan-dao.js?v=20261121-2" defer></script>
   </body>
 </html>

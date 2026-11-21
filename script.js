@@ -142,6 +142,53 @@ if (liveList) {
   setInterval(refreshTimes, 30000);
 }
 
+// ---------- Nút "N chương trình đang diễn ra": nút nổi bật đầu section Tiền ủng hộ trực tiếp + nút nổi ghim góc trái dưới màn hình (.is-float, luôn hiện) ----------
+// N đếm từ PROGRAMS (chuong-trinh-data.js — nạp sau file này nên chờ DOMContentLoaded): bỏ chương trình Sắp diễn ra (startIn > 0) và Đã kết thúc (days ≤ 0).
+// GSAP (không giảm chuyển động): nút trong section bật nhẹ + số đếm từ 0 khi cuộn tới (1 lần) · nút nổi trượt lên từ đáy màn hình + đếm số khi vào trang
+// → sau đó vệt sáng lướt qua mỗi ~4 giây · rê chuột: mũi tên nhích qua lại (nút nổi: nền xanh, không có mũi tên). Bấm → cuộn tới #chuong-trinh (FLOW: link neo / cuộn gốc).
+document.addEventListener('DOMContentLoaded', () => {
+  const links = [...document.querySelectorAll('.live-programs:not([hidden])')]; // bỏ qua nút đang ẩn
+  if (!links.length) return;
+  const total = typeof PROGRAMS !== 'undefined' ? PROGRAMS.filter((p) => !(p.startIn > 0) && p.days > 0).length : null;
+  if (total !== null) links.forEach((link) => { link.querySelector('[data-live-programs]').textContent = String(total); });
+  links.forEach((link) => {
+    const count = link.querySelector('[data-live-programs]').textContent;
+    if (link.classList.contains('is-float')) link.setAttribute('aria-label', `${count} chương trình đang diễn ra — xem các chương trình đang cần chung tay`);
+  });
+  if (!window.gsap || !window.ScrollTrigger) return;
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const cleanups = links.map((link) => {
+      const num = link.querySelector('[data-live-programs]');
+      const value = Number(num.textContent);
+      const counter = { value: 0 };
+      const isFloat = link.classList.contains('is-float');
+      const arrow = link.querySelector('.live-programs-arrow');
+      const arrowIcon = arrow?.querySelector('.icon'); // nút nổi không có vòng mũi tên
+      const shine = gsap.fromTo(link.querySelector('.live-programs-shine'), { xPercent: -120 }, { xPercent: 320, duration: 1.2, ease: 'power2.inOut', repeat: -1, repeatDelay: 2.8, paused: true });
+      num.textContent = '0';
+      const tl = gsap.timeline({
+        ...(isFloat ? { delay: 1.2 } : { scrollTrigger: { trigger: link, start: 'top 90%', once: true } }),
+        onComplete: () => shine.play(),
+      });
+      if (isFloat) tl.from(link, { y: 80, autoAlpha: 0, duration: 0.9, ease: 'expo.out', clearProps: 'transform,opacity,visibility' });
+      else tl.from(link, { scale: 0.9, duration: 0.8, ease: 'back.out(1.8)', clearProps: 'transform' });
+      tl.to(counter, { value, duration: 1.4, ease: 'power2.out', onUpdate: () => { num.textContent = String(Math.round(counter.value)); } }, '<0.1');
+      if (arrow) tl.from(arrow, { x: -16, autoAlpha: 0, duration: 0.6, ease: 'power3.out', clearProps: 'all' }, '<0.2');
+      const nudge = arrowIcon && gsap.to(arrowIcon, { x: 4, duration: 0.45, ease: 'sine.inOut', repeat: -1, yoyo: true, paused: true });
+      const enter = () => nudge?.play();
+      const leave = () => { if (!nudge) return; nudge.pause(); gsap.to(arrowIcon, { x: 0, duration: 0.3, ease: 'power2.out' }); };
+      link.addEventListener('mouseenter', enter);
+      link.addEventListener('mouseleave', leave);
+      return () => {
+        link.removeEventListener('mouseenter', enter);
+        link.removeEventListener('mouseleave', leave);
+        num.textContent = String(value);
+      };
+    });
+    return () => cleanups.forEach((fn) => fn());
+  });
+});
+
 // ==================== SECTION 04: TOP GÂY QUỸ — tab Tổ chức / Cá nhân, kỳ xếp hạng, bảng top 10 ====================
 // ---------- Dữ liệu: DỮ LIỆU MINH HỌA ----------
 // Khi triển khai lấy từ API xếp hạng (chỉ số tiền đã xác nhận, người gây quỹ đồng ý công khai).
@@ -651,41 +698,66 @@ if (foundersTrack) {
   }
 }
 
-// ==================== SECTION: TÌNH NGUYỆN VIÊN — dải slide tự chuyển (như Đơn vị đồng hành) ====================
-// Không ghim / không cuộn ngang theo cuộn dọc: mỗi 6 giây trượt sang thẻ kế (hết thì quay về đầu), dừng khi rê chuột / focus bàn phím.
-// Điểm dừng = mép trái từng thẻ (gộp các thẻ cuối cùng chạm mép phải dải thành 1 điểm) → chấm dựng theo số điểm dừng, dựng lại khi đổi cỡ màn.
-// Vuốt tay vẫn được (scroll-snap); giảm chuyển động: không tự chuyển.
+// ==================== SECTION: TÌNH NGUYỆN VIÊN — dải thẻ tự chạy ngang liên tục (lặp vô tận) ====================
+// Dải trôi đều sang trái (~40px/giây); hết bộ thẻ gốc thì nối tiếp bằng bộ bản sao (aria-hidden) nên chạy vòng không bị giật.
+// Dừng khi: dải chưa vào màn / đang ẩn tab / rê chuột / focus bàn phím / chưa hiện xong (data-reveal). Vuốt tay, lăn chuột ngang, bấm chấm → nghỉ 4 giây rồi chạy tiếp từ chỗ đang đứng.
+// Chấm chỉ slide: dựng theo điểm dừng của bộ thẻ gốc (dùng lại .founders-dot), tô chấm theo vị trí đang chạy. Giảm chuyển động: không tự chạy, không tạo bản sao (vuốt tay + scroll-snap như cũ).
 const volunteerViewport = document.querySelector('#volunteer-viewport');
 if (volunteerViewport) {
   const section = volunteerViewport.closest('.chapter');
   const track = volunteerViewport.querySelector('.chapter-track');
   const dotsBox = section.querySelector('[data-volunteer-dots]');
-  const slideNames = [...track.children].map((slide) => slide.querySelector('h3').textContent.trim());
+  const originals = [...track.children];
+  const slideNames = originals.map((slide) => slide.querySelector('h3').textContent.trim());
+  const SPEED = 40; // px mỗi giây
+  const HOLD_MS = 4000; // nghỉ sau khi người dùng tự cuộn / bấm chấm
+  const auto = !reduceMotion;
+  // ---------- Bản sao nối đuôi để chạy vòng: ẩn với trình đọc màn hình, không nhận Tab, bỏ số đếm ----------
+  if (auto) {
+    originals.forEach((slide) => {
+      const copy = slide.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.classList.add('is-clone');
+      copy.querySelectorAll('a, button').forEach((el) => el.setAttribute('tabindex', '-1'));
+      copy.querySelectorAll('[data-count-to]').forEach((el) => el.removeAttribute('data-count-to'));
+      copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+      track.append(copy);
+    });
+  }
+  // Độ dài 1 vòng = khoảng cách từ thẻ gốc đầu tiên tới bản sao đầu tiên
+  const loopWidth = () => (auto ? track.children[originals.length].offsetLeft - originals[0].offsetLeft : 0);
   let stops = [];
   let dots = [];
-  // ---------- Điểm dừng: vị trí cuộn để thẻ nằm sát mép trái dải (trừ đệm --edge), không vượt quá cuộn tối đa ----------
+  // ---------- Điểm dừng: vị trí cuộn để thẻ gốc nằm sát mép trái dải (trừ đệm --edge) ----------
   const measureStops = () => {
-    const max = volunteerViewport.scrollWidth - volunteerViewport.clientWidth;
+    const max = auto ? loopWidth() : volunteerViewport.scrollWidth - volunteerViewport.clientWidth;
     const padLeft = parseFloat(getComputedStyle(track).paddingLeft) || 0;
     const result = [];
-    [...track.children].forEach((slide, i) => {
+    originals.forEach((slide, i) => {
       const left = Math.round(Math.min(max, Math.max(0, slide.offsetLeft - track.offsetLeft - padLeft)));
       if (!result.length || left - result[result.length - 1].left > 4) result.push({ left, index: i });
     });
     return result;
   };
   const currentStop = () => {
-    const x = volunteerViewport.scrollLeft;
-    return stops.reduce((best, stop, i) => (Math.abs(stop.left - x) < Math.abs(stops[best].left - x) ? i : best), 0);
+    const loop = loopWidth();
+    const x = loop ? volunteerViewport.scrollLeft % loop : volunteerViewport.scrollLeft;
+    let best = 0;
+    stops.forEach((stop, i) => { if (stop.left <= x + 8) best = i; });
+    return best;
   };
   const markDot = () => {
     const index = currentStop();
     dots.forEach((dot, i) => (i === index ? dot.setAttribute('aria-current', 'true') : dot.removeAttribute('aria-current')));
   };
+  // ---------- Tạm nghỉ khi người dùng tự điều khiển; trong lúc nghỉ bật lại scroll-snap cho vuốt tay ----------
+  let holdUntil = 0;
+  const hold = () => { holdUntil = performance.now() + HOLD_MS; volunteerViewport.classList.remove('is-auto'); };
   const goToStop = (index) => {
+    hold();
     volunteerViewport.scrollTo({ left: stops[index].left, behavior: reduceMotion ? 'auto' : 'smooth' });
   };
-  // ---------- Chấm chỉ slide (dùng lại .founders-dot): chấm dài = slide đang xem, bấm để chuyển ----------
+  // ---------- Chấm chỉ slide (dùng lại .founders-dot): chấm dài = thẻ đang xem, bấm để chuyển ----------
   const buildDots = () => {
     stops = measureStops();
     dotsBox.replaceChildren();
@@ -705,23 +777,33 @@ if (volunteerViewport) {
   window.addEventListener('load', buildDots, { once: true }); // ảnh lazy tải xong → đo lại bề rộng thẻ
   let resizeTimer;
   window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(buildDots, 200); });
-  // ---------- Tự chuyển: đếm 6 giây kể từ lúc thẻ đang xem hiện hẳn trong màn (không theo nhịp cố định từ lúc tải trang) ----------
-  // Dải chưa vào màn / đang mờ (hiệu ứng mở đầu desktop) / rê chuột / focus / vừa vuốt tay → đếm lại từ đầu,
-  // nên khi cuộn tới luôn thấy thẻ đầu (Trao đi thời gian) đủ 6 giây rồi mới sang thẻ kế.
-  const AUTOPLAY_MS = 6000;
-  let shownSince = performance.now();
-  let inView = false;
-  const resetTimer = () => { shownSince = performance.now(); };
-  volunteerViewport.addEventListener('scroll', () => { markDot(); resetTimer(); }, { passive: true });
-  if (!reduceMotion) {
-    new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; resetTimer(); }, { threshold: 0.6 }).observe(volunteerViewport);
-    setInterval(() => {
-      const paused = !inView || document.hidden || stops.length < 2
+  volunteerViewport.addEventListener('scroll', markDot, { passive: true });
+  // ---------- Chạy liên tục bằng requestAnimationFrame (giữ vị trí số thực để chạy mượt ở tốc độ thấp) ----------
+  if (auto) {
+    let inView = false;
+    new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; }, { threshold: 0.3 }).observe(volunteerViewport);
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((type) => volunteerViewport.addEventListener(type, hold, { passive: true }));
+    let pos = 0;
+    let last = performance.now();
+    let running = false;
+    const tick = (now) => {
+      const dt = Math.min(64, now - last) / 1000;
+      last = now;
+      const paused = !inView || document.hidden || now < holdUntil
         || volunteerViewport.matches(':hover') || dotsBox.matches(':hover') || section.querySelector(':focus-visible')
-        || Number(getComputedStyle(track).opacity) < 1; // desktop: dải chưa trượt vào hẳn (hiệu ứng mở đầu)
-      if (paused) { resetTimer(); return; }
-      if (performance.now() - shownSince >= AUTOPLAY_MS) goToStop((currentStop() + 1) % stops.length);
-    }, 250);
+        || Number(getComputedStyle(volunteerViewport).opacity) < 1; // chưa hiện xong (data-reveal)
+      if (paused) {
+        running = false;
+      } else {
+        if (!running) { pos = volunteerViewport.scrollLeft; running = true; volunteerViewport.classList.add('is-auto'); } // chạy tiếp từ chỗ đang đứng
+        const loop = loopWidth();
+        pos += SPEED * dt;
+        if (loop && pos >= loop) pos -= loop; // tới đầu bộ bản sao → nhảy về thẻ gốc tương ứng (trông y hệt)
+        volunteerViewport.scrollLeft = pos;
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 }
 
@@ -885,31 +967,8 @@ if (window.gsap && window.ScrollTrigger) {
     });
   });
 
-  // ==================== SECTION: CHƯƠNG — Tình nguyện viên (câu dẫn · số đếm; dải slide ở SECTION: TÌNH NGUYỆN VIÊN) · Giải thưởng (5 hạng mục) ====================
-  // Tách câu dẫn chuyện thành từng chữ (.chapter-word), giữ nguyên thẻ <em> từ khóa; chỉ tách khi có chuyển động
-  const splitStoryWords = (element) => {
-    if (element.dataset.split) return [...element.querySelectorAll('.chapter-word')];
-    const wrap = (node) => {
-      [...node.childNodes].forEach((child) => {
-        if (child.nodeType === Node.ELEMENT_NODE) { wrap(child); return; }
-        if (child.nodeType !== Node.TEXT_NODE || !child.textContent.trim()) return;
-        const fragment = document.createDocumentFragment();
-        child.textContent.split(/(\s+)/).forEach((part) => {
-          if (!part) return;
-          if (/^\s+$/.test(part)) { fragment.append(part); return; }
-          const word = document.createElement('span');
-          word.className = 'chapter-word';
-          word.textContent = part;
-          fragment.append(word);
-        });
-        child.replaceWith(fragment);
-      });
-    };
-    wrap(element);
-    element.dataset.split = 'true';
-    return [...element.querySelectorAll('.chapter-word')];
-  };
-
+  // ==================== SECTION: CHƯƠNG — Tình nguyện viên: không ghim, không hiệu ứng chữ (bỏ màn chuyển cảnh câu dẫn → đầu section) ====================
+  // Câu dẫn · đầu section · dải slide chỉ hiện dần 1 lần khi cuộn tới (data-reveal — SECTION: HIỆN KHI CUỘN TỚI bên dưới); ảnh tải lười (loading=lazy)
   // Đếm số lên tới data-count-to (chạy 1 lần)
   const countUp = (stat) => {
     if (stat.dataset.counted) return;
@@ -920,81 +979,6 @@ if (window.gsap && window.ScrollTrigger) {
       onUpdate: () => { stat.textContent = Math.round(counter.value).toLocaleString('vi-VN'); },
     });
   };
-  // Tách hết các câu dẫn trong 1 khối .chapter-story thành từng chữ
-  const storyWords = (story) => (story ? [...story.querySelectorAll('.chapter-story-text')].flatMap(splitStoryWords) : []);
-  // Câu dẫn hiện hết 1 lần: cuộn tới là các chữ mờ → sáng lần lượt từng chữ trong ~1.8s (chạy theo thời gian, không theo nhịp cuộn)
-  const revealStoryOnce = (story, words) => {
-    gsap.set(words, { opacity: 0.12 });
-    ScrollTrigger.create({
-      trigger: story, start: 'top 80%', once: true,
-      onEnter: () => gsap.to(words, { opacity: 1, duration: 0.6, ease: 'power1.out', stagger: { amount: 1.2 } }),
-    });
-  };
-  // Câu dẫn chương: khối .chapter-story--instant hiện hết chữ ngay khi cuộn tới, giữ ~nửa màn cuộn để đọc rồi trôi lên mờ đi.
-  // Trả về vị trí (px cuộn) khi câu đã mờ hết.
-  const addStoryRead = (tl, section, vh) => {
-    const story = section.querySelector('.chapter-story');
-    const words = storyWords(story);
-    if (!words.length) return 0;
-    if (story.classList.contains('chapter-story--instant')) {
-      revealStoryOnce(story, words);
-      tl.to(story, { autoAlpha: 0, y: -vh * 0.12, duration: vh * 0.3, ease: 'power2.in' }, vh * 0.5);
-      return vh * 0.8;
-    }
-    tl.fromTo(words, { opacity: 0.12 }, { opacity: 1, duration: vh / words.length, stagger: vh / words.length, immediateRender: true }, 0)
-      .to(story, { autoAlpha: 0, y: -vh * 0.12, duration: vh * 0.3, ease: 'power2.in' }, vh);
-    return vh * 1.3;
-  };
-  // Mỗi chương / Giải thưởng: timeline tính theo px cuộn, ghim suốt timeline (end = tổng thời lượng).
-  // Tạo theo đúng thứ tự trên trang (I → III) + refreshPriority 1 để quãng ghim chương trên được tính trước chương dưới.
-  mm.add('(min-width: 1101px) and (prefers-reduced-motion: no-preference)', () => {
-    const vh = window.innerHeight;
-    const chapters = gsap.utils.toArray('.chapter');
-    chapters.forEach((section) => section.classList.add('is-pinned'));
-    const panelHandlers = [];
-
-    // ---------- I · Tình nguyện viên — hiệu ứng mở đầu như cũ: ghim section, câu dẫn hiện → trôi lên mờ đi → đầu section hiện + dải thẻ trượt vào từ phải
-    // → nghỉ ngắn rồi nhả ghim. Không còn cuộn ngang theo cuộn dọc: sau đó dải là slide tự chuyển (SECTION: TÌNH NGUYỆN VIÊN) ----------
-    const setupGallery = (section) => {
-      const viewport = section.querySelector('.chapter-viewport');
-      const track = section.querySelector('.chapter-track');
-      const dots = section.querySelector('.chapter-dots');
-      viewport.scrollLeft = 0;
-      const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
-      const after = addStoryRead(tl, section, vh);
-      const enterAt = Math.max(0, after - vh * 0.1);
-      const head = section.querySelector('.chapter-head');
-      if (head) tl.fromTo(head, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: vh * 0.4, ease: 'power2.out', immediateRender: true }, enterAt);
-      tl.call(() => { viewport.scrollLeft = 0; }, null, enterAt) // dải luôn vào bằng thẻ đầu (Trao đi thời gian)
-        .fromTo(track, { x: viewport.clientWidth * 0.6, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: vh * 0.5, ease: 'power2.out', immediateRender: true }, enterAt);
-      if (dots) tl.fromTo(dots, { autoAlpha: 0 }, { autoAlpha: 1, duration: vh * 0.2, immediateRender: true }, enterAt + vh * 0.3);
-      tl.to({}, { duration: vh * 0.5 }); // dải đã vào hẳn → giữ thẻ đầu đứng yên thêm ~nửa màn cuộn rồi mới nhả ghim
-      const stat = section.querySelector('.chapter-stat [data-count-to]');
-      if (stat) { stat.textContent = '0'; tl.call(() => countUp(stat), null, after + vh * 0.3); }
-      ScrollTrigger.create({ trigger: section, start: 'top top', end: `+=${tl.duration()}`, pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, animation: tl });
-    };
-
-    // I (Tình nguyện viên). III (Giải thưởng) không còn ghim — thẻ ảnh dọc mở rộng, xem "GIẢI THƯỞNG: thẻ ảnh dọc" bên dưới
-    chapters.forEach((section) => { if (section.querySelector('.chapter-track')) setupGallery(section); });
-
-    return () => {
-      chapters.forEach((section) => section.classList.remove('is-pinned'));
-      panelHandlers.forEach((off) => off());
-    };
-  });
-
-  // ---------- Màn ≤1100px: câu dẫn sáng dần từng chữ khi cuộn qua (khối --instant: hiện hết 1 lần), không ghim ----------
-  mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
-    gsap.utils.toArray('.chapter .chapter-story').forEach((story) => {
-      if (story.classList.contains('chapter-story--instant')) { revealStoryOnce(story, storyWords(story)); return; }
-      story.querySelectorAll('.chapter-story-text').forEach((text) => {
-        gsap.fromTo(splitStoryWords(text), { opacity: 0.12 }, {
-          opacity: 1, ease: 'none', stagger: 0.1,
-          scrollTrigger: { trigger: text, start: 'top 85%', end: 'bottom 45%', scrub: true },
-        });
-      });
-    });
-  });
 
   // ---------- Màn ≤1100px: thẻ giải thưởng, các panel trồi lên (không ghim) ----------
   mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
@@ -1006,8 +990,8 @@ if (window.gsap && window.ScrollTrigger) {
     });
   });
 
-  // ---------- Màn ≤1100px: số tình nguyện viên đếm lên khi hiện ra (desktop: timeline chương gọi countUp) ----------
-  mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
+  // ---------- Số tình nguyện viên đếm lên khi hiện ra (mọi cỡ màn) ----------
+  mm.add('(prefers-reduced-motion: no-preference)', () => {
     const stat = document.querySelector('.chapter-stat [data-count-to]');
     if (!stat) return;
     stat.textContent = '0';

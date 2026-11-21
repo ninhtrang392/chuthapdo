@@ -149,6 +149,25 @@
 /* ---------- Nền cột QR: ảnh "hy vọng xanh" (thay nền đỏ), lớp phủ nhẹ giữ ảnh sáng, tươi; khung thông tin chuyển khoản kính trắng mờ, chữ tối ---------- */
 .qf-donate .pv-donate-pay{background:linear-gradient(180deg,rgba(255,255,255,.1) 0%,rgba(20,60,30,.12) 50%,rgba(20,60,30,.22) 100%),url("../Emages/background_hy_vong_xanh_sach.png") center 65% / cover no-repeat}
 .qf-donate .pv-qr-transfer{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.72)}
+/* ---------- Nền theo ngân hàng (quy-nhan-dao.js gắn .is-bank-vcb / .is-bank-mb): Vietcombank giữ nền xanh lá ở trên · MB: ảnh "Ngân hàng số tương lai trên quỹ đạo ánh sáng", bóng chữ xanh dương ---------- */
+.qf-donate.is-bank-mb .pv-donate-pay{background:linear-gradient(180deg,rgba(10,30,90,.08) 0%,rgba(10,30,90,.14) 50%,rgba(10,30,90,.26) 100%),url("../Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Ng%C3%A2n%20h%C3%A0ng%20s%E1%BB%91%20t%C6%B0%C6%A1ng%20lai%20tr%C3%AAn%20qu%E1%BB%B9%20%C4%91%E1%BA%A1o%20%C3%A1nh%20s%C3%A1ng.png") center / cover no-repeat}
+.qf-donate.is-bank-mb .qf-donate-head :is(.pv-donate-title,.pv-donate-sub),.qf-donate.is-bank-mb .pv-qr-warn{text-shadow:0 1px 4px rgba(10,30,90,.6)}
+/* ---------- Chọn ngân hàng: dropdown góc phải trên tiêu đề — nút trắng (logo đang chọn + mũi tên) · danh sách xổ xuống cùng kiểu menu Khác của header (.nav-more-menu, styles.css) ---------- */
+.qf-donate-head{flex-wrap:wrap}
+.qf-bank-select{position:relative;z-index:5;margin-left:auto}
+.qf-bank-toggle{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 12px 0 16px;border:0;border-radius:12px;background:#fff;color:var(--color-text);cursor:pointer;box-shadow:0 4px 12px rgba(10,30,40,.24)}
+.qf-bank-toggle img{width:auto;height:24px;object-fit:contain}
+.qf-bank-toggle .icon{width:16px;height:16px;transition:transform .25s}
+.qf-bank-toggle[aria-expanded="true"] .icon{transform:rotate(180deg)}
+.qf-bank-toggle:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.qf-bank-menu{position:absolute;top:calc(100% + 8px);right:0;display:flex;flex-direction:column;gap:4px;width:max-content;min-width:100%;margin:0;padding:8px;border:1px solid var(--color-border);border-radius:16px;background:#fff;box-shadow:0 18px 40px rgba(20,30,50,.16);list-style:none;transform-origin:top right;animation:account-in .18s cubic-bezier(.22,1,.36,1)}
+.qf-bank-menu[hidden]{display:none}
+.qf-bank-option{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:48px;padding:8px 12px;border:0;border-radius:8px;background:none;font:inherit;font-size:14px;font-weight:500;line-height:20px;color:var(--color-text);text-align:left;cursor:pointer;transition:background .2s}
+.qf-bank-option:hover,.qf-bank-option:focus-visible{outline:none;background:var(--color-surface-alt)}
+.qf-bank-logo{display:inline-flex;align-items:center;justify-content:center;flex:none;width:76px;height:28px}
+.qf-bank-logo img{max-width:100%;max-height:24px;width:auto;height:auto;object-fit:contain}
+.qf-bank-option .icon{width:18px;height:18px;color:var(--red);visibility:hidden}
+.qf-bank-option[aria-pressed="true"] .icon{visibility:visible}
 .qf-donate .pv-qr-transfer h3,.qf-donate .pv-qr-transfer dd b,.qf-donate .pv-qr-transfer dd button{color:var(--color-text)}
 .qf-donate .pv-qr-transfer h3{font-size:18px;line-height:26px} /* tiêu đề "Thông tin chuyển khoản" to hơn (bản chung 15px) */
 .qf-donate .pv-qr-brands span{padding-left:0;border-left:0} /* chỉ còn tên ngân hàng (bỏ logo napas 247) → bỏ vạch ngăn */
@@ -399,4 +418,9 @@
 @media(max-width:1439px){.qf-about-more .qf-faq-body p br{display:none}} /* cột hẹp: bỏ ngắt dòng cố định, chữ tự chảy */
 @media(min-width:1440px) and (max-width:1599px){.qf-field-body{left:20px;right:20px}.qf-field-body h3 + p{font-size:14px;line-height:22px}} /* thẻ hẹp (chữ ~398px): mô tả 14px để từng dòng cố định (dài nhất ≈ 394px) vẫn trọn 1 dòng */
 @media(max-width:1439px){.qf-field-body p br{display:none}} /* < 1440px: thẻ quá hẹp → bỏ ngắt dòng cố định trong mô tả thẻ lĩnh vực, chữ tự chảy */
-@media(max-width:767px){.qf-page .section-lead br{display:none}} /* điện thoại: bỏ ngắt dòng cố định trong các câu mô tả section */
+@media(max-width:767px){.qf-page .section-lead br{display:none}}
+
+/* ==================== SECTION: TRANG TẾT NHÂN ÁI (tet-nhan-ai.html — nhân bản trang Quỹ) ==================== */
+/* ---------- Hero: logo Tết Nhân ái thay tiêu đề chữ (ảnh 1754×1156 có viền trống ≈ 6% → lề âm để logo sát lề chữ bên dưới) ---------- */
+.tna-hero-logo{display:block;width:400px;max-width:100%;height:auto;margin:-24px 0 -24px -24px}
+@media (max-width:640px){.tna-hero-logo{width:280px;margin:-16px 0 -16px -16px}} /* điện thoại: bỏ ngắt dòng cố định trong các câu mô tả section */

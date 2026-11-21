@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/styles.css?v=20261120-4">
-  <link rel="stylesheet" href="css/site-chrome.css?v=20261119-2" />
+  <link rel="stylesheet" href="css/site-chrome.css?v=20261121-12" />
   <meta name="theme-color" content="#ed2429">
 
   <link
@@ -2568,13 +2568,8 @@
     }
 
     #gioi-thieu.overview {
-      /* Mép trên làm mờ từ trắng (nền hero) sang nền hồng trong 160px — chuyển section không bị cứng.
-         Mép dưới: ảnh sóng giữ nguyên vị trí (bóng phản chiếu của 3 card đổ lên sóng), làm mờ sang trắng
-         trong 168px với các điểm dừng giãn dần (ease-out) để sóng tan đều, không đọng thành dải hồng đục. */
-      background: linear-gradient(to bottom, #fff 0, rgba(255, 255, 255, 0) 160px),
-        linear-gradient(to top, #fff 0, rgba(255, 255, 255, .92) 24px, rgba(255, 255, 255, .7) 56px,
-          rgba(255, 255, 255, .42) 96px, rgba(255, 255, 255, .16) 136px, rgba(255, 255, 255, 0) 168px),
-        url('assets/don-vi/bg-song-do.png') center bottom / cover no-repeat, #fbefef !important;
+      /* Nền trắng (đã bỏ nền hồng + ảnh sóng đỏ assets/don-vi/bg-song-do.png theo yêu cầu) */
+      background: #fff !important;
       position: relative;
       isolation: isolate;
       overflow: hidden;
@@ -2641,7 +2636,7 @@
     }
 
     .overview-founders-stage .dh-founder.is-low {
-      margin-top: 64px;
+      margin-top: 48px;
     }
 
     .overview-founders-stage .dh-founder-card {
@@ -2649,7 +2644,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 380px;
+      min-height: 280px; /* thu ngắn thẻ (trước 380px) */
       padding: 26px 14px 0;
       overflow: hidden;
       border: 2px solid #fff !important;
@@ -2740,7 +2735,7 @@
       z-index: 1;
       display: block;
       width: calc(100% + 28px);
-      height: 190px;
+      height: 120px; /* thu ngắn thẻ (trước 190px) */
       margin: auto -14px 0;
       -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 35%);
       mask-image: linear-gradient(180deg, transparent 0, #000 35%);
@@ -2753,6 +2748,264 @@
       object-fit: cover;
       object-position: 50% 40%;
     }
+
+    /* ---------- Giới thiệu chương trình: cụm thẻ đơn vị đã chuyển sang SECTION: ĐƠN VỊ CHỦ TRÌ & ĐỒNG HÀNH → phần chữ 1 cột, căn giữa ---------- */
+    html body main#main .overview-grid.is-single {
+      grid-template-columns: minmax(0, 1fr) !important;
+      max-width: 1160px !important;
+      margin-inline: auto !important;
+    }
+
+    /* Tiêu đề section Giới thiệu căn giữa */
+    html body main#main#main #gioi-thieu .section-heading {
+      text-align: center;
+    }
+
+    /* ---------- Giới thiệu: 3 thẻ giá trị (Tầm nhìn · Lực lượng nòng cốt · Cùng chung tay) — thẻ kính trắng · icon tròn nền hồng · gạch đỏ ngắn ở đáy ---------- */
+    .ngn-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ngn-pillar {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 28px 24px 40px;
+      border: 1px solid #fff;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .72);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 32px rgba(150, 20, 30, .08);
+    }
+
+    .ngn-pillar::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      width: 56px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--red, #ed2429);
+      transform: translateX(-50%);
+    }
+
+    .ngn-pillar-icon {
+      display: grid;
+      flex: none;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #fde8ea;
+    }
+
+    .ngn-pillar-icon::before {
+      content: '';
+      width: 34px;
+      height: 34px;
+      background: var(--red, #ed2429);
+      -webkit-mask: var(--icon) center / contain no-repeat;
+      mask: var(--icon) center / contain no-repeat;
+    }
+
+    html body main#main .ngn-pillar-text h3 {
+      margin: 4px 0 6px;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 28px;
+      color: var(--ink);
+    }
+
+    html body main#main .ngn-pillar-text p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 22px;
+      color: var(--muted);
+    }
+
+    /* Trích dẫn: hẹp hơn hàng thẻ, căn giữa; dấu ngoặc kép lớn hồng bên trái; luôn 2 dòng như mẫu */
+    html body main#main#main .overview-quote-box.ngn-quote {
+      width: 100%;
+      max-width: 880px;
+      margin: 8px auto 0 !important;
+      padding: 28px 48px 28px 104px !important;
+    }
+
+    .ngn-quote .ngn-quote-mark {
+      position: absolute;
+      top: 14px;
+      left: 36px;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 80px;
+      font-weight: 700;
+      line-height: 1;
+      color: #f4a3a8;
+    }
+
+    .ngn-quote .br-quote {
+      display: inline;
+    }
+
+    html body main#main .ngn-quote p {
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .ngn-pillars {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      html body main#main#main .overview-quote-box.ngn-quote {
+        padding: 24px 20px 24px 64px !important;
+      }
+
+      .ngn-quote .ngn-quote-mark {
+        left: 16px;
+        font-size: 56px;
+      }
+
+      .ngn-quote .br-quote {
+        display: none;
+      }
+    }
+    /* ==================== SECTION: ĐƠN VỊ CHỦ TRÌ & ĐỒNG HÀNH ==================== */
+    /* Dùng lại bố cục Đối tác tài trợ trang Đơn vị đồng hành (css/styles.css: .dh-sponsors-head · .dh-tier-divider · .dh-sponsor-marquee · .dh-feat);
+       biến khoảng cách / đường kẻ vốn gắn ở .dh-page nên khai báo lại cho section này */
+    .ngn-partners {
+      --dh-space: 64px;
+      --dh-line: rgba(36, 39, 44, .12);
+      padding-bottom: var(--dh-space);
+    }
+
+    .ngn-partners .section-heading {
+      text-align: center;
+    }
+
+    .ngn-partners .section-heading span {
+      color: var(--red, #ed2429);
+    }
+
+    /* ---------- Hàng thẻ tĩnh (không chạy ngang): căn giữa, xuống dòng khi hẹp ---------- */
+    .ngn-partners .ngn-tier .partner-list {
+      display: flex !important; /* kể cả khi giảm chuyển động (css gốc đổi .partner-list sang lưới) */
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      gap: 20px;
+      padding: 12px 0 20px;
+    }
+
+    html body main#main .ngn-partners .dh-sponsors-head {
+      margin-bottom: 40px;
+    }
+
+    html body main#main .ngn-partners .sponsor-lead {
+      max-width: 720px;
+      margin-inline: auto;
+      text-wrap: balance;
+    }
+
+    /* Cấp 1 (chủ trì & khởi xướng): thẻ lớn hơn · cấp 2 (hỗ trợ): thẻ nhỏ hơn, bằng nhau */
+    .ngn-partners .ngn-tier.is-host .partner-logo {
+      width: 320px;
+      height: 220px;
+    }
+
+    .ngn-partners .ngn-tier:not(.is-host) .partner-logo {
+      width: 200px;
+      height: 170px;
+      padding: 16px 14px 20px !important;
+    }
+
+    .ngn-partners .ngn-tier:not(.is-host) .dh-feat-logo,
+    .ngn-partners .ngn-tier:not(.is-host) .dh-feat-logo img {
+      height: 52px;
+      margin-bottom: 8px;
+    }
+
+    .ngn-partners .ngn-tier:not(.is-host) .dh-feat-logo.is-wordmark {
+      font-size: 17px;
+      line-height: 21px;
+    }
+
+    .ngn-partners .ngn-tier:not(.is-host) .dh-feat strong {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .ngn-partners .ngn-tier:not(.is-host) .dh-feat small {
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .ngn-partners .dh-feat small {
+      text-wrap: balance;
+    }
+
+    /* Logo dạng chữ ngang rất đậm (VCCorp, Tuổi Trẻ): thu nhỏ trong ô logo để cân với logo Hội CTĐ */
+    .ngn-partners .dh-feat-logo.is-small {
+      display: grid;
+      place-items: center;
+    }
+
+    .ngn-partners .dh-feat-logo.is-small img {
+      width: auto;
+      max-width: 72%;
+      height: 52px;
+    }
+
+    /* Hội CTĐ: chỉ hiện huy hiệu tròn (Emages/logo-hctd-mark.svg) — to hơn logo chữ để cân thị giác với VCCorp, Tuổi Trẻ */
+    .ngn-partners .dh-feat-logo.is-small.is-mark img {
+      max-width: none;
+      height: 72px;
+    }
+
+    /* Logo ngang dài (CLB Niềm tin số): vừa bề ngang thẻ nhỏ, căn giữa ô logo */
+    .ngn-partners .dh-feat-logo.is-wide {
+      display: grid;
+      place-items: center;
+    }
+
+    .ngn-partners .ngn-tier:not(.is-host) .dh-feat-logo.is-wide img {
+      width: auto;
+      max-width: 100%;
+      height: 40px;
+      margin-bottom: 0;
+    }
+
+    /* Chưa có logo: tên đơn vị đặt ở ô logo, chữ đậm theo màu vạch đáy như một nhãn hiệu */
+    .ngn-partners .dh-feat-logo.is-wordmark {
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 24px;
+      color: var(--dh-bar, var(--red, #ed2429));
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    @media (max-width: 640px) {
+      .ngn-partners .ngn-tier:not(.is-host) .partner-logo {
+        width: calc(50% - 10px);
+      }
+
+      .ngn-partners .ngn-tier.is-host .partner-logo {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+    /* ==================== END SECTION: ĐƠN VỊ CHỦ TRÌ & ĐỒNG HÀNH ==================== */
 
     @media (max-width: 1024px) {
       .overview-grid {
@@ -4814,7 +5067,7 @@
     }
 
     html body main#main#main .dh-founder-photo {
-      margin-top: 48px !important
+      margin-top: 24px !important /* thẻ ngắn lại: ảnh sát phần chữ hơn (trước 48px) */
     }
 
     html body main#main#main .principle-top {
@@ -6077,9 +6330,9 @@
       aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
       <a href="ban-do-so.html">Bản đồ số</a>
-      <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+      <!-- ---------- Trợ giúp: chữ "Trợ giúp" trên ảnh bắt tay đỏ (.nav-help-heart, máy tính) + mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
       <div class="nav-more">
-          <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+          <button class="nav-more-toggle nav-help-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu"><span class="nav-help-heart">Trợ giúp</span><svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
           <div class="nav-more-menu" id="nav-help-menu" hidden>
               <a href="ho-so.html#nguoi-yeu-the/them-moi">Đăng ký nhận trợ giúp</a>
               <a href="ho-so.html#gia-nhap-doi/them-moi">Đăng ký tình nguyện viên</a>
@@ -6090,7 +6343,7 @@
       <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
       <a href="nguoi-gan-nhat.html" aria-current="page">Người gần nhất</a>
       <a href="don-vi-dong-hanh.html">Đồng hành</a>
-      <a href="quy-nhan-dao.html">Quỹ Nhân đạo</a>
+      <a href="quy-nhan-dao.html">Quỹ Nhân đạo Việt Nam</a>
       <a href="giai-thuong.html">Giải thưởng</a>
       <a href="#" data-panel="Hỏi đáp">Hỏi Đáp</a>
       <!-- ---------- Khác: nút có mũi tên xổ danh mục trang con (account-menu.js › HEADER: menu Khác) ---------- -->
@@ -6102,6 +6355,7 @@
         <div class="nav-more-menu" id="nav-more-menu" hidden>
           <a href="tin-tuc.html">Tin tức</a>
           <a href="index.html#cong-khai">Công khai – Minh bạch</a>
+          <a href="tet-nhan-ai.html">Tết Nhân ái</a>
           <a href="#" data-panel="Hướng dẫn quyên góp">Hướng dẫn quyên góp</a>
           <a href="#" data-panel="Câu hỏi thường gặp">Câu hỏi thường gặp</a>
           <a href="#lien-he">Liên hệ</a>
@@ -6165,7 +6419,7 @@
     </section>
 
     <section class="section overview" id="gioi-thieu">
-      <div class="wrap overview-grid">
+      <div class="wrap overview-grid is-single">
         <!-- Cột 1: Gom toàn bộ text thông tin -->
         <div class="overview-text-col">
           <div>
@@ -6185,67 +6439,79 @@
               kỹ&nbsp;năng sơ&nbsp;cấp&nbsp;cứu cho người&nbsp;trẻ Việt&nbsp;Nam. </p>
           </div>
 
-          <div class="overview-cards-row">
-            <div class="overview-card-box">
-              <div class="overview-card-head"><i class="overview-card-icon"
-                  style="--icon:url('Emages/icons/target.svg')" aria-hidden="true"></i><strong>Tầm nhìn</strong></div>
-              <p>Xây&nbsp;dựng cộng&nbsp;đồng nhân&nbsp;ái, đủ năng&nbsp;lực hành&nbsp;động vì sự an&nbsp;toàn của
-                mọi&nbsp;người xung&nbsp;quanh.</p>
-            </div>
+          <!-- ---------- 3 thẻ giá trị: icon tròn nền hồng · tiêu đề · mô tả · gạch đỏ ngắn ở đáy (thẻ kính trắng) ---------- -->
+          <ul class="ngn-pillars">
+            <li class="ngn-pillar">
+              <span class="ngn-pillar-icon" style="--icon:url('Emages/icons/people.svg')" aria-hidden="true"></span>
+              <div class="ngn-pillar-text">
+                <h3>Tầm nhìn</h3>
+                <p>Xây&nbsp;dựng cộng&nbsp;đồng nhân&nbsp;ái,<br />để không&nbsp;ai bị bỏ&nbsp;lại phía&nbsp;sau.</p>
+              </div>
+            </li>
+            <li class="ngn-pillar">
+              <span class="ngn-pillar-icon" style="--icon:url('Emages/icons/tree.svg')" aria-hidden="true"></span>
+              <div class="ngn-pillar-text">
+                <h3>Lực lượng nòng cốt</h3>
+                <p>Lấy người&nbsp;trẻ (học&nbsp;sinh, sinh&nbsp;viên) làm hạt&nbsp;nhân tiên&nbsp;phong lan&nbsp;tỏa đến toàn&nbsp;xã&nbsp;hội.</p>
+              </div>
+            </li>
+            <li class="ngn-pillar">
+              <span class="ngn-pillar-icon" style="--icon:url('Emages/icons/heart-handshake.svg')" aria-hidden="true"></span>
+              <div class="ngn-pillar-text">
+                <h3>Cùng chung tay</h3>
+                <p>Lan&nbsp;tỏa yêu&nbsp;thương,<br />kết&nbsp;nối cộng&nbsp;đồng nhân&nbsp;ái.</p>
+              </div>
+            </li>
+          </ul>
 
-            <div class="overview-card-box">
-              <div class="overview-card-head"><i class="overview-card-icon"
-                  style="--icon:url('Emages/icons/people.svg')" aria-hidden="true"></i><strong>Lực lượng nòng
-                  cốt</strong></div>
-              <p>Lấy người&nbsp;trẻ (học&nbsp;sinh, sinh&nbsp;viên) làm hạt&nbsp;nhân tiên&nbsp;phong lan&nbsp;tỏa đến
-                toàn&nbsp;xã&nbsp;hội.</p>
-            </div>
-          </div>
-
-          <figure class="overview-quote-box">
+          <!-- ---------- Trích dẫn: khung kính hồng nhạt · dấu ngoặc kép lớn bên trái · 2 dòng căn giữa ---------- -->
+          <figure class="overview-quote-box ngn-quote">
+            <span class="ngn-quote-mark" aria-hidden="true">“</span>
             <blockquote>
-              <p>“Biến lòng&nbsp;tốt thành năng&nbsp;lực hành&nbsp;động — để mỗi&nbsp;người<br class="br-quote">
-                đều&nbsp;có&nbsp;thể là <em>Người Gần Nhất</em>, là điểm&nbsp;tựa nhân&nbsp;ái của cộng&nbsp;đồng.”</p>
+              <p>“Biến lòng&nbsp;tốt thành năng&nbsp;lực hành&nbsp;động — để mỗi&nbsp;người<br class="br-quote">
+                đều&nbsp;có&nbsp;thể là <em>Người Gần Nhất</em>, là điểm&nbsp;tựa nhân&nbsp;ái của cộng&nbsp;đồng.”</p>
             </blockquote>
           </figure>
         </div>
+      </div>
+    </section>
 
-        <!-- Cột 2: Khung 3 thẻ đối tác sáng lập & chủ trì -->
-        <div class="overview-founders-stage">
-          <ul class="dh-founders is-compact" aria-label="Cơ quan chủ trì và đơn vị khởi xướng">
-            <!-- Card 1: Hội Chữ thập đỏ Việt Nam (Chủ trì) -->
-            <li class="dh-founder is-low">
-              <div class="dh-founder-card">
-                <span class="dh-founder-logo"><img class="logo-hctd" src="assets/logo-hctd.svg"
-                    alt="Hội Chữ thập đỏ Việt Nam"></span>
-                <p class="dh-founder-role">Hội Chữ thập đỏ<span class="dh-founder-sub">Cơ quan chủ trì</span></p>
-                <span class="dh-founder-photo"><img src="Emages/nguoi-gan-nhat/founder-hctd-4.webp" alt="" width="1672" height="941" loading="lazy"></span>
-              </div>
-            </li>
-
-            <!-- Card 2: Báo Tuổi Trẻ (Sáng lập) -->
-            <li class="dh-founder">
-              <div class="dh-founder-card">
-                <span class="dh-founder-logo"><img src="Emages/logo-tuoi-tre.webp" alt="Báo Tuổi Trẻ"></span>
-                <p class="dh-founder-role">Báo Tuổi Trẻ<span class="dh-founder-sub">Đơn vị khởi xướng</span></p>
-                <span class="dh-founder-photo"><img src="Emages/nguoi-gan-nhat/founder-tuoitre-fb.webp" alt=""
-                    loading="lazy"></span>
-              </div>
-            </li>
-
-            <!-- Card 3: VCCorp (Sáng lập) -->
-            <li class="dh-founder is-low">
-              <div class="dh-founder-card">
-                <span class="dh-founder-logo"><img src="Emages/logo-vccorp.svg" alt="VCCorp"></span>
-                <p class="dh-founder-role">Công ty CP VCCorp<span class="dh-founder-sub">Đơn vị khởi xướng</span></p>
-                <span class="dh-founder-photo"><img src="Emages/nguoi-gan-nhat/founder-vccorp.webp?v=2" alt=""
-                    loading="lazy"></span>
-              </div>
-            </li>
+    <!-- ==================== SECTION: ĐƠN VỊ CHỦ TRÌ & ĐỒNG HÀNH ==================== -->
+    <!-- Bố cục như section "Cùng Hội Chữ thập đỏ Việt Nam lan tỏa giá trị nhân ái" (trang Đơn vị đồng hành): tiêu đề · mô tả căn giữa →
+         đường kẻ có nhãn chia cấp → thẻ logo · tên · vai trò · vạch màu đáy (dùng lại .dh-tier-divider · .dh-sponsor-marquee · .partner-logo.dh-feat).
+         2 cấp: Cơ quan chủ trì & đơn vị khởi xướng (3 thẻ lớn: Hội CTĐ — chỉ huy hiệu · VCCorp · Báo Tuổi Trẻ) · Đơn vị đồng hành (3 thẻ nhỏ). Không chạy ngang (ít thẻ → hàng tĩnh căn giữa).
+         Logo cấp 2: Hội Thầy thuốc trẻ (logo-hoi-thay-thuoc-tre.png — dựng từ LOGO HOITHAYTHUOC_Vector.pdf) · CLB Niềm tin số (Logo NTS.png, logo ngang .is-wide) · CP Group (logo-cp-group.png — cắt gọn từ CPG.png), thư mục Emages/Người Gần Nhất/.
+         Đơn vị chưa có logo: tên ở ô logo (.dh-feat-logo.is-wordmark). Màu vạch đáy theo màu logo. -->
+    <section class="section dh-sponsors ngn-partners" id="don-vi-dong-hanh" aria-labelledby="ngn-partners-title">
+      <!-- ---------- Tiêu đề · mô tả (căn giữa) ---------- -->
+      <div class="wrap dh-sponsors-head">
+        <div class="dh-split-intro">
+          <h2 class="section-heading" id="ngn-partners-title">Cùng chung tay vì <span>Người Gần Nhất</span></h2>
+          <p class="sponsor-lead">Chương trình do Hội Chữ thập đỏ Việt Nam chủ trì, VCCorp và Báo Tuổi Trẻ khởi xướng, cùng các đơn vị hỗ trợ lan tỏa năng lực hành động nhân ái.</p>
+        </div>
+      </div>
+      <div class="wrap dh-tiers">
+        <!-- ---------- Cấp 1: Cơ quan chủ trì & đơn vị khởi xướng — 3 thẻ lớn chung 1 hàng ---------- -->
+        <h3 class="dh-tier-divider is-first"><span>Cơ quan chủ trì &amp; đơn vị khởi xướng</span></h3>
+        <div class="dh-sponsor-marquee is-featured ngn-tier is-host">
+          <ul class="partner-list" aria-label="Cơ quan chủ trì và đơn vị khởi xướng">
+            <li class="partner-logo dh-feat" style="--dh-bar:#ed2429"><span class="dh-feat-logo is-small is-mark"><img src="Emages/logo-hctd-mark.svg" alt="" width="84" height="84" loading="lazy" decoding="async"></span><strong>Hội Chữ thập đỏ Việt Nam</strong><small>Định hướng – tổ chức – điều phối – quản lý</small></li>
+            <li class="partner-logo dh-feat" style="--dh-bar:#24272c"><span class="dh-feat-logo is-small"><img src="Emages/logo-vccorp.svg" alt="" loading="lazy" decoding="async"></span><strong>VCCorp</strong><small>Sáng kiến, Công nghệ, Nền tảng số &amp; truyền thông</small></li>
+            <li class="partner-logo dh-feat" style="--dh-bar:#e3262c"><span class="dh-feat-logo is-small"><img src="Emages/logo-tuoi-tre.webp" alt="" loading="lazy" decoding="async"></span><strong>Báo Tuổi Trẻ</strong><small>Sáng kiến, truyền thông xã hội</small></li>
+          </ul>
+        </div>
+        <!-- ---------- Cấp 2: Đơn vị đồng hành — 3 thẻ nhỏ ngang cấp ---------- -->
+        <h3 class="dh-tier-divider"><span>Đơn vị đồng hành</span></h3>
+        <div class="dh-sponsor-marquee is-featured ngn-tier">
+          <ul class="partner-list" aria-label="Đơn vị đồng hành">
+            <li class="partner-logo dh-feat" style="--dh-bar:#1474bb"><span class="dh-feat-logo"><img src="Emages/Ng%C6%B0%E1%BB%9Di%20G%E1%BA%A7n%20Nh%E1%BA%A5t/logo-hoi-thay-thuoc-tre.png" alt="" width="320" height="320" loading="lazy" decoding="async"></span><strong>Hội Thầy thuốc trẻ</strong><small>Chuyên môn y tế</small></li>
+            <li class="partner-logo dh-feat" style="--dh-bar:#4a3fc0"><span class="dh-feat-logo is-wide"><img src="Emages/Ng%C6%B0%E1%BB%9Di%20G%E1%BA%A7n%20Nh%E1%BA%A5t/Logo%20NTS.png" alt="" width="181" height="54" loading="lazy" decoding="async"></span><strong>Câu lạc bộ Niềm tin số</strong><small>Hỗ trợ cộng đồng số</small></li>
+            <li class="partner-logo dh-feat" style="--dh-bar:#15994d"><span class="dh-feat-logo"><img src="Emages/Ng%C6%B0%E1%BB%9Di%20G%E1%BA%A7n%20Nh%E1%BA%A5t/logo-cp-group.png" alt="" width="240" height="292" loading="lazy" decoding="async"></span><strong>CP</strong><small>Nguồn lực và hoạt động nhân đạo</small></li>
           </ul>
         </div>
       </div>
     </section>
+    <!-- ==================== END SECTION: ĐƠN VỊ CHỦ TRÌ & ĐỒNG HÀNH ==================== -->
     <section class="principles" aria-labelledby="principles-title">
       <div class="wrap">
         <div class="principle-top">

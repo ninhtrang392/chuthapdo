@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261121-1" />
+    <link rel="stylesheet" href="styles.css?v=20261121-25" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -95,9 +95,9 @@
         <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
             <a href="ban-do-so.html">Bản đồ số</a>
-            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+            <!-- ---------- Trợ giúp: chữ "Trợ giúp" trên ảnh bắt tay đỏ (.nav-help-heart, máy tính) + mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
             <div class="nav-more">
-                <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
+                <button class="nav-more-toggle nav-help-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu"><span class="nav-help-heart">Trợ giúp</span><svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
                 <div class="nav-more-menu" id="nav-help-menu" hidden>
                     <a href="ho-so.html#nguoi-yeu-the/them-moi">Đăng ký nhận trợ giúp</a>
                     <a href="ho-so.html#gia-nhap-doi/them-moi">Đăng ký tình nguyện viên</a>
@@ -108,7 +108,7 @@
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
             <a href="nguoi-gan-nhat.html">Người gần nhất</a>
             <a href="don-vi-dong-hanh.html">Đồng hành</a>
-            <a href="quy-nhan-dao.html">Quỹ Nhân đạo</a>
+            <a href="quy-nhan-dao.html">Quỹ Nhân đạo Việt Nam</a>
             <a href="giai-thuong.html">Giải thưởng</a>
             <a href="#" data-panel="Hỏi đáp">Hỏi Đáp</a>
             <!-- ---------- Khác: nút có mũi tên xổ danh mục trang con (account-menu.js › HEADER: menu Khác) ---------- -->
@@ -117,6 +117,7 @@
                 <div class="nav-more-menu" id="nav-more-menu" hidden>
                     <a href="tin-tuc.html">Tin tức</a>
                     <a href="#cong-khai">Công khai – Minh bạch</a>
+                    <a href="tet-nhan-ai.html">Tết Nhân ái</a>
                 </div>
             </div>
             <a class="button button-primary nav-cta" href="#chuong-trinh"><svg class="icon"><use href="#heart-solid"/></svg>Chung tay ngay</a>
@@ -218,8 +219,19 @@
                                 <p class="live-total">Hôm nay đã nhận <strong data-live-total="1286450000">1.286.450.000 ₫</strong></p>
                                 <a class="link-arrow" href="#" data-panel="Tất cả giao dịch">Xem tất cả giao dịch<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
                             </div>
-                            <!-- ---------- Link Danh sách chương trình thiện nguyện: cùng hàng nhãn Ủng hộ mới nhất, cuộn xuống section Chương trình (#chuong-trinh) ---------- -->
-                            <a class="link-arrow" href="#chuong-trinh">Danh sách chương trình thiện nguyện<svg class="icon" aria-hidden="true"><use href="#arrow"/></svg></a>
+                            <!-- ---------- Nút nổi bật "N chương trình đang diễn ra": cùng hàng nhãn Ủng hộ mới nhất, cuộn xuống section Chương trình (#chuong-trinh)
+                                 N = số chương trình đang diễn ra (không tính Sắp diễn ra / Đã kết thúc) đếm từ PROGRAMS (chuong-trinh-data.js) — script.js › SECTION: TIỀN ỦNG HỘ TRỰC TIẾP:
+                                 số đếm lên khi cuộn tới, vệt sáng lướt qua định kỳ, mũi tên nhích khi rê chuột (GSAP; giảm chuyển động → đứng yên) ---------- -->
+                            <!-- Đang ẩn (thuộc tính hidden) theo yêu cầu — đã có nút nổi góc trái dưới; bỏ hidden để hiện lại -->
+                            <a class="live-programs" href="#chuong-trinh" hidden>
+                                <span class="live-programs-dot" aria-hidden="true"></span>
+                                <span class="live-programs-text">
+                                    <span class="live-programs-label">Đang diễn ra</span>
+                                    <span class="live-programs-value"><strong data-live-programs>20</strong> chương trình thiện nguyện</span>
+                                </span>
+                                <span class="live-programs-arrow" aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span>
+                                <span class="live-programs-shine" aria-hidden="true"></span>
+                            </a>
                         </div>
 
                         <!-- ---------- 3 giao dịch mới nhất (data-ago: số phút trước, script.js cập nhật nhãn thời gian) ---------- -->
@@ -348,19 +360,19 @@
 
                 <!-- ==================== SECTION: TÌNH NGUYỆN VIÊN — CHƯƠNG I (dải slide tự chạy) ==================== -->
                 <!-- Chương I của mạch "hành trình" (I → II → III → Chương trình). Bố cục dải ngang (tham khảo philos.site, giữ style web):
-           2 câu dẫn chung một màn (câu chuyển cảnh từ Hành trình nhân ái + câu dẫn chương), hiện hết 1 lần khi cuộn tới → đầu section (tiêu đề · mô tả) + dải gồm 2 khối giới thiệu (Trao đi thời gian · Hiến máu cứu người: ảnh + tiêu đề · mô tả + nút) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
-           Không ghim / không cuộn ngang theo cuộn dọc nữa: dải là slide tự chuyển mỗi 6 giây như section Đơn vị đồng hành (script.js › SECTION: TÌNH NGUYỆN VIÊN), dừng khi rê chuột / focus; chấm chỉ slide (JS dựng, dùng lại .founders-dot); vuốt tay được (scroll-snap).
+           2 câu dẫn (câu chuyển cảnh từ Hành trình nhân ái + câu dẫn chương) — không ghim, không hiệu ứng chuyển cảnh: câu dẫn, đầu section, dải chỉ hiện dần 1 lần khi cuộn tới (data-reveal) → đầu section (tiêu đề · mô tả) + dải gồm 2 khối giới thiệu (Trao đi thời gian · Hiến máu cứu người: ảnh + tiêu đề · mô tả + nút) + 3 lợi ích (ảnh ngang 3:2 so le cao thấp, bên cạnh: tên · dòng thông tin · mô tả). Rê chuột → ảnh phóng nhẹ, tên đổi màu.
+           Không ghim / không cuộn ngang theo cuộn dọc: dải tự chạy ngang liên tục, lặp vô tận bằng bộ thẻ bản sao (script.js › SECTION: TÌNH NGUYỆN VIÊN), dừng khi rê chuột / focus; chấm chỉ slide (JS dựng, dùng lại .founders-dot); vuốt tay được (scroll-snap).
            Đăng ký → form gia nhập đội, CLB ở hồ sơ (ho-so.html#gia-nhap-doi). Đăng ký hiến máu: chưa có trang riêng → tạm mở hộp thoại xem trước (data-panel). DỮ LIỆU MINH HỌA: số tình nguyện viên lấy từ hệ thống khi triển khai; ảnh hiến máu: Emages/QUỹ nhân đạo/Nụ cười trao giọt máu hồng.png. -->
                 <section class="section chapter chapter-gallery volunteer" id="tinh-nguyen-vien" aria-labelledby="tinh-nguyen-vien-title">
                     <div class="chapter-stage">
-                        <!-- ---------- Câu dẫn chuyện: 2 câu chung một màn, cuộn tới là hiện hết cả 2 (script.js › SECTION: CHƯƠNG) ---------- -->
-                        <div class="chapter-story chapter-story--instant">
+                        <!-- ---------- Câu dẫn chuyện: 2 câu, không hiệu ứng chữ — chỉ hiện dần khi cuộn tới (data-reveal) ---------- -->
+                        <div class="chapter-story chapter-story--instant" data-reveal>
                             <p class="chapter-story-text">Hành trình ấy bắt đầu từ một người<br>và người đó có thể là <em>bạn</em>.</p>
                             <p class="chapter-story-text">Bắt đầu bằng một chút thời gian trao đi để những ngày bình thường bỗng trở nên <em>ý nghĩa</em>.</p>
                         </div>
 
                         <!-- ---------- Đầu section: tiêu đề · mô tả (như chương Giải thưởng) ---------- -->
-                        <div class="section-head chapter-head">
+                        <div class="section-head chapter-head" data-reveal>
                             <div>
                                 <h2 class="section-title" id="tinh-nguyen-vien-title">Tình nguyện viên Chữ thập đỏ</h2>
                                 <p class="section-lead">Mạng lưới tình nguyện viên tại các đội, câu&nbsp;lạc&nbsp;bộ trên cả nước<br />luôn có mặt khi cộng đồng cần.</p>
@@ -368,7 +380,7 @@
                         </div>
 
                         <!-- ---------- Dải slide: giới thiệu (ảnh · tiêu đề · mô tả · số tình nguyện viên · nút) · Hiến máu (ảnh · tiêu đề · mô tả · nút) + 3 lợi ích ---------- -->
-                        <div class="chapter-viewport" id="volunteer-viewport" role="group" aria-roledescription="carousel" aria-label="Tình nguyện viên — tự chuyển mỗi 6 giây, dừng khi rê chuột">
+                        <div class="chapter-viewport" id="volunteer-viewport" data-reveal role="group" aria-roledescription="carousel" aria-label="Tình nguyện viên — tự chạy ngang, dừng khi rê chuột">
                             <ul class="chapter-track" aria-label="Lợi ích khi trở thành tình nguyện viên">
                             <li class="chapter-intro has-figure">
                                 <div class="chapter-figure"><img src="Emages/Homepage/Humanitarian%20Volunteers%20Delivering%20Aid.png" alt="Tình nguyện viên Chữ thập đỏ trao thùng quà tận tay cụ bà, tươi cười trò chuyện" width="1672" height="941" loading="lazy" decoding="async" /></div>
@@ -1337,7 +1349,18 @@
     </div>
     <!-- ==================== END FLOW: khung ScrollSmoother ==================== -->
 
-    <!-- ---------- Nhãn đơn vị phát triển: ghim góc trái dưới màn hình — nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
+    <!-- ---------- Nút nổi "N chương trình đang diễn ra": ghim góc trái dưới màn hình, luôn hiện — bấm cuộn tới section Chương trình đang cần chung tay (#chuong-trinh).
+         Dùng lại nút .live-programs (đầu section Tiền ủng hộ trực tiếp) bản gọn .is-float; số N + chuyển động: script.js › SECTION: TIỀN ỦNG HỘ TRỰC TIẾP. Nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
+    <!-- Bản nổi: nền xanh (màu chữ "Chung tay" — --color-green) · số N to bên trái cao 2 dòng · bên phải: "chương trình" trên, "Đang diễn ra" dưới (thẳng cột) (không chữ "thiện nguyện", không vòng mũi tên) -->
+    <a class="live-programs is-float" href="#chuong-trinh">
+        <span class="live-programs-dot" aria-hidden="true"></span>
+        <span class="live-programs-text">
+            <strong class="live-programs-count" data-live-programs>20</strong>
+            <span class="live-programs-value">chương trình</span>
+            <span class="live-programs-label">Đang diễn ra</span>
+        </span>
+        <span class="live-programs-shine" aria-hidden="true"></span>
+    </a>
 
     <!-- ---------- Nút lên đầu trang: ghim góc phải dưới màn hình (chỉ icon) — nằm ngoài #smooth-wrapper để position: fixed hoạt động ---------- -->
     <a class="footer-top" href="#" aria-label="Lên đầu trang"><span aria-hidden="true"><svg class="icon"><use href="#arrow"/></svg></span></a>
@@ -1484,7 +1507,7 @@
     <script src="flow.js?v=20261106-1" defer></script>
     <script src="account-menu.js?v=20261120-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="script.js?v=20261121-1" defer></script>
+    <script src="script.js?v=20261121-7" defer></script>
     <script src="chuong-trinh-data.js?v=20261119-1" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
     <script src="hero-3d.js?v=20261031-2" defer></script>

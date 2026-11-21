@@ -48,6 +48,13 @@
 .nav-more-toggle .icon{width:16px;height:16px;transition:transform .25s}
 .nav-more-toggle:hover,.nav-more-toggle[aria-expanded="true"]{color:var(--red)}
 .nav-more-toggle[aria-expanded="true"] .icon{transform:rotate(180deg)}
+/* ---------- Trợ giúp: chữ "Trợ giúp" đỏ đậm đặt trên ảnh bắt tay đỏ (Emages/header-tro-giup-web.png — cắt gọn, thu nhỏ từ header-tro-giup-bat-tay.png) — chỉ menu ngang máy tính (≥ 1121px); menu điện thoại giữ dạng chữ ---------- */
+@media(min-width:1121px){
+  .navigation .nav-more-toggle.nav-help-toggle{gap:0;padding:0 4px 0 0}
+  .nav-help-heart{--heart-h:50px;display:flex;align-items:flex-start;justify-content:center;width:calc(var(--heart-h) * 1.6);height:var(--heart-h);padding-top:calc(var(--heart-h) * .26 - 7px);background:url("../Emages/header-tro-giup-web.png") center bottom / contain no-repeat;font-size:12px;font-weight:800;line-height:14px;color:#e0141c} /* ảnh 1225×765 (1,6 : 1): chữ gọn trong khoảng trắng giữa 2 cánh tay (tâm chữ ≈ 26% chiều cao, ngang 2 đầu tay — chỗ khoảng trắng rộng nhất), trên chỗ bàn tay bắt nhau */
+  .nav-help-toggle:hover .nav-help-heart,.nav-help-toggle[aria-expanded="true"] .nav-help-heart{color:#a8141f}
+  @media(max-width:1300px){.nav-help-heart{--heart-h:46px;font-size:11px}} /* header thấp, menu chật → nhỏ hơn chút */
+}
 .nav-more-menu{position:absolute;top:calc(100% + 12px);left:0;z-index:60;display:flex;flex-direction:column;width:240px;padding:8px;border:1px solid var(--color-border);border-radius:16px;background:#fff;box-shadow:0 18px 40px rgba(20,30,50,.16);transform-origin:top left;animation:account-in .18s cubic-bezier(.22,1,.36,1)}
 .nav-more-menu[hidden]{display:none}
 .navigation .nav-more-menu a{display:flex;align-items:center;min-height:38px;padding:8px 12px;border-radius:4px;font-size:14px;line-height:20px;transition:background .2s,color .2s}
@@ -125,6 +132,15 @@
 @media(max-width:1120px){
 .header-auth{gap:6px;margin-left:4px}
 .header-auth .button{min-height:40px;padding:0 16px}
+}
+/* ---------- Header 1121–1200px: tên dài "Quỹ Nhân đạo Việt Nam" → logo nhỏ hơn, menu sát nhau, nút Đăng nhập / Đăng ký gọn để nút Đăng ký không tràn (cùng styles.css) ---------- */
+@media(min-width:1121px) and (max-width:1200px){
+.header{gap:4px}
+.brand img{width:136px;height:32px}
+.navigation{gap:0}
+.navigation a,.nav-more-toggle{padding:12px 2px}
+.header-auth{gap:6px;margin-left:4px}
+.header-auth .button{min-height:40px;padding:0 12px;font-size:13px}
 }
 .nav-auth{display:none}
 @media(max-width:600px){
