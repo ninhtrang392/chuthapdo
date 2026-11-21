@@ -2761,122 +2761,35 @@
       text-align: center;
     }
 
-    /* ---------- Giới thiệu: 3 thẻ giá trị (Tầm nhìn · Lực lượng nòng cốt · Cùng chung tay) — thẻ kính trắng · icon tròn nền hồng · gạch đỏ ngắn ở đáy ---------- */
-    .ngn-pillars {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin: 8px 0 0;
-      padding: 0;
-      list-style: none;
+    /* ---------- Giới thiệu: cột chữ gọn (≈ 720px) căn giữa · 2 ô Tầm nhìn / Lực lượng nòng cốt chữ căn giữa · trích dẫn khung kính trắng, dấu ngoặc kép xanh ---------- */
+    html body main#main#main #gioi-thieu .overview-grid.is-single {
+      max-width: 720px !important;
     }
 
-    .ngn-pillar {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      padding: 28px 24px 40px;
-      border: 1px solid #fff;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, .72);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 12px 32px rgba(150, 20, 30, .08);
+    html body main#main#main#main #gioi-thieu .overview-card-box p {
+      text-align: center !important;
     }
 
-    .ngn-pillar::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: 18px;
-      width: 56px;
-      height: 3px;
-      border-radius: 2px;
-      background: var(--red, #ed2429);
-      transform: translateX(-50%);
+    html body main#main#main#main #gioi-thieu .overview-quote-box {
+      border: 1px solid rgba(36, 39, 44, .08) !important;
+      background: rgba(255, 255, 255, .9) !important;
+      box-shadow: 0 12px 32px rgba(36, 39, 44, .08) !important;
     }
 
-    .ngn-pillar-icon {
-      display: grid;
-      flex: none;
-      place-items: center;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: #fde8ea;
-    }
-
-    .ngn-pillar-icon::before {
-      content: '';
-      width: 34px;
-      height: 34px;
-      background: var(--red, #ed2429);
-      -webkit-mask: var(--icon) center / contain no-repeat;
-      mask: var(--icon) center / contain no-repeat;
-    }
-
-    html body main#main .ngn-pillar-text h3 {
-      margin: 4px 0 6px;
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 28px;
-      color: var(--ink);
-    }
-
-    html body main#main .ngn-pillar-text p {
-      margin: 0;
-      font-size: 14px;
-      line-height: 22px;
-      color: var(--muted);
-    }
-
-    /* Trích dẫn: hẹp hơn hàng thẻ, căn giữa; dấu ngoặc kép lớn hồng bên trái; luôn 2 dòng như mẫu */
-    html body main#main#main .overview-quote-box.ngn-quote {
-      width: 100%;
-      max-width: 880px;
-      margin: 8px auto 0 !important;
-      padding: 28px 48px 28px 104px !important;
-    }
-
-    .ngn-quote .ngn-quote-mark {
-      position: absolute;
-      top: 14px;
-      left: 36px;
+    /* Dấu ngoặc kép mở: xanh lá đậm, chữ có chân, đứng đầu câu trích dẫn */
+    #gioi-thieu .ov-quote-mark {
+      margin-right: 4px;
       font-family: Georgia, 'Times New Roman', serif;
-      font-size: 80px;
+      font-size: 40px;
+      font-style: normal;
       font-weight: 700;
-      line-height: 1;
-      color: #f4a3a8;
+      line-height: 0;
+      vertical-align: -12px;
+      color: #006c45;
     }
 
-    .ngn-quote .br-quote {
-      display: inline;
-    }
-
-    html body main#main .ngn-quote p {
-      text-align: center;
-    }
-
-    @media (max-width: 1024px) {
-      .ngn-pillars {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      html body main#main#main .overview-quote-box.ngn-quote {
-        padding: 24px 20px 24px 64px !important;
-      }
-
-      .ngn-quote .ngn-quote-mark {
-        left: 16px;
-        font-size: 56px;
-      }
-
-      .ngn-quote .br-quote {
-        display: none;
-      }
+    html body main#main#main#main #gioi-thieu .overview-quote-box .br-quote {
+      display: none;
     }
     /* ==================== SECTION: ĐƠN VỊ CHỦ TRÌ & ĐỒNG HÀNH ==================== */
     /* Dùng lại bố cục Đối tác tài trợ trang Đơn vị đồng hành (css/styles.css: .dh-sponsors-head · .dh-tier-divider · .dh-sponsor-marquee · .dh-feat);
@@ -6439,37 +6352,29 @@
               kỹ&nbsp;năng sơ&nbsp;cấp&nbsp;cứu cho người&nbsp;trẻ Việt&nbsp;Nam. </p>
           </div>
 
-          <!-- ---------- 3 thẻ giá trị: icon tròn nền hồng · tiêu đề · mô tả · gạch đỏ ngắn ở đáy (thẻ kính trắng) ---------- -->
-          <ul class="ngn-pillars">
-            <li class="ngn-pillar">
-              <span class="ngn-pillar-icon" style="--icon:url('Emages/icons/people.svg')" aria-hidden="true"></span>
-              <div class="ngn-pillar-text">
-                <h3>Tầm nhìn</h3>
-                <p>Xây&nbsp;dựng cộng&nbsp;đồng nhân&nbsp;ái,<br />để không&nbsp;ai bị bỏ&nbsp;lại phía&nbsp;sau.</p>
-              </div>
-            </li>
-            <li class="ngn-pillar">
-              <span class="ngn-pillar-icon" style="--icon:url('Emages/icons/tree.svg')" aria-hidden="true"></span>
-              <div class="ngn-pillar-text">
-                <h3>Lực lượng nòng cốt</h3>
-                <p>Lấy người&nbsp;trẻ (học&nbsp;sinh, sinh&nbsp;viên) làm hạt&nbsp;nhân tiên&nbsp;phong lan&nbsp;tỏa đến toàn&nbsp;xã&nbsp;hội.</p>
-              </div>
-            </li>
-            <li class="ngn-pillar">
-              <span class="ngn-pillar-icon" style="--icon:url('Emages/icons/heart-handshake.svg')" aria-hidden="true"></span>
-              <div class="ngn-pillar-text">
-                <h3>Cùng chung tay</h3>
-                <p>Lan&nbsp;tỏa yêu&nbsp;thương,<br />kết&nbsp;nối cộng&nbsp;đồng nhân&nbsp;ái.</p>
-              </div>
-            </li>
-          </ul>
+          <!-- ---------- 2 ô giá trị (Tầm nhìn · Lực lượng nòng cốt): icon + tiêu đề, mô tả căn giữa, ngăn bằng vạch dọc; kẻ ngang trên/dưới ---------- -->
+          <div class="overview-cards-row">
+            <div class="overview-card-box">
+              <div class="overview-card-head"><i class="overview-card-icon"
+                  style="--icon:url('Emages/icons/target.svg')" aria-hidden="true"></i><strong>Tầm nhìn</strong></div>
+              <p>Xây&nbsp;dựng cộng&nbsp;đồng nhân&nbsp;ái, đủ năng&nbsp;lực hành&nbsp;động vì sự an&nbsp;toàn của
+                mọi&nbsp;người xung&nbsp;quanh.</p>
+            </div>
 
-          <!-- ---------- Trích dẫn: khung kính hồng nhạt · dấu ngoặc kép lớn bên trái · 2 dòng căn giữa ---------- -->
-          <figure class="overview-quote-box ngn-quote">
-            <span class="ngn-quote-mark" aria-hidden="true">“</span>
+            <div class="overview-card-box">
+              <div class="overview-card-head"><i class="overview-card-icon"
+                  style="--icon:url('Emages/icons/people.svg')" aria-hidden="true"></i><strong>Lực lượng nòng
+                  cốt</strong></div>
+              <p>Lấy người&nbsp;trẻ (học&nbsp;sinh, sinh&nbsp;viên) làm hạt&nbsp;nhân tiên&nbsp;phong lan&nbsp;tỏa đến
+                toàn&nbsp;xã&nbsp;hội.</p>
+            </div>
+          </div>
+
+          <!-- ---------- Trích dẫn: khung kính, dấu ngoặc kép xanh, 2 dòng căn giữa ---------- -->
+          <figure class="overview-quote-box">
             <blockquote>
-              <p>“Biến lòng&nbsp;tốt thành năng&nbsp;lực hành&nbsp;động — để mỗi&nbsp;người<br class="br-quote">
-                đều&nbsp;có&nbsp;thể là <em>Người Gần Nhất</em>, là điểm&nbsp;tựa nhân&nbsp;ái của cộng&nbsp;đồng.”</p>
+              <p><span class="ov-quote-mark" aria-hidden="true">“</span>Biến lòng&nbsp;tốt thành năng&nbsp;lực hành&nbsp;động — để mỗi&nbsp;người đều&nbsp;có&nbsp;thể là
+                <em>Người Gần Nhất</em>, là điểm&nbsp;tựa nhân&nbsp;ái của cộng&nbsp;đồng.</p>
             </blockquote>
           </figure>
         </div>
