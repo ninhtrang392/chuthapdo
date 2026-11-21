@@ -123,7 +123,7 @@
   });
 })();
 
-// ==================== HEADER: menu xổ cấp 2 — "Trợ giúp" (Đăng ký trợ giúp · tình nguyện viên · hiến máu) · "Khác" (dùng chung mọi trang) ====================
+// ==================== HEADER: menu xổ cấp 2 — "Trợ giúp" (Đăng ký nhận trợ giúp · tình nguyện viên · hiến máu · chương trình) · "Khác" (dùng chung mọi trang) ====================
 // Mỗi .nav-more: bấm nút → xổ / thu danh mục (mở menu này thì đóng menu kia); bấm ra ngoài, nhấn Esc hoặc chọn 1 mục → đóng.
 // Màn ≤1120px: danh mục mở ngay trong menu mobile (CSS).
 (() => {

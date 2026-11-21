@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261120-6" />
+    <link rel="stylesheet" href="styles.css?v=20261121-1" />
     <!-- Màn vào trang:
          · Mở trang chủ bình thường → PRELOADER (logo trái tim + câu trích dẫn) che sẵn, script.js chạy rồi gỡ; tự gỡ sau 4s nếu GSAP lỗi.
          · Vào bằng link có #neo (vd. index.html#don-vi-dong-hanh) → bỏ preloader, vào thẳng trang. -->
@@ -95,13 +95,14 @@
         <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
             <a href="ban-do-so.html">Bản đồ số</a>
-            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
             <div class="nav-more">
                 <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
                 <div class="nav-more-menu" id="nav-help-menu" hidden>
-                    <a href="ho-so.html#nguoi-yeu-the">Đăng ký trợ giúp</a>
-                    <a href="ho-so.html#gia-nhap-doi">Đăng ký tình nguyện viên</a>
-                    <a href="ho-so.html#dang-ky-hien-mau">Đăng ký hiến máu</a>
+                    <a href="ho-so.html#nguoi-yeu-the/them-moi">Đăng ký nhận trợ giúp</a>
+                    <a href="ho-so.html#gia-nhap-doi/them-moi">Đăng ký tình nguyện viên</a>
+                    <a href="ho-so.html#dang-ky-hien-mau/them-moi">Đăng ký hiến máu</a>
+                    <a href="ho-so.html#chuong-trinh/them-moi">Đăng ký chương trình</a>
                 </div>
             </div>
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
@@ -144,7 +145,7 @@
                             <span class="hero-line"><span class="hero-line-inner">Chung tay</span></span>
                             <span class="hero-line hero-line--indent">
                                 <span class="hero-line-inner">
-                                    <span class="hero-pill" aria-hidden="true"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/Sharing%20Compassion%2C%20One%20Heart%20at%20a%20Time.png" alt="" width="1254" height="1254" style="object-position:50% 68%" /></span>
+                                    <span class="hero-pill" aria-hidden="true"><img src="Emages/Homepage/Nh%E1%BB%AFng%20b%C3%A0n%20tay%20chung%20m%E1%BB%99t%20l%C3%B2ng.png" alt="" width="1535" height="1024" style="object-position:50% 90%;transform:scale(1.4);transform-origin:45% 60%" /></span>
                                     <span class="hero-accent">vì một</span>
                                 </span>
                             </span>
@@ -386,7 +387,7 @@
                                 <div class="chapter-figure"><img src="Emages/QU%E1%BB%B9%20nh%C3%A2n%20%C4%91%E1%BA%A1o/N%E1%BB%A5%20c%C6%B0%E1%BB%9Di%20trao%20gi%E1%BB%8Dt%20m%C3%A1u%20h%E1%BB%93ng.png" alt="Người hiến máu tươi cười trên ghế hiến máu, tình nguyện viên Chữ thập đỏ ngồi bên cạnh" width="1672" height="941" loading="lazy" decoding="async" /></div>
                                 <div class="chapter-intro-text">
                                     <h3 class="section-title">Hiến giọt máu đào, trao đời sự sống</h3>
-                                    <p class="section-lead">Mỗi giọt máu cho đi - một cuộc đời ở lại. Đăng ký tham gia hiến máu tình nguyện cùng Hội Chữ thập đỏ tại các điểm hiến máu gần nơi bạn sống.</p>
+                                    <p class="section-lead">Mỗi giọt máu cho đi - Một cuộc đời ở lại. Đăng ký tham gia hiến máu tình nguyện cùng Hội Chữ thập đỏ tại các điểm hiến máu gần nơi bạn sống.</p>
                                     <div class="chapter-actions">
                                         <a class="button button-primary" href="#" data-panel="Đăng ký hiến máu" data-magnetic>Đăng ký hiến máu</a>
                                     </div>
@@ -458,12 +459,11 @@
 
                 <!-- ==================== SECTION: GIẢI THƯỞNG NGỌN ĐÈN NHÂN ÁI — CHƯƠNG III (giới thiệu 5 hạng mục) ==================== -->
                 <!-- Chương III của mạch "hành trình": giới thiệu giải thưởng (không hiện gương mặt người được vinh danh).
-           Bố cục thẻ xếp chồng (kiểu GSAP showcase "stacking cards"): màn ghim gồm đầu section + 5 thẻ hạng mục;
-           cuộn tới đâu thẻ sau trượt lên đè thẻ trước tới đó (script.js › SECTION: CHƯƠNG). Màn ≤1100px / giảm chuyển động: 5 thẻ xếp dọc.
+           Bố cục thẻ: 5 tấm ảnh dọc xếp ngang như "Kết nối nguồn lực" trang Quỹ (.qf-res-*) — tấm đang mở rộng hiện mô tả (rê chuột / focus / bấm, script.js › SECTION: GIẢI THƯỞNG).
+           Màn ≤1023px: 5 tấm xếp dọc, mở sẵn mô tả.
            Tên + mô tả 5 hạng mục theo văn bản "Định hướng 05 hạng mục Giải thưởng"; ảnh thẻ: Emages/thẻ 1.png … thẻ 4.png · thẻ 05 dùng Emages/tinh-nguyen-vien/tnv-cap-cuu-thang-cuon.webp — thay bằng nội dung chính thức của giải thưởng. -->
                 <section class="section awards chapter-awards" id="giai-thuong" aria-labelledby="giai-thuong-title">
-                    <!-- ---------- Màn ghim (desktop): đầu section + 5 thẻ xếp chồng trong cùng 1 màn — thẻ sau trượt lên đè thẻ trước, thẻ trước thu nhỏ, lùi lên, tối đi
-                         (script.js › SECTION: CHƯƠNG). Màn ≤1100px / giảm chuyển động: 5 thẻ xếp dọc. Mỗi thẻ: số khổng lồ mờ · biểu trưng Trái Tim Lửa · tên · mô tả | ảnh minh họa ---------- -->
+                    <!-- ---------- Khối nội dung: đầu section + 5 tấm ảnh dọc (mỗi tấm: ảnh nền · số · biểu trưng Trái Tim Lửa · tên · mô tả) ---------- -->
                     <div class="award-pin">
                         <!-- ---------- Đầu section: nằm chung màn ghim với chồng thẻ ---------- -->
                         <div class="awards-head">
@@ -481,56 +481,47 @@
                             </div>
                         </div>
 
-                        <ol class="award-cards" aria-label="5 hạng mục Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái”">
-                            <li class="award-card">
-                                <div class="award-card-text">
-                                    <span class="award-num" aria-hidden="true">01</span>
-                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
-                                    <h3 class="award-title">Cá nhân tiêu biểu</h3>
-                                    <p class="award-desc">Tôn vinh cá nhân có hành động nhân ái, đóng góp nổi bật, dấn thân hoặc có ảnh hưởng tích cực rõ nét đối với người có hoàn cảnh khó khăn và cộng đồng.</p>
+                        <!-- ---------- 5 thẻ hạng mục: tấm ảnh dọc mở rộng như trang Quỹ (.qf-res-*) — số · biểu trưng Trái Tim Lửa · tên; tấm đang mở hiện mô tả (script.js › GIẢI THƯỞNG) ---------- -->
+                        <ol class="award-cards qf-res-list" aria-label="5 hạng mục Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái”">
+                            <li class="qf-res-item is-active" tabindex="0">
+                                <img src="Emages/th%E1%BA%BB%201.png" alt="Tình nguyện viên Chữ thập đỏ nắm tay trò chuyện cùng cụ bà trước hiên nhà vùng cao" loading="lazy" decoding="async" />
+                                <span class="qf-res-num">01</span><span class="qf-res-icon" aria-hidden="true"><img src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></span>
+                                <div class="qf-res-body">
+                                    <h3>Cá nhân tiêu biểu</h3>
+                                    <div class="qf-res-more"><div><p>Tôn vinh cá nhân có hành động nhân ái, đóng góp nổi bật, dấn thân hoặc có ảnh hưởng tích cực rõ nét đối với người có hoàn cảnh khó khăn và cộng đồng.</p></div></div>
                                 </div>
-                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%201.png" alt="Tình nguyện viên Chữ thập đỏ nắm tay trò chuyện cùng cụ bà trước hiên nhà vùng cao" loading="lazy" decoding="async" /></div>
-                                <span class="award-card-shade" aria-hidden="true"></span>
                             </li>
-                            <li class="award-card">
-                                <div class="award-card-text">
-                                    <span class="award-num" aria-hidden="true">02</span>
-                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
-                                    <h3 class="award-title">Tổ chức đồng hành</h3>
-                                    <p class="award-desc">Tôn vinh tổ chức, doanh nghiệp, đơn vị có đóng góp nhân đạo thiết thực, hiệu quả, minh bạch và đồng hành có trách nhiệm với hoạt động nhân đạo.</p>
+                            <li class="qf-res-item" tabindex="0">
+                                <img src="Emages/th%E1%BA%BB%202.png" alt="Tình nguyện viên Chữ thập đỏ trao thùng hàng cứu trợ cho cụ bà dân tộc vùng cao" loading="lazy" decoding="async" />
+                                <span class="qf-res-num">02</span><span class="qf-res-icon" aria-hidden="true"><img src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></span>
+                                <div class="qf-res-body">
+                                    <h3>Tổ chức đồng hành</h3>
+                                    <div class="qf-res-more"><div><p>Tôn vinh tổ chức, doanh nghiệp, đơn vị có đóng góp nhân đạo thiết thực, hiệu quả, minh bạch và đồng hành có trách nhiệm với hoạt động nhân đạo.</p></div></div>
                                 </div>
-                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%202.png" alt="Tình nguyện viên Chữ thập đỏ trao thùng hàng cứu trợ cho cụ bà dân tộc vùng cao" loading="lazy" decoding="async" /></div>
-                                <span class="award-card-shade" aria-hidden="true"></span>
                             </li>
-                            <li class="award-card">
-                                <div class="award-card-text">
-                                    <span class="award-num" aria-hidden="true">03</span>
-                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
-                                    <h3 class="award-title">Sáng kiến, mô hình nhân đạo</h3>
-                                    <p class="award-desc">Tôn vinh sáng kiến, mô hình, chương trình hoặc giải pháp đổi mới, đáp ứng đúng nhu cầu, tạo tác động thực tế và có khả năng duy trì, nhân rộng.</p>
+                            <li class="qf-res-item" tabindex="0">
+                                <img src="Emages/th%E1%BA%BB%203.png" alt="Điểm khám sức khỏe lưu động của Hội Chữ thập đỏ: tình nguyện viên hướng dẫn cụ bà, bác sĩ đo huyết áp" loading="lazy" decoding="async" />
+                                <span class="qf-res-num">03</span><span class="qf-res-icon" aria-hidden="true"><img src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></span>
+                                <div class="qf-res-body">
+                                    <h3>Sáng kiến, mô hình nhân đạo</h3>
+                                    <div class="qf-res-more"><div><p>Tôn vinh sáng kiến, mô hình, chương trình hoặc giải pháp đổi mới, đáp ứng đúng nhu cầu, tạo tác động thực tế và có khả năng duy trì, nhân rộng.</p></div></div>
                                 </div>
-                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%203.png" alt="Điểm khám sức khỏe lưu động của Hội Chữ thập đỏ: tình nguyện viên hướng dẫn cụ bà, bác sĩ đo huyết áp" loading="lazy" decoding="async" /></div>
-                                <span class="award-card-shade" aria-hidden="true"></span>
                             </li>
-                            <li class="award-card">
-                                <div class="award-card-text">
-                                    <span class="award-num" aria-hidden="true">04</span>
-                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
-                                    <h3 class="award-title">Cống hiến bền bỉ</h3>
-                                    <p class="award-desc">Tôn vinh cá nhân hoặc tổ chức có quá trình đóng góp lâu dài, liên tục, kiên trì, có kết quả và ảnh hưởng sâu rộng trong công tác nhân đạo.</p>
+                            <li class="qf-res-item" tabindex="0">
+                                <img src="Emages/th%E1%BA%BB%204.png" alt="Tình nguyện viên Chữ thập đỏ vác bao gạo, dìu cụ bà trên đường làng; đoàn tình nguyện viên mang quà phía sau" loading="lazy" decoding="async" />
+                                <span class="qf-res-num">04</span><span class="qf-res-icon" aria-hidden="true"><img src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></span>
+                                <div class="qf-res-body">
+                                    <h3>Cống hiến bền bỉ</h3>
+                                    <div class="qf-res-more"><div><p>Tôn vinh cá nhân hoặc tổ chức có quá trình đóng góp lâu dài, liên tục, kiên trì, có kết quả và ảnh hưởng sâu rộng trong công tác nhân đạo.</p></div></div>
                                 </div>
-                                <div class="award-card-media"><img src="Emages/th%E1%BA%BB%204.png" alt="Tình nguyện viên Chữ thập đỏ vác bao gạo, dìu cụ bà trên đường làng; đoàn tình nguyện viên mang quà phía sau" loading="lazy" decoding="async" /></div>
-                                <span class="award-card-shade" aria-hidden="true"></span>
                             </li>
-                            <li class="award-card">
-                                <div class="award-card-text">
-                                    <span class="award-num" aria-hidden="true">05</span>
-                                    <img class="award-card-logo" src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" />
-                                    <h3 class="award-title">Hành động nhân đạo đặc biệt</h3>
-                                    <p class="award-desc">Tôn vinh hành động dũng cảm, kịp thời, có ý nghĩa đặc biệt trong cứu giúp, bảo vệ tính mạng, sức khỏe, phẩm giá hoặc hỗ trợ con người trong tình huống khẩn cấp, thiên tai, thảm họa và hoàn cảnh đặc biệt khó khăn.</p>
+                            <li class="qf-res-item" tabindex="0">
+                                <img src="Emages/Th%E1%BA%BB%205.png" alt="Tình nguyện viên Chữ thập đỏ cõng cụ ông vượt dòng nước lũ, đồng đội dìu đỡ bên cạnh" loading="lazy" decoding="async" />
+                                <span class="qf-res-num">05</span><span class="qf-res-icon" aria-hidden="true"><img src="Emages/Bi%E1%BB%83u%20tr%C6%B0ng%20Tr%C3%A1i%20Tim%20L%E1%BB%ADa%20Ch%E1%BB%AF%20Th%E1%BA%ADp%20%C4%90%E1%BB%8F%20Vi%E1%BB%87t%20Nam.png" alt="" width="1086" height="1448" loading="lazy" decoding="async" /></span>
+                                <div class="qf-res-body">
+                                    <h3>Hành động nhân đạo đặc biệt</h3>
+                                    <div class="qf-res-more"><div><p>Tôn vinh hành động dũng cảm, kịp thời, có ý nghĩa đặc biệt trong cứu giúp, bảo vệ tính mạng, sức khỏe, phẩm giá hoặc hỗ trợ con người trong tình huống khẩn cấp, thiên tai, thảm họa và hoàn cảnh đặc biệt khó khăn.</p></div></div>
                                 </div>
-                                <div class="award-card-media"><img src="Emages/Th%E1%BA%BB%205.png" alt="Tình nguyện viên Chữ thập đỏ cõng cụ ông vượt dòng nước lũ, đồng đội dìu đỡ bên cạnh" loading="lazy" decoding="async" /></div>
-                                <span class="award-card-shade" aria-hidden="true"></span>
                             </li>
                         </ol>
                     </div>
@@ -1493,7 +1484,7 @@
     <script src="flow.js?v=20261106-1" defer></script>
     <script src="account-menu.js?v=20261120-1" defer></script>
     <script src="visit-counter.js?v=20261109-1" defer></script>
-    <script src="script.js?v=20261120-3" defer></script>
+    <script src="script.js?v=20261121-1" defer></script>
     <script src="chuong-trinh-data.js?v=20261119-1" defer></script>
     <script src="story-popover.js?v=20261105-2" defer></script>
     <script src="hero-3d.js?v=20261031-2" defer></script>

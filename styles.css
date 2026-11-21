@@ -715,42 +715,43 @@ h1{font-family:inherit;font-size:clamp(40px,4vw,70px);font-weight:600;letter-spa
 /* Đầu section giải thưởng: biểu trưng Trái Tim Lửa (PNG nền trong suốt) bên trái nhãn · tiêu đề · mô tả */
 .awards-brand{display:flex;align-items:center;gap:clamp(16px,2vw,28px)}
 
-/* ---------- III · Giải thưởng — thẻ xếp chồng (kiểu GSAP showcase "stacking cards"): màn ghim (.award-pin) gồm đầu section + 4 thẻ hạng mục.
-   .awards.is-pinned (script.js, desktop có chuyển động): thẻ chồng lên nhau tuyệt đối; GSAP đẩy thẻ sau từ dưới lên đè khít thẻ trước (các thẻ trùng nhau, nhìn như 1 thẻ).
-   Không ghim (màn ≤1100px / giảm chuyển động): 4 thẻ xếp dọc. ---------- */
+/* ---------- III · Giải thưởng — 5 thẻ hạng mục: dùng lại tấm ảnh dọc mở rộng của trang Quỹ (.qf-res-* — SECTION: THẺ ẢNH DỌC MỞ RỘNG bên dưới) ---------- */
 .awards{--edge:max(var(--gutter),calc((100vw - var(--container)) / 2));position:relative;overflow:hidden;overflow:clip;background:var(--color-bg)}
 .awards-head > .section-head{margin-bottom:var(--space-head)}
 .awards-brand .section-lead{max-width:680px} /* tên "Giải thưởng Nhân đạo Việt Nam “Ngọn đèn Nhân ái” — tôn vinh những tấm gương" ≈ 660px → dòng 1 trọn 1 dòng */
 .award-pin{display:flex;flex-direction:column;padding-inline:var(--edge)}
-.awards.is-pinned{padding:0}
-/* Desktop ghim: đầu section (trên) + chồng thẻ cao cố định; khối ghim cao theo nội dung (không kéo cả màn → không dư khoảng trắng với section trên);
-   script.js ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header → cả cụm căn giữa màn */
-.awards.is-pinned .award-pin{padding-block:48px 32px}
-.awards.is-pinned .awards-head > .section-head{margin-bottom:32px} /* thẻ chồng khít (không còn mép lùi lên) → chỉ chừa 32px dưới mô tả */
-.award-cards{display:grid;gap:16px;margin:0;padding:0;list-style:none}
-.awards.is-pinned .award-cards{position:relative;display:block;flex:none;height:clamp(420px,52vh,520px)} /* thẻ thấp gọn; tối thiểu 420px để chữ + logo không bị cắt trên màn thấp */
-/* Thẻ: chữ trái · ảnh phải; nền ảnh dải ruy-băng hình tim (Emages/Nền trừu tượng dải ruy-băng hình tim.png, neo đáy), viền mảnh, bóng nhẹ để thẻ trên tách khỏi thẻ dưới */
-.award-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center;gap:clamp(24px,4vw,64px);overflow:hidden;padding:clamp(20px,2.4vw,32px);border:1px solid var(--color-border);border-radius:24px;background:#fff url('Emages/N%E1%BB%81n%20tr%E1%BB%ABu%20t%C6%B0%E1%BB%A3ng%20d%E1%BA%A3i%20ruy-b%C4%83ng%20h%C3%ACnh%20tim.png') center bottom / cover no-repeat;box-shadow:0 -12px 40px rgba(36,39,44,.08)}
-.awards.is-pinned .award-card{position:absolute;inset:0;transform-origin:50% 0;will-change:transform}
-.awards.is-pinned .award-card{box-shadow:none} /* 5 thẻ chồng khít → bóng cộng dồn rất đậm: chỉ giữ 1 bóng nhạt ở thẻ dưới cùng (luôn nằm đúng chỗ cụm thẻ) */
-.awards.is-pinned .award-card:first-child{box-shadow:0 8px 24px rgba(36,39,44,.06)}
-.award-card-text{position:relative;isolation:isolate;padding:clamp(8px,2vw,32px)}
-/* Số khổng lồ mờ ở góc trên bên phải khối chữ (sau chữ) */
-.award-num{position:absolute;top:0;right:0;z-index:-1;font-family:'Playfair Display',Georgia,serif;font-size:clamp(160px,17vw,280px);font-weight:400;line-height:1;color:rgba(237,36,41,.06);transform:translateY(-30%);pointer-events:none} /* đỏ rất nhạt (màu --red, độ đậm 6%) */
-/* Biểu trưng Trái Tim Lửa ở góc trên khối chữ của thẻ (thay cho logo ở đầu section) */
-.award-card-logo{display:block;width:auto;height:clamp(64px,6vw,88px);margin-bottom:20px}
-.award-title{margin:0;font-size:24px;font-weight:600;line-height:32px;color:var(--color-text);text-wrap:balance}
-.award-desc{max-width:520px;margin:16px 0 0;font-size:17px;line-height:1.6;color:#454A50} /* đậm hơn màu phụ để đọc rõ trên nền ảnh */
-.award-card-media{overflow:hidden;aspect-ratio:4 / 3;border-radius:16px;background:var(--color-surface-alt)}
-.awards.is-pinned .award-card-media{height:100%;aspect-ratio:auto}
-.award-card-media img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 12%} /* khung rộng hơn ảnh → cắt lệch xuống dưới, giữ đầu người ở mép trên */
-/* Lớp phủ của thẻ đã bị thẻ sau đè (GSAP tăng opacity theo độ sâu) */
-.award-card-shade{position:absolute;inset:0;z-index:2;background:var(--red);opacity:0;pointer-events:none} /* phủ đỏ rất nhạt (GSAP: 5–15%) → mép thẻ phía sau hồng nhạt thay vì xám */
+.award-cards{margin:0;padding:0;list-style:none}
 
-
-/* ---------- Responsive: giải thưởng (không ghim: thẻ xếp dọc, ảnh trên chữ) ---------- */
-@media(max-width:1100px){.award-card{grid-template-columns:1fr;gap:8px}.award-card-media{order:-1;aspect-ratio:16 / 10}.award-num{font-size:160px}}
-@media(max-width:600px){.award-card-logo{height:56px;margin-bottom:16px}.award-card{padding:12px;border-radius:20px}.award-desc{font-size:16px}.award-num{font-size:120px}}
+/* ==================== SECTION: THẺ ẢNH DỌC MỞ RỘNG (.qf-res-*) — dùng chung: Quỹ nhân đạo › Kết nối nguồn lực · Trang chủ › Giải thưởng ==================== */
+/* ---------- Các tấm dọc xếp ngang: tấm .is-active mở rộng, hiện mô tả (rê chuột / focus / bấm — quy-nhan-dao.js, script.js) ---------- */
+.qf-res-list{--qf-res-ease:cubic-bezier(.65,.05,0,1);display:flex;gap:16px;height:clamp(400px,52svh,460px)} /* thấp vừa đủ chứa nội dung tấm đang mở */
+.qf-res-item{position:relative;isolation:isolate;flex:1 1 0;min-width:0;overflow:hidden;border-radius:20px;background:var(--color-surface-alt);color:#fff;cursor:pointer;transition:flex-grow .8s var(--qf-res-ease)}
+.qf-res-item.is-active{flex-grow:2.6;cursor:default}
+.qf-res-item>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.2s var(--qf-res-ease)}
+.qf-res-item.is-active>img{transform:scale(1)}
+.qf-res-item::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.5) 60%,rgba(0,0,0,.88) 100%)}
+.qf-res-item:focus-visible{outline:3px solid var(--color-primary);outline-offset:3px}
+/* ---------- Số thứ tự (trên trái) · biểu tượng tròn trắng (trên phải) ---------- */
+.qf-res-num{position:absolute;top:24px;left:24px;font-size:15px;font-weight:600}
+.qf-res-icon{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--color-primary)}
+.qf-res-icon .icon{width:20px;height:20px}
+.qf-res-icon img{display:block;width:auto;height:28px} /* biểu trưng Trái Tim Lửa (thẻ Giải thưởng) */
+/* ---------- Tiêu đề · mô tả (mô tả chỉ hiện ở tấm đang mở) ---------- */
+.qf-res-body{position:absolute;left:24px;right:24px;bottom:24px}
+.qf-res-body h3{margin:0;font-size:24px;font-weight:600;line-height:32px;color:#fff}
+.qf-res-more{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .8s var(--qf-res-ease),opacity .4s}
+.qf-res-more>div{min-height:0;overflow:hidden}
+.qf-res-item.is-active .qf-res-more{grid-template-rows:1fr;opacity:1;transition-delay:0s,.25s}
+.qf-res-more p{max-width:620px;text-wrap:balance;margin:8px 0 0;font-size:15px;line-height:24px;color:rgba(255,255,255,.88)}
+/* ---------- Responsive: ≤1023px tấm xếp dọc, mở sẵn mô tả · ≤767px bỏ ngắt dòng cố định ---------- */
+@media(max-width:1023px){
+  .qf-res-list{flex-direction:column;height:auto}
+  .qf-res-item{flex:none;min-height:420px;cursor:default}
+  .qf-res-item .qf-res-more{grid-template-rows:1fr;opacity:1}
+  .qf-res-item>img{transform:none}
+}
+@media(max-width:767px){.qf-res-more p br{display:none}}
+/* ==================== END SECTION: THẺ ẢNH DỌC MỞ RỘNG ==================== */
 /* ==================== END SECTION: CHƯƠNG ==================== */
 
 /* ==================== SECTION: DỰ ÁN NGƯỜI GẦN NHẤT — GIỚI THIỆU DỰ ÁN ==================== */
@@ -2517,13 +2518,17 @@ html.pf-reg-lock{overflow:hidden}
 .pf-reg-section{border:1px solid var(--color-border);border-radius:12px;background:#fff;scroll-margin-top:20px}
 /* ---------- Đăng ký hiến máu: fieldset bọc 4 phần, không tạo khung (giữ khoảng cách giữa các phần); xem hồ sơ đã nộp → fieldset disabled, chữ giữ màu thường cho dễ đọc ---------- */
 .pf-reg-fieldset{display:contents;min-width:0;margin:0;padding:0;border:0}
-.pf-reg-fieldset:disabled :is(input,select){opacity:1;color:var(--color-text);-webkit-text-fill-color:var(--color-text);cursor:default}
-.pf-reg-fieldset:disabled .pf-control:not(.is-locked){background:#f7f8f9}
+/* Xem phiếu (fieldset disabled): mọi ô trông như ô khóa .pf-control.is-locked — nền xám, chữ #474d54, không viền hover, không con trỏ nhập */
+.pf-reg-fieldset:disabled .pf-control :is(input:not(.pf-date-native),select,textarea){opacity:1;background:var(--color-surface-alt);color:#474d54;-webkit-text-fill-color:#474d54;cursor:default} /* trừ ô lịch gốc ẩn sau ô ngày */
+.pf-reg-fieldset:disabled .pf-control :is(input,select,textarea):hover{border-color:var(--color-border)}
+.pf-reg-fieldset:disabled .pf-date-btn{opacity:.5;cursor:default}
+.pf-reg-fieldset:disabled .pf-check{background:var(--color-surface-alt);cursor:default}
+.pf-reg-fieldset:disabled .pf-check:checked{border-color:#a3a9b0;background:#a3a9b0} /* đã tích + khóa: ô xám, dấu tích trắng vẫn thấy */
+.pf-reg-fieldset:disabled .pf-reg-check{color:#474d54;cursor:default}
 .pf-reg-fieldset:disabled .pf-caret{display:none}
 /* Nhóm nút chọn khi xem: như .pf-radio-group.is-locked — chỉ hiện đáp án đã chọn, nền xám */
 .pf-reg-fieldset:disabled .pf-radio{background:var(--color-surface-alt);cursor:default}
 .pf-reg-fieldset:disabled .pf-radio:not(:has(input:checked)){display:none}
-.pf-reg-fieldset:disabled .pf-fields:has(input[name="bd-slot"]:checked, #bd-slot-other-check:checked) > .pf-field:not(:has(input:checked)){display:none} /* khung giờ đã chọn (hoặc Khác): ẩn các buổi còn lại */
 .pf-fields > .pf-notice{grid-column:1 / -1} /* lưu ý sàng lọc sức khỏe: trải hết hàng */
 #bd-gender .pf-radio{flex:1 1 0} /* Giới tính: giãn hết cột như các ô bên cạnh (như .pf-team-leader); đăng ký hộ → Nữ / Nam chia đôi */
 /* Đã từng / Chưa từng: không khung viền (như câu Có / Không ở Sàng lọc); giữ cao 40px để thẳng hàng ô Số lần, Ngày gần nhất bên cạnh */
@@ -2538,16 +2543,6 @@ html.pf-reg-lock{overflow:hidden}
 .bd-event-row select{text-overflow:ellipsis} /* chữ quá dài: "…" (đủ nội dung ở title — ho-so.js) */
 @media(max-width:1023px){.bd-event-row{grid-template-columns:repeat(2,minmax(0,1fr))}.bd-event-row > :last-child{grid-column:1 / -1}}
 @media(max-width:767px){.bd-event-row{grid-template-columns:minmax(0,1fr)}}
-/* Khung giờ sáng / chiều: 8 ô bằng nhau, thẳng cột giữa 2 buổi (lưới 4 cột, khoảng cách cột như .pf-team-row4); màn hẹp 2 cột, điện thoại 1 cột */
-.pf-radio-group.bd-slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 20px} /* 2 class: thắng .pf-radio-group{display:flex} khai báo phía sau */
-@media(max-width:1023px){.pf-radio-group.bd-slot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:767px){.pf-radio-group.bd-slot-grid{grid-template-columns:minmax(0,1fr)}}
-/* Tích Khác → khung giờ sáng / chiều bị khóa: làm mờ (không áp khi xem hồ sơ — fieldset disabled) */
-.pf-reg-fieldset:not(:disabled) .bd-slot-grid .pf-radio:has(input[type="radio"]:disabled){opacity:.45;cursor:not-allowed}
-/* Thời gian khác: nút Khác (bằng 1 ô khung giờ) + ô tự nhập thời gian kéo hết các cột còn lại; điện thoại xếp dưới */
-#bd-slot-other-field .pf-control{grid-column:2 / -1}
-@media(max-width:767px){#bd-slot-other-field .pf-control{grid-column:auto}}
-.pf-reg-fieldset:disabled #bd-slot-other-field:not(:has(input:checked)){display:none} /* xem hồ sơ: chỉ hiện khi đã chọn Khác */
 .pf-reg-section-head{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--color-border);border-radius:12px 12px 0 0;background:#f7f8f9}
 .pf-reg-section-head h3{margin:0;font-size:14px;font-weight:600;line-height:20px;color:var(--color-text)}
 .pf-reg-section .pf-fields{gap:16px 20px;padding:20px}

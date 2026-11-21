@@ -1867,19 +1867,21 @@ const bloodPickedPlace = (d) => d.place || bloodEvent(d.event).place;
 const bloodRegCache = new Map();
 const BLOOD_OK = { q1: 'Có', q2: 'Không', q3: 'Không', q4: 'Không', q5: 'Không' }; // câu trả lời đạt điều kiện
 const BLOOD_DEMO = {
-  'Hiến máu tình nguyện đợt 2 năm 2026': { ever: 'Đã từng', times: '1', last: '2026-02-01', q: BLOOD_OK, slot: '8h30 – 9h30', agree: true, privacy: true },
-  'Lễ hội Xuân hồng 2026': { ever: 'Đã từng', times: '', last: '', q: BLOOD_OK, slot: '9h30 – 10h30', agree: true, privacy: true },
-  'Ngày hội hiến máu mùa hè 2025': { ever: 'Chưa từng', times: '', last: '', q: { ...BLOOD_OK, q5: 'Có' }, slot: '14h30 – 15h30', agree: true, privacy: true },
+  'Hiến máu tình nguyện đợt 2 năm 2026': { ever: 'Đã từng', times: '1', last: '2026-02-01', q: BLOOD_OK, slotFrom: '08:30', slotTo: '09:30', agree: true, privacy: true },
+  'Lễ hội Xuân hồng 2026': { ever: 'Đã từng', times: '', last: '', q: BLOOD_OK, slotFrom: '09:30', slotTo: '10:30', agree: true, privacy: true },
+  'Ngày hội hiến máu mùa hè 2025': { ever: 'Chưa từng', times: '', last: '', q: { ...BLOOD_OK, q5: 'Có' }, slotFrom: '14:30', slotTo: '15:30', agree: true, privacy: true },
 };
 function bloodRegData(r) {
   if (bloodRegCache.has(r.id)) return bloodRegCache.get(r.id);
-  const demo = BLOOD_DEMO[r.name] || { ever: '', times: '', last: '', q: {}, slot: '', agree: false, privacy: false };
+  const demo = BLOOD_DEMO[r.name] || { ever: '', times: '', last: '', q: {}, slotFrom: '', slotTo: '', agree: false, privacy: false };
   return { event: r.name, phone: '0912345678', addrProvince: 'Tỉnh Hà Tĩnh', addrWard: 'Phường Thành Sen', address: 'Số 25 đường Hà Huy Tập', work: 'Trường THPT Phan Đình Phùng', ...demo };
 }
 // Cột Thời gian hiến máu: ngày hiến (dòng trên) · khung giờ đã đăng ký (dòng dưới, chưa chọn thì ghi rõ)
 // Khung giờ hiển thị: khung có sẵn · chọn Khác thì lấy thời gian người dùng tự nhập
+// Thời gian hiến máu Từ – Đến (hh:mm) hiển thị dạng "8h30 – 9h30"
 function bloodSlotText(d) {
-  return d.slot === 'Khác' ? (d.slotOther || 'Khác') : d.slot;
+  const h = (v) => { const [hh, mm] = v.split(':'); return `${Number(hh)}h${mm}`; };
+  return d.slotFrom && d.slotTo ? `${h(d.slotFrom)} – ${h(d.slotTo)}` : '';
 }
 function bloodTimeCell(r) {
   const d = bloodRegData(r);
@@ -3611,10 +3613,15 @@ const showRoute = () => {
   if (isTeamView) openTeamView(decodeURIComponent(code));
   else closeTeamView(false);
   if (target === 'nguoi-yeu-the-xem') renderVulnerableDetail(decodeURIComponent(code));
-  // #chuong-trinh/them-moi: mở thẳng màn Đăng ký (nút Tạo chiến dịch ở trang Chương trình công khai — SRS Mockup 1 #7); chờ script chạy xong
-  if (target === 'chuong-trinh' && sub === 'them-moi') {
-    history.replaceState(null, '', '#chuong-trinh');
-    setTimeout(() => startRegister(null), 0);
+  // #<màn>/them-moi: mở thẳng biểu mẫu đăng ký của màn đó — menu Trợ giúp ở header (nhận trợ giúp · tình nguyện viên · hiến máu · chương trình),
+  // nút Tạo chiến dịch ở trang Chương trình công khai (SRS Mockup 1 #7). Bỏ /them-moi khỏi địa chỉ để bấm lại menu vẫn mở được; chờ script chạy xong
+  if (sub === 'them-moi' && ['chuong-trinh', 'tinh-nguyen-vien', 'nguoi-yeu-the'].includes(target)) {
+    history.replaceState(null, '', `#${volKind || target}`);
+    setTimeout(() => {
+      if (target === 'chuong-trinh') startRegister(null);
+      else if (target === 'tinh-nguyen-vien') document.querySelector('#vol-add').click(); // nút chính theo loại: gia nhập đội, CLB / hiến máu …
+      else document.querySelector('[data-vul-add]').click(); // Hồ sơ người yếu thế: chưa có biểu mẫu → hộp thông báo xem trước
+    }, 0);
   }
 };
 window.addEventListener('hashchange', () => {
@@ -5973,19 +5980,12 @@ const syncBloodNote = () => {
     return value && value !== field.dataset.ok;
   });
 };
-// ---------- Thời gian khác (ô tích Khác): tích → bỏ chọn & khóa khung giờ sáng / chiều, mở ô tự nhập thời gian (bắt buộc);
-// bỏ tích → mở lại khung giờ, khóa và xóa ô tự nhập ----------
-const bdSlotOther = document.querySelector('#bd-slot-other');
-const bdSlotOtherCheck = document.querySelector('#bd-slot-other-check');
-const bdSlotRadios = [...bloodForm.querySelectorAll('input[name="bd-slot"]')];
-const bdSlotValue = () => (bdSlotOtherCheck.checked ? 'Khác' : bdPick('bd-slot'));
-const syncBloodSlotOther = (focus = false) => {
-  const other = bdSlotOtherCheck.checked;
-  bdSlotRadios.forEach((radio) => { radio.disabled = other; if (other) radio.checked = false; });
-  bdSlotOther.disabled = !other;
-  if (!other) { bdSlotOther.value = ''; bdSlotOther.closest('.pf-field').classList.remove('is-invalid'); }
-  else if (focus) bdSlotOther.focus();
-};
+// ---------- Thời gian hiến máu: người dùng tự nhập Từ – Đến (hh:mm, 24 giờ) — gõ số tự chèn dấu ":" ----------
+const bdSlotFrom = document.querySelector('#bd-slot-from');
+const bdSlotTo = document.querySelector('#bd-slot-to');
+const maskHm = (v) => { const d = v.replace(/\D/g, '').slice(0, 4); return d.length > 2 ? `${d.slice(0, 2)}:${d.slice(2)}` : d; };
+const validHm = (v) => /^([01]\d|2[0-3]):[0-5]\d$/.test(v);
+[bdSlotFrom, bdSlotTo].forEach((el) => el.addEventListener('input', () => { el.value = maskHm(el.value); }));
 bdTimes.addEventListener('input', () => { bdTimes.value = bdTimes.value.replace(/\D/g, ''); });
 document.querySelector('#bd-phone').addEventListener('input', (event) => { event.target.value = event.target.value.replace(/\D/g, ''); });
 
@@ -6011,8 +6011,8 @@ const bloodFormData = () => ({
   times: bdTimes.value.trim(),
   last: bdLast.value,
   q: Object.fromEntries(BD_QUESTIONS.map((q) => [q, bdPick(`bd-${q}`)])),
-  slot: bdSlotValue(),
-  slotOther: bdSlotOther.value.trim(),
+  slotFrom: bdSlotFrom.value.trim(),
+  slotTo: bdSlotTo.value.trim(),
   agree: document.querySelector('#bd-agree').checked,
   privacy: document.querySelector('#bd-privacy').checked,
 });
@@ -6034,16 +6034,14 @@ const loadBlood = (d) => {
   bdLastText.value = isoToVi(d.last);
   BD_QUESTIONS.forEach((q) => bdSetPick(`bd-${q}`, (d.q || {})[q] || ''));
   syncBloodFemale();
-  bdSlotOtherCheck.checked = d.slot === 'Khác';
-  syncBloodSlotOther();
-  if (d.slot !== 'Khác') bdSetPick('bd-slot', d.slot);
-  bdSlotOther.value = d.slotOther || '';
+  bdSlotFrom.value = d.slotFrom || '';
+  bdSlotTo.value = d.slotTo || '';
   document.querySelector('#bd-agree').checked = d.agree;
   document.querySelector('#bd-privacy').checked = d.privacy;
 };
 // Đăng ký mới: form trống (chọn chương trình trước); điện thoại lấy từ tài khoản
 const resetBlood = () => {
-  loadBlood({ eventProvince: '', event: '', time: '', place: '', proxy: false, person: null, phone: TEAM_ACCOUNT.phone, addrProvince: '', addrWard: '', address: '', work: '', ever: '', times: '', last: '', q: {}, slot: '', agree: false, privacy: false });
+  loadBlood({ eventProvince: '', event: '', time: '', place: '', proxy: false, person: null, phone: TEAM_ACCOUNT.phone, addrProvince: '', addrWard: '', address: '', work: '', ever: '', times: '', last: '', q: {}, slotFrom: '', slotTo: '', agree: false, privacy: false });
   bloodStatus.textContent = '';
 };
 // Chế độ: điền biểu mẫu · xem phiếu đã gửi (khóa toàn bộ, tiêu đề kèm mã phiếu, chân chỉ còn nút Đóng)
@@ -6118,21 +6116,10 @@ bloodForm.addEventListener('input', (event) => {
 bloodForm.addEventListener('change', (event) => {
   const { target } = event;
   if (target.type === 'radio') {
-    // Khung giờ: câu báo lỗi nằm ở ô Buổi chiều → bỏ tô đỏ cả 2 ô khi đã chọn
-    if (target.name === 'bd-slot') {
-      document.querySelector('#bd-slot-field').classList.remove('is-invalid');
-      document.querySelector('#bd-slot-field').previousElementSibling.classList.remove('is-invalid');
-    }
     target.closest('.pf-field').classList.remove('is-invalid');
     if (target.name === 'bd-ever') syncBloodEver();
     if (target.name === 'bd-gender') syncBloodFemale();
     if (/^bd-q\d$/.test(target.name)) syncBloodNote();
-  }
-  if (target === bdSlotOtherCheck) {
-    // Tích / bỏ tích Khác: bỏ báo lỗi "chưa chọn khung giờ" ở 2 buổi, khóa / mở khung giờ
-    document.querySelector('#bd-slot-field').classList.remove('is-invalid');
-    document.querySelector('#bd-slot-field').previousElementSibling.classList.remove('is-invalid');
-    syncBloodSlotOther(true);
   }
   if (target.matches('#bd-agree, #bd-privacy') && document.querySelector('#bd-agree').checked && document.querySelector('#bd-privacy').checked) {
     document.querySelector('#bd-commit-error').hidden = true;
@@ -6170,9 +6157,12 @@ const validateBlood = () => {
     }
   }
   bdQuestionFields().forEach((field) => { if (!bdPick(field.querySelector('input').name)) bad(field, 'Vui lòng chọn câu trả lời.'); });
+  // Thời gian hiến máu Từ – Đến: đủ 2 ô (bắt buộc — vòng kiểm tra chung ở trên), đúng hh:mm, Đến sau Từ
   const slotField = document.querySelector('#bd-slot-field');
-  if (!bdSlotValue()) bad(slotField, 'Vui lòng chọn khung giờ hiến máu.');
-  else if (bdSlotValue() === 'Khác' && !bdSlotOther.value.trim()) bad(bdSlotOther.closest('.pf-field'), 'Vui lòng nhập thời gian hiến máu.');
+  if (bdSlotFrom.value && bdSlotTo.value) {
+    if (!validHm(bdSlotFrom.value) || !validHm(bdSlotTo.value)) bad(slotField, 'Giờ không hợp lệ (hh:mm, ví dụ 07:30).');
+    else if (bdSlotTo.value <= bdSlotFrom.value) bad(slotField, 'Giờ kết thúc phải sau giờ bắt đầu.');
+  }
   // Mỗi người chỉ 1 hồ sơ đang chờ cho 1 đợt (so theo số định danh của người hiến — đăng ký hộ người khác vẫn được)
   const identity = bloodDonor(bloodFormData()).identity;
   const pending = bdEvent.value && VOL_REGS.find((r) => r.type === 'HM' && r.name === bdEvent.value && ['new', 'scheduled'].includes(r.status) && bloodDonor(bloodRegData(r)).identity === identity);
@@ -6181,8 +6171,6 @@ const validateBlood = () => {
   document.querySelector('#bd-commit-error').hidden = agreed;
   if (!agreed) bad(document.querySelector('#bd-agree').closest('.pf-field'));
   bloodForm.querySelectorAll('.pf-field').forEach((field) => field.classList.toggle('is-invalid', invalid.has(field)));
-  // Khung giờ: tô đỏ cả ô Buổi sáng (câu báo lỗi nằm dưới ô Buổi chiều)
-  slotField.previousElementSibling.classList.toggle('is-invalid', invalid.has(slotField));
   syncFieldErrors(bloodForm, invalid);
   return [...bloodForm.querySelectorAll('.pf-field')].filter((field) => invalid.has(field)); // theo thứ tự trên form để cuộn tới ô lỗi đầu tiên
 };

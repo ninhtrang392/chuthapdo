@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261120-26" />
+    <link rel="stylesheet" href="styles.css?v=20261120-29" />
 </head>
 
 <body class="pf-page">
@@ -77,13 +77,14 @@
         <button class="menu-toggle" type="button" aria-label="Mở menu" aria-controls="navigation" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="navigation" id="navigation" aria-label="Điều hướng chính">
             <a href="ban-do-so.html">Bản đồ số</a>
-            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
+            <!-- ---------- Trợ giúp: nút có mũi tên xổ menu cấp 2 — Đăng ký nhận trợ giúp (Hồ sơ người yếu thế) · Đăng ký tình nguyện viên · Đăng ký hiến máu · Đăng ký chương trình — mỗi mục mở thẳng biểu mẫu đăng ký (ho-so.html#<màn>/them-moi) (account-menu.js › HEADER: menu xổ cấp 2) ---------- -->
             <div class="nav-more">
                 <button class="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-help-menu">Trợ giúp<svg class="icon" aria-hidden="true"><use href="#chevron-down"/></svg></button>
                 <div class="nav-more-menu" id="nav-help-menu" hidden>
-                    <a href="ho-so.html#nguoi-yeu-the">Đăng ký trợ giúp</a>
-                    <a href="ho-so.html#gia-nhap-doi">Đăng ký tình nguyện viên</a>
-                    <a href="ho-so.html#dang-ky-hien-mau">Đăng ký hiến máu</a>
+                    <a href="ho-so.html#nguoi-yeu-the/them-moi">Đăng ký nhận trợ giúp</a>
+                    <a href="ho-so.html#gia-nhap-doi/them-moi">Đăng ký tình nguyện viên</a>
+                    <a href="ho-so.html#dang-ky-hien-mau/them-moi">Đăng ký hiến máu</a>
+                    <a href="ho-so.html#chuong-trinh/them-moi">Đăng ký chương trình</a>
                 </div>
             </div>
             <a href="chuong-trinh-thien-nguyen.html">Ủng hộ</a>
@@ -281,7 +282,7 @@
                         </div>
                         <div class="pf-head-tools">
                             <button class="pf-btn pf-btn-ghost" type="button" id="vul-export"><svg class="icon" aria-hidden="true"><use href="#download"/></svg>Kết xuất</button>
-                            <button class="pf-btn pf-btn-primary" type="button" data-panel="Thêm hồ sơ người yếu thế"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg>Thêm mới</button>
+                            <button class="pf-btn pf-btn-primary" type="button" data-vul-add data-panel="Thêm hồ sơ người yếu thế"><svg class="icon" aria-hidden="true"><use href="#plus"/></svg>Thêm mới</button>
                         </div>
                     </div>
                     <p class="pf-notice"><svg class="icon" aria-hidden="true"><use href="#shield"/></svg>Thông tin người yếu thế được bảo mật: chỉ bạn và cán bộ Hội phụ trách địa bàn xem được hồ sơ đầy đủ.</p>
@@ -1782,36 +1783,17 @@
                             </div>
                         </section>
 
-                        <!-- ---------- Phần 5: Đăng ký thời gian hiến máu — chia khung 1 tiếng: sáng 7h30 – 11h30 · chiều 13h30 – 17h30 (chọn 1) ---------- -->
+                        <!-- ---------- Phần 5: Đăng ký thời gian hiến máu — người dùng tự nhập khoảng giờ Từ – Đến (hh:mm, 24 giờ; bắt buộc, Đến sau Từ) — ho-so.js: SECTION ĐĂNG KÝ HIẾN MÁU ---------- -->
                         <section class="pf-reg-section" aria-labelledby="pf-blood-s5-title">
                             <div class="pf-reg-section-head">
                                 <h3 id="pf-blood-s5-title">5. Đăng ký thời gian hiến máu</h3>
                             </div>
                             <div class="pf-fields">
-                                <div class="pf-field is-wide">
-                                    <span class="pf-label" id="bd-slot-am-label">Buổi sáng</span>
-                                    <div class="pf-radio-group bd-slot-grid" role="radiogroup" aria-labelledby="bd-slot-am-label">
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="7h30 – 8h30" />7h30 – 8h30</label>
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="8h30 – 9h30" />8h30 – 9h30</label>
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="9h30 – 10h30" />9h30 – 10h30</label>
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="10h30 – 11h30" />10h30 – 11h30</label>
-                                    </div>
-                                </div>
-                                <div class="pf-field is-wide" id="bd-slot-field">
-                                    <span class="pf-label" id="bd-slot-pm-label">Buổi chiều</span>
-                                    <div class="pf-radio-group bd-slot-grid" role="radiogroup" aria-labelledby="bd-slot-pm-label">
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="13h30 – 14h30" />13h30 – 14h30</label>
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="14h30 – 15h30" />14h30 – 15h30</label>
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="15h30 – 16h30" />15h30 – 16h30</label>
-                                        <label class="pf-radio"><input type="radio" name="bd-slot" value="16h30 – 17h30" />16h30 – 17h30</label>
-                                    </div>
-                                </div>
-                                <!-- Khác (ô tích): tích → khóa các khung giờ sáng / chiều, mở ô tự nhập thời gian (bắt buộc); bỏ tích → mở lại khung giờ (ho-so.js: syncBloodSlotOther) -->
-                                <div class="pf-field is-wide" id="bd-slot-other-field">
-                                    <span class="pf-label" id="bd-slot-other-label">Thời gian khác</span>
-                                    <div class="pf-radio-group bd-slot-grid" role="group" aria-labelledby="bd-slot-other-label">
-                                        <label class="pf-radio"><input class="pf-check" type="checkbox" id="bd-slot-other-check" />Khác</label>
-                                        <div class="pf-control"><input id="bd-slot-other" type="text" maxlength="100" placeholder="Nhập thời gian, ví dụ: 11h30 – 12h00" aria-label="Thời gian hiến máu khác" disabled /></div>
+                                <div class="pf-field" id="bd-slot-field">
+                                    <span class="pf-label" id="bd-slot-label">Thời gian hiến máu<span class="pf-req" aria-hidden="true">*</span></span>
+                                    <div class="pf-reg-range" role="group" aria-labelledby="bd-slot-label">
+                                        <div class="pf-control"><input id="bd-slot-from" type="text" inputmode="numeric" maxlength="5" placeholder="Từ (vd: 07:30)" aria-label="Từ giờ" autocomplete="off" required /></div>
+                                        <div class="pf-control"><input id="bd-slot-to" type="text" inputmode="numeric" maxlength="5" placeholder="Đến (vd: 08:30)" aria-label="Đến giờ" autocomplete="off" required /></div>
                                     </div>
                                 </div>
                             </div>
@@ -2015,7 +1997,7 @@
     <script src="team-members.js?v=20261023-1" defer></script>
     <!-- Danh mục hành chính 34 tỉnh/thành · 3.321 phường/xã (dùng chung với Bản đồ số) — Địa chỉ liên lạc trong form Đăng ký hiến máu -->
     <script src="ban-do-so-locations.js" defer></script>
-    <script src="ho-so.js?v=20261120-19" defer></script>
+    <script src="ho-so.js?v=20261121-1" defer></script>
 </body>
 
 </html>

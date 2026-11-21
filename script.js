@@ -725,6 +725,17 @@ if (volunteerViewport) {
   }
 }
 
+// ==================== SECTION: GIẢI THƯỞNG — thẻ ảnh dọc (như Kết nối nguồn lực trang Quỹ): rê chuột / focus / bấm → mở rộng tấm, hiện mô tả ====================
+document.querySelectorAll('.awards .qf-res-list').forEach((list) => {
+  const items = [...list.querySelectorAll('.qf-res-item')];
+  const activate = (item) => items.forEach((other) => other.classList.toggle('is-active', other === item));
+  items.forEach((item) => {
+    item.addEventListener('mouseenter', () => { if (matchMedia('(hover: hover)').matches) activate(item); });
+    item.addEventListener('focusin', () => activate(item));
+    item.addEventListener('click', () => activate(item));
+  });
+});
+
 // ==================== MOTION: GSAP / ScrollTrigger (tự tắt khi reduced motion) ====================
 // Content stays visible if GSAP fails to load; CTAs are clickable throughout.
 if (window.gsap && window.ScrollTrigger) {
@@ -963,43 +974,8 @@ if (window.gsap && window.ScrollTrigger) {
       ScrollTrigger.create({ trigger: section, start: 'top top', end: `+=${tl.duration()}`, pin: true, scrub: 1, anticipatePin: 1, refreshPriority: 1, animation: tl });
     };
 
-    // ---------- III · Giải thưởng — thẻ xếp chồng: đầu section cuộn qua bình thường (data-reveal) → chồng thẻ trồi lên khi đi vào màn →
-    // ghim .award-pin; mỗi nhịp cuộn: thẻ sau trượt từ dưới lên đè khít thẻ trước (các thẻ chồng trùng nhau, nhìn như 1 thẻ) ----------
-    const setupAwards = (section) => {
-      const pin = section.querySelector('.award-pin');
-      const cards = gsap.utils.toArray(section.querySelectorAll('.award-card'));
-      if (!pin || cards.length < 2) return;
-      section.classList.add('is-pinned');
-      // Tween khối con (không tween chính .award-pin — phần tử đang ghim bị dịch transform sẽ lệch vị trí khi hết ghim)
-      gsap.fromTo(pin.children, { autoAlpha: 0, y: 80 }, {
-        autoAlpha: 1, y: 0, ease: 'power2.out',
-        scrollTrigger: { trigger: pin, start: 'top 90%', end: 'top 30%', scrub: true },
-      });
-      const lead = vh * 0.05; // nghỉ ngắn ở thẻ 01 ngay khi vừa ghim
-      const step = vh * 0.35; // mỗi thẻ ~0.35 màn cuộn (cuộn nhanh)
-      const tail = vh * 0.1;  // nghỉ ngắn ở thẻ cuối trước khi nhả ghim
-      const tl = gsap.timeline({ defaults: { ease: 'none' }, paused: true });
-      cards.forEach((card, i) => gsap.set(card, { zIndex: i + 1 }));
-      gsap.set(cards.slice(1), { y: vh }); // thẻ chờ nằm hẳn dưới mép màn (thẻ thấp nên không dùng yPercent)
-      // Thẻ trước đứng yên đúng chỗ (không lùi, không thu nhỏ) → thẻ sau trượt lên đè khít, nhìn vào chỉ thấy 1 thẻ
-      cards.slice(1).forEach((card, n) => {
-        const at = lead + step * n;
-        tl.to(card, { y: 0, duration: step, ease: 'power2.out' }, at);
-      });
-      tl.to({}, { duration: tail });
-      // Ghim khi tâm khối trùng tâm vùng nhìn thấy dưới header (header nổi phía trên) → cả cụm đầu section + chồng thẻ căn giữa màn
-      const headerBottom = () => { const h = document.querySelector('.header'); return h ? h.offsetTop + h.offsetHeight : 0; };
-      ScrollTrigger.create({
-        trigger: pin, start: () => `center ${Math.round((window.innerHeight + headerBottom()) / 2)}px`, end: `+=${tl.duration()}`,
-        pin: true, scrub: 0.5, anticipatePin: 1, refreshPriority: 1, invalidateOnRefresh: true, animation: tl, // scrub 0.5: bám cuộn nhanh hơn
-      });
-      panelHandlers.push(() => section.classList.remove('is-pinned'));
-    };
-
-    // Tạo theo thứ tự trên trang: I (Tình nguyện viên) → III (Giải thưởng — không phải .chapter, ghim riêng .award-pin)
+    // I (Tình nguyện viên). III (Giải thưởng) không còn ghim — thẻ ảnh dọc mở rộng, xem "GIẢI THƯỞNG: thẻ ảnh dọc" bên dưới
     chapters.forEach((section) => { if (section.querySelector('.chapter-track')) setupGallery(section); });
-    const awardsSection = document.querySelector('.chapter-awards');
-    if (awardsSection) setupAwards(awardsSection);
 
     return () => {
       chapters.forEach((section) => section.classList.remove('is-pinned'));
@@ -1022,7 +998,7 @@ if (window.gsap && window.ScrollTrigger) {
 
   // ---------- Màn ≤1100px: thẻ giải thưởng, các panel trồi lên (không ghim) ----------
   mm.add('(max-width: 1100px) and (prefers-reduced-motion: no-preference)', () => {
-    gsap.utils.toArray('.award-card, .panel').forEach((element) => {
+    gsap.utils.toArray('.awards .qf-res-item, .panel').forEach((element) => {
       gsap.from(element, {
         y: 60, autoAlpha: 0, duration: 1, ease: 'expo.out', clearProps: 'transform,opacity,visibility',
         scrollTrigger: { trigger: element, start: 'top 90%', once: true },

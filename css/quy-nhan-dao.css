@@ -279,23 +279,7 @@
 .qf-docs-panel .pf-tag{flex:none}
 
 /* ==================== SECTION: KẾT NỐI NGUỒN LỰC ==================== */
-/* ---------- 4 tấm dọc: tấm .is-active mở rộng ---------- */
-.qf-res-list{display:flex;gap:16px;height:clamp(400px,52svh,460px)} /* thấp vừa đủ chứa nội dung tấm đang mở (tiêu đề · mô tả · 3 ý · nút) */
-.qf-res-item{position:relative;isolation:isolate;flex:1 1 0;min-width:0;overflow:hidden;border-radius:20px;background:var(--color-surface-alt);color:#fff;cursor:pointer;transition:flex-grow .8s var(--qf-ease)}
-.qf-res-item.is-active{flex-grow:2.6;cursor:default}
-.qf-res-item>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.2s var(--qf-ease)}
-.qf-res-item.is-active>img{transform:scale(1)}
-.qf-res-item::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.5) 60%,rgba(0,0,0,.88) 100%)}
-.qf-res-num{position:absolute;top:24px;left:24px;font-size:15px;font-weight:600}
-.qf-res-icon{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--color-primary)}
-.qf-res-icon .icon{width:20px;height:20px}
-.qf-res-body{position:absolute;left:24px;right:24px;bottom:24px}
-.qf-res-body h3{font-size:24px;font-weight:600;line-height:32px}
-.qf-res-more{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .8s var(--qf-ease),opacity .4s}
-.qf-res-more>div{min-height:0;overflow:hidden}
-.qf-res-item.is-active .qf-res-more{grid-template-rows:1fr;opacity:1;transition-delay:0s,.25s}
-.qf-res-more p{max-width:620px;text-wrap:balance;margin-top:8px;font-size:15px;line-height:24px;color:rgba(255,255,255,.88)}
-@media(max-width:767px){.qf-res-more p br{display:none}} /* màn hẹp: bỏ ngắt dòng cố định trong mô tả tấm */
+/* ---------- Tấm ảnh dọc mở rộng (.qf-res-*): đã chuyển sang styles.css (SECTION: THẺ ẢNH DỌC MỞ RỘNG) để dùng chung với trang chủ ---------- */
 
 /* ==================== SECTION: TIN TỨC ==================== */
 /* ---------- Tab 5 chuyên mục (.pf-tabs dùng chung) · lưới bài viết dùng lại .news-grid trang chủ ---------- */
@@ -363,10 +347,6 @@
   .qf-hero-visual{height:520px;margin-inline:24px}
   .qf-about-side,.qf-guide-side{position:static}
   .qf-about-photo{aspect-ratio:16/9}
-  .qf-res-list{flex-direction:column;height:auto}
-  .qf-res-item{flex:none;min-height:420px;cursor:default}
-  .qf-res-item .qf-res-more{grid-template-rows:1fr;opacity:1}
-  .qf-res-item>img{transform:none}
   .qf-account-steps{grid-template-columns:minmax(0,1fr);margin-top:24px}
   .qf-account-steps .ngn-item{padding:16px 0;border-left:0;border-top:1px solid #f0d6d8} /* 3 bước xếp dọc: vạch dọc → vạch ngang */
   .qf-account-steps .ngn-item:first-child{padding-top:0;border-top:0}
